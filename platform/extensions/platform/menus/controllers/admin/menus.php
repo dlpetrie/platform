@@ -28,7 +28,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 	public function before()
 	{
 		parent::before();
-		$this->active_menu('menus');
+		$this->active_menu('admin-menus');
 	}
 
 	public function get_index()
@@ -48,17 +48,25 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 		$result = API::get('menus/menu', array(
 			'id' => $id,
 		));
-		$menu = $result['menu'];
+		$menu   = $result['menu'];
 
 		// Get last item ID
-		$result = API::get('menus/last_item_id');
+		$result       = API::get('menus/last_item_id');
 		$last_item_id = $result['last_item_id'];
+
+		// Get
+		$result = API::get('menus/slugs', array(
+			'not_id' => isset($menu['id']) ? $menu['id'] : false,
+		));
+		$persisted_slugs  = $result['slugs'];
 
 		return Theme::make('menus::edit')
 		            ->with('menu', $menu)
 		            ->with('menu_id', (isset($menu['id'])) ? $menu['id'] : false)
 		            ->with('item_template', json_encode(Theme::make('menus::edit/item_template')->render()))
-		            ->with('last_item_id', $last_item_id);
+		            ->with('last_item_id', $last_item_id)
+		            ->with('root_slug', isset($menu['slug']) ? $menu['slug'] : null)
+		            ->with('persisted_slugs', json_encode($persisted_slugs));
 	}
 
 	public function post_edit($id = false)
@@ -102,7 +110,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 			Cartalyst::messages()->error($result['message']);
 		}
 
-		return Redirect::to(ADMIN.'/menus/edit/'.array_get($result, 'menu.id'));
+		return Redirect::to_secure(ADMIN.'/menus/edit/'.array_get($result, 'menu.id'));
 	}
 
 	public function get_delete($id)
@@ -111,7 +119,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 			'id' => $id,
 		));
 
-		return Redirect::to(ADMIN.'/menus');
+		return Redirect::to_secure(ADMIN.'/menus');
 	}
 
 	/**
@@ -127,7 +135,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 			'name'    => Input::get('item_fields.'.$item['id'].'.name'),
 			'slug'    => Input::get('item_fields.'.$item['id'].'.slug'),
 			'uri'     => Input::get('item_fields.'.$item['id'].'.uri'),
-			'status' => Input::get('item_fields.'.$item['id'].'.status', 1),
+			'status'  => Input::get('item_fields.'.$item['id'].'.status', 1),
 		);
 
 		// Determine if we're a new item or not. If we're
@@ -136,6 +144,18 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 		if ( ! Input::get('item_fields.'.$item['id'].'.is_new'))
 		{
 			$new_item['id'] = $item['id'];
+		}
+
+		// Now, look for secure URLs
+		if (URL::valid($new_item['uri']))
+		{
+			$new_item['secure'] = (int) starts_with($new_item['uri'], 'https://');
+		}
+
+		// Relative URL, look in the POST data
+		else
+		{
+			$new_item['secure'] = Input::get('item_fields.'.$item['id'].'.secure', 0);
 		}
 
 		// If we have children, call the function again

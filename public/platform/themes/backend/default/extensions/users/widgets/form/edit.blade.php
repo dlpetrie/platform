@@ -1,4 +1,7 @@
 {{ Form::open(ADMIN.'/users/edit/'.$user['id'], 'POST', array('class' => 'form-horizontal')) }}
+
+	{{ Form::token() }}
+
 	<div class="well">
 		<fieldset>
 
@@ -25,5 +28,5 @@
 	</div>
 
 	<button class="btn btn-large" type="submit" value="{{ Lang::line('users::users.button.create') }}">{{ Lang::line('users::users.button.update') }}</button>
-	<a class="btn btn-large" href="{{ url(ADMIN.'/users') }}">{{ Lang::line('users::users.button.cancel') }}</a>
+	<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users') }}">{{ Lang::line('users::users.button.cancel') }}</a>
 {{ Form::close() }}

@@ -80,12 +80,12 @@ class Menus_API_Menus_Controller extends API_Controller
 
 			$menu = Menu::from_hierarchy_array($id, Input::get('items'), function($root_item) use ($id, $name, $slug)
 			{
-				if ($name and ( ! $id or $user_editable))
+				if ($name and ( ! $id or $root_item->user_editable))
 				{
 					$root_item->name = $name;
 				}
 
-				if ($slug and ( ! $id or $user_editable))
+				if ($slug and ( ! $id or $root_item->user_editable))
 				{
 					$root_item->slug = $slug;
 				}
@@ -102,6 +102,8 @@ class Menus_API_Menus_Controller extends API_Controller
 		}
 		catch (\Exception $e)
 		{
+			echo $e->getMessage();
+			exit;
 			return array(
 				'status'  => true,
 				'message' => $e->getMessage(),
@@ -401,6 +403,44 @@ class Menus_API_Menus_Controller extends API_Controller
 				'message' => $e->getMessage(),
 			);
 		}
+	}
+
+	/**
+	 * Returns an array of menu slugs.
+	 *
+	 * @return  array
+	 */
+	public function get_slugs()
+	{
+		// Get an array of slugs
+		$slugs = array();
+
+		// The ID of the menu to not include
+		// when fetching slugs. This is used
+		// in the menu scaffolding
+		$not_id = Input::get('not_id', false);
+
+		// Get items
+		$items = Menu::all(function($query) use ($not_id)
+		{
+			if ($not_id !== false)
+			{
+				$query->where(Menu::nesty_col('tree'), '!=', $not_id);
+			}
+
+			return $query;
+		}, array('slug'));
+
+		foreach ($items as $item)
+		{
+			$slugs[] = $item->slug;
+		}
+
+		// We can't really go wrong, can we?
+		return array(
+			'status' => true,
+			'slugs'  => $slugs,
+		);
 	}
 
 }

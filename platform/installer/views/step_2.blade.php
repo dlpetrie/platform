@@ -1,42 +1,40 @@
 @layout('installer::template')
 
-@section('content')
-<div id="installer">
-	<div class="content">
-
-		<div class="brand">
-			{{ HTML::image('platform/installer/img/brand.png', 'Platform by Cartalyst'); }}
-		</div>
-		<h1>An Extra Step</h1>
-		<p>Step 2 is just for you &hearts;</p>
-
-		<div class="breadcrumbs">
-			<ul class="nav">
-				<li>Step 1</li>
-				<li class="active">Step 2</li>
-				<li>Step 3</li>
-				<li>Finish</li>
-			</ul>
-		</div>
-
-  		{{ Form::open() }}
-		<fieldset>
-
-			<legend>Custom Installation Step</legend>
-
-			<p>Add any custom steps to your installation process</p>
-
-			<div class="control-group pager">
-				<div class="controls">
-					<button type="submit" class="btn btn-primary">
-						Continue to Step 3
-					</button>
-				</div>
-			</div>
-		</fieldset>
-		{{ Form::close() }}
-
+@section('navigation')
+	<h1>Database</h1>
+	<p class="step">Let's take some database credentials</p>
+	<div class="breadcrumbs">
+		<ul class="nav">
+			<li><span>Step 1:</span> Prepare installation</li>
+			<li class="active">
+				<span>Step 2:</span> Database Credentials
+				<div class="messages alert"></div>
+			</li>
+			<li><span>Step 3:</span> Administration</li>
+			<li><span>Step 4:</span> Complete</li>
+		</ul>
 	</div>
-</div>
+@endsection
 
+
+@section('content')
+<div class="grid contain">
+	<h2>Now its time to create a database, then give us the details and we'll do the rest.</h2>
+	{{ Form::open(null, 'POST', array('id' => 'database-form')) }}
+	{{ Form::token() }}
+	<fieldset>
+		{{ Form::select('driver', array(null => 'Database Driver') + $drivers, $credentials['driver'], array('class' => 'span3')) }}
+		{{ Form::text('host', $credentials['host'], array('class' => 'span3', 'placeholder' => 'Server', 'required')) }}
+		{{ Form::text('username', $credentials['username'], array('class' => 'span3', 'placeholder' => 'User Name', 'required')) }}
+		{{ Form::password('password', array('class' => 'span3', 'placeholder' => 'Password')) }}
+		{{ Form::text('database', $credentials['database'], array('class' => 'span3', 'placeholder' => 'Database Name', 'required')) }}
+	</fieldset>
+	<div class="actions">
+		<a class="btn btn-large" href="{{URL::to('installer/step_1');}}">Back</a>
+		<button type="submit" class="btn btn-large" disabled>
+			Continue to Step 3
+		</button>
+	</div>
+	{{ Form::close() }}
+</div>
 @endsection

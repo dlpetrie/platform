@@ -20,6 +20,9 @@
 
 class API_Controller extends Base_Controller
 {
+	// Override construct as it doesn't need CSRF checks for internal API calls
+	public function __construct() {}
+
 	/**
 	 * This function is called before the action is executed.
 	 *
@@ -28,9 +31,9 @@ class API_Controller extends Base_Controller
 	public function before()
 	{
 		// see if the request is coming from the internal API
-		if (! API::is_internal())
+		if ( ! API::is_internal())
 		{
-			Redirect::to('404')->send();
+			return Event::first('404');
 			exit;
 		}
 

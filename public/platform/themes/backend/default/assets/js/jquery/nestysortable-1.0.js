@@ -80,7 +80,12 @@
 			var self  = this;
 			self.elem = elem;
 
-			$.extend(self.settings, settings);
+			$.extend(true, self.settings, settings);
+
+			// Check for NestedSortable
+			if ( ! $().nestedSortable) {
+				$.error('$.nestySortable requires $.nestedSortable');
+			}
 
 			// Initialise NestedSortable
 			self.sortable().nestedSortable({
@@ -151,22 +156,39 @@
 				// the template variables with the value of each
 				// field's selector.
 				for (i in self.settings.fields) {
-					var field = self.settings.fields[i];
 
-					var value = $(field.newSelector).val();
+					// Get some variables
+					var field        = self.settings.fields[i],
+					    $formElement = $(field.newSelector);
 
-					if (typeof field.required !== 'undefined' && field.required === true && (typeof value === 'undedfined' || ! value)) {
+					// Checkboxes have a boolean attribute
+					if ($formElement.is(':checkbox')) {						
+						fieldValue = $formElement.attr('checked') ? 'checked="checked"' : '';
+						rawValue   = $formElement.attr('checked') ? $formElement.attr('value') : 0;
+					}
+					else {
+						fieldValue = 'value="'+$formElement.val()+'"';
+						rawValue   = $formElement.val();
+					}
 
-						result = self.settings.invalidFieldCallback(field, value);
+					// Validate form element
+					if ($formElement.is(':invalid')) {
+						result = self.settings.invalidFieldCallback(field, rawValue);
 
 						if (typeof result !== 'undefiend' && valid === true) {
 							valid = Boolean(result);
 						}
+
+						continue;
 					}
 
-					// Replace the name with the actual value
-					var regex    = new RegExp('\{\{'+field.name+'\}\}', 'gi');
-					itemTemplate = itemTemplate.replace(regex, value);
+					// Replace all field values. These change depending on the input type
+					var fieldRegex = new RegExp('\{\{field\.'+field.name+'\}\}', 'gi'),
+					    rawRegex   = new RegExp('\{\{raw\.'+field.name+'\}\}', 'gi');
+
+					// Replace all values
+					itemTemplate = itemTemplate.replace(fieldRegex, fieldValue);
+					itemTemplate = itemTemplate.replace(rawRegex, rawValue);
 				}
 
 				if (valid !== true) {

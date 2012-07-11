@@ -32,6 +32,9 @@ class Users_Install
 	public function up()
 	{
 
+		/* # Create User Tables
+		================================================== */
+
 		// Migrate Sentry
 		Command::run(array('migrate', 'sentry'));
 
@@ -51,84 +54,66 @@ class Users_Install
 			'name' => 'users',
 		));
 
-		// Add configuration settings
-		$status_disabled = DB::table('configuration')->insert(array(
+		/* # Create Menu Items
+		================================================== */
+
+		// Set Admin menu
+		$admin = Menu::admin_menu();
+
+		// Create users link
+		$users = new Menu(array(
+			'name'          => 'Users',
+			'extension'     => 'users',
+			'slug'          => 'admin-users',
+			'uri'           => 'users',
+			'user_editable' => 0,
+			'status'        => 1,
+		));
+
+		$users->last_child_of($admin);
+
+		// Create users list link
+		$users_list = new Menu(array(
+			'name'          => 'Users',
+			'extension'     => 'users',
+			'slug'          => 'admin-users-list',
+			'uri'           => 'users',
+			'user_editable' => 0,
+			'status'        => 1,
+		));
+
+		$users_list->last_child_of($users);
+
+		// Create groups link
+		$groups = new Menu(array(
+			'name'          => 'Groups',
+			'extension'     => 'users',
+			'slug'          => 'admin-groups-list',
+			'uri'           => 'users/groups',
+			'user_editable' => 0,
+			'status'        => 1,
+		));
+
+		$groups->last_child_of($users);
+
+		/* # Configuration Settings
+		================================================== */
+
+		// Status Disabled
+		$status_disabled = DB::table('settings')->insert(array(
 			'extension' 	=> 'users',
 			'type' 			=> 'status',
 			'name' 			=> 'disabled',
 			'value' 		=> '0',
 		));
 
-		$status_enabled = DB::table('configuration')->insert(array(
+		// Status Enabled
+		$status_enabled = DB::table('settings')->insert(array(
 			'extension' 	=> 'users',
 			'type' 			=> 'status',
 			'name' 			=> 'enabled',
 			'value' 		=> '1',
 		));
-
-		// Create menu items
-		$admin = Menu::admin_menu();
-
-		// Find the system menu
-		$primary = Menu::find(function($query) use ($admin)
-		{
-			return $query->where('slug', '=', 'users');
-		});
-
-		if ($primary === null)
-		{
-			$primary = new Menu(array(
-				'name'          => 'Users',
-				'extension'     => 'users',
-				'slug'          => 'users',
-				'uri'           => 'users',
-				'user_editable' => 0,
-				'status'        => 1,
-			));
-
-			// Find the system menu (system is a dependency of
-			// this module)
-			$system = Menu::find(function($query)
-			{
-				return $query->where('slug', '=', 'system');
-			});
-
-			// Fallback
-			if ($system === null)
-			{
-				$primary->last_child_of($admin);
-			}
-
-			// Put before system
-			else
-			{
-				$primary->previous_sibling_of($system);
-			}
-		}
-
-		// Users menu
-		$users = new Menu(array(
-			'name'          => 'Users',
-			'extension'     => 'users',
-			'slug'          => 'users-list',
-			'uri'           => 'users',
-			'user_editable' => 0,
-			'status'        => 1,
-		));
-
-		$users->last_child_of($primary);
-
-		// Groups menu
-		$groups = new Menu(array(
-			'name'          => 'Groups',
-			'extension'     => 'users',
-			'slug'          => 'groups-list',
-			'uri'           => 'users/groups',
-			'user_editable' => 0,
-			'status'        => 1,
-		));
-
-		$groups->last_child_of($primary);
 
 	}
 

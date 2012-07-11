@@ -100,7 +100,7 @@ class Platform
 		if (static::$messages === null)
 		{
 			// Setup Messages class. Second param to persist messages to session
-			static::$messages = \Messages::instance(array(), true);
+			static::$messages = \Messages::instance();
 		}
 
 		return static::$messages;
@@ -374,7 +374,7 @@ class Platform
 			}
 		}
 
-		// Extnesions table doesn't exist
+		// Extensions table doesn't exist
 		catch (Exception $e)
 		{
 			$installed = false;

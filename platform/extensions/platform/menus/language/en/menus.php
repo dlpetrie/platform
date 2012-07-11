@@ -20,15 +20,17 @@
 
 return array(
 
+	'title'       => 'Menus Management',
+	'tagline' => 'Manage menus and their items.',
+
 	/* General */
 	'general' => array(
-		'title'       => 'Menus Management',
-		'description' => 'Manage menus and their items.',
 		'yes'         => 'Yes',
 		'no'          => 'No',
 		'name'        => 'Name',
 		'slug'        => 'Slug',
 		'uri'         => 'Uri',
+		'secure'      => 'Secure (HTTPS)',
 		'status'      => 'Enabled',
 		'new_item'    => 'New Item',
 	),

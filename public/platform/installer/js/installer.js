@@ -11,33 +11,26 @@ $(document).ready(function() {
 	| credentials before allowing them to
 	| continue with the install process.
 	*/
-	$('#database-form').find('select, input').on('focus keyup change', function(e) {
+	$('.messages').html('Awaiting Credentials');
 
-		// Check keycode - enter
-		// shouldn't trigger it
-		if (e.keyCode === 13) {
-			return;
-		}
+	var checkDBCredentials = function() {
 
-		// Count the amount of empty fields
-		$length = $('#database-form').find('select, input:not(:password)').filter(function()
+		length = $('#database-form').find('select, input:not(:password)').filter(function()
 		{
 			return $(this).val() == '';
 		}).length;
 
-		// If we have filled out all fields,
-		// do an AJAX call to check the credentials
-		if ($length == 0) {
-
+		if (length == 0)
+		{
 			$.ajax({
 				type     : 'POST',
-				url      : platform.url.base('installer/index/confirm_db'),
+				url      : platform.url.base('installer/confirm_db'),
 				data     : $('#database-form').serialize(),
 				dataType : 'JSON',
 				success  : function(data, textStatus, jqXHR) {
 
 					// Show success message and enable continue button
-					$('.confirm-db').html(data.message)
+					$('.messages').html(data.message)
 					                [data.error ? 'addClass' : 'removeClass']('alert-error')
 					                [data.error ? 'removeClass' : 'addClass']('alert-success')
 					                .show();
@@ -51,16 +44,104 @@ $(document).ready(function() {
 						alert(jqXHR.status + ' ' + errorThrown);
 					}
 				}
-			})
+			});
 		}
-
-		// Else, remove the confirm database text
-		// and disable the continue button
-		else {
-			$('.confirm-db').html('')
-			                .hide();
+		else
+		{
+			$('.messages')
+				.removeClass('alert-success')
+				.removeClass('alert-error')
+				.addClass('alert')
+				.html('Awaiting Credentials');
 
 			$('#database-form button:submit').attr('disabled', 'disabled');
 		}
-	});
+	}
+
+	var checkUserCredentials = function() {
+
+		length = $('#user-form').find('input').filter(function()
+		{
+			return $(this).val() == '';
+		}).length;
+
+		if (length == 0)
+		{
+			$.ajax({
+				type     : 'POST',
+				url      : platform.url.base('installer/confirm_user'),
+				data     : $('#user-form').serialize(),
+				dataType : 'JSON',
+				success  : function(data, textStatus, jqXHR) {
+					console.log(data);
+
+					message = data.message[0];
+
+					// $.each(data.message, function(idx, val) {
+					// 	message += val;
+					// });
+
+					// Show success message and enable continue button
+					$('.messages').html(message)
+					                [data.error ? 'addClass' : 'removeClass']('alert-error')
+					                [data.error ? 'removeClass' : 'addClass']('alert-success')
+					                .show();
+
+					$('#user-form button:submit')[data.error ? 'attr' : 'removeAttr']('disabled', 'disabled');
+				},
+				error    : function(jqXHR, textStatus, errorThrown) {
+
+					// Don't know
+					if (jqXHR.status != 0) {
+						alert(jqXHR.status + ' ' + errorThrown);
+					}
+				}
+			});
+		}
+		else
+		{
+			$('.messages')
+				.removeClass('alert-success')
+				.removeClass('alert-error')
+				.addClass('alert')
+				.html('Awaiting Credentials');
+
+			$('#user-form button:submit').attr('disabled', 'disabled');
+		}
+	}
+
+	if ($('#database-form').length)
+	{
+		checkDBCredentials();
+
+		$('#database-form').find('select, input').on('focus keyup change', function(e) {
+
+			// Check keycode - enter
+			// shouldn't trigger it
+			if (e.keyCode === 13) {
+				return;
+			}
+
+			checkDBCredentials();
+
+		});
+	}
+
+	if ($('#user-form').length)
+	{
+		checkUserCredentials();
+
+		$('#user-form').find('input').on('focus keyup change', function(e) {
+
+			// Check keycode - enter
+			// shouldn't trigger it
+			if (e.keyCode === 13) {
+				return;
+			}
+
+			checkUserCredentials();
+
+		});
+	}
+
 });

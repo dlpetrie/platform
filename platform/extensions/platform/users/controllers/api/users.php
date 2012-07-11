@@ -71,14 +71,14 @@ class Users_API_Users_Controller extends API_Controller
 				// respond
 				return array(
 					'status'  => true,
-					'message' => Lang::line('users::users.create_success')->get()
+					'message' => Lang::line('users::users.create.success')->get()
 				);
 			}
 			else
 			{
 				return array(
 					'status'  => false,
-					'message' => ($user->validation()->errors->has()) ? $user->validation()->errors : Lang::line('user::users.create_error')->get()
+					'message' => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : Lang::line('user::users.create.error')->get()
 				);
 			}
 		}
@@ -105,14 +105,14 @@ class Users_API_Users_Controller extends API_Controller
 			{
 				return array(
 					'status'  => true,
-					'message' => Lang::line('users::users.update_success')->get()
+					'message' => Lang::line('users::users.update.success')->get()
 				);
 			}
 			else
 			{
 				return array(
 					'status'  => false,
-					'message' => ($user->validation()->errors->has()) ? $user->validation()->errors : Lang::line('users::users.update_error')->get()
+					'message' => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : Lang::line('users::users.update.error')->get()
 				);
 			}
 		}
@@ -176,22 +176,22 @@ class Users_API_Users_Controller extends API_Controller
 	public function get_datatable()
 	{
 		$defaults = array(
-			'select'    => array(
-				'users.id'            => Lang::line('users::users.general.id')->get(),
-				'first_name'          => Lang::line('users::users.general.first_name')->get(),
-				'last_name'           => Lang::line('users::users.general.last_name')->get(),
-				'email'               => Lang::line('users::users.general.email')->get(),
-				'groups.name'         => Lang::line('users::users.general.groups')->get(),
-				'configuration.name'  => Lang::line('users::users.general.status')->get(),
-				'created_at'          => 'Created At',
+			'select'   => array(
+				'users.id'       => Lang::line('users::users.general.id')->get(),
+				'first_name'     => Lang::line('users::users.general.first_name')->get(),
+				'last_name'      => Lang::line('users::users.general.last_name')->get(),
+				'email'          => Lang::line('users::users.general.email')->get(),
+				'groups.name'    => Lang::line('users::users.general.groups')->get(),
+				'settings.name'  => Lang::line('users::users.general.status')->get(),
+				'created_at'     => 'Created At',
 			),
-			'alias'     => array(
-				'users.id'            => 'id',
-				'groups.name'         => 'groups',
-				'configuration.name'  => 'status'
+			'alias'    => array(
+				'users.id'      => 'id',
+				'groups.name'   => 'groups',
+				'settings.name' => 'status'
 			),
-			'where'     => array(),
-			'order_by'  => array('users.id' => 'desc'),
+			'where'    => array(),
+			'order_by' => array('users.id' => 'desc'),
 		);
 
 		// lets get to total user count
@@ -208,9 +208,9 @@ class Users_API_Users_Controller extends API_Controller
 				->left_join('users_metadata', 'users.id', '=', 'users_metadata.user_id')
 				->left_join('users_groups', 'users.id', '=', 'users_groups.user_id')
 				->left_join('groups', 'users_groups.group_id', '=', 'groups.id')
-				->join('configuration', 'configuration.value', '=', 'users.status')
-				->where('configuration.extension', '=', 'users')
-				->where('configuration.type', '=', 'status');
+				->join('settings', 'settings.value', '=', 'users.status')
+				->where('settings.extension', '=', 'users')
+				->where('settings.type', '=', 'status');
 		});
 
 		// set paging
@@ -224,9 +224,9 @@ class Users_API_Users_Controller extends API_Controller
 
 			return $query
 				->select($columns)
-				->join('configuration', 'configuration.value', '=', 'users.status')
-				->where('configuration.extension', '=', 'users')
-				->where('configuration.type', '=', 'status');
+				->join('settings', 'settings.value', '=', 'users.status')
+				->where('settings.extension', '=', 'users')
+				->where('settings.type', '=', 'status');
 
 		});
 
@@ -323,13 +323,19 @@ class Users_API_Users_Controller extends API_Controller
 			// Get the Swift Mailer instance
 			$mailer = IoC::resolve('mailer');
 
+			$link = URL::to(ADMIN.'/reset_password_confirm/'.$reset['link']);
+
+			// set body
+			$body = file_get_contents(path('public').'platform'.DS.'emails'.DS.'reset_password.html');
+			$body = preg_replace('/{{SITE_TITLE}}/', Platform::get('settings.general.title'), $body);
+			$body = preg_replace('/{{RESET_LINK}}/', $link, $body);
+
 			// Construct the message
-			$message = Swift_Message::newInstance(Platform::get('settings.general.title').' - Password Reset')
-			    ->setFrom(Platform::get('settings.general.email'), Platform::get('settings.general.title'))
+			$message = Swift_Message::newInstance()
+				->setSubject(Platform::get('settings.site.title').' - Password Reset')
+			    ->setFrom(Platform::get('settings.site.email'), Platform::get('settings.site.title'))
 			    ->setTo(Input::get('email'))
-			    ->setBody(
-			    	'Please go to the link provided below to change your password to the provided reset password.'."\n\n".
-					"\t".URL::to('admin/reset_password_confirm/'.$reset['link']),'text/html');
+			    ->setBody($body,'text/html');
 
 			// Send the email
 			$mailer->send($message);

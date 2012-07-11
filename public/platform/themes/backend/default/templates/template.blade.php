@@ -13,8 +13,8 @@
 
 	<meta name="description" content="an ecommerce engine">
 	<meta name="author" content="Cartalyst LLC">
-	<meta name="base_url" content="{{ url() }}">
-	<meta name="admin_url" content="{{ url(ADMIN) }}">
+	<meta name="base_url" content="{{ URL::to_secure() }}">
+	<meta name="admin_url" content="{{ URL::to_secure(ADMIN) }}">
 
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -47,13 +47,13 @@
 	<div id="base" class="grid">
 		<header class="rows">
 			<div class="brand">
-				<a href="{{ url(ADMIN) }}">
+				<a href="{{ URL::to_secure(ADMIN) }}">
 					<img src="{{ Theme::asset('img/brand.png') }}" title="Cartalyst">
 				</a>
 			</div>
 			<div class="about">
-				<h1>@get.settings.general.title</h1>
-				<p class="lead">@get.settings.general.tagline</p>
+				<h1>@get.settings.site.title</h1>
+				<p class="lead">@get.settings.site.tagline</p>
 			</div>
 			<div class="profile">
 				@widget('platform.users::users.profile')
@@ -73,6 +73,28 @@
 
 				<div class="content column expand">
 					<div class="container">
+						<div class="messages">
+							<ul class="success">
+								@foreach (Session::get('platform.success', array()) as $plat_success)
+									<li>{{ $plat_success }}</li>
+								@endforeach
+							</ul>
+							<ul class="errors">
+								@foreach (Session::get('platform.errors', array()) as $plat_errors)
+									<li>{{ $plat_errors }}</li>
+								@endforeach
+							</ul>
+							<ul class="warning">
+								@foreach (Session::get('platform.warning', array()) as $plat_warning)
+									<li>{{ $plat_warning }}</li>
+								@endforeach
+							</ul>
+							<ul class="info">
+								@foreach (Session::get('platform.info', array()) as $plat_info)
+									<li>{{ $plat_info }}</li>
+								@endforeach
+							</ul>
+						</div>
 						@yield('content')
 					</div>
 				</div>
@@ -81,7 +103,7 @@
 		<div id="footer" class="rows">
 			<div class="wrapper clearfix">
 				<div class="brand">
-					<a href="{{ url(ADMIN) }}">
+					<a href="{{ URL::to_secure(ADMIN) }}">
 						<img src="{{ Theme::asset('img/brand-footer.png') }}" title="Cartalyst">
 					</a>
 				</div>

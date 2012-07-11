@@ -18,6 +18,8 @@
  * @link       http://cartalyst.com
  */
 
+// Remove /index/ out of installer routes.
+Route::any('installer/(:any)', 'installer::index@(:1)');
 Route::get('installer', 'installer::index@index');
 
 Route::controller(Controller::detect('installer'));

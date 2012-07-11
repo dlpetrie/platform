@@ -26,7 +26,7 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 		// general settings
 		'general' => array(
 			'site:name' => 'required',
-			//'site:url'  => 'required'
+			'site:email' => 'required|email'
 		)
 	);
 
@@ -38,7 +38,7 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 	public function before()
 	{
 		parent::before();
-		$this->active_menu('settings');
+		$this->active_menu('admin-settings');
 	}
 
 	/**
@@ -136,7 +136,7 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 			Platform::messages()->error($update['errors']);
 		}
 
-		return Redirect::to(ADMIN.'/settings/general');
+		return Redirect::to_secure(ADMIN.'/settings/general');
 	}
 
 }

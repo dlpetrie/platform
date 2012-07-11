@@ -34,15 +34,14 @@
 */
 
 return array(
+	'crud'   => array(
+		'location' => 'path: '.path('app').'bundles'.DS.'crud',
+	),
 	'gitsy'   => array(
 		'location' => 'path: '.path('app').'bundles'.DS.'gitsy',
 	),
 	'nesty'   => array(
 		'location' => 'path: '.path('app').'bundles'.DS.'nesty',
-		'auto'     => true,
-	),
-	'oauth2'  => array(
-		'location' => 'path: '.path('app').'bundles'.DS.'oauth2',
 		'auto'     => true,
 	),
 	'sentry'  => array(
@@ -51,7 +50,6 @@ return array(
 	),
 	'swiftmailer' => array(
 		'location' => 'path: '.path('app').'bundles'.DS.'swiftmailer',
-		//'auto'     => true,
 	),
 	'theme'   => array(
 		'location' => 'path: '.path('app').'bundles'.DS.'theme',

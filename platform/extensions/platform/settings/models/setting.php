@@ -30,18 +30,16 @@ use Crud;
 class Setting extends Crud
 {
 
-	protected static $_table = 'configuration';
-
 	/**
 	 * Set validation rules and labels
 	 *
 	 * @param  array  validation rules
 	 * @param  array  labels
 	 */
-	public function set_validation($rules = array(), $labels = array())
+	public function set_validation($rules = array(), $messages = array())
 	{
 		static::$_rules  = $rules;
-		// static::$_labels = $labels;
+		// static::$_messages = $messages;
 	}
 
 }
