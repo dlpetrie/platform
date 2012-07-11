@@ -18,8 +18,6 @@
  * @link       http://cartalyst.com
  */
 
-Autoloader::namespaces(array(
-	'Books\\Widgets' => __DIR__.DS.'widgets',
-	'Books\\Plugins' => __DIR__.DS.'plugins',
-	'Books'          => __DIR__.DS.'models',
-));
+return array(
+
+);
