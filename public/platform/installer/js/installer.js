@@ -44,7 +44,7 @@ $(document).ready(function() {
 					                .show();
 
 					db_pass = ! data.error;
-					
+
 					// $('#database-form button:submit')[data.error ? 'attr' : 'removeAttr']('disabled', 'disabled');
 				},
 				error    : function(jqXHR, textStatus, errorThrown) {
@@ -175,18 +175,24 @@ $(document).ready(function() {
 
 		$('#database-form').find('select, input').on('focus keyup change', function(e) {
 
+			if (typeof(checkDBTimer) != "undefined") {
+				clearTimeout(checkDBTimer);
+			}
+
 			// Check keycode - enter
 			// shouldn't trigger it
 			if (e.keyCode === 13) {
 				return;
 			}
 
-			if (checkDBCredentials() && checkDisclaimer()) {
-				$('#database-form button:submit').removeAttr('disabled', 'disabled');
-			}
-			else {
-				$('#database-form button:submit').attr('disabled', 'disabled');
-			}
+			checkDBTimer = setTimeout(function() {
+				if (checkDBCredentials() && checkDisclaimer()) {
+					$('#database-form button:submit').removeAttr('disabled', 'disabled');
+				}
+				else {
+					$('#database-form button:submit').attr('disabled', 'disabled');
+				}
+			}, 1000);
 
 		});
 	}
@@ -197,13 +203,19 @@ $(document).ready(function() {
 
 		$('#user-form').find('input').on('focus keyup change', function(e) {
 
+			if (typeof(checkUserTimer) != "undefined") {
+				clearTimeout(checkUserTimer);
+			}
+
 			// Check keycode - enter
 			// shouldn't trigger it
 			if (e.keyCode === 13) {
 				return;
 			}
 
-			checkUserCredentials();
+			checkUserTimer = setTimeout(function() {
+				checkUserCredentials();
+			}, 1000);
 
 		});
 	}
