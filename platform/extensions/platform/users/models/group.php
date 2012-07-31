@@ -175,7 +175,7 @@ class Group extends Crud
 				$this->before_delete(null);
 			}
 
-			$result = Sentry::group($this->{static::key()})->delete();
+			$result = Sentry::group((int) $this->{static::key()})->delete();
 
 			if (static::$_events)
 			{

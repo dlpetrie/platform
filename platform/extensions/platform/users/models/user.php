@@ -256,7 +256,7 @@ class User extends Crud
 				$this->before_delete(null);
 			}
 
-			$result = Sentry::user($this->{static::key()})->delete();
+			$result = Sentry::user((int) $this->{static::key()})->delete();
 
 			if (static::$_events)
 			{

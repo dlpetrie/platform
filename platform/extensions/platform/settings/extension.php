@@ -53,7 +53,7 @@ return array(
 	},
 
 	'rules' => array(
-
+		'settings::admin.settings@general'
 	),
 
 );

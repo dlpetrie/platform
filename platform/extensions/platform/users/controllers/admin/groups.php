@@ -91,13 +91,13 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 		{
 			// group was created - set success and redirect back to admin user groups
 			Platform::messages()->success($create_group['message']);
-			return Redirect::to_secure('admin/users/groups');
+			return Redirect::to_secure(ADMIN.'/users/groups');
 		}
 		else
 		{
 			// there was an error creating the group - set errors
 			Platform::messages()->error($create_group['message']);
-			return Redirect::to_secure('admin/users/groups/create')->with_input();
+			return Redirect::to_secure(ADMIN.'/users/groups/create')->with_input();
 		}
 	}
 

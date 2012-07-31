@@ -47,7 +47,12 @@ return array(
 	},
 
 	'rules' => array(
-
+		'extensions::admin.extensions@index',
+		'extensions::admin.extensions@install',
+		'extensions::admin.extensions@uninstall',
+		'extensions::admin.extensions@enable',
+		'extensions::admin.extensions@disable',
+		'extensions::admin.extensions@update',
 	),
 
 );

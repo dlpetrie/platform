@@ -44,4 +44,11 @@ return array(
 
 	},
 
+	'rules' => array(
+		'menus::admin.menus@index',
+		'menus::admin.menus@create',
+		'menus::admin.menus@edit',
+		'menus::admin.menus@delete',
+	),
+
 );
