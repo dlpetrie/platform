@@ -62,7 +62,6 @@ return array(
 	},
 
 	'rules' => array(
-		'admin.is_another_admin',
 		'users::admin.users@index',
 		'users::admin.users@create',
 		'users::admin.users@edit',
