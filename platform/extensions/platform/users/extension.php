@@ -67,6 +67,9 @@ return array(
 		'users::admin.users@edit',
 		'users::admin.users@delete',
 		'users::admin.groups@index',
+		'users::admin.groups@create',
+		'users::admin.groups@edit',
+		'users::admin.groups@delete',
 	),
 
 );

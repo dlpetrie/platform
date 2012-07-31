@@ -56,6 +56,8 @@ return array(
 	'rules' => array(
 		'themes::admin.themes@frontend',
 		'themes::admin.themes@backend',
+		'themes::admin.themes@edit',
+		'themes::admin.themes@activate',
 	),
 
 );

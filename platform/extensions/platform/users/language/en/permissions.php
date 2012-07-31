@@ -24,7 +24,6 @@ return array(
 
 	'admin' => array(
 		'_title_' => 'Admin Users General',
-		'is_another_admin' => 'Another Admin',
 
 		'users' => array(
 			'_title_' => 'Admin Users',
@@ -37,7 +36,10 @@ return array(
 		'groups'  => array(
 			'_title_' => 'Admin User Groups',
 			'index'   => 'View Group',
-		)
+			'create'  => 'Create',
+			'edit'    => 'Edit',
+			'delete'  => 'Delete',
+		),
 	),
 
 	'btn_update' => 'Update Permissions'

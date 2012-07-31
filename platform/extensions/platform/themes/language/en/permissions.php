@@ -25,6 +25,8 @@ return array(
 			'_title_'  => 'Admin Themes',
 			'frontend' => 'Frontend',
 			'backend'  => 'Backend',
+			'edit'     => 'Edit',
+			'activate' => 'Activate',
 		),
 	)
 
