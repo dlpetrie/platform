@@ -13,7 +13,7 @@
 @endsection
 
 <!-- Queue Scripts -->
-{{ Theme::queue_asset('login', 'users::js/login.js', 'jquery') }}
+{{ Theme::queue_asset('reset_password', 'users::js/reset_password.js', 'jquery') }}
 
 <!-- Scripts -->
 @section('scripts')
