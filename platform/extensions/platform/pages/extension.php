@@ -47,13 +47,15 @@ return array(
 
 		Route::any('/', 'pages::pages@index');
 
-		Route::any('(:any)', function($page = 'index') {
+		Route::any('(:any)(/.*)?', function($page = 'index', $params = null) {
+
 			// check if the page is a bundle
 			if ( ! Bundle::exists($page))
 			{
 				$page = ($page == 'home') ? 'index' : $page;
+				$params = explode('/', $params);
 
-				return Controller::call('pages::pages@'.$page);
+				return Controller::call('pages::pages@'.$page, $params);
 			}
 		});
 	},
