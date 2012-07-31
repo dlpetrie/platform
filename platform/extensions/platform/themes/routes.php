@@ -18,4 +18,5 @@
  * @link       http://cartalyst.com
  */
 
+Route::any(ADMIN.'/themes', 'themes::admin.themes@frontend');
 Route::controller(Controller::detect('themes'));

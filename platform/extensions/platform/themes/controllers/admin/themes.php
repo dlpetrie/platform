@@ -32,17 +32,6 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
 	}
 
 	/**
-	 * Default View
-	 * Points to frontend theme
-	 *
-	 * @return  View
-	 */
-	public function get_index()
-	{
-		return Redirect::to_secure(ADMIN.'/themes/frontend');
-	}
-
-	/**
 	 * Shows Frontend Themes
 	 *
 	 * @return  View
