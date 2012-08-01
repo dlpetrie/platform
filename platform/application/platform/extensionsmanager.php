@@ -688,12 +688,12 @@ class ExtensionsManager
 		// Start the extension so we can find it's bundle path
 		$this->start($extension);
 
-		$files = (array) glob(Bundle::path($extension->slug).'migrations'.DS.'*_*'.EXT);
+		$files = glob(Bundle::path($extension->slug).'migrations'.DS.'*_*'.EXT);
 
 		// When open_basedir is enabled, glob will return false on an
 		// empty directory, so we will return an empty array in this
 		// case so the application doesn't bomb out.
-		if (empty($files))
+		if ($files === false)
 		{
 			return array();
 		}
