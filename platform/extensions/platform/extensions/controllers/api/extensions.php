@@ -114,7 +114,7 @@ class Extensions_API_Extensions_Controller extends API_Controller
 
 		try
 		{
-			$extension = Platform::extensions_manager()->install($slug);
+			$extension = Platform::extensions_manager()->install($slug, true);
 		}
 		catch (Exception $e)
 		{
