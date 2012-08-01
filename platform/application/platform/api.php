@@ -107,10 +107,17 @@ class API
 		// Store the main request method and data
 		$main_request = Request::$foundation;
 
-		$get  = ($type == 'GET')  ? $data : array();
-		$post = ($type == 'POST') ? $data : array();
+		// Work out our query string and request data
+		$query   = ($type == 'GET')  ? $data : array();
+		$request = ($type == 'POST') ? $data : array();
 
-		Request::$foundation = new RequestFoundation($get, $post, array(), $_COOKIE, array(), $_SERVER);
+		// Override the server methods
+		$server = array_merge($_SERVER, array(
+			'REQUEST_METHOD' => strtoupper($type),
+			'REQUEST_URI'    => $uri,
+		));
+
+		Request::$foundation = new RequestFoundation($query, $request, array(), $_COOKIE, $_FILES, $server);
 		Request::foundation()->setMethod($type);
 		Request::foundation()->headers->add(array('content-type' => $format));
 
