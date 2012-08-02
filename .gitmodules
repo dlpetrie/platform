@@ -9,4 +9,4 @@
 	url = git@github.com:cartalyst/theme.git
 [submodule "platform/bundles/crud"]
 	path = platform/bundles/crud
-	url = git@github.com:cartalyst/crud.git
+	url = git://github.com/cartalyst/crud.git
