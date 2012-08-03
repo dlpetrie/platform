@@ -20,8 +20,22 @@
 
 class API_Controller extends Base_Controller
 {
+	/**
+	 * @var  array  List of routes to whitelist from auth filter
+	 */
+	protected $whitelist = array();
+
+	/**
+	 * Note: This is a quick temporary fix
+	 */
 	// Override construct as it doesn't need CSRF checks for internal API calls
-	public function __construct() {}
+	public function __construct()
+	{
+		if ( ! API::is_internal() and ( ! Sentry::check() or ! Sentry::user()->has_access('is_admin')))
+		{
+			$this->filter('before', 'admin_auth')->except($this->whitelist);
+		}
+	}
 
 	/**
 	 * This function is called before the action is executed.
@@ -30,10 +44,10 @@ class API_Controller extends Base_Controller
 	 */
 	public function before()
 	{
-		// see if the request is coming from the internal API
+		// See if the request is coming from the internal API
 		if ( ! API::is_internal())
 		{
-			return Event::first('404');
+			Event::fire('404');
 			exit;
 		}
 
