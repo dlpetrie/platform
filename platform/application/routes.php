@@ -182,11 +182,16 @@ Route::filter('csrf', function()
 	Request::foundation()->request->remove(Session::csrf_token);
 });
 
+// Filter all auth
 Route::filter('auth', function()
 {
-	if ( ! Sentry::check()) return Redirect::to('login');
+	if ( ! Sentry::check())
+	{
+		return Redirect::to('login');
+	}
 });
 
+// Filter all admin auth
 Route::filter('admin_auth', function()
 {
 	if ( ! Sentry::check() or ! Sentry::user()->has_access('is_admin') )

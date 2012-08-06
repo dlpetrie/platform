@@ -87,7 +87,6 @@ class Users_Auth_Controller extends Public_Controller
 	 */
 	public function get_login()
 	{
-
 		API::get('users/logout');
 		$this->active_menu('main-login');
 		return Theme::make('users::auth/login');

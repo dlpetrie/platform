@@ -23,11 +23,6 @@ use Platform\Users\User;
 class Users_API_Users_Controller extends API_Controller
 {
 
-	/**
-	 * Whitelisted Auth Routes
-	 */
-	protected $whitelist = array('login', 'logout', 'reset_password', 'reset_password_confirm');
-
 	public function get_index()
 	{
 		$config = Input::get() + array(
