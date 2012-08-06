@@ -18,28 +18,8 @@
  * @link       http://cartalyst.com
  */
 
-use Platform\Menus\Menu;
+return array(
 
-class Dashboard_Admin_Dashboard_Controller extends Admin_Controller
-{
-
-	/**
-	 * This function is called before the action is executed.
-	 *
-	 * @return void
-	 */
-	public function before()
-	{
-		// parent::before();
-		// $this->active_menu('admin-dashboard');
-	}
-
-	public function get_index()
-	{
-		echo '<pre>';
-		print_r(API::get('users'));
-
-		// return Theme::make('dashboard::index');
-	}
-
-}
+	// Error for an invalid response format
+	'invalid_instance' => 'Response must be an instance of :allowed, :instance given.',
+);

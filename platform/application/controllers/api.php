@@ -20,6 +20,7 @@
 
 class API_Controller extends Base_Controller
 {
+
 	/**
 	 * @var  array  List of routes to whitelist from auth filter
 	 */
@@ -77,23 +78,43 @@ class API_Controller extends Base_Controller
 			$response = $this->response($method, $parameters);
 		}
 
-		switch (Request::foundation()->headers->get('content-type'))
+		// Validate our response
+		if ( ! $response instanceof Response)
 		{
-			case 'application/json':
-				$response = json_encode($response);
-			break;
-			case 'application/vnd.php.serialized':
-				$response = serialize($response);
-			break;
-			default:
-				$response = json_encode($response);
-			break;
+			// throw new Exception(Lang::line('api.invalid_instance', array(
+			// 	'allowed'  => get_class(with(new Response(''))),
+			// 	'instance' => gettype($response),
+			// )));
+
+			Log::api(Lang::line('api.invalid_instance', array(
+				'allowed'  => get_class(with(new Response(''))),
+				'instance' => gettype($response),
+			)));
+
+			// Convert it now
+			$response = new Response($response);
 		}
 
 		// The "after" function on the controller is simply a convenient hook
 		// so the developer can work on the response before it's returned to
 		// the browser. This is useful for templating, etc.
 		$this->after($response);
+
+		// Transform our response content into the required
+		// format
+		switch (Request::foundation()->headers->get('accept'))
+		{
+			// Serialized PHP array
+			case 'application/vnd.php.serialized':
+				$response->content = serialize($response->content);
+			break;
+
+			// JSON is also the default
+			case 'application/json':
+			default:
+				$response->content = json_encode($response->content);
+			break;
+		}
 
 		Filter::run($this->filters('after', $method), array($response));
 
