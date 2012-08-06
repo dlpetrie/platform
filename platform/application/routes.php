@@ -77,7 +77,7 @@ Route::any(ADMIN.'/(:any?)/(:any?)/(:any?)(/.*)?', function($bundle = 'dashboard
 
 
 // Re-route api controllers
-Route::any(array(API.'/(:any?)/(:any?)/(:any?)(/.*)?', API.'/(:any?)/(:any?)(/.*)?', API.'/(:any?)/(:any?)(/.*)?'), function($bundle = 'dashboard', $controller = null, $action = null, $params = null)
+Route::any(array(API.'/(:any?)/(:any?)/(:any?)(/.*)?', API.'/(:any?)/(:any?)(/.*)?', API.'/(:any?)(/.*)?'), function($bundle = 'dashboard', $controller = null, $action = null, $params = null)
 {
 	if ( ! Bundle::exists($bundle))
 	{
