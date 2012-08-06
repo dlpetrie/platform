@@ -48,25 +48,6 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 	 */
 	public function get_index()
 	{
-		// echo '<pre>';
-		// // $menu = Menu::admin_menu();
-
-
-		// // print_r($menu);
-
-		// $users_list = Menu::find(function($query)
-		// {
-		// 	return $query->where('slug', '=', 'users-list');
-		// });
-
-		// echo $users_list->path();
-
-		// echo str_repeat(PHP_EOL, 3);
-
-		// $users_list->parent();
-
-		// print_r($users_list);
-
 		return $this->get_general();
 	}
 
@@ -82,7 +63,6 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 
 	public function post_general()
 	{
-
 		$post = Input::get();
 
 		$settings = array();
