@@ -67,23 +67,6 @@ class API_Controller extends Base_Controller
 	}
 
 	/**
-	 * This function is called before the action is executed.
-	 *
-	 * @return void
-	 */
-	public function before()
-	{
-		// See if the request is coming from the internal API
-		if ( ! API::is_internal())
-		{
-			Event::fire('404');
-			exit;
-		}
-
-		return parent::before();
-	}
-
-	/**
 	 * Execute a controller method with the given parameters.
 	 *
 	 * @param  string    $method
@@ -96,18 +79,30 @@ class API_Controller extends Base_Controller
 		// information
 		try
 		{
-			$filters = $this->filters('before', $method);
-
-			// Again, as was the case with route closures, if the controller "before"
-			// filters return a response, it will be considered the response to the
-			// request and the controller method will not be used.
-			$response = Filter::run($filters, array(), true);
-
-			if (is_null($response))
+			// Firstly, let's check if we're running an internal request or not.
+			// External calls are okay as long as we have authentication and
+			// ACL access.
+			if ( ! API::is_internal() and ( ! Sentry::check() or ! Sentry::user()->has_access()))
 			{
-				$this->before();
+				// We'll throw a 404
+				$response = $this->no_route();
+			}
+			else
+			{
+				$filters = $this->filters('before', $method);
 
-				$response = $this->response($method, $parameters);
+				// Again, as was the case with route closures, if the controller "before"
+				// filters return a response, it will be considered the response to the
+				// request and the controller method will not be used.
+				$response = Filter::run($filters, array(), true);
+
+				// No filter passed through?
+				if (is_null($response))
+				{
+					$this->before();
+
+					$response = $this->response($method, $parameters);
+				}
 			}
 
 			// Validate our response
@@ -130,7 +125,10 @@ class API_Controller extends Base_Controller
 			// The "after" function on the controller is simply a convenient hook
 			// so the developer can work on the response before it's returned to
 			// the browser. This is useful for templating, etc.
-			$this->after($response);
+			if ( ! API::is_internal() and ( ! Sentry::check() or ! Sentry::user()->has_access()))
+			{
+				$this->after($response);
+			}
 		}
 		catch (Exception $e)
 		{
