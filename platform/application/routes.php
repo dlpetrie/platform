@@ -109,7 +109,7 @@ Route::any(array(API.'/(:any?)/(:any?)/(:any?)(/.*)?', API.'/(:any?)/(:any?)(/.*
 });
 
 // Now detect controllers
-// Route::controller(Controller::detect());
+Route::controller(Controller::detect());
 
 /*
 |--------------------------------------------------------------------------
