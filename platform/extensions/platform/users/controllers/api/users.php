@@ -23,7 +23,19 @@ use Platform\Users\User;
 class Users_API_Users_Controller extends API_Controller
 {
 
-	public function get_index($id = null)
+	/**
+	 * Returns an array of users by the
+	 * given filters or a single user
+	 *
+	 *	<code>
+	 *		$users = API::get('users');
+	 *		$user  = API::get('users/:id');
+	 *	</code>
+	 *
+	 * @param   int  $id
+	 * @return  mixed
+	 */
+	public function get_index($id = false)
 	{
 		$config = Input::get() + array(
 			'select'   => array('users.id', 'users.email', 'users_metadata.*', 'users.status', \DB::raw('GROUP_CONCAT(groups.name ORDER BY groups.name ASC SEPARATOR \',\') AS groups')
@@ -35,7 +47,7 @@ class Users_API_Users_Controller extends API_Controller
 		);
 
 		// No ID? Return all users
-		if ($id == null)
+		if ($id == false)
 		{
 
 			$users = User::find_custom($config['select'], $config['where'], $config['order_by'], $config['take'], $config['skip']);
@@ -57,12 +69,61 @@ class Users_API_Users_Controller extends API_Controller
 		{
 			return new Response(Lang::line('users::users.errors.does_not_exist', array(
 				'id' => $id,
-			))->get(), 404);
+			))->get(), API::STATUS_NOT_FOUND);
 		}
 
 		$user = $users[0];
 		$user->groups = explode(',', $user->groups);
 		return new Response($user);
+	}
+
+	/**
+	 * Updates a given user by the
+	 * provided ID
+	 *
+	 *	<code>
+	 *		API::put('users/:id', $data);
+	 *	</code>
+	 *
+	 * @param   int  $id
+	 * @return  array
+	 */
+	public function put_index($id)
+	{
+		// set user data
+		$user_data = Input::get();
+
+		$user = new User($user_data);
+
+		print_r($user_data);
+
+		die();
+
+		// save user
+		try
+		{
+			if ($user->save())
+			{
+				return array(
+					'status'  => true,
+					'message' => Lang::line('users::users.update.success')->get()
+				);
+			}
+			else
+			{
+				return array(
+					'status'  => false,
+					'message' => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : Lang::line('users::users.update.error')->get()
+				);
+			}
+		}
+		catch (\Exception $e)
+		{
+			return array(
+				'status'  => false,
+				'message' => $e->getMessage()
+			);
+		}
 	}
 
 	public function post_register()

@@ -82,7 +82,7 @@ Route::any(ADMIN.'/(:any?)/(:any?)/(:any?)(/.*)?', function($bundle = 'dashboard
  *		/api/users/1 => users::api.users@index(1)
  *	</code>
  */
-Route::any(API.'/(:any?)/(:num)', function($bundle = DEFAULT_BUNDLE, $id = null)
+Route::any(API.'/(:any?)/(:num)', function($bundle = DEFAULT_BUNDLE, $id = null, $params = null)
 {
 	return Controller::call($bundle.'::api.'.$bundle.'@index', array($id));
 });

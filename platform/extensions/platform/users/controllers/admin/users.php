@@ -87,33 +87,7 @@ class Users_Admin_Users_Controller extends Admin_Controller
 	 */
 	public function post_create()
 	{
-		$user = array(
-			'email'                 => Input::get('email'),
-			'password'              => Input::get('password'),
-			'password_confirmation' => Input::get('password_confirmation'),
-			'groups'                => Input::get('groups'),
-			'metadata'              => array(
-				'first_name' => Input::get('first_name'),
-				'last_name'  => Input::get('last_name'),
-			)
-		);
-
-		// create the user
-		$create_user = API::post('users/create', $user);
-
-		if ($create_user['status'])
-		{
-			// user was created - set success and redirect back to admin/users
-			Platform::messages()->success($create_user['message']);
-			return Redirect::to_secure(ADMIN.'/users');
-		}
-		else
-		{
-			// there was an error creating the user - set errors
-			Platform::messages()->error($create_user['message']);
-
-			return Redirect::to_secure(ADMIN.'/users/create')->with_input();
-		}
+		return $this->post_edit();
 	}
 
 	/**
@@ -134,17 +108,10 @@ class Users_Admin_Users_Controller extends Admin_Controller
 	 *
 	 * @return  Redirect
 	 */
-	public function post_edit($id)
+	public function post_edit($id = false)
 	{
-		if ( ! $id)
-		{
-			Platform::messages()->error('A user Id is required to update a user.');
-			return Redirect::to_secure(ADMIN.'/users');
-		}
-
-		// initialize data array
+		// Initialize data array
 		$data = array(
-			'id'                    => $id,
 			'email'                 => Input::get('email'),
 			'password'              => Input::get('password'),
 			'password_confirmation' => Input::get('password_confirmation'),
@@ -154,6 +121,26 @@ class Users_Admin_Users_Controller extends Admin_Controller
 				'last_name'  => Input::get('last_name'),
 			)
 		);
+
+		echo '<pre>';
+
+		try
+		{
+			if ($id)
+			{
+				$user = API::put('users/'.$id, $data);
+			}
+			else
+			{
+				$user = API::post('users', $data);
+			}
+		}
+		catch (APIClientException $e)
+		{
+			throw $e;
+		}
+
+		die();
 
 		// update user
 		$update_user = API::post('users/update', $data);

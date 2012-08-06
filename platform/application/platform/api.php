@@ -330,19 +330,8 @@ class API
 		// Store the main request method and data
 		$main_request = Request::$foundation;
 
-		// Work out our query string and request data
-		$query   = ($method === 'GET')  ? $data : array();
-		$request = ($method === 'POST') ? $data : array();
-
-		// Override the $_SERVER properties
-		// for the internal request
-		$server = array_merge($_SERVER, array(
-			'REQUEST_METHOD' => $method,
-			'REQUEST_URI'    => $uri,
-		));
-
 		// Create a new request object
-		Request::$foundation = new RequestFoundation($query, $request, array(), $_COOKIE, $_FILES, $server);
+		Request::$foundation = RequestFoundation::create($uri, $method, $data, $_COOKIE, $_FILES, $_SERVER, $content = null);
 
 		// Set the method
 		Request::foundation()->setMethod($method);
