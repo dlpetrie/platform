@@ -100,9 +100,16 @@ class API_Controller extends Base_Controller
 		// the browser. This is useful for templating, etc.
 		$this->after($response);
 
+		// If there is no format available, use
+		// the default format.
+		if ( ! $format = Request::foundation()->headers->get('accept'))
+		{
+			$format = API::$content_types[Config::get('api.default_format', 'json')];
+		}
+
 		// Transform our response content into the required
 		// format
-		switch (Request::foundation()->headers->get('accept'))
+		switch ($format)
 		{
 			// Serialized PHP array
 			case 'application/vnd.php.serialized':
