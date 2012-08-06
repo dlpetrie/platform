@@ -160,9 +160,11 @@ class Installer_Index_Controller extends Base_Controller
 		// 4. Install extensions
 		Installer::install_extensions();
 
-		$create_user = API::post('users/create', $user);
-
-		if ( ! $create_user['status'])
+		try
+		{
+			$create_user = API::post('users', $user);
+		}
+		catch (APIClientException $e)
 		{
 			return Redirect::to('installer/step_3');
 		}

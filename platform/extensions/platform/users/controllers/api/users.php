@@ -78,6 +78,42 @@ class Users_API_Users_Controller extends API_Controller
 	}
 
 	/**
+	 * Creates a user
+	 *
+	 *	<code>
+	 *		API::post('users', $data);
+	 *	</code>
+	 */
+	public function post_index()
+	{
+		// Create a user
+		$user = new User(Input::get());
+
+		// Save user
+		try
+		{
+			// Save the user
+			if ($user->save())
+			{
+				return new Response($user, API::STATUS_CREATED);
+			}
+			else
+			{
+				return new Response(array(
+					'message' => Lang::line('users::users.create.error')->get(),
+					'errors'  => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : array(),
+					), API::STATUS_BAD_REQUEST);
+			}
+		}
+		catch (Exception $e)
+		{
+			return new Response(array(
+				'message' => $e->getMessage(),
+			), API::STATUS_BAD_REQUEST);
+		}
+	}
+
+	/**
 	 * Updates a given user by the
 	 * provided ID
 	 *
@@ -90,15 +126,12 @@ class Users_API_Users_Controller extends API_Controller
 	 */
 	public function put_index($id)
 	{
-		// set user data
-		$user_data = Input::get();
-
-		// Create a user
+		// Update a user
 		$user = new User(array_merge(array(
 			'id' => $id,
-		), $user_data));
+		), Input::get()));
 
-		// save user
+		// Save user
 		try
 		{
 			// Save the user
@@ -114,7 +147,7 @@ class Users_API_Users_Controller extends API_Controller
 					), API::STATUS_BAD_REQUEST);
 			}
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			return new Response(array(
 				'message' => $e->getMessage(),

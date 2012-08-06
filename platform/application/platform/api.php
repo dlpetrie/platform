@@ -101,13 +101,14 @@ class API
 	const STATUS_OK  = 200;
 
 	/**
-	 * No Content
+	 * No Content / Created
 	 *
 	 * I've created the resource you submitted,
 	 * but I don't have anything to return.
 	 *
 	 * @constant
 	 */
+	const STATUS_CREATED    = 204;
 	const STATUS_NO_CONTENT = 204;
 
 	/**
