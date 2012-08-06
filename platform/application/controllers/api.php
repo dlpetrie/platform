@@ -18,8 +18,37 @@
  * @link       http://cartalyst.com
  */
 
+use Symfony\Component\HttpFoundation\Response as ResponseFoundation;
+
 class API_Controller extends Base_Controller
 {
+
+	/**
+	 * Catch-all method for requests that can't be matched.
+	 *
+	 * @param  string    $method
+	 * @param  array     $parameters
+	 * @return Response
+	 */
+	public function __call($method, $parameters)
+	{
+		return $this->no_route($method, $parameters);
+	}
+
+	/**
+	 * Called in routes.php when no route leading with
+	 * api/ can be resolved. We call this because __call()
+	 * is slow.
+	 *
+	 * @param  string    $method
+	 * @param  array     $parameters
+	 * @return Response
+	 */
+	public function no_route($method = null, $parameters = null)
+	{
+		return new Response(ResponseFoundation::$statusTexts[404], 404);
+	}
+
 	/**
 	 * @var  array  List of routes to whitelist from auth filter
 	 */
@@ -63,37 +92,78 @@ class API_Controller extends Base_Controller
 	 */
 	public function execute($method, $parameters = array())
 	{
-		$filters = $this->filters('before', $method);
-
-		// Again, as was the case with route closures, if the controller "before"
-		// filters return a response, it will be considered the response to the
-		// request and the controller method will not be used.
-		$response = Filter::run($filters, array(), true);
-
-		if (is_null($response))
+		// Wrap everything in a try, as to not expose sensitive
+		// information
+		try
 		{
-			$this->before();
+			$filters = $this->filters('before', $method);
 
-			$response = $this->response($method, $parameters);
+			// Again, as was the case with route closures, if the controller "before"
+			// filters return a response, it will be considered the response to the
+			// request and the controller method will not be used.
+			$response = Filter::run($filters, array(), true);
+
+			if (is_null($response))
+			{
+				$this->before();
+
+				$response = $this->response($method, $parameters);
+			}
+
+			// Validate our response
+			if ( ! $response instanceof Response)
+			{
+				// throw new Exception(Lang::line('api.invalid_instance', array(
+				// 	'allowed'  => get_class(with(new Response(''))),
+				// 	'instance' => gettype($response),
+				// )));
+
+				Log::api(Lang::line('api.invalid_instance', array(
+					'allowed'  => get_class(with(new Response(''))),
+					'instance' => gettype($response),
+				)));
+
+				// Convert it now
+				$response = new Response($response);
+			}
+
+			// The "after" function on the controller is simply a convenient hook
+			// so the developer can work on the response before it's returned to
+			// the browser. This is useful for templating, etc.
+			$this->after($response);
+		}
+		catch (Exception $e)
+		{
+			if (API::is_internal())
+			{
+				throw $e;
+			}
+
+			$response = new Response(ResponseFoundation::$statusTexts[500], 500);
 		}
 
-		switch (Request::foundation()->headers->get('content-type'))
+		// If there is no format available, use
+		// the default format.
+		if ( ! $format = Request::foundation()->headers->get('accept'))
 		{
-			case 'application/json':
-				$response = json_encode($response);
-			break;
+			$format = API::$content_types[Config::get('api.default_format', 'json')];
+		}
+
+		// Transform our response content into the required
+		// format
+		switch ($format)
+		{
+			// Serialized PHP array
 			case 'application/vnd.php.serialized':
-				$response = serialize($response);
+				$response->content = serialize($response->content);
 			break;
+
+			// JSON is also the default
+			case 'application/json':
 			default:
-				$response = json_encode($response);
+				$response->content = json_encode($response->content);
 			break;
 		}
-
-		// The "after" function on the controller is simply a convenient hook
-		// so the developer can work on the response before it's returned to
-		// the browser. This is useful for templating, etc.
-		$this->after($response);
 
 		Filter::run($this->filters('after', $method), array($response));
 
