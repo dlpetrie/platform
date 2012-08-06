@@ -34,17 +34,16 @@ class Admin_Controller extends Authorized_Controller
 	 */
 	public function before()
 	{
-		if ( Config::get('application.ssl') and ! Request::secure())
+		if (Config::get('application.ssl') and ! Request::secure())
 		{
 			//return Redirect::to_secure(URI::current())->send();
 		}
 
-		// now check to make sure they have bundle specific permissions
+		// Now check to make sure they have bundle specific permissions
 		if ( ! Sentry::user()->has_access())
 		{
 			Platform::messages()->error('Insufficient Permissions');
-			Redirect::to(ADMIN.'/dashboard')->send();
-			exit;
+			return Redirect::to(ADMIN.'/dashboard');
 		}
 
 		// Set the active theme based on the database contents,
