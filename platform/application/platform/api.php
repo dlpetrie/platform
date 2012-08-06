@@ -19,6 +19,51 @@
  */
 
 use Symfony\Component\HttpFoundation\LaravelRequest as RequestFoundation;
+use Symfony\Component\HttpFoundation\Response as ResponseFoundation;
+
+// Generic API Exception
+class APIException extends Exception
+{
+
+	/**
+	 * An array of errors for the
+	 * Exception
+	 *
+	 * @var array
+	 */
+	protected $errors = array();
+
+	/**
+	 * Sets / gets errors for an API
+	 * Exception.
+	 *
+	 * @param   array  $errors
+	 * @return  array  $errors
+	 */
+	public function errors(array $errors = array())
+	{
+		if ( ! empty($errors))
+		{
+			$this->errors = $errors;
+		}
+
+		return $this->errors;
+	}
+
+}
+
+// Client exceptions
+class APIClientException              extends APIException {}
+class APIBadRequestException          extends APIClientException {}
+class APIUnauthorizedException        extends APIClientException {}
+class APIForbiddenException           extends APIClientException {}
+class APINotFoundException            extends APIClientException {}
+class APINotAllowedException          extends APIClientException {}
+
+// Server exceptions
+class APIServerException              extends APIException {}
+class APIInternalServerErrorException extends APIServerException {}
+class APIServiceUnavailableException  extends APIServerException {}
 
 /**
  * This Api class acts as the base for
@@ -251,8 +296,15 @@ class API
 		// Convert
 		$method = Str::upper($method);
 
+		if ( ! $uri)
+		{
+			throw new Exception(Lang::line('api.invalid_uri', array(
+				'uri' => $uri,
+			)));
+		}
+
 		// Prefix the URI with api/
-		$uri = 'api/'.ltrim($uri, '/');
+		$uri = API.'/'.ltrim($uri, '/');
 
 		// Strip out any exteranl URLs. The
 		// API is for interal requests only.
@@ -321,17 +373,94 @@ class API
 		{
 			// Serialized PHP array
 			case 'application/vnd.php.serialized':
-				$content = unserialize($response->content);
+				$response->content = unserialize($response->content);
 			break;
 
 			// JSON is also the default
 			case 'application/json':
 			default:
-				$content = json_decode($response->content, 'assoc');
+				$response->content = json_decode($response->content, 'assoc');
+		}
+
+		// If there's an area, prepare an
+		// exception to be thrown
+		if ($response->foundation->isClientError() or $response->foundation->isServerError())
+		{
+			// If we have a string as the content,
+			// treat that as the message
+			if (is_string($response->content))
+			{
+				$response->content = array(
+					'message' => $response->content,
+				);
+			}
+
+			// Check for required message field if we
+			// were given an array
+			elseif ( ! isset($response->content['message']))
+			{
+				// Default to the nornaml HTTP message
+				// for the given status code
+				$response->content['message'] = ResponseFoundation::$statusTexts[$response->status()];
+
+				// throw new Exception(Lang::line('api.no_message_on_error', array(
+				// 	'status' => $response->status(),
+				// 	'method' => $method,
+				// 	'uri'    => $uri,
+				// )));
+			}
+
+			// Delegate the exception class
+			if ($response->foundation->isClientError())
+			{
+				$class = 'APIClientException';
+
+				switch ($response->status())
+				{
+					case 400:
+						$class = 'APIBadRequestException';
+						break;
+					case 401:
+						$class = 'APIUnauthorizedException';
+						break;
+					case 403:
+						$class = 'APIForbiddenException';
+						break;
+					case 404:
+						$class = 'APINotFoundException';
+						break;
+					case 405:
+						$class = 'APINotAllowedException';
+						break;
+				}
+			}
+			else
+			{
+				$class = 'APIServerException';
+
+				switch ($response->status())
+				{
+					case 500:
+						$class = 'APIInternalServerErrorException';
+						break;
+					case 503:
+						$class = 'APIServiceUnavailableException';
+						break;
+				}
+			}
+
+			$exception = new $class($response->content['message'], $response->status());
+
+			if (isset($response->content['errors']) and is_array($response->content['errors']))
+			{
+				$exception->errors($response->content['errors']);
+			}
+
+			throw $exception;
 		}
 
 		// Return our content.
-		return $content;
+		return $response->content;
 	}
 
 	/**

@@ -37,7 +37,7 @@ return array(
 	'crud',
 	'gitsy',
 	'nesty' => array(
-		'auto' => true
+		'auto' => true,
 	),
 	'sentry' => array(
 		'auto' => true,

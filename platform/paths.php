@@ -39,6 +39,7 @@ $environments = array(
 */
 
 define('ADMIN', 'admin');
+define('API', 'api');
 
 // --------------------------------------------------------------
 // The path to the application directory.
