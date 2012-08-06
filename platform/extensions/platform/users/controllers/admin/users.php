@@ -21,9 +21,14 @@
 class Users_Admin_Users_Controller extends Admin_Controller
 {
 	/**
-	 * Whitelisted Auth Routes
+	 * Whitelisted auth routes.
+	 *
+	 * @var  array
 	 */
-	protected $whitelist = array('login', 'logout', 'reset_password', 'reset_password_confirm');
+	protected $whitelist = array(
+		'login', 'logout', 'reset_password',
+		'reset_password_confirm',
+	);
 
 	/**
 	 * This function is called before the action is executed.

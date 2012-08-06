@@ -21,6 +21,10 @@
 class Admin_Controller extends Authorized_Controller
 {
 
+	/**
+	 * Called when the class object is
+	 * initialized
+	 */
 	public function __construct()
 	{
 		$this->filter('before', 'admin_auth')->except($this->whitelist);
@@ -39,7 +43,7 @@ class Admin_Controller extends Authorized_Controller
 			//return Redirect::to_secure(URI::current())->send();
 		}
 
-		// now check to make sure they have bundle specific permissions
+		// Now check to make sure they have bundle specific permissions
 		if ( ! Sentry::user()->has_access())
 		{
 			Platform::messages()->error('Insufficient Permissions');

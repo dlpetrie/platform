@@ -24,6 +24,33 @@ class API_Controller extends Base_Controller
 {
 
 	/**
+	 * Whitelisted auth routes.
+	 *
+	 * @var  array
+	 */
+	protected $whitelist = array();
+
+	/**
+	 * Flag for whether we can hide the
+	 * API controller. If left null or not
+	 * set, will be automatically determined
+	 * based off user access and whether the
+	 * request is internal or external.
+	 *
+	 * @var  bool
+	 */
+	protected $restrict_method;
+
+	/**
+	 * Called when the class object is
+	 * initialized
+	 */
+	public function __construct()
+	{
+
+	}
+
+	/**
 	 * Catch-all method for requests that can't be matched.
 	 *
 	 * @param  string    $method
@@ -46,24 +73,31 @@ class API_Controller extends Base_Controller
 	 */
 	public function no_route($method = null, $parameters = null)
 	{
-		return new Response(ResponseFoundation::$statusTexts[404], 404);
+		return new Response(array(
+			'message' => ResponseFoundation::$statusTexts[404],
+		), 404);
 	}
 
 	/**
-	 * @var  array  List of routes to whitelist from auth filter
+	 * Returns whether the current method
+	 * should be restricted from showing. This
+	 * is usually because it's a protected API
+	 * method and the user isn't authenticated.
+	 *
+	 * @todo Split this into three methods, one
+	 *       for not logged in, one for incorrect
+	 *       credentials and one for ACL denied.
+	 *
+	 * @return  bool
 	 */
-	protected $whitelist = array();
-
-	/**
-	 * Note: This is a quick temporary fix
-	 */
-	// Override construct as it doesn't need CSRF checks for internal API calls
-	public function __construct()
+	protected function restrict_method($method = null)
 	{
-		if ( ! API::is_internal() and ( ! Sentry::check() or ! Sentry::user()->has_access('is_admin')))
+		if ($this->restrict_method === null)
 		{
-			$this->filter('before', 'admin_auth')->except($this->whitelist);
+			$this->restrict_method = ( ! API::is_internal() and ( ! Sentry::check() or ! Sentry::user()->has_access($method)));
 		}
+
+		return $this->restrict_method;
 	}
 
 	/**
@@ -82,7 +116,7 @@ class API_Controller extends Base_Controller
 			// Firstly, let's check if we're running an internal request or not.
 			// External calls are okay as long as we have authentication and
 			// ACL access.
-			if ( ! API::is_internal() and ( ! Sentry::check() or ! Sentry::user()->has_access()))
+			if ($this->restrict_method() === true and ( ! in_array($method, $this->whitelist)))
 			{
 				// We'll throw a 404
 				$response = $this->no_route();
@@ -125,7 +159,7 @@ class API_Controller extends Base_Controller
 			// The "after" function on the controller is simply a convenient hook
 			// so the developer can work on the response before it's returned to
 			// the browser. This is useful for templating, etc.
-			if ( ! API::is_internal() and ( ! Sentry::check() or ! Sentry::user()->has_access()))
+			if ($this->restrict_method() === false)
 			{
 				$this->after($response);
 			}
@@ -137,7 +171,9 @@ class API_Controller extends Base_Controller
 				throw $e;
 			}
 
-			$response = new Response(ResponseFoundation::$statusTexts[500], 500);
+			$response = new Response(array(
+				'message' => ResponseFoundation::$statusTexts[500],
+			), 500);
 		}
 
 		// If there is no format available, use
