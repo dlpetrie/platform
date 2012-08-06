@@ -23,11 +23,10 @@ use Platform\Users\User;
 class Users_API_Users_Controller extends API_Controller
 {
 
-	public function get_index()
+	public function get_index($id = null)
 	{
 		$config = Input::get() + array(
-			'select'   => array('users.id', 'users.email', 'users_metadata.*', 'users.status',
-				\DB::raw('GROUP_CONCAT(groups.name ORDER BY groups.name ASC SEPARATOR \',\') AS groups')
+			'select'   => array('users.id', 'users.email', 'users_metadata.*', 'users.status', \DB::raw('GROUP_CONCAT(groups.name ORDER BY groups.name ASC SEPARATOR \',\') AS groups')
 			),
 			'where'    => array(),
 			'order_by' => array(),
@@ -35,25 +34,35 @@ class Users_API_Users_Controller extends API_Controller
 			'skip'     => 0,
 		);
 
+		// No ID? Return all users
+		if ($id == null)
+		{
+
+			$users = User::find_custom($config['select'], $config['where'], $config['order_by'], $config['take'], $config['skip']);
+
+			foreach ($users as &$user)
+			{
+				$user->groups = explode(',', $user->groups);
+			}
+
+			return new Response($users);
+		}
+
+		$config['take'] = 1;
+		$config['where'] = array('users.id', '=', $id);
+
 		$users = User::find_custom($config['select'], $config['where'], $config['order_by'], $config['take'], $config['skip']);
 
-		foreach ($users as &$user)
+		if (empty($users))
 		{
-			$user->groups = explode(',', $user->groups);
+			return new Response(Lang::line('users::users.errors.does_not_exist', array(
+				'id' => $id,
+			))->get(), 404);
 		}
 
-		if ($users)
-		{
-			return array(
-				'status' => true,
-				'users'  => $users
-			);
-		}
-
-		return array(
-			'status'  => false,
-			'message' => 'No users exist within the give parameters.'
-		);
+		$user = $users[0];
+		$user->groups = explode(',', $user->groups);
+		return new Response($user);
 	}
 
 	public function post_register()

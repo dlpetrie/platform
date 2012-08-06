@@ -75,6 +75,17 @@ Route::any(ADMIN.'/(:any?)/(:any?)/(:any?)(/.*)?', function($bundle = 'dashboard
 	return Controller::call($controller, $params);
 });
 
+/**
+ * Route /api/extension/:id
+ *
+ *	<code>
+ *		/api/users/1 => users::api.users@index(1)
+ *	</code>
+ */
+Route::any(API.'/(:any?)/(:num)', function($bundle = DEFAULT_BUNDLE, $id = null)
+{
+	return Controller::call($bundle.'::api.'.$bundle.'@index', array($id));
+});
 
 // Re-route api controllers
 Route::any(array(API.'/(:any?)/(:any?)/(:any?)(/.*)?', API.'/(:any?)/(:any?)(/.*)?', API.'/(:any?)(/.*)?'), function($bundle = 'dashboard', $controller = null, $action = null, $params = null)

@@ -111,7 +111,8 @@ return array(
 
 	/* General Errors */
 	'errors' => array(
-		'count_error' => 'There was an issue retrieving the count, please try again.',
+		'does_not_exist'  => 'User :id does not exist.',
+		'count_error'     => 'There was an issue retrieving the count, please try again.',
 		'invalid_request' => 'Not a valid request.',
 	)
 

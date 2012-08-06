@@ -350,13 +350,16 @@ class User extends Crud
 	 */
 	protected function after_find($result)
 	{
-		$result->metadata = array();
-		foreach ($result as $key => $val)
+		if ($result)
 		{
-			if ( ! in_array($key, static::$_fields))
+			$result->metadata = array();
+			foreach ($result as $key => $val)
 			{
-				$result->metadata[$key] = $val;
-				unset($result->{$key});
+				if ( ! in_array($key, static::$_fields))
+				{
+					$result->metadata[$key] = $val;
+					unset($result->{$key});
+				}
 			}
 		}
 
