@@ -19,7 +19,7 @@
 
 @section('content')
 <div class="grid contain">
-	<h2>Now you need an administrator, create your initial user and your almost ready to rock.</h2>
+	<h2>Now you need an administrator, create your initial user and you're almost ready to rock.</h2>
 	{{ Form::open(null, 'POST', array('id' => 'user-form')) }}
 	{{ Form::token() }}
 	<fieldset>
