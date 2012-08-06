@@ -93,36 +93,32 @@ class Users_API_Users_Controller extends API_Controller
 		// set user data
 		$user_data = Input::get();
 
-		$user = new User($user_data);
-
-		print_r($user_data);
-
-		die();
+		// Create a user
+		$user = new User(array_merge(array(
+			'id' => $id,
+		), $user_data));
 
 		// save user
 		try
 		{
+			// Save the user
 			if ($user->save())
 			{
-				return array(
-					'status'  => true,
-					'message' => Lang::line('users::users.update.success')->get()
-				);
+				return new Response($user);
 			}
 			else
 			{
-				return array(
-					'status'  => false,
-					'message' => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : Lang::line('users::users.update.error')->get()
-				);
+				return new Response(array(
+					'message' => Lang::line('users::users.update.error')->get(),
+					'errors'  => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : array(),
+					), API::STATUS_BAD_REQUEST);
 			}
 		}
 		catch (\Exception $e)
 		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage()
-			);
+			return new Response(array(
+				'message' => $e->getMessage(),
+			), API::STATUS_BAD_REQUEST);
 		}
 	}
 

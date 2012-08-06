@@ -122,8 +122,6 @@ class Users_Admin_Users_Controller extends Admin_Controller
 			)
 		);
 
-		echo '<pre>';
-
 		try
 		{
 			if ($id)
@@ -137,26 +135,17 @@ class Users_Admin_Users_Controller extends Admin_Controller
 		}
 		catch (APIClientException $e)
 		{
-			throw $e;
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+
+			return Redirect::to_secure(ADMIN.'/users/'.(($id) ? 'edit/'.$id : 'create'))->with_input();
 		}
 
-		die();
-
-		// update user
-		$update_user = API::post('users/update', $data);
-
-		if ($update_user['status'])
-		{
-			// user was updated - set success and redirect back to admin/users
-			Platform::messages()->success($update_user['message']);
-			return Redirect::to_secure(ADMIN.'/users');
-		}
-		else
-		{
-			// there was an error updating the user - set errors
-			Platform::messages()->error($update_user['message']);
-			return Redirect::to_secure(ADMIN.'/users/edit/'.$id)->with_input();
-		}
+		return Redirect::to_secure(ADMIN.'/users');
 	}
 
 	/**
