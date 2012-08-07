@@ -12,4 +12,4 @@
 
 	{{ Form::close() }}
 
-<p class="errors"></p>
+<p id="reset-feedback" data-wait="{{ Lang::line('users::users.reset.wait') }}" data-redirecting="{{ Lang::line('users::users.reset.redirect') }}"></p>

@@ -24,6 +24,7 @@ return array(
 		'_title_' => 'Admin Extensions',
 
 		'extensions' => array(
+			'_title_'   => 'Admin Extensions',
 			'index'     => 'View',
 			'install'   => 'Install',
 			'uninstall' => 'Uninstall',

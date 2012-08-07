@@ -24,7 +24,7 @@ return array(
 	'invalid_uri' => 'An invalid URI [:uri] was provided to the API',
 
 	// Error for an invalid response format
-	'invalid_instance' => 'Response must be an instance of :allowed, :instance given.',
+	'invalid_instance' => 'Response must be an instance of :allowed, :instance given at [:method /:uri]',
 
 	// Error given out when the response from an API call doesn't
 	// meet the required criteria

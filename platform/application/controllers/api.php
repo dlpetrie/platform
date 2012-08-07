@@ -150,6 +150,8 @@ class API_Controller extends Base_Controller
 				Log::api(Lang::line('api.invalid_instance', array(
 					'allowed'  => get_class(with(new Response(''))),
 					'instance' => gettype($response),
+					'method'   => Request::method(),
+					'uri'      => Request::server('REQUEST_URI'),
 				)));
 
 				// Convert it now

@@ -19,6 +19,7 @@
  */
 
 use Platform\Users\User;
+use Sentry\SentryException;
 
 class Users_API_Users_Controller extends API_Controller
 {
@@ -204,6 +205,80 @@ class Users_API_Users_Controller extends API_Controller
 	}
 
 	/**
+	 * Returns fields required for a
+	 * Platform.table
+	 *
+	 * @return  Response
+	 */
+	public function get_datatable()
+	{
+		$defaults = array(
+			'select'   => array(
+				'users.id'       => Lang::line('users::users.general.id')->get(),
+				'first_name'     => Lang::line('users::users.general.first_name')->get(),
+				'last_name'      => Lang::line('users::users.general.last_name')->get(),
+				'email'          => Lang::line('users::users.general.email')->get(),
+				'groups.name'    => Lang::line('users::users.general.groups')->get(),
+				'settings.name'  => Lang::line('users::users.general.status')->get(),
+				'created_at'     => 'Created At',
+			),
+			'alias'    => array(
+				'users.id'      => 'id',
+				'groups.name'   => 'groups',
+				'settings.name' => 'status'
+			),
+			'where'    => array(),
+			'order_by' => array('users.id' => 'desc'),
+		);
+
+		// lets get to total user count
+		$count_total = User::count();
+
+		// get the filtered count
+		// we set to distinct because a user can be in multiple groups
+		$count_filtered = User::count_distinct('users.id', function($query) use ($defaults)
+		{
+			// sets the where clause from passed settings
+			$query = Table::count($query, $defaults);
+
+			return $query
+				->left_join('users_metadata', 'users.id', '=', 'users_metadata.user_id')
+				->left_join('users_groups', 'users.id', '=', 'users_groups.user_id')
+				->left_join('groups', 'users_groups.group_id', '=', 'groups.id')
+				->join('settings', 'settings.value', '=', 'users.status')
+				->where('settings.extension', '=', 'users')
+				->where('settings.type', '=', 'status');
+		});
+
+		// set paging
+		$paging = Table::prep_paging($count_filtered, 20);
+
+		$items = User::all(function($query) use ($defaults, $paging)
+		{
+			list($query, $columns) = Table::query($query, $defaults, $paging);
+
+			$columns[] = \DB::raw('GROUP_CONCAT(groups.name ORDER BY groups.name ASC SEPARATOR \',\') AS groups');
+
+			return $query
+				->select($columns)
+				->join('settings', 'settings.value', '=', 'users.status')
+				->where('settings.extension', '=', 'users')
+				->where('settings.type', '=', 'status');
+
+		});
+
+		$items = ($items) ?: array();
+
+		return new Response(array(
+			'columns'        => $defaults['select'],
+			'rows'           => $items,
+			'count'          => $count_total,
+			'count_filtered' => $count_filtered,
+			'paging'         => $paging,
+		));
+	}
+
+	/**
 	 * Registers a user (but doesn't)
 	 * activate them.
 	 *
@@ -225,6 +300,7 @@ class Users_API_Users_Controller extends API_Controller
 		try
 		{
 			$result = $user->save();
+
 			if ($result['id'])
 			{
 				// Send email
@@ -246,10 +322,10 @@ class Users_API_Users_Controller extends API_Controller
 				$body = preg_replace(array_keys($replacements), array_values($replacements), $body);
 
 				// Construct the message
-				$message = Swift_Message::newInstance(Platform::get('settings.general.title').' - Activate Account')
-				    ->setFrom(Platform::get('settings.general.email'), Platform::get('settings.general.title'))
-				    ->setTo(Input::get('email'))
-				    ->setBody($body,'text/html');
+				$message = Swift_Message::newInstance(Platform::get('settings.general.title').'        - Activate Account')
+				           ->setFrom(Platform::get('settings.general.email'), Platform::get('settings.general.title'))
+				           ->setTo(Input::get('email'))
+				           ->setBody($body,'text/html');
 
 				// Send the email
 				$mailer->send($message);
@@ -310,236 +386,146 @@ class Users_API_Users_Controller extends API_Controller
 		}
 	}
 
-	public function post_delete()
-	{
-		// check if id is set
-		if ( ! Input::get('id'))
-		{
-			return array(
-				'status'  => false,
-				'message' => Lang::line('users::users.id_required')->get(),
-	 		);
-		}
-
-		// set user
-		try
-		{
-			$user = User::find((int) Input::get('id'));
-
-			// throw http not found if user does not exist
-			if ( ! $user)
-			{
-				return array(
-					'status'  => false,
-					'message' => Lang::line('users::users.general.not_found')->get()
-				);
-			}
-
-			// save user data
-			if ($user->delete())
-			{
-				return array(
-					'status'  => true,
-					'message' => Lang::line('users::users.delete.success')->get(),
-				);
-			}
-
-			return array(
-				'status'  => false,
-				'message' => 'User was not deleted'
-			);
-		}
-		catch (Exception $e)
-		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage()
-			);
-		}
-	}
-
-	public function get_datatable()
-	{
-		$defaults = array(
-			'select'   => array(
-				'users.id'       => Lang::line('users::users.general.id')->get(),
-				'first_name'     => Lang::line('users::users.general.first_name')->get(),
-				'last_name'      => Lang::line('users::users.general.last_name')->get(),
-				'email'          => Lang::line('users::users.general.email')->get(),
-				'groups.name'    => Lang::line('users::users.general.groups')->get(),
-				'settings.name'  => Lang::line('users::users.general.status')->get(),
-				'created_at'     => 'Created At',
-			),
-			'alias'    => array(
-				'users.id'      => 'id',
-				'groups.name'   => 'groups',
-				'settings.name' => 'status'
-			),
-			'where'    => array(),
-			'order_by' => array('users.id' => 'desc'),
-		);
-
-		// lets get to total user count
-		$count_total = User::count();
-
-		// get the filtered count
-		// we set to distinct because a user can be in multiple groups
-		$count_filtered = User::count_distinct('users.id', function($query) use ($defaults)
-		{
-			// sets the where clause from passed settings
-			$query = Table::count($query, $defaults);
-
-			return $query
-				->left_join('users_metadata', 'users.id', '=', 'users_metadata.user_id')
-				->left_join('users_groups', 'users.id', '=', 'users_groups.user_id')
-				->left_join('groups', 'users_groups.group_id', '=', 'groups.id')
-				->join('settings', 'settings.value', '=', 'users.status')
-				->where('settings.extension', '=', 'users')
-				->where('settings.type', '=', 'status');
-		});
-
-		// set paging
-		$paging = Table::prep_paging($count_filtered, 20);
-
-		$items = User::all(function($query) use ($defaults, $paging)
-		{
-			list($query, $columns) = Table::query($query, $defaults, $paging);
-
-			$columns[] = \DB::raw('GROUP_CONCAT(groups.name ORDER BY groups.name ASC SEPARATOR \',\') AS groups');
-
-			return $query
-				->select($columns)
-				->join('settings', 'settings.value', '=', 'users.status')
-				->where('settings.extension', '=', 'users')
-				->where('settings.type', '=', 'status');
-
-		});
-
-		$items = ($items) ?: array();
-
-		return array(
-			'columns'        => $defaults['select'],
-			'rows'           => $items,
-			'count'          => $count_total,
-			'count_filtered' => $count_filtered,
-			'paging'         => $paging,
-		);
-	}
-
 	/**
-	 * Auth API Methods
+	 * Logs a user in.
+	 *
+	 *	<code>
+	 *		API::post('users/login', array(
+	 *			'email'    => ':email',
+	 *			'password' => ':password',
+	 *		));
+	 *	</code>
+	 *
+	 * @return  Response
 	 */
-
-
 	public static function post_login()
 	{
-		// log the user out
+		// Log the user out
 		Sentry::logout();
 
 		try
 		{
-			// log the user in
+			// Log the user in
 			if (Sentry::login(Input::get('email'), Input::get('password'), Input::get('remember')))
 			{
-				return array(
-					'status'   => true,
-					'is_admin' => Sentry::user()->has_access('is_admin')
-				);
+				return new Response(array(
+					'is_admin' => Sentry::user()->has_access('is_admin'),
+				));
 			}
 
-			// could not log the user in
-			return array(
-				'status'  => false,
-				'message' => Lang::line('users::users.general.invalid_login')->get()
-			);
+			return new Response(array(
+				'message' => Lang::line('users::users.general.invalid_login')->get(),
+			), API::STATUS_UNAUTHORIZED);
 		}
-		catch (Sentry\SentryException $e)
+		catch (SentryException $e)
 		{
-			// issue logging in via Sentry - lets catch the sentry error thrown
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage()
-			);
+			return new Response(array(
+				'message' => $e->getMessage(),
+			), API::STATUS_BAD_REQUEST);
 		}
 	}
 
+	/**
+	 * Logs the current user out.
+	 *
+	 *	<code>
+	 *		API::post('users/logout');
+	 *	</code>
+	 *
+	 * @return  Response
+	 */
 	public function get_logout()
 	{
 		Sentry::logout();
 
-		return array(
-			'status' => true
-		);
+		return new Response(null, API::STATUS_NO_CONTENT);
 	}
 
+	/**
+	 * Sends an email out to reset an
+	 * account password.
+	 *
+	 *	<code>
+	 *		API::post('users/reset_password', array(
+	 *			'email' => ':email',
+	 *			'password' => ':password',
+	 *		));
+	 *
+	 * @return  Response
+	 */
 	public function post_reset_password()
 	{
 		try
 		{
-			$reset = Sentry::reset_password(Input::get('email'), Input::get('password'));
+			if ($reset = Sentry::reset_password(Input::get('email'), Input::get('password')))
+			{
+				// Start up swiftmailer
+				Bundle::start('swiftmailer');
+
+				// Get the Swift Mailer instance
+				$mailer = IoC::resolve('mailer');
+
+				$link = URL::to(ADMIN.'/reset_password_confirm/'.$reset['link']);
+
+				// Get email
+				$body = File::get(path('public').'platform'.DS.'emails'.DS.'reset_password.html');
+
+				// Replacements
+				$replacements = array(
+					'/{{SITE_TITLE}}/' => Platform::get('settings.general.title'),
+					'/{{RESET_LINK}}/' => $link,
+				);
+
+				$body = preg_replace(array_keys($replacements), array_values($replacements), $body);
+
+				// Construct the message
+				$message = Swift_Message::newInstance()
+				         ->setSubject(Platform::get('settings.site.title').' - Password Reset')
+				         ->setFrom(Platform::get('settings.site.email'), Platform::get('settings.site.title'))
+				         ->setTo(Input::get('email'))
+				         ->setBody($body,'text/html');
+
+				// Send the email
+				$mailer->send($message);
+
+				return new Response(null, API::STATUS_NO_CONTENT);
+			}
+
+			return new Response(array(
+				'message' => Lang::line('users::users.reset.password_error')->get(),
+			), API::STATUS_BAD_REQUEST);
 		}
-		catch(Exception $e)
+		catch (Exception $e)
 		{
-			return array(
-				'status'  => false,
+			return new Response(array(
 				'message' => $e->getMessage(),
-			);
+			), API::STATUS_BAD_REQUEST);
 		}
-
-		if ($reset)
-		{
-			// start up swiftmailer
-			Bundle::start('swiftmailer');
-
-			// Get the Swift Mailer instance
-			$mailer = IoC::resolve('mailer');
-
-			$link = URL::to(ADMIN.'/reset_password_confirm/'.$reset['link']);
-
-			// set body
-			$body = file_get_contents(path('public').'platform'.DS.'emails'.DS.'reset_password.html');
-			$body = preg_replace('/{{SITE_TITLE}}/', Platform::get('settings.general.title'), $body);
-			$body = preg_replace('/{{RESET_LINK}}/', $link, $body);
-
-			// Construct the message
-			$message = Swift_Message::newInstance()
-				->setSubject(Platform::get('settings.site.title').' - Password Reset')
-			    ->setFrom(Platform::get('settings.site.email'), Platform::get('settings.site.title'))
-			    ->setTo(Input::get('email'))
-			    ->setBody($body,'text/html');
-
-			// Send the email
-			$mailer->send($message);
-
-			return array(
-				'status'  => true,
-				'message' => Lang::line('users::users.reset.password_success')->get()
-			);
-		}
-
-		return array(
-			'status'  => false,
-			'message' => Lang::line('users::users.reset.password_error')->get()
-		);
 
 	}
 
+	/**
+	 * Confirms the password reset.
+	 *
+	 *	<code>
+	 *		API::post('users/reset_password_confirm', array(
+	 *			'email' => ':email',
+	 *			'password' => ':password',
+	 *		));
+	 *	</code>
+	 *
+	 * @return  Response
+	 */
 	public function post_reset_password_confirm()
 	{
-		$reset = Sentry::reset_password_confirm(Input::get('email'), Input::get('password'));
-
-		if ($reset)
+		if ($reset = Sentry::reset_password_confirm(Input::get('email'), Input::get('password')))
 		{
-			return array(
-				'status'  => true,
-				'message' => Lang::line('users::users.reset.password_confirm_success')->get()
-			);
+			return new Response(null, API::STATUS_NO_CONTENT);
 		}
 
-		return array(
-			'status'  => false,
-			'message' => Lang::line('users::users.reset.password_confirm_error')->get()
-		);
+		return new Response(array(
+			'message' => Lang::line('users::users.reset.password_confirm_error')->get(),
+		), API::STATUS_UNPROCESSABLE_ENTITY);
 	}
 
 }

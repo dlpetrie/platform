@@ -64,6 +64,13 @@ return array(
 		'update'         => 'Save Changes',
 	),
 
+	/* Login User */
+	'login' => array(
+		'wait'     => 'Pleas wait...',
+		'success'  => 'Succesfully logged in',
+		'redirect' => 'Redirecting...',
+	),
+
 	/* Create User */
 	'create' => array(
 		'title'          => 'Create User',
@@ -96,6 +103,9 @@ return array(
 
 	/* Reset Password */
 	'reset' => array(
+		'wait'                     => 'Please Wait...',
+		'error'                    => 'Check your emails!',
+		'redirect'                 => 'Redirecting...',
 		'password_confirm_success' => 'Your password reset has confirmed and updated successfully. You may now log in with your new password.',
 		'password_confirm_error'   => 'There was an error confirming your password reset. Please try again.',
 		'password_error'           => 'Unable to reset your password, please make sure both Email and Password are set and you are using a registered email address.',

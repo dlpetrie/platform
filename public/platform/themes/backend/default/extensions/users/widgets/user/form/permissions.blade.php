@@ -8,8 +8,9 @@
 			<legend>{{ $category['title'] }}</legend>
 			@foreach($category['permissions'] as $permission)
 				<div>
-					<label for="{{ $permission['value'] }}" class="checkbox">
-						<input type="checkbox" id="{{ $permission['slug'] }}" name="{{ $permission['slug'] }}" {{ ($permission['has']) ? 'checked="checked"' : '' }}> {{ $permission['value'] }}
+					<label class="checkbox">
+						<input type="checkbox" id="{{ $permission['slug'] }}" name="{{ $permission['slug'] }}" {{ ($permission['has']) ? 'checked="checked"' : '' }}>
+						{{ $permission['value'] }}
 					</label>
 				</div>
 			@endforeach

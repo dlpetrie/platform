@@ -187,13 +187,13 @@ class Users_Admin_Users_Controller extends Admin_Controller
 			return Redirect::to_secure(ADMIN.'/users');
 		}
 
-		$permissions = Input::get();
-		$rules = Sentry\Sentry_Rules::fetch_rules();
-
+		$permissions        = Input::get();
+		$rules              = Sentry\Sentry_Rules::fetch_rules();
 		$update_permissions = array();
+
 		foreach ($rules as $rule)
 		{
-			$slug = \Str::slug($rule, '_');
+			$slug = Str::slug($rule, '_');
 
 			if (array_key_exists($slug, $permissions))
 			{
@@ -205,25 +205,27 @@ class Users_Admin_Users_Controller extends Admin_Controller
 			}
 		}
 
-		// initialize data array
+		// Initialize data array
 		$data = array(
-			'id'          => $id,
-			'permissions' => $update_permissions
+			'permissions' => $update_permissions,
 		);
 
-		// update user
-		$update_user = API::post('users/update', $data);
-
-		if ($update_user['status'])
+		try
 		{
-			// user was updated - set success and redirect back to admin users
-			Platform::messages()->success($update_user['message']);
+			// Update user
+			$update_user = API::put('users/'.$id, $data);
+
 			return Redirect::to_secure(ADMIN.'/users');
 		}
-		else
+		catch (APIClientException $e)
 		{
-			// there was an error updating the user - set errors
-			Platform::messages()->error($update_user['message']);
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+
 			return Redirect::to_secure(ADMIN.'/users/edit/'.$id)->with_input();
 		}
 	}

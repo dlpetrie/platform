@@ -9,5 +9,4 @@
 	<p class="help-block"><a href="{{ URL::to_secure('/reset_password') }}">{{ Lang::line('users::users.general.reset_password') }}</a></p>
 {{ Form::close() }}
 
-<p class="errors"></p>
-
+<p id="login-feedback" data-wait="{{ Lang::line('users::users.login.wait') }}" data-redirecting="{{ Lang::line('users::users.login.redirect') }}"></p>

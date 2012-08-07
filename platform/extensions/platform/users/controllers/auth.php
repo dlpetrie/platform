@@ -111,37 +111,65 @@ class Users_Auth_Controller extends Public_Controller
 	 */
 	public function post_login()
 	{
-		$login = API::post('users/login', array(
-			'email'    => Input::get('email'),
-			'password' => Input::get('password'),
-		));
-
-		if ($login['status'])
-		{
-			$data = array(
-				'status'   => true,
-				'redirect' => (\Session::get('last_url')) ?: URL::to('')
-			);
-		}
-		else
-		{
-			$data = array(
-				'status' => false,
-				'message' => $login['message']
-			);
-		}
-
-		// TODO - Show Login Error
 		if (Request::ajax())
 		{
-			// send json response
-			return json_encode($data);
+			$response  = array();
+			$http_code = API::STATUS_OK;
 		}
 
-		if ($data['status'])
+		try
 		{
-			return Redirect::to($data['redirect']);
+			$result = API::post('users/login', array(
+				'email'    => Input::get('email'),
+				'password' => Input::get('password'),
+			));
+
+			// If we're admin
+			if (array_get($result, 'is_admin'))
+			{
+				if ( ! Request::ajax())
+				{
+					return Redirect::to_secure(ADMIN);
+				}
+				else
+				{
+					$response['redirect'] = URL::to_secure(ADMIN);
+				}
+			}
+			else
+			{
+				if ( ! Request::ajax())
+				{
+					return Redirect::to('');
+				}
+
+				$response['redirect'] = URL::to('');
+			}
+
+			// Success message
+			$response['message'] = Lang::line('users::users.login.success')->get();
 		}
+		catch (APIClientException $e)
+		{
+			if ( ! Request::ajax())
+			{
+				Platform::messages()->error($e->getMessage());
+
+				foreach ($e->errors() as $error)
+				{
+					Platform::messages()->error($error);
+				}
+
+				return Redirect::to('login')->with_input();
+			}
+
+			// Build our reponse array
+			$response['message'] = $e->getMessage();
+			$http_code           = $e->getCode();
+		}
+
+		// To get this far we're in an AJAX response
+		return new Response(json_encode($response), $http_code);
 	}
 
 	/**
@@ -151,18 +179,21 @@ class Users_Auth_Controller extends Public_Controller
 	 */
 	 public function get_logout()
 	 {
-	 	$logout = API::get('users/logout');
-	 	if ($logout['status'])
+	 	try
 	 	{
-	 		$data = array(
-				'status'   => true,
-				'redirect' => (\Session::get('last_url')) ?: URL::to('')
-			);
+	 		API::get('users/logout');
 	 	}
-	 	if ($data['status'])
+	 	catch (APIClientException $e)
 		{
-			return Redirect::to($data['redirect']);
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
+
+		return Redirect::to((Session::get('last_url')) ?: URL::to(''));
 	 }
 
 	/**
@@ -183,27 +214,52 @@ class Users_Auth_Controller extends Public_Controller
 	 */
 	public function post_reset_password()
 	{
-		$reset = API::post('users/reset_password', array(
-			'email'    => Input::get('email'),
-			'password' => Input::get('password')
-		));
-
-		if ($reset['status'])
+		if (Request::ajax())
 		{
-			$data = array(
-				'status'   => true,
-				'redirect' => URL::to_secure('login')
-			);
-		}
-		else
-		{
-			$data = array(
-				'status' => false,
-				'message' => $reset['message']
-			);
+			$response  = array();
+			$http_code = API::STATUS_OK;
 		}
 
-		return json_encode($data);
+		try
+		{
+			API::post('users/reset_password', array(
+				'email'    => Input::get('email'),
+				'password' => Input::get('password'),
+			));
+
+			if ( ! Request::ajax())
+			{
+				Platform::messages()->success(Lang::line('users::users.reset.password_success')->get());
+
+				return Redirect::to_secure('login');
+			}
+			else
+			{
+				$response['message'] = Lang::line('users::users.reset.password_success')->get();
+			}
+		}
+		catch (APIClientException $e)
+		{
+			if ( ! Request::ajax())
+			{
+				Platform::messages()->error($e->getMessage());
+
+				foreach ($e->errors() as $error)
+				{
+					Platform::messages()->error($error);
+				}
+
+				return Redirect::to((Session::get('last_url')) ?: URL::to(''));
+			}
+			else
+			{
+				$response['message'] = $e->getMessage();
+				$http_code           = $e->getCode();
+			}
+		}
+
+		// To get this far we're in an AJAX response
+		return new Response(json_encode($response), $http_code);
 	}
 
 	/**
@@ -215,21 +271,28 @@ class Users_Auth_Controller extends Public_Controller
 	 */
 	public function get_reset_password_confirm($email = null, $password = null)
 	{
-		$data = array();
-
-		$reset = API::post('users/reset_password_confirm', array(
-			'email'    => $email,
-			'password' => $password,
-		));
-
-		if ($reset['status'])
+		try
 		{
-			// TODO: - Set Success message
+			API::post('users/reset_password_confirm', array(
+				'email'    => $email,
+				'password' => $password,
+			));
+
+			Platform::messages()->success(Lang::line('users::users.reset.password_confirm_success')->get());
+
 			return Redirect::to_secure('login');
 		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
 
-		// TODO: - Set error message
-		return Redirect::to_secure('reset_password');
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+
+			return Redirect::to_secure('resset_password');
+		}
 	}
 
 }

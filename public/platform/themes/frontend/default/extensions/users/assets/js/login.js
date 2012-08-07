@@ -1,11 +1,13 @@
 (function($) {
-	var $form = $('#login-form');
-	var $errors = $('.errors');
+	var $form          = $('#login-form');
+	var $loginFeedback = $('#login-feedback');
+
 	$form.on('submit', function(e) {
 		e.preventDefault();
 
-		$errors.addClass('alert alert-info');
-		$errors.html('Please Wait...');
+		$loginFeedback.removeClass()
+		       .addClass('alert alert-info')
+		       .html($loginFeedback.data('wait'));
 
 		$.ajax({
 			type:     'POST',
@@ -14,16 +16,29 @@
 			data:     $form.serialize(),
 
 			success: function(data) {
-				if(data.status)
-				{
-					window.location.href = data.redirect;
-				}
-				else
-				{
-					$errors.removeClass('alert-info');
-					$errors.addClass('alert-' + data.alert);
-					$errors.html(data.message);
-				}
+				$loginFeedback.removeClass('alert-info alert-danger')
+				              .addClass('alert-success')
+				              .html(data.message);
+
+				// Put the redirect message for slow net
+				// connections
+				setTimeout(function() {
+					$loginFeedback.html($loginFeedback.data('redirecting'));
+
+					// Move on
+					if (typeof data.redirect !== 'undefined') {
+						window.location.href = data.redirect;
+					}
+					else {
+						window.location.reload();
+					}
+				}, 1000);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				var response = $.parseJSON(jqXHR.responseText);
+				$loginFeedback.removeClass('alert-info alert-success')
+				              .addClass('alert-danger')
+				              .html(response.message);
 			}
 		});
 

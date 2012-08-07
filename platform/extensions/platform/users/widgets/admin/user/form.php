@@ -26,6 +26,7 @@ use Lang;
 use Platform;
 use Redirect;
 use Sentry;
+use Str;
 use Theme;
 
 class Admin_User_Form
@@ -121,12 +122,12 @@ class Admin_User_Form
 				// Set vars
 				$title = Lang::line($bundle.'::permissions.'.$title.'_title_')->get();
 				$lang  = $bundle.'::permissions.'.$lang;
-				$slug  = \Str::slug($title, '_');
+				$slug  = Str::slug($title, '_');
 
 				$extension_rules[$slug]['title'] = $title;
 				$extension_rules[$slug]['permissions'][] = array(
 					'value'	=> Lang::line($lang)->get(),
-					'slug'  => \Str::slug($rule, '_'),
+					'slug'  => Str::slug($rule, '_'),
 					'has'   => (array_key_exists($rule, $current_permissions) and $current_permissions[$rule] == 1) ? 1 : '',
 				);
 			}
