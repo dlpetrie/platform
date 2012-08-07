@@ -187,9 +187,12 @@ Route::filter('after', function($response)
 
 Route::filter('csrf', function()
 {
-	if (Request::forged()) return Response::error('500');
+	if (Request::forged())
+	{
+		return Response::error('500');
+	}
 
-	// remove the token from the input now
+	// Remove the token from the input now
 	Request::foundation()->request->remove(Session::csrf_token);
 });
 
