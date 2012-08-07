@@ -156,21 +156,22 @@ class Users_Admin_Users_Controller extends Admin_Controller
 	 */
 	public function get_delete($id)
 	{
-		// delete the user
-		$delete_user = API::post('users/delete', array('id' => $id));
+		try
+		{
+			// Delete the user
+			$delete_user = API::delete('users/'.$id);
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
 
-		if ($delete_user['status'])
-		{
-			// user was edited - set success and redirect back to admin/users
-			Platform::messages()->success($delete_user['message']);
-			return Redirect::to_secure(ADMIN.'/users');
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
-		else
-		{
-			// there was an error editing the user - set errors
-			Platform::messages()->error($delete_user['message']);
-			return Redirect::to_secure(ADMIN.'/users');
-		}
+
+		return Redirect::to_secure(ADMIN.'/users');
 	}
 
 	/**

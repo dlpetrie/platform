@@ -80,13 +80,14 @@ class User extends Crud
 			}
 		}
 
-		// see if creation is a registration
+		// See if creation is a registration
 		$register = (isset($attributes['register'])) ? $attributes['register'] : false;
 
-		// prep attribute values after validation is done
+		// Prep attribute values after validation is done
 		$attributes = $this->prep_attributes($attributes);
 
 		$groups = array();
+
 		if (array_key_exists('groups', $attributes))
 		{
 			if ( ! empty($attributes['groups']))

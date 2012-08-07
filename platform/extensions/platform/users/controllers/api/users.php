@@ -33,7 +33,7 @@ class Users_API_Users_Controller extends API_Controller
 	 *	</code>
 	 *
 	 * @param   int  $id
-	 * @return  mixed
+	 * @return  Response
 	 */
 	public function get_index($id = false)
 	{
@@ -83,11 +83,17 @@ class Users_API_Users_Controller extends API_Controller
 	 *	<code>
 	 *		API::post('users', $data);
 	 *	</code>
+	 *
+	 * @return  Response
 	 */
 	public function post_index()
 	{
 		// Create a user
 		$user = new User(Input::get());
+
+		echo '<pre>';
+		print_r($user);
+		die();
 
 		// Save user
 		try
@@ -122,7 +128,7 @@ class Users_API_Users_Controller extends API_Controller
 	 *	</code>
 	 *
 	 * @param   int  $id
-	 * @return  array
+	 * @return  Response
 	 */
 	public function put_index($id)
 	{
@@ -144,7 +150,7 @@ class Users_API_Users_Controller extends API_Controller
 				return new Response(array(
 					'message' => Lang::line('users::users.update.error')->get(),
 					'errors'  => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : array(),
-					), API::STATUS_BAD_REQUEST);
+					), API::STATUS_UNPROCESSABLE_ENTITY);
 			}
 		}
 		catch (Exception $e)
@@ -155,6 +161,58 @@ class Users_API_Users_Controller extends API_Controller
 		}
 	}
 
+	/**
+	 * Deletes a user by the
+	 * given ID
+	 *
+	 *	<code>
+	 *		API::delete('usrs/:id');
+	 *	</code>
+	 *
+	 * @param   int  $id
+	 * @return  Response
+	 */
+	public function delete_index($id)
+	{
+		$user = User::find($id);
+
+		if ($user === null)
+		{
+			return new Response(array(
+				'message' => Lang::line('users::users.general.not_found')->get()
+			), API::STATUS_NOT_FOUND);
+		}
+
+		try
+		{
+			if ($user->delete())
+			{
+				return new Response(null, API::STATUS_NO_CONTENT);
+			}
+
+			return new Response(array(
+				'message' => "An error occured while deleting the user [$id]",
+				'errors'  => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : array(),
+			), API::STATUS_UNPROCESSABLE_ENTITY);
+		}
+		catch (Exception $e)
+		{
+			return new Response(array(
+				'message' => $e->getMessage(),
+			), API::STATUS_BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Registers a user (but doesn't)
+	 * activate them.
+	 *
+	 *	<code>
+	 *		POST('users/register', $data);
+	 *	</code>
+	 *
+	 * @return  Response
+	 */
 	public function post_register()
 	{
 		$user_data = Input::get() + array(
@@ -163,22 +221,29 @@ class Users_API_Users_Controller extends API_Controller
 
 		$user = new User($user_data);
 
-		// save user
+		// Save user
 		try
 		{
 			$result = $user->save();
 			if ($result['id'])
 			{
-				// send email
+				// Send email
 				$hash = $result['hash'];
 
 				// Get the Swift Mailer instance
 				Bundle::start('swiftmailer');
 				$mailer = IoC::resolve('mailer');
 
-				$body = file_get_contents(path('public').'platform/emails'.DS.'register.html');
-				$body = preg_replace('/{{SITE_TITLE}}/', Platform::get('settings.general.title'), $body);
-				$body = preg_replace('/{{ACTIVATION_LINK}}/', URL::to_secure('activate/'.$hash), $body);
+				// Get email
+				$body = File::get(path('public').'platform/emails'.DS.'register.html');
+
+				// Replacements
+				$replacements = array(
+					'/{{SITE_TITLE}}/'      => Platform::get('settings.general.title'),
+					'/{{ACTIVATION_LINK}}/' => URL::to_secure('activate/'.$hash),
+				);
+
+				$body = preg_replace(array_keys($replacements), array_values($replacements), $body);
 
 				// Construct the message
 				$message = Swift_Message::newInstance(Platform::get('settings.general.title').' - Activate Account')
@@ -189,126 +254,59 @@ class Users_API_Users_Controller extends API_Controller
 				// Send the email
 				$mailer->send($message);
 
-				// respond
-				return array(
-					'status'  => true,
-					'message' => Lang::line('users::users.create.success')->get()
-				);
+				return new Response($user, API::STATUS_CREATED);
 			}
 			else
 			{
-				return array(
-					'status'  => false,
-					'message' => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : Lang::line('user::users.create.error')->get()
-				);
+				return new Response(array(
+					'message' => Lang::line('user::users.create.error')->get(),
+					'errors'  => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : array(),
+				), API::STATUS_UNPROCESSABLE_ENTITY);
+
 			}
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage()
-			);
+			return new Response(array(
+				'message' => $e->getMessage(),
+			), API::STATUS_BAD_REQUEST);
 		}
 	}
 
+	/**
+	 * Activates a user by providing
+	 * the user's email and the activation
+	 * code.
+	 *
+	 *	<code>
+	 *		API::post('users/activate', array(
+	 *			'email' => ':email',
+	 *			'code'  => ':code',
+	 *		));
+	 *	</code>
+	 *
+	 * @return  Response
+	 */
 	public function post_activate()
 	{
-		$data = Input::get();
-
 		try
 		{
-			if (Sentry::activate_user($data['email'], $data['code']))
+			if ($user = Sentry::activate_user(Input::get('email'), Input::get('code')))
 			{
-				return array(
-					'status'  => true,
-					'message' => 'User Successfully Activated.'
-				);
+				$user = User::find($user->id);
+
+				return new Response($user);
 			}
 
-			return array(
-				'status'  => false,
-				'message' => 'Could not activate user.'
-			);
+			return new Response(array(
+				'message' => 'Could not activate user.',
+			), API::STATUS_UNPROCESSABLE_ENTITY);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage()
-			);
-		}
-	}
-
-	public function post_create()
-	{
-		// set user data
-		$user_data = Input::get();
-
-		// remove register just incase
-		unset($user_data['register']);
-
-		$user = new User($user_data);
-
-		// save user
-		try
-		{
-			if ($user->save())
-			{
-				// respond
-				return array(
-					'status'  => true,
-					'message' => Lang::line('users::users.create.success')->get()
-				);
-			}
-			else
-			{
-				return array(
-					'status'  => false,
-					'message' => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : Lang::line('user::users.create.error')->get()
-				);
-			}
-		}
-		catch (\Exception $e)
-		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage()
-			);
-		}
-	}
-
-	public function post_update()
-	{
-		// set user data
-		$user_data = Input::get();
-
-		$user = new User($user_data);
-
-		// save user
-		try
-		{
-			if ($user->save())
-			{
-				return array(
-					'status'  => true,
-					'message' => Lang::line('users::users.update.success')->get()
-				);
-			}
-			else
-			{
-				return array(
-					'status'  => false,
-					'message' => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : Lang::line('users::users.update.error')->get()
-				);
-			}
-		}
-		catch (\Exception $e)
-		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage()
-			);
+			return new Response(array(
+				'message' => $e->getMessage(),
+			), API::STATUS_BAD_REQUEST);
 		}
 	}
 
@@ -351,7 +349,7 @@ class Users_API_Users_Controller extends API_Controller
 				'message' => 'User was not deleted'
 			);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			return array(
 				'status'  => false,
@@ -480,7 +478,7 @@ class Users_API_Users_Controller extends API_Controller
 		{
 			$reset = Sentry::reset_password(Input::get('email'), Input::get('password'));
 		}
-		catch(\Exception $e)
+		catch(Exception $e)
 		{
 			return array(
 				'status'  => false,

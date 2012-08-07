@@ -40,7 +40,7 @@ class Users_Auth_Controller extends Public_Controller
 
 	public function post_register()
 	{
-		$register = API::post('users/register', array(
+		$data = array(
 			'email'                 => Input::get('email'),
 			'email_confirmation'    => Input::get('email_confirm'),
 			'password'              => Input ::get('password'),
@@ -49,32 +49,46 @@ class Users_Auth_Controller extends Public_Controller
 				'first_name' => Input::get('first_name'),
 				'last_name'  => Input::get('last_name'),
 			),
-		));
+		);
 
-		if ($register['status'])
+		try
 		{
+			API::post('users/register', $data);
+
 			return Redirect::to('login');
 		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
 
-		Platform::messages()->error($register['message']);
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 
-		return Redirect::to('register')->with_input();
+			return Redirect::to('register')->with_input();
+		}
 	}
 
 	public function get_activate($email, $code)
 	{
-		$activate = API::post('users/activate', array(
-			'email' => $email,
-			'code'  => $code,
-		));
+		try
+		{
+			API::post('users/activate', array(
+				'email' => $email,
+				'code'  => $code,
+			));
 
-		if ($activate['status'])
-		{
-			Platform::messages()->success($activate['message']);
+			Platform::messages()->success('Successfully activated user.');
 		}
-		else
+		catch (APIClientException $e)
 		{
-			Platform::messages()->error($activate['message']);
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
 
 		return Redirect::to('login');

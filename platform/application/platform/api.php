@@ -189,6 +189,17 @@ class API
 	const STATUS_NOT_ALLOWED = 405;
 
 	/**
+	 * Unprocessable Entity
+	 *
+	 * You have provided the right type of data
+	 * (thus avoiding a 400) but validation
+	 * failed
+	 *
+	 * @constant
+	 */
+	const STATUS_UNPROCESSABLE_ENTITY = 422;
+
+	/**
 	 * Internal SErver Error
 	 *
 	 * General or Unkown error
