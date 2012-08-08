@@ -82,9 +82,21 @@ Route::any(ADMIN.'/(:any?)/(:any?)/(:any?)(/.*)?', function($bundle = 'dashboard
  *		/api/users/1 => users::api.users@index(1)
  *	</code>
  */
-Route::any(API.'/(:any?)/(:num)', function($bundle = DEFAULT_BUNDLE, $id = null, $params = null)
+Route::any(API.'/(:any)/(:num)', function($bundle = DEFAULT_BUNDLE, $id = null, $params = null)
 {
 	return Controller::call($bundle.'::api.'.$bundle.'@index', array($id));
+});
+
+/**
+ * Route /api/extension/controller/:id
+ *
+ *	<code>
+ *		/api/users/groups/1 => users::api.users.groups@index(1)
+ *	</code>
+ */
+Route::any(API.'/(:any)/(:any)/(:num)', function($bundle = DEFAULT_BUNDLE, $controller = null, $id = null, $params = null)
+{
+	return Controller::call($bundle.'::api.'.$controller.'@index', array($id));
 });
 
 // Re-route api controllers
@@ -187,10 +199,10 @@ Route::filter('after', function($response)
 
 Route::filter('csrf', function()
 {
-	if (Request::forged())
-	{
-		return Response::error('500');
-	}
+	// if (Request::forged())
+	// {
+	// 	return Response::error('500');
+	// }
 
 	// Remove the token from the input now
 	Request::foundation()->request->remove(Session::csrf_token);
