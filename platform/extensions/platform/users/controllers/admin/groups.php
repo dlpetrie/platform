@@ -39,19 +39,19 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 	 */
 	public function get_index()
 	{
-		// get all the input
+		// Get all the input
 		$options = Input::get();
 
-		// grab our table data from the user groups api
+		// Grab our table data from the user groups api
 		$datatable = API::get('users/groups/datatable', $options);
 
-		// format data for passing
+		// Format data for passing
 		$data = array(
 			'columns' => $datatable['columns'],
 			'rows'    => $datatable['rows'],
 		);
 
-		// if this was an ajax request, only return the body of the table
+		// If this was an ajax request, only return the body of the table
 		if (Request::ajax())
 		{
 			$data = (json_encode(array(
@@ -84,21 +84,7 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 	 */
 	public function post_create()
 	{
-		// create the group
-		$create_group = API::post('users/groups/create', Input::get());
-
-		if ($create_group['status'])
-		{
-			// group was created - set success and redirect back to admin user groups
-			Platform::messages()->success($create_group['message']);
-			return Redirect::to_secure(ADMIN.'/users/groups');
-		}
-		else
-		{
-			// there was an error creating the group - set errors
-			Platform::messages()->error($create_group['message']);
-			return Redirect::to_secure(ADMIN.'/users/groups/create')->with_input();
-		}
+		return $this->post_edit();
 	}
 
 	/**
@@ -117,29 +103,36 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 	 *
 	 * @return  Redirect
 	 */
-	public function post_edit($id = null)
+	public function post_edit($id = false)
 	{
-		// initialize data array
 		$data = array(
-			'id'   => $id,
 			'name' => Input::get('name'),
 		);
 
-		// update group
-		$edit_group = API::post('users/groups/update', $data);
+		try
+		{
+			if ($id)
+			{
+				$user = API::put('users/groups/'.$id, $data);
+			}
+			else
+			{
+				$user = API::post('users/groups', $data);
+			}
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
 
-		if ($edit_group['status'])
-		{
-			// group was edited - set success and redirect back to admin user groups
-			Platform::messages()->success($edit_group['message']);
-			return Redirect::to_secure(ADMIN.'/users/groups');
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+
+			return Redirect::to_secure(ADMIN.'/users/groups/'.(($id) ? 'edit/'.$id : 'create'))->with_input();
 		}
-		else
-		{
-			// there was an error editing the group - set errors
-			Platform::messages()->error($edit_group['message']);
-			return Redirect::to_secure(ADMIN.'/users/groups/edit/'.$id)->with_input();
-		}
+
+		return Redirect::to_secure(ADMIN.'/users/groups');
 	}
 
 	/**
@@ -150,21 +143,22 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 	 */
 	public function get_delete($id)
 	{
-		// delete the group
-		$delete_group = API::post('users/groups/delete', array('id' => $id));
 
-		if ($delete_group['status'])
+		try
 		{
-			// group was deleted - set success and redirect back to admin user groups
-			Platform::messages()->success($delete_group['message']);
-			return Redirect::to_secure(ADMIN.'/users/groups');
+			API::delete('users/groups/'.$id);
 		}
-		else
+		catch (APIClientException $e)
 		{
-			// there was an error editing the group - set errors
-			Platform::messages()->error($delete_group['message']);
-			return Redirect::to_secure(ADMIN.'/users/groups');
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
+
+		return Redirect::to(ADMIN.'/users/groups');
 	}
 
 	/**
@@ -181,12 +175,13 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 		}
 
 		$permissions = Input::get();
-		$rules = Sentry\Sentry_Rules::fetch_rules();
+		$rules       = Sentry\Sentry_Rules::fetch_rules();
 
 		$update_permissions = array();
+
 		foreach ($rules as $rule)
 		{
-			$slug = \Str::slug($rule, '_');
+			$slug = Str::slug($rule, '_');
 
 			if (array_key_exists($slug, $permissions))
 			{
@@ -198,27 +193,27 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 			}
 		}
 
-		// initialize data array
 		$data = array(
-			'id'          => $id,
-			'permissions' => $update_permissions
+			'permissions' => $update_permissions,
 		);
 
-		// update group
-		$update_group = API::post('users/groups/update', $data);
-
-		if ($update_group['status'])
+		try
 		{
-			// group was updated - set success and redirect back to admin user groups
-			Platform::messages()->success($update_group['message']);
-			return Redirect::to_secure(ADMIN.'/users/groups');
+			API::put('users/groups/'.$id, $data);
 		}
-		else
+		catch (APIClientException $e)
 		{
-			// there was an error updating the group - set errors
-			Platform::messages()->error($update_group['message']);
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+
 			return Redirect::to_secure(ADMIN.'/users/groups/edit/'.$id)->with_input();
 		}
+
+		return Redirect::to_secure(ADMIN.'/users/groups');
 	}
 
 }

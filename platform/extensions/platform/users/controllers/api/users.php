@@ -61,7 +61,7 @@ class Users_API_Users_Controller extends API_Controller
 			return new Response($users);
 		}
 
-		$config['take'] = 1;
+		$config['take']  = 1;
 		$config['where'] = array('users.id', '=', $id);
 
 		$users = User::find_custom($config['select'], $config['where'], $config['order_by'], $config['take'], $config['skip']);
@@ -91,10 +91,6 @@ class Users_API_Users_Controller extends API_Controller
 	{
 		// Create a user
 		$user = new User(Input::get());
-
-		echo '<pre>';
-		print_r($user);
-		die();
 
 		// Save user
 		try
@@ -151,7 +147,7 @@ class Users_API_Users_Controller extends API_Controller
 				return new Response(array(
 					'message' => Lang::line('users::users.update.error')->get(),
 					'errors'  => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : array(),
-					), API::STATUS_UNPROCESSABLE_ENTITY);
+				), API::STATUS_UNPROCESSABLE_ENTITY);
 			}
 		}
 		catch (Exception $e)
