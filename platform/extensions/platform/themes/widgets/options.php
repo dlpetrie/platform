@@ -21,6 +21,7 @@
 namespace Platform\Themes\Widgets;
 
 use API;
+use APIClientException;
 use Theme;
 use Request;
 
@@ -32,16 +33,23 @@ class Options
 		// set type
 		$theme_type = (strpos(\URI::segment(1), ADMIN) === false) ? 'frontend' : 'backend';
 
-		// get active theme
-		$active = API::get('settings', array(
-			'where' => array(
-				array('extension', '=', 'themes'),
-				array('type', '=', 'theme'),
-				array('name', '=', $theme_type),
-			),
-		));
+		try
+		{
+			// Get active theme
+			$settings = API::get('settings', array(
+				'where' => array(
+					array('extension', '=', 'themes'),
+					array('type', '=', 'theme'),
+					array('name', '=', $theme_type),
+				),
+			));
 
-		$active = $active['settings'][0];
+			$active = $settings[0];
+		}
+		catch (APIClientException $e)
+		{
+			$active = array('value' => 'default');
+		}
 
 		// get active custom theme options
 		$active_custom = API::get('themes/options', array(

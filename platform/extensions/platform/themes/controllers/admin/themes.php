@@ -133,45 +133,50 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
 	 */
 	protected function post_activate($type, $theme)
 	{
-
-		$result = API::post('settings', array(
-			'settings' => array(
-				'values' => array(
-					'extension' => 'themes',
-					'type'      => 'theme',
-					'name'      => Input::get('type'),
-					'value'     => Input::get('theme'),
-				),
-
-				// validation
-				'validation' => array(
-					'name'  => 'required',
-					'value' => 'required',
-				),
-
-				// labels
-				'labels' => array(
-					'name' => 'Theme'
-				),
-			),
-		));
-
-		if ($result['status'])
+		try
 		{
-			Platform::messages()->success($result['updated']);
+			$updated = API::post('settings', array(
+				'settings' => array(
+					'values' => array(
+						'extension' => 'themes',
+						'type'      => 'theme',
+						'name'      => Input::get('type'),
+						'value'     => Input::get('theme'),
+					),
 
-			$data = $this->theme_data('backend');
+					// validation
+					'validation' => array(
+						'name'  => 'required',
+						'value' => 'required',
+					),
 
-			return Redirect::to_secure(ADMIN.'/themes/'.$type);
+					// labels
+					'labels' => array(
+						'name' => 'Theme'
+					),
+				),
+			));
+
+			if (is_array($updated) and count($updated) > 0)
+			{
+				foreach ($updated as $setting)
+				{
+					Platform::messages()->success($setting.' has been updated.');
+				}
+			}
 		}
-		else
+		catch (APIClientException $e)
 		{
-			echo Platform::messages()->error($result['errors']);
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
 
-
+		return Redirect::to_secure(ADMIN.'/themes/'.$type);
 	}
-
 
 	/**
 	 * Gets all theme data necessary for views
@@ -188,19 +193,27 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
 
 		$themes = $themes['themes'][$type];
 
-		// get active theme
-		$active = API::get('settings', array(
-			'where'     => array(
-				array('extension', '=', 'themes'),
-				array('type', '=', 'theme'),
-				array('name', '=', $type)
-			),
-		));
+		try
+		{
+			// Get active theme
+			$settings = API::get('settings', array(
+				'where' => array(
+					array('extension', '=', 'themes'),
+					array('type', '=', 'theme'),
+					array('name', '=', $type),
+				),
+			));
 
-		$active = $active['settings'][0];
+			$active = $settings[0];
+		}
+		catch (APIClientException $e)
+		{
+			// Use 'default' theme
+			$active = array('value' => 'default');
+		}
 
-		// get active theme info and remove from array
-		if ( array_key_exists($active['value'], $themes))
+		// Get active theme info and remove from array
+		if (array_key_exists($active['value'], $themes))
 		{
 			$data['exists'] = true;
 

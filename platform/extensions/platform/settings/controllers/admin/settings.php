@@ -108,12 +108,28 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 			);
 		}
 
-		$update = Api::post('settings', array('settings' => $settings));
-
-		if ($update['status'])
+		try
 		{
-			Platform::messages()->success($update['updated']);
-			Platform::messages()->error($update['errors']);
+			$updated = Api::post('settings', array(
+				'settings' => $settings,
+			));
+
+			if (is_array($updated) and count($updated) > 0)
+			{
+				foreach ($updated as $setting)
+				{
+					Platform::messages()->success($setting.' has been updated.');
+				}
+			}
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
 
 		return Redirect::to_secure(ADMIN.'/settings/general');

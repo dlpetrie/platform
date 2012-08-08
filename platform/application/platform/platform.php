@@ -187,21 +187,17 @@ class Platform
 
 		if ( ! array_key_exists($extension, static::$settings))
 		{
-			// find all settings for requested extension
-			$ext_settings = API::get('settings', array(
-				'where' => array(
-					array('extension', '=', $extension),
-				),
-				'organize' => true
-			));
-
-			// add extension settings to the settings array
-			if ($ext_settings['status'])
+			try
 			{
-				static::$settings[$extension] = $ext_settings['settings'];
+				// Find all settings for requested extension
+				static::$settings[$extension] = API::get('settings', array(
+					'where' => array(
+						array('extension', '=', $extension),
+					),
+					'organize' => true,
+				));
 			}
-			// add to array anyways to prevent errors
-			else
+			catch (APIClientException $e)
 			{
 				static::$settings[$extension] = array();
 			}
