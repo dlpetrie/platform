@@ -20,18 +20,18 @@
 				              .addClass('alert-success')
 				              .html(data.message);
 
+				// Move on
+				if (typeof data.redirect !== 'undefined') {
+					window.location.href = data.redirect;
+				}
+				else {
+					window.location.reload();
+				}
+
 				// Put the redirect message for slow net
 				// connections
 				setTimeout(function() {
 					$loginFeedback.html($loginFeedback.data('redirecting'));
-
-					// Move on
-					if (typeof data.redirect !== 'undefined') {
-						window.location.href = data.redirect;
-					}
-					else {
-						window.location.reload();
-					}
 				}, 1000);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
