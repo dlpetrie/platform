@@ -155,7 +155,14 @@ class API_Controller extends Base_Controller
 				)));
 
 				// Convert it now
-				$response = new Response($response);
+				if (is_null($response) or $response == '')
+				{
+					$response = new Response(null, API::STATUS_NO_CONTENT);
+				}
+				else
+				{
+					$response = new Response($response);
+				}
 			}
 
 			// The "after" function on the controller is simply a convenient hook
