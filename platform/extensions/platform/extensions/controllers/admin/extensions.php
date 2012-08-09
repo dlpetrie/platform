@@ -34,22 +34,27 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
 	public function get_index()
 	{
-		// Get list of installed extensions in the system
-		$installed = API::get('extensions/installed');
+		try
+		{
+			$installed = API::get('extensions', array(
+				'filter' => 'installed',
+			));
 
-		// Get list of uninstalled extensions in the system
-		$uninstalled = API::get('extensions/uninstalled', array(
-			'detailed' => true,
-		));
+			$uninstalled = API::get('extensions', array(
+				'filter' => 'uninstalled',
+			));
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
 
-		// check for updates on installed extensions
-		$installed = API::get('extensions/updates', array(
-			'extensions' => $installed,
-		));
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+		}
 
 		$data = array(
-			// 'columns'     => $datatable['columns'],
-			// 'rows'        => $datatable['rows'],
 			'installed'   => $installed,
 			'uninstalled' => $uninstalled,
 		);

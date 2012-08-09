@@ -119,20 +119,20 @@ class Themes_API_Themes_Controller extends API_Controller
 			), API::STATUS_NOT_FOUND);
 		}
 
-		$theme = Theme::find(function($query) use ($type, $name)
+		$theme_options = Theme::find(function($query) use ($type, $name)
 		{
 			return $query->where('type', '=', $type)
 			             ->where('theme', '=', $name);
 		});
 
-		// Get the options
-		if ($theme)
+		if ($theme_options === null)
 		{
-			$theme_options = $theme['options'];
+			$theme_options = new Theme(array(
+				'type'    => $type,
+				'theme'   => $name,
+				'options' => array(),
+			));
 		}
-
-		// Fallback for theme options.
-		$theme_options or $theme_options = array();
 
 		// Return the options
 		return new Response($theme_options);

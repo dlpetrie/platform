@@ -85,8 +85,9 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
 		try
 		{
 			// Merge the default theme info with the custom options
-			$data['theme']    = API::get('themes/'.$type.'/'.$name);
+			$data['theme'] = API::get('themes/'.$type.'/'.$name);
 			$options       = API::get('themes/'.$type.'/'.$name.'/options');
+			$options       = array_get($options, 'options');
 			$data['theme']['options'] = array_replace_recursive(array_get($data, 'theme.options'), $options);
 		}
 		catch (APIClientException $e)

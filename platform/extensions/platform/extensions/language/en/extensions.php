@@ -30,10 +30,11 @@ return array(
 		'slug'        => 'Slug',
 		'author'      => 'Author',
 		'description' => 'Description',
+		'has_updates' => 'Has Updates Available',
 		'version'     => 'Version',
 		'is_core'     => 'Is Core Extension',
 		'enabled'     => 'Enabled',
-		'actions'     => 'actions',
+		'actions'     => 'Actions',
 	),
 
 	// Values for tinyint fields

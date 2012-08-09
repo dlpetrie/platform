@@ -30,13 +30,6 @@ class ExtensionsManager
 {
 
 	/**
-	 * Array of started Platform Extensions
-	 *
-	 * @var array
-	 */
-	protected $extensions = array();
-
-	/**
 	 * An array of extensions that are exempt
 	 * from being treated like normal extensions.
 	 */
@@ -55,7 +48,7 @@ class ExtensionsManager
 		// Loop through and start every extension
 		foreach ($extensions as $extension)
 		{
-			$this->start($extension);
+			$this->start($extension['info']['slug']);
 		}
 
 		return $this;
@@ -64,67 +57,54 @@ class ExtensionsManager
 	/**
 	 * Starts an extension.
 	 *
-	 * @param   string  $name
-	 * @param   mixed   $value
+	 * @param   string  $slug
+	 * @param   ExtensionsManager
 	 */
-	public function start($extension)
+	public function start($slug)
 	{
-		// We might have been given the slug
-		// of an extension to start
-		if ( ! $extension instanceof Extension)
-		{
-			$model = Extension::find(function($query) use ($extension)
-			{
-				return $query->where('slug', '=', $extension);
-			});
+		// Load extension info
+		$extension = $this->get($slug);
 
-			if ($model === null)
-			{
-				throw new Exception("Platform Extension [$extension] doesn't exist in database.");
-			}
-
-			$extension = $model;
-		}
-
-		// If the extension is already started
-		if (array_key_exists($extension->slug, $this->extensions))
+		// Already started?
+		if ($bundle = array_get($extension, 'bundles.handles') and Bundle::started($bundle))
 		{
 			return $this;
 		}
 
-		// Load extension info
-		$info = $this->info($extension->slug);
-
 		// Register the bundle with Laravel
-		array_key_exists('bundles', $info) and Bundle::register($extension->slug, $info['bundles']);
+		if ( ! array_key_exists('bundles', $extension))
+		{
+			throw new Exception("Every extension.php file must contain a bundles array. None found in [$slug]");
+		}
 
 		// Start the bundle
-		Bundle::start($extension->slug);
+		Bundle::register($slug, $extension['bundles']);
+		Bundle::start($slug);
 
 		// Register global routes
-		if (array_key_exists('global_routes', $info))
+		if (array_key_exists('global_routes', $extension))
 		{
 			// Check we've been given a closure
-			if ( ! $info['global_routes'] instanceof Closure)
+			if ( ! $extension['global_routes'] instanceof Closure)
 			{
-				throw new Exception("'global_routes' must be a function / closure in [$file]");
+				throw new Exception("'global_routes' must be a function / closure in [$slug]");
 
 			}
 
-			$info['global_routes']();
+			$extension['global_routes']();
 		}
 
 		// Register listeners
-		if (array_key_exists('listeners', $info))
+		if (array_key_exists('listeners', $extension))
 		{
 			// Check we've been given a closure
-			if ( ! $info['listeners'] instanceof Closure)
+			if ( ! $extension['listeners'] instanceof Closure)
 			{
-				throw new Exception("'listeners' must be a function / closure in [$file]");
+				throw new Exception("'listeners' must be a function / closure in [$slug]");
 
 			}
 
-			$info['listeners']();
+			$extension['listeners']();
 		}
 
 		return $this;
@@ -142,7 +122,7 @@ class ExtensionsManager
 		// Get extension info
 		try
 		{
-			$info = $this->info($slug);
+			$info = $this->get($slug);
 		}
 		catch (Exception $e)
 		{
@@ -151,13 +131,9 @@ class ExtensionsManager
 
 		// Create a new model instance.
 		$extension = new Extension(array(
-			'name'        => $info['info']['name'],
-			'slug'        => $info['info']['slug'],
-			'version'     => $info['info']['version'],
-			'author'      => isset($info['info']['author']) ? $info['info']['author'] : '',
-			'description' => isset($info['info']['description']) ? $info['info']['description'] : '',
-			'is_core'     => isset($info['info']['is_core']) ? $info['info']['is_core'] : '',
-			'enabled'     => ($is_core = isset($info['info']['is_core'])) ? 1 : (int) $enable,
+			'slug'    => $info['info']['slug'],
+			'version' => $info['info']['version'],
+			'enabled' => ($is_core = isset($info['info']['is_core'])) ? 1 : (int) $enable,
 		));
 		$extension->save();
 
@@ -206,9 +182,9 @@ class ExtensionsManager
 	 * @param   string  $slug
 	 * @return  bool
 	 */
-	public function uninstall($id)
+	public function uninstall($slug)
 	{
-		$extension = Extension::find($id);
+		$extension = Extension::find($slug);
 
 		if ($extension === null)
 		{
@@ -251,16 +227,16 @@ class ExtensionsManager
 	/**
 	 * Enables an extension.
 	 *
-	 * @param   int  $id
+	 * @param   string  $slug
 	 * @return  Extension
 	 */
-	public function enable($id)
+	public function enable($slug)
 	{
-		$extension = Extension::find($id);
+		$extension = Extension::find($slug);
 
 		if ($extension === null)
 		{
-			throw new Exception('Platform extension doesn\'t exist.');
+			throw new Exception('Platform extension [$slug] doesn\'t exist.');
 		}
 
 		// Enable menus related to the extension
@@ -277,16 +253,16 @@ class ExtensionsManager
 	/**
 	 * Disables an extension.
 	 *
-	 * @param   int  $id
+	 * @param   string  $slug
 	 * @return  Extension
 	 */
-	public function disable($id)
+	public function disable($slug)
 	{
-		$extension = Extension::find($id);
+		$extension = Extension::find($slug);
 
 		if ($extension === null)
 		{
-			throw new Exception('Platform extension doesn\'t exist.');
+			throw new Exception('Platform extension [$slug] doesn\'t exist.');
 		}
 
 		// Disable menus related to the extension
@@ -300,34 +276,43 @@ class ExtensionsManager
 		return $extension;
 	}
 
-	public function has_update($extension_slug)
+	/**
+	 * Determines if the extension has an update
+	 * available or not.
+	 *
+	 * @param   string  $slug
+	 * @return  bool
+	 */
+	public function has_update($slug)
 	{
-		$extension = Extension::find(function($query) use ($extension_slug) {
-			return $query->where('slug', '=', $extension_slug);
-		});
+		// Get the database entity
+		$extension = Extension::find($slug);
 
-		$info = $this->info($extension_slug);
+		// Get the info from the extension.php file
+		$info = $this->get_extensionphp($slug);
 
-		return ($info['info']['version'] > $extension->version);
+		// Return 
+		return (version_compare($info['info']['version'], $extension->version) > 0);
 	}
 
-	public function update($id)
+	/**
+	 * Updates an extension.
+	 *
+	 * @param   string  $slug
+	 * @return  bool
+	 */
+	public function update($slug)
 	{
-		// find extension
-		$extension = Extension::find($id);
+		// Find extension
+		$extension = Extension::find($slug);
 
-		// find extension.php file
-		$info = $this->info($extension->slug);
+		// Find extension.php file
+		$info = $this->get($extension->slug);
 
-		// update extension
-		$extension->name        = $info['info']['name'];
-		$extension->slug        = $info['info']['slug'];
-		$extension->version     = $info['info']['version'];
-		$extension->author      = $info['info']['author'];
-		$extension->description = $info['info']['description'];
-		$extension->is_core     = $info['info']['is_core'];
+		// Update extension
+		$extension->version = $info['info']['version'];
 
-		// save extension updates
+		// Save extension updates
 		$extension->save();
 
 		// We need to start the extension, just in case
@@ -396,12 +381,8 @@ class ExtensionsManager
 			Schema::create('extensions', function($table)
 			{
 				$table->increments('id')->unsigned();
-				$table->string('name', 50);
 				$table->string('slug', 50)->unique();
-				$table->string('author', 50)->nullable();
-				$table->text('description')->nullable();
-				$table->text('version', 5);
-				$table->boolean('is_core')->nullable();
+				$table->text('version', 25);
 				$table->boolean('enabled');
 			});
 		}
@@ -414,63 +395,39 @@ class ExtensionsManager
 		 * @todo remove when my pull request gets accepted
 		 */
 		ob_end_clean();
-
-		return;
 	}
 
 	/**
-	 * Returns all installed extensions as an array
-	 * of Extensions\Extenion models.
+	 * Returns all extensions. Installed and uninstalled.
 	 *
 	 * @return  array
 	 */
-	public function installed($condition = null)
+	public function all()
 	{
-		return Extension::all($condition);
-	}
+		$extensions = array();
 
-	/**
-	 * Returns all enabled extensions as an array
-	 * of Extensions\Extenion models.
-	 *
-	 * @param   Closure  $condition
-	 * @return  array
-	 */
-	public function enabled($condition = null)
-	{
-		return Extension::all(function($query) use ($condition)
+		// Loop through extensions directories
+		foreach ($this->extensions_directories() as $directory)
 		{
-			$query->where('enabled', '=', 1);
+			// Get our extension slug - always
+			// matches the folder name.
+			$slug = basename($directory);
 
-			if ($condition instanceof Closure)
+			// Read extension info. Always do this even
+			// if no details are required as this will
+			// validate the extension.
+			try
 			{
-				$query = $condition($query);
+				$extensions[$slug] = $this->get($slug);
 			}
-
-			return $query;
-		});
-	}
-
-	/**
-	 * Returns all disabled extensions as an array
-	 * of Extensions\Extenion models.
-	 *
-	 * @param   Closure  $condition
-	 * @return  array
-	 */
-	public function disabled($condition = null)
-	{
-		return Extension::all(function($query) use ($condition)
-		{
-			$query->where('enabled', '=', 0);
-
-			if ($condition instanceof Closure)
+			catch (Exception $e)
 			{
-				$query = $condition($query);
+				continue;
 			}
+		}
 
-			return $query;
-		});
+		ksort($extensions);
+		return array_values($extensions);
 	}
 
 	/**
@@ -481,63 +438,84 @@ class ExtensionsManager
 	 * value. If $detailed is true, then the value
 	 * is the extension info.
 	 *
-	 * @param   Closure  $condition
+	 * @param   mixed  $condition
 	 * @return  array
 	 */
-	public function uninstalled($condition = null, $detailed = false)
+	public function uninstalled()
 	{
-		// Firstly, get all installed extensions
-		$results = $this->installed(function($query) use ($condition)
+		// Array of installed slugs
+		$installed_slugs = array();
+
+		// Array of uninstalled extensions
+		$extensions = array();
+
+		// Add slugs of installed
+		foreach ($this->installed() as $extension)
 		{
-			// We only want to select the slug
-			$query->select('slug');
-
-			// Check if we have a closure provided as
-			// a condition to this function
-			if ($condition instanceof Closure)
-			{
-				$query = $condition($query);
-			}
-
-			return $query;
-		});
-
-		// Build a basic array of installed extensions
-		$installed = array();
-		foreach ($results as $result)
-		{
-			$installed[] = $result->slug;
+			$installed_slugs[] = $extension['info']['slug'];
 		}
 
-		// Build an array of uninstalled extensions
-		$uninstalled = array();
-		foreach ($this->extensions_directories() as $extension)
+		// Loop through all extensions
+		foreach ($this->all() as $extension)
 		{
-			// Get our extension slug - always
-			// matches the folder name.
-			$slug = Str::lower(basename($extension));
-
-			// Read extension info. Always do this even
-			// if no details are required as this will
-			// validate the extension.
-			try
-			{
-				$info = $this->info($slug);
-
-				if (in_array($slug, $installed))
-				{
-					continue;
-				}
-
-				$uninstalled[] = ($detailed === true) ? $info : $slug;
-			}
-			catch (Exception $e)
+			// Already in the array of installed slugs?
+			if (in_array($extension['info']['slug'], $installed_slugs))
 			{
 				continue;
 			}
+
+			$extensions[] = $extension;
 		}
 
-		return $uninstalled;
+		return $extensions;
+	}
+
+	/**
+	 * Returns all installed extensions as an array
+	 * of Extensions\Extenion models.
+	 *
+	 * @param   mixed  $condition
+	 * @return  array
+	 */
+	public function installed($condition = null)
+	{
+		$extensions = array();
+
+		foreach (Extension::all($condition) as $extension)
+		{
+			$extensions[$extension->slug] = $this->get($extension->slug);
+		}
+
+		ksort($extensions);
+		return array_values($extensions);
+	}
+
+	/**
+	 * Returns all enabled extensions as an array
+	 * of Extensions\Extenion models.
+	 *
+	 * @return  array
+	 */
+	public function enabled()
+	{
+		return $this->installed(function($query)
+		{
+			return $query->where('enabled', '=', 1);
+		});
+	}
+
+	/**
+	 * Returns all disabled extensions as an array
+	 * of Extensions\Extenion models.
+	 *
+	 * @return  array
+	 */
+	public function disabled()
+	{
+		return $this->installed(function($query)
+		{
+			return $query->where('enabled', '=', 0);
+		});
 	}
 
 	/**
@@ -550,7 +528,7 @@ class ExtensionsManager
 	 * @param   mixed
 	 * @return  array
 	 */
-	protected function cascade_extesions_directories()
+	protected function cascade_extensions_directories()
 	{
 		// Fallbacks
 		$extensions      = array();
@@ -594,7 +572,7 @@ class ExtensionsManager
 		$grouped_extensions   = (array) glob(path('extensions').'*'.DS.'*'.DS.'extension'.EXT, GLOB_NOSORT);
 		$top_level_extensions = (array) glob(path('extensions').'*'.DS.'extension'.EXT, GLOB_NOSORT);
 
-		return $this->cascade_extesions_directories($top_level_extensions, $grouped_extensions);
+		return $this->cascade_extensions_directories($top_level_extensions, $grouped_extensions);
 	}
 
 	/**
@@ -603,7 +581,7 @@ class ExtensionsManager
 	 * @param   array  $extensions
 	 * @return  array  $extensions
 	 */
-	public function sort_dependencies(&$extensions = array())
+	public function sort_dependencies(&$slugs = array())
 	{
 		// Array of extensions dependencies, where
 		// the key is the slug of the extension
@@ -611,32 +589,37 @@ class ExtensionsManager
 		// on which that extension depends.
 		$extensions_dependencies = array();
 
-		foreach ($extensions as $extension)
+		foreach ($slugs as $slug)
 		{
 			try
 			{
-				$info = $this->info($extension);
+				$extension = $this->get_extensionphp($slug);
 			}
 			catch (Exception $e)
 			{
 				continue;
 			}
 
-			if ($dependencies = array_get($info, 'dependencies') and is_array($dependencies))
+			if ($dependencies = array_get($extension, 'dependencies') and is_array($dependencies))
 			{
-				$extensions_dependencies[$extension] = $dependencies;
+				$extensions_dependencies[$slug] = $dependencies;
 			}
 			else
 			{
-				$extensions_dependencies[$extension] = array();
+				$extensions_dependencies[$slug] = array();
 			}
 		}
 
-		$extensions = Dependency::sort($extensions_dependencies);
-
-		return $extensions;
+		return Dependency::sort($extensions_dependencies);
 	}
 
+	/**
+	 * Finds the extension file for an extension
+	 * with the given slug.
+	 *
+	 * @param   string  $slug
+	 * @return  string
+	 */
 	public function find_extension_file($slug)
 	{
 		// We'll search the root dir first
@@ -651,7 +634,45 @@ class ExtensionsManager
 		return ( ! empty($files)) ? $files[0] : false;
 	}
 
-	public function info($slug)
+	/**
+	 * Gets an extension by the given slug. Returns
+	 * all information for it.
+	 *
+	 * Note: This method should be used at all
+	 *       times externally from this class
+	 *       as an API to return an extension. Classes
+	 *       should never interact directly with an Extension
+	 *       model.
+	 *
+	 * @param   string  $slug
+	 * @return  array   $info
+	 */
+	public function get($slug)
+	{
+		// Get the extension.php info
+		$extension = $this->get_extensionphp($slug);
+
+		if ($model = Extension::find($slug))
+		{
+			// Update the version and enabled flags for the extension.
+			$extension['info']['version'] = $model['version'];
+			$extension['info']['enabled'] = (bool) $model['enabled'];
+			$extension['installed']       = true;
+			$extension['has_update']      = $this->has_update($slug);
+		}
+
+		ksort($extension['info']);
+		return $extension;
+	}
+
+	/**
+	 * Returns the extension's info according
+	 * to the extension.php file in the filesystem.
+	 *
+	 * @param   string  $slug
+	 * @return  array   $info
+	 */
+	public function get_extensionphp($slug)
 	{
 		$file = $this->find_extension_file($slug);
 
@@ -668,12 +689,29 @@ class ExtensionsManager
 		if ( ! $info or
 			 ! is_array($info) or
 			 ! array_get($info, 'info.name') or
-			 ! array_get($info, 'info.slug') or
 			 ! array_get($info, 'info.version'))
 		{
 			throw new Exception("Platform Excention [$slug] doesn't have a valid extension.php file");
 		}
 
+		// Add the slug to the info
+		$info['info']['slug'] = $slug;
+
+		// Installed flag
+		$info['installed']  = false;
+		$info['has_update'] = true;
+
+		// Default parameters
+		if ( ! array_key_exists('is_core', $info['info']))
+		{
+			$info['info']['is_core'] = 0;
+		}
+		if ( ! array_key_exists('enabled', $info['info']))
+		{
+			$info['info']['enabled'] = 0;
+		}
+
+		ksort($info['info']);
 		return $info;
 	}
 

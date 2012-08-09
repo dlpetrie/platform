@@ -39,14 +39,14 @@
 					<table id="installed-extension-table" class="table table-bordered">
 						<thead>
 							<tr>
-								<th>Id</th>
-								<th>Name</th>
-								<th>Slug</th>
-								<th>Author</th>
-								<th>Description</th>
-								<th>Version</th>
-								<th>Is Core</th>
-								<th>Status</th>
+								<th>{{ Lang::line('extensions::extensions.table.name') }}</th>
+								<th>{{ Lang::line('extensions::extensions.table.slug') }}</th>
+								<th>{{ Lang::line('extensions::extensions.table.author') }}</th>
+								<th>{{ Lang::line('extensions::extensions.table.description') }}</th>
+								<th>{{ Lang::line('extensions::extensions.table.version') }}</th>
+								<th>{{ Lang::line('extensions::extensions.table.is_core') }}</th>
+								<th>{{ Lang::line('extensions::extensions.table.enabled') }}</th>
+								<th>{{ Lang::line('extensions::extensions.table.has_updates') }}</th>
 								<th></th>
 							</tr>
 						<thead>

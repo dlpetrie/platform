@@ -21,82 +21,111 @@
 class Extensions_API_Extensions_Controller extends API_Controller
 {
 
-	public function get_datatable()
-	{
-		// CartTable defaults
-		$defaults = array(
-			'select'    => array(
-				'id'          => Lang::line('extensions::extensions.table.id')->get(),
-				'name'        => Lang::line('extensions::extensions.table.name')->get(),
-				'slug'        => Lang::line('extensions::extensions.table.slug')->get(),
-				'author'      => Lang::line('extensions::extensions.table.author')->get(),
-				'description' => Lang::line('extensions::extensions.table.description')->get(),
-				'version'     => Lang::line('extensions::extensions.table.version')->get(),
-				'is_core'     => Lang::line('extensions::extensions.table.is_core')->get(),
-				'enabled'     => Lang::line('extensions::extensions.table.enabled')->get(),
-			),
-			'where'     => array(),
-			'order_by'  => array('slug' => 'asc'),
-		);
-
-		// Get total count
-		$count_total = Extension::count();
-
-		// Get the filtered count
-		$count_filtered = Extension::count('id', function($query) use($defaults)
-		{
-			// Sets the were clause from passed settings
-			$query = Table::count($query, $defaults);
-
-			return $query;
-		});
-
-		// Paging
-		$paging = Table::prep_paging($count_filtered, 20);
-
-		// Get Table items
-		$items = Extension::all(function($query) use ($defaults, $paging)
-		{
-			list($query, $columns) = Table::query($query, $defaults, $paging);
-
-			return $query->select($columns);
-		});
-
-		// Get items
-		$items = ($items) ?: array();
-
-		// Return our data
-		return array(
-			'columns'        => $defaults['select'],
-			'rows'           => $items,
-			'count'          => $count_total,
-			'count_filtered' => $count_filtered,
-			'paging'         => $paging,
-		);
-	}
-
 	/**
-	 * Returns an array of installed extensions
-	 * that are present in the filesystem, in a structure
-	 * similar to that returned from the database.
+	 * Returns an array of all extensions,
+	 * installed and uninstalled. You can provide
+	 * an optional key (filter) with a value. Providing
+	 * a slug as the second parameter will return that
+	 * extension itself.
 	 *
-	 * @return  array
+	 * This filter can either be:
+	 *  - uninstalled
+	 *  - installed
+	 *  - disabled
+	 *  - enabled
+	 *
+	 *	<code>
+	 *		$all         = API::get('extensions');
+	 *		$enabled   = API::get('extensions', array(
+	 *			'filter' => 'enabled',
+	 *		));
+	 *		$uninstalled = API::get('extensions', array(
+	 *			'filter' => 'uninstalled',
+	 *		));
+	 *	</code>
+	 *
+	 * @return  Response
 	 */
-	public function get_installed()
+	public function get_index($slug = false)
 	{
-		return Platform::extensions_manager()->installed(null, true);
-	}
+		// Returning all extensions
+		if ($slug == false)
+		{
+			// Array of extensions
+			$extensions = array();
 
-	/**
-	 * Returns an array of uninstalled extensions
-	 * that are present in the filesystem, in a structure
-	 * similar to that returned from the database.
-	 *
-	 * @return  array
-	 */
-	public function get_uninstalled()
-	{
-		return Platform::extensions_manager()->uninstalled(null, true);
+			// If we have a filter, populate our extensions array
+			if ($filter = Input::get('filter'))
+			{
+				if (in_array($filter, array('uninstalled', 'installed', 'disabled', 'enabled')))
+				{
+					// Get the extensions
+					foreach (Platform::extensions_manager()->$filter() as $extension)
+					{
+						// Remove callbacks as they're no use
+						// in JSON
+						array_forget($extension, 'listeners');
+						array_forget($extension, 'global_routes');
+
+						$extensions[] = $extension;
+					}
+
+					return new Response($extensions);
+				}
+
+				return new Response(array(
+					'message' => 'Invalid extension filter provided.',
+				), API::STATUS_BAD_REQUEST);
+			}
+
+			// No filter, return all extensions
+			else
+			{
+				foreach (Platform::extensions_manager()->all() as $extension)
+				{
+					// Remove callbacks as they're no use
+					// in JSON
+					array_forget($extension, 'listeners');
+					array_forget($extension, 'global_routes');
+
+					$extensions[] = $extension;
+				}
+			}
+
+			// Sort the extensions
+			ksort($extensions);
+
+			// Only return array keys. This is because
+			// we should return a JSON array. Named keys
+			// returns an object.
+			return new Response(array_values($extensions));
+		}
+
+		// Doesn't exist? Throw a 404
+		if ( ! Platform::extensions_manager()->find_extension_file($slug))
+		{
+			return new Response(array(
+				'message' => "Extension [$slug] doesn't exist.",
+			), API::STATUS_NOT_FOUND);
+		}
+
+		try
+		{
+			$extension = Platform::extensions_manager()->get($slug);
+
+			// Remove callbacks as they're no use
+			// in JSON
+			array_forget($extension, 'listeners');
+			array_forget($extension, 'global_routes');
+
+			return new Response($extension);
+		}
+		catch (Exception $e)
+		{
+			return new Response(array(
+				'message' => $e->getMessage(),
+			), API::STATUS_BAD_REQUEST);
+		}
 	}
 
 	/**
@@ -230,6 +259,66 @@ class Extensions_API_Extensions_Controller extends API_Controller
 			'status'    => true,
 			'extension' => $extension,
 		);
+	}
+
+	/**
+	 * Returns fields required for a
+	 * Platform.table
+	 *
+	 * @return  Response
+	 */
+	public function get_datatable()
+	{
+		// CartTable defaults
+		$defaults = array(
+			'select'    => array(
+				'id'          => Lang::line('extensions::extensions.table.id')->get(),
+				'name'        => Lang::line('extensions::extensions.table.name')->get(),
+				'slug'        => Lang::line('extensions::extensions.table.slug')->get(),
+				'author'      => Lang::line('extensions::extensions.table.author')->get(),
+				'description' => Lang::line('extensions::extensions.table.description')->get(),
+				'version'     => Lang::line('extensions::extensions.table.version')->get(),
+				'is_core'     => Lang::line('extensions::extensions.table.is_core')->get(),
+				'enabled'     => Lang::line('extensions::extensions.table.enabled')->get(),
+			),
+			'where'     => array(),
+			'order_by'  => array('slug' => 'asc'),
+		);
+
+		// Get total count
+		$count_total = Extension::count();
+
+		// Get the filtered count
+		$count_filtered = Extension::count('id', function($query) use($defaults)
+		{
+			// Sets the were clause from passed settings
+			$query = Table::count($query, $defaults);
+
+			return $query;
+		});
+
+		// Paging
+		$paging = Table::prep_paging($count_filtered, 20);
+
+		// Get Table items
+		$items = Extension::all(function($query) use ($defaults, $paging)
+		{
+			list($query, $columns) = Table::query($query, $defaults, $paging);
+
+			return $query->select($columns);
+		});
+
+		// Get items
+		$items = ($items) ?: array();
+
+		// Return our data
+		return new Response(array(
+			'columns'        => $defaults['select'],
+			'rows'           => $items,
+			'count'          => $count_total,
+			'count_filtered' => $count_filtered,
+			'paging'         => $paging,
+		));
 	}
 
 }

@@ -42,4 +42,26 @@ class Extension extends Crud
 	 */
 	protected static $_timestamps = false;
 
+	/**
+	 * Find a model by either it's primary key
+	 * or a condition that modifies the query object.
+	 *
+	 * @param   string  $condition
+	 * @param   array   $columns
+	 * @return  Crud
+	 */
+	public static function find($condition = 'first', $columns = array('*'), $events = array('before', 'after'))
+	{
+		// Find by slug
+		if (is_string($condition) and ! in_array($condition, array('first', 'last')))
+		{
+			return parent::find(function($query) use ($condition)
+			{
+				return $query->where('slug', '=', $condition);
+			}, $columns, $events);
+		}
+
+		return parent::find($condition, $columns, $events);
+	}
+
 }
