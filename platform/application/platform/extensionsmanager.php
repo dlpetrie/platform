@@ -122,7 +122,7 @@ class ExtensionsManager
 		// Get extension info
 		try
 		{
-			$info = $this->get($slug);
+			$extension = $this->get($slug);
 		}
 		catch (Exception $e)
 		{
@@ -130,12 +130,12 @@ class ExtensionsManager
 		}
 
 		// Create a new model instance.
-		$extension = new Extension(array(
-			'slug'    => $info['info']['slug'],
-			'version' => $info['info']['version'],
-			'enabled' => ($is_core = isset($info['info']['is_core'])) ? 1 : (int) $enable,
+		$model = new Extension(array(
+			'slug'    => $extension['info']['slug'],
+			'version' => $extension['info']['version'],
+			'enabled' => ($is_core = isset($extension['info']['is_core'])) ? 1 : (int) $enable,
 		));
-		$extension->save();
+		$model->save();
 
 		// We need to start the extension, just in case
 		// the migrations that we're about to run require
@@ -143,7 +143,7 @@ class ExtensionsManager
 		// the extension will allow the classes to be autoloaded.
 		// An example of this is in the "menus" extension, it
 		// uses the "menus" model.
-		$this->start($extension->slug);
+		$this->start($slug);
 
 		// Resolves core tasks.
 		require_once path('sys').'cli/dependencies'.EXT;
@@ -155,7 +155,7 @@ class ExtensionsManager
 
 		// Run extensions migration. This will prepare
 		// the table we need to install the core extensions
-		Command::run(array('migrate', $extension->slug));
+		Command::run(array('migrate', array_get($slug, 'bundles.handles', $slug)));
 
 		/**
 		 * @todo remove when my pull request gets accepted
@@ -169,11 +169,11 @@ class ExtensionsManager
 		if ( ! $is_core and ! $enable)
 		{
 			API::post('menus/disable', array(
-				'extension' => $extension->slug,
+				'extension' => $slug,
 			));
 		}
 
-		return $extension;
+		return $this->get($slug);
 	}
 
 	/**
@@ -203,10 +203,10 @@ class ExtensionsManager
 		 * @todo Remove - this is a temp fix for the
 		 *       problem below.
 		 */
-		$this->reset_migrations($extension);
+		$this->reset_migrations($slug);
 
 		// Reset migrations - loose all data
-		// Command::run(array('migrate:reset', $extension->slug));
+		// Command::run(array('migrate:reset', $slug));
 		// We can't currently do this as Laravel isn't passing the argument
 		// for the bundle to reset and thus is caught in an infinite loop.
 		/**
@@ -221,7 +221,7 @@ class ExtensionsManager
 		// Delete reference from the databas
 		$extension->delete();
 
-		return true;
+		return $this->get($slug);
 	}
 
 	/**
@@ -247,7 +247,7 @@ class ExtensionsManager
 		$extension->enabled = 1;
 		$extension->save();
 
-		return $extension;
+		return $this->get($slug);
 	}
 
 	/**
@@ -273,7 +273,7 @@ class ExtensionsManager
 		$extension->enabled = 0;
 		$extension->save();
 
-		return $extension;
+		return $this->get($slug);
 	}
 
 	/**
@@ -286,13 +286,13 @@ class ExtensionsManager
 	public function has_update($slug)
 	{
 		// Get the database entity
-		$extension = Extension::find($slug);
+		$model = Extension::find($slug);
 
 		// Get the info from the extension.php file
-		$info = $this->get_extensionphp($slug);
+		$extension = $this->get_extensionphp($slug);
 
 		// Return 
-		return (version_compare($info['info']['version'], $extension->version) > 0);
+		return (version_compare($extension['info']['version'], $model->version) > 0);
 	}
 
 	/**
@@ -304,16 +304,16 @@ class ExtensionsManager
 	public function update($slug)
 	{
 		// Find extension
-		$extension = Extension::find($slug);
+		$model = Extension::find($slug);
 
 		// Find extension.php file
-		$info = $this->get($extension->slug);
+		$extension = $this->get_extensionphp($slug);
 
 		// Update extension
-		$extension->version = $info['info']['version'];
+		$model->version = $extension['info']['version'];
 
 		// Save extension updates
-		$extension->save();
+		$model->save();
 
 		// We need to start the extension, just in case
 		// the migrations that we're about to run require
@@ -321,7 +321,7 @@ class ExtensionsManager
 		// the extension will allow the classes to be autoloaded.
 		// An example of this is in the "menus" extension, it
 		// uses the "menus" model.
-		$this->start($extension->slug);
+		$this->start($slug);
 
 		// Resolves core tasks.
 		require_once path('sys').'cli/dependencies'.EXT;
@@ -333,14 +333,14 @@ class ExtensionsManager
 
 		// Run extensions migration. This will prepare
 		// the table we need to install the core extensions
-		Command::run(array('migrate', $extension->slug));
+		Command::run(array('migrate', $slug));
 
 		/**
 		 * @todo remove when my pull request gets accepted
 		 */
 		ob_end_clean();
 
-		return $extension;
+		return $this->get($slug);
 	}
 
 	/**
@@ -645,20 +645,23 @@ class ExtensionsManager
 	 *       model.
 	 *
 	 * @param   string  $slug
-	 * @return  array   $info
+	 * @return  array   $extension
 	 */
 	public function get($slug)
 	{
 		// Get the extension.php info
 		$extension = $this->get_extensionphp($slug);
 
+		// If we were given a model, use it. Otherwise,
+		// load it from the database. Either way,
+		// update the extension file.
 		if ($model = Extension::find($slug))
 		{
 			// Update the version and enabled flags for the extension.
 			$extension['info']['version'] = $model['version'];
 			$extension['info']['enabled'] = (bool) $model['enabled'];
-			$extension['installed']       = true;
-			$extension['has_update']      = $this->has_update($slug);
+			$extension['info']['installed']       = true;
+			$extension['info']['has_update']      = $this->has_update($slug);
 		}
 
 		ksort($extension['info']);
@@ -683,36 +686,36 @@ class ExtensionsManager
 		}
 
 		// Info
-		$info = require $file;
+		$extension = require $file;
 
 		// Bunch of requirements for an extension.php file
-		if ( ! $info or
-			 ! is_array($info) or
-			 ! array_get($info, 'info.name') or
-			 ! array_get($info, 'info.version'))
+		if ( ! $extension or
+			 ! is_array($extension) or
+			 ! array_get($extension, 'info.name') or
+			 ! array_get($extension, 'info.version'))
 		{
 			throw new Exception("Platform Excention [$slug] doesn't have a valid extension.php file");
 		}
 
 		// Add the slug to the info
-		$info['info']['slug'] = $slug;
+		$extension['info']['slug'] = $slug;
 
 		// Installed flag
-		$info['installed']  = false;
-		$info['has_update'] = true;
+		$extension['info']['installed']  = false;
+		$extension['info']['has_update'] = false;
 
 		// Default parameters
-		if ( ! array_key_exists('is_core', $info['info']))
+		if ( ! array_key_exists('is_core', $extension['info']))
 		{
-			$info['info']['is_core'] = 0;
+			$extension['info']['is_core'] = 0;
 		}
-		if ( ! array_key_exists('enabled', $info['info']))
+		if ( ! array_key_exists('enabled', $extension['info']))
 		{
-			$info['info']['enabled'] = 0;
+			$extension['info']['enabled'] = 0;
 		}
 
-		ksort($info['info']);
-		return $info;
+		ksort($extension['info']);
+		return $extension;
 	}
 
 	/**
@@ -721,12 +724,13 @@ class ExtensionsManager
 	 * @param   Extension  $extension
 	 * @return  void
 	 */
-	protected function reset_migrations(Extension $extension)
+	protected function reset_migrations($slug)
 	{
 		// Start the extension so we can find it's bundle path
-		$this->start($extension);
+		$this->start($slug);
+		$extension = $this->get($slug);
 
-		$files = glob(Bundle::path($extension->slug).'migrations'.DS.'*_*'.EXT);
+		$files = glob(Bundle::path($slug).'migrations'.DS.'*_*'.EXT);
 
 		// When open_basedir is enabled, glob will return false on an
 		// empty directory, so we will return an empty array in this
@@ -755,7 +759,7 @@ class ExtensionsManager
 		// Loop through files
 		foreach ($files as $file)
 		{
-			require_once Bundle::path($extension->slug).'migrations'.DS.$file.EXT;
+			require_once Bundle::path($slug).'migrations'.DS.$file.EXT;
 
 			// Since the migration name will begin with the numeric ID, we'll
 			// slice off the ID so we are left with the migration class name.
@@ -764,7 +768,7 @@ class ExtensionsManager
 			// Migrations that exist within bundles other than the default
 			// will be prefixed with the bundle name to avoid any possible
 			// naming collisions with other bundle's migrations.
-			$prefix = Bundle::class_prefix($extension->slug);
+			$prefix = Bundle::class_prefix($slug);
 
 			$class = $prefix.\Laravel\Str::classify(substr($file, 18));
 
@@ -776,7 +780,7 @@ class ExtensionsManager
 
 		// Remove the entry from the migrations table
 		DB::table('laravel_migrations')
-		  ->where('bundle', '=', $extension->slug)
+		  ->where('bundle', '=', $slug)
 		  ->delete();
 
 		return $this;

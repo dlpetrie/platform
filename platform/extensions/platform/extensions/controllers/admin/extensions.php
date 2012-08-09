@@ -64,59 +64,106 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
 	public function get_install($slug)
 	{
-		$result = API::post('extensions/install', array('slug' => $slug));
-
-		if ( ! $result['status'])
+		try
 		{
-			Platform::messages()->error($result['message']);
+			API::put('extensions/'.$slug, array(
+				'installed' => true,
+			));
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
 
 		return Redirect::to_secure(ADMIN.'/extensions');
 	}
 
-	public function get_uninstall($id)
+	public function get_uninstall($slug)
 	{
-		$result = API::post('extensions/uninstall', array('id' => $id));
-
-		if ( ! $result['status'])
+		try
 		{
-			Platform::messages()->error($result['message']);
+			API::put('extensions/'.$slug, array(
+				'installed' => false,
+			));
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
 
 		return Redirect::to_secure(ADMIN.'/extensions');
 	}
 
-	public function get_enable($id)
+	public function get_enable($slug)
 	{
-		$result = API::post('extensions/enable', array('id' => $id));
-
-		if ( ! $result['status'])
+		try
 		{
-			Platform::messages()->error($result['message']);
+			API::put('extensions/'.$slug, array(
+				'installed' => true,
+				'enabled'   => true,
+			));
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
 
 		return Redirect::to_secure(ADMIN.'/extensions');
 	}
 
-	public function get_disable($id)
+	public function get_disable($slug)
 	{
-		$result = API::post('extensions/disable', array('id' => $id));
-
-		if ( ! $result['status'])
+		try
 		{
-			Platform::messages()->error($result['message']);
+			API::put('extensions/'.$slug, array(
+				'installed' => true,
+				'enabled'   => false,
+			));
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
 
 		return Redirect::to_secure(ADMIN.'/extensions');
 	}
 
-	public function get_update($id)
+	public function get_update($slug)
 	{
-		$result = API::post('extensions/update', array('id' => $id));
-
-		if ( ! $result['status'])
+		try
 		{
-			Platform::messages()->error($result['message']);
+			API::put('extensions/'.$slug, array(
+				'update' => true,
+			));
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
 
 		return Redirect::to_secure(ADMIN.'/extensions');

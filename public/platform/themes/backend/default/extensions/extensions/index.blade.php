@@ -47,7 +47,7 @@
 								<th>{{ Lang::line('extensions::extensions.table.is_core') }}</th>
 								<th>{{ Lang::line('extensions::extensions.table.enabled') }}</th>
 								<th>{{ Lang::line('extensions::extensions.table.has_updates') }}</th>
-								<th></th>
+								<th class="span3">{{ Lang::line('extensions::extensions.table.actions') }}</th>
 							</tr>
 						<thead>
 						<tbody>

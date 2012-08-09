@@ -130,196 +130,118 @@ class Extensions_API_Extensions_Controller extends API_Controller
 	}
 
 	/**
-	 * Installs an extension by the given slug.
+	 * Updates an extension based on the parameters
+	 * passed.
 	 *
-	 * @param  string  $slug
-	 * @return
-	 */
-	public function post_install()
-	{
-		$slug = Input::get('slug', function()
-		{
-			throw new Exception('Invalid slug provided.');
-		});
-
-		try
-		{
-			$extension = Platform::extensions_manager()->install($slug, true);
-		}
-		catch (Exception $e)
-		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage(),
-			);
-		}
-
-		return array(
-			'status'    => true,
-			'extension' => $extension,
-		);
-	}
-
-	/**
-	 * Uninstalls an extension
+	 *	<code>
+	 *		// This installs an extension
+	 *		API::put('extensions/users', array(
+	 *			'installed' => true,
+	 *		));
 	 *
-	 * @param  string  $slug
-	 * @return
-	 */
-	public function post_uninstall()
-	{
-		$id = Input::get('id', function()
-		{
-			throw new Exception('Invalid id provided.');
-		});
-
-		try
-		{
-			return array(
-				'status' => Platform::extensions_manager()->uninstall($id),
-			);
-		}
-		catch (Exception $e)
-		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage(),
-			);
-		}
-	}
-
-	/**
-	 * Checks if extensions have updates
+	 *		API::put('extensions/users', array(
+	 *			'enabled' => false,
+	 *		));
 	 *
-	 * @return array
-	 */
-	public function get_updates()
-	{
-		$extensions = Input::get('extensions');
-
-		foreach ($extensions as &$extension)
-		{
-			$extension['update'] = Platform::extensions_manager()->has_update($extension['slug']);
-		}
-
-		return $extensions;
-	}
-
-	public function post_update()
-	{
-		$id = Input::get('id');
-
-		Platform::extensions_manager()->update($id);
-	}
-
-	public function post_enable()
-	{
-		$id = Input::get('id', function()
-		{
-			throw new Exception('Invalid id provided.');
-		});
-
-		try
-		{
-			$extension = Platform::extensions_manager()->enable($id);
-		}
-		catch (Exception $e)
-		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage(),
-			);
-		}
-
-		return array(
-			'status'    => true,
-			'extension' => $extension,
-		);
-	}
-
-	public function post_disable()
-	{
-		$id = Input::get('id', function()
-		{
-			throw new Exception('Invalid id provided.');
-		});
-
-		try
-		{
-			$extension = Platform::extensions_manager()->disable($id);
-		}
-		catch (Exception $e)
-		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage(),
-			);
-		}
-
-		return array(
-			'status'    => true,
-			'extension' => $extension,
-		);
-	}
-
-	/**
-	 * Returns fields required for a
-	 * Platform.table
+	 *		// Installed equalling false is...
+	 *		API::put('extensions/users', array(
+	 *			'installed' => false,
+	 *		));
 	 *
+	 *		// The same as uninstalled equalling true.
+	 *		// Be sure to only pick one or the other or
+	 *		// You could override yourself.
+	 *		API::put('extensions/users', array(
+	 *			'uninstalled' => true,
+	 *		));
+	 *	</code>
+	 *
+	 * 'installed' is the opposite to 'uninstalled'. If
+	 * both are provided, the value for 'installed' will
+	 * be used.
+	 *
+	 * 'enabled' is the opposite to 'disabled'. If both
+	 * are provided, the value for 'enabled' is used.
+	 *
+	 *
+	 * @param   string  $slug
 	 * @return  Response
 	 */
-	public function get_datatable()
+	public function put_index($slug)
 	{
-		// CartTable defaults
-		$defaults = array(
-			'select'    => array(
-				'id'          => Lang::line('extensions::extensions.table.id')->get(),
-				'name'        => Lang::line('extensions::extensions.table.name')->get(),
-				'slug'        => Lang::line('extensions::extensions.table.slug')->get(),
-				'author'      => Lang::line('extensions::extensions.table.author')->get(),
-				'description' => Lang::line('extensions::extensions.table.description')->get(),
-				'version'     => Lang::line('extensions::extensions.table.version')->get(),
-				'is_core'     => Lang::line('extensions::extensions.table.is_core')->get(),
-				'enabled'     => Lang::line('extensions::extensions.table.enabled')->get(),
-			),
-			'where'     => array(),
-			'order_by'  => array('slug' => 'asc'),
-		);
-
-		// Get total count
-		$count_total = Extension::count();
-
-		// Get the filtered count
-		$count_filtered = Extension::count('id', function($query) use($defaults)
+		// Doesn't exist? Throw a 404
+		if ( ! Platform::extensions_manager()->find_extension_file($slug))
 		{
-			// Sets the were clause from passed settings
-			$query = Table::count($query, $defaults);
+			return new Response(array(
+				'message' => "Extension [$slug] doesn't exist.",
+			), API::STATUS_NOT_FOUND);
+		}
 
-			return $query;
-		});
+		// Get the extension
+		$extension = Platform::extensions_manager()->get($slug);
 
-		// Paging
-		$paging = Table::prep_paging($count_filtered, 20);
+		// Flags for whether the extension
+		// should become installed or enabled
+		$installed = null;
+		$enabled   = null;
 
-		// Get Table items
-		$items = Extension::all(function($query) use ($defaults, $paging)
+		// If we have an installed key
+		if ((($_installed = Input::get('installed')) !== null) or (($_uninstalled = Input::get('uninstalled')) !== null))
 		{
-			list($query, $columns) = Table::query($query, $defaults, $paging);
+			$installed = ($_installed !== null) ? (bool) $_installed : ( ! (bool) $_uninstalled);
+		}
 
-			return $query->select($columns);
-		});
+		// If we have an enabled key
+		if ((($_enabled = Input::get('enabled')) !== null) or (($_disabled = Input::get('disabled')) !== null))
+		{
+			$enabled = ($_enabled !== null) ? (bool) $_enabled : ( ! (bool) $_disabled);
+		}
 
-		// Get items
-		$items = ($items) ?: array();
+		try
+		{
+			// If the person wants the extension installed
+			if ($installed === true)
+			{
+				// Check if it's already been installed
+				if ($extension['info']['installed'] != true)
+				{
+					$extension = Platform::extensions_manager()->install($slug);
+				}
+			}
 
-		// Return our data
-		return new Response(array(
-			'columns'        => $defaults['select'],
-			'rows'           => $items,
-			'count'          => $count_total,
-			'count_filtered' => $count_filtered,
-			'paging'         => $paging,
-		));
+			// The person wants the extension uninstalled
+			elseif ($installed === false and $extension['info']['installed'] == true)
+			{
+				$extension = Platform::extensions_manager()->uninstall($slug);
+			}
+
+			// If they want it enabled or not. We only allow
+			// that if the extension is installed
+			if ($enabled !== null and $extension['info']['installed'] == true)
+			{
+				$method = ($enabled === true) ? 'enable' : 'disable';
+				$extension = Platform::extensions_manager()->$method($slug);
+			}
+
+			// They want to update it
+			if ($update = Input::get('update'))
+			{
+				$extension = Platform::extensions_manager()->update($slug);
+			}
+		}
+		catch (Exception $e)
+		{
+			return new Response(array(
+				'message' => $e->getMessage(),
+			), API::STATUS_BAD_REQUEST);
+		}
+
+		// Remove callbacks as they're no use
+		// in JSON
+		array_forget($extension, 'listeners');
+		array_forget($extension, 'global_routes');
+
+		return new Response($extension);
 	}
 
 }
