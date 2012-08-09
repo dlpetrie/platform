@@ -36,12 +36,13 @@ class Extensions_API_Extensions_Controller extends API_Controller
 	 *
 	 *	<code>
 	 *		$all         = API::get('extensions');
-	 *		$enabled   = API::get('extensions', array(
+	 *		$enabled     = API::get('extensions', array(
 	 *			'filter' => 'enabled',
 	 *		));
 	 *		$uninstalled = API::get('extensions', array(
 	 *			'filter' => 'uninstalled',
 	 *		));
+	 *		$users       = API::get('extensions/users');
 	 *	</code>
 	 *
 	 * @return  Response
