@@ -94,7 +94,7 @@ class Users_API_Groups_Controller extends API_Controller
 				return new Response(array(
 					'message' => Lang::line('users::groups.create.error')->get(),
 					'errors'  => ($group->validation()->errors->has()) ? $group->validation()->errors->all() : array(),
-					), API::STATUS_BAD_REQUEST);
+					), ($group->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 			}
 		}
 		catch (Exception $e)
@@ -136,7 +136,7 @@ class Users_API_Groups_Controller extends API_Controller
 				return new Response(array(
 					'message' => Lang::line('groups::groups.update.error')->get(),
 					'errors'  => ($group->validation()->errors->has()) ? $group->validation()->errors->all() : array(),
-				), API::STATUS_UNPROCESSABLE_ENTITY);
+				), ($group->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 			}
 		}
 		catch (Exception $e)
@@ -179,7 +179,7 @@ class Users_API_Groups_Controller extends API_Controller
 			return new Response(array(
 				'message' => "An error occured while deleting the group [$id]",
 				'errors'  => ($group->validation()->errors->has()) ? $group->validation()->errors->all() : array(),
-			), API::STATUS_UNPROCESSABLE_ENTITY);
+			), ($group->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 		}
 		catch (Exception $e)
 		{

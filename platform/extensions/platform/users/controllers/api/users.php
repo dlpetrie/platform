@@ -105,7 +105,7 @@ class Users_API_Users_Controller extends API_Controller
 				return new Response(array(
 					'message' => Lang::line('users::users.create.error')->get(),
 					'errors'  => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : array(),
-					), API::STATUS_BAD_REQUEST);
+					), ($user->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 			}
 		}
 		catch (Exception $e)
@@ -147,7 +147,7 @@ class Users_API_Users_Controller extends API_Controller
 				return new Response(array(
 					'message' => Lang::line('users::users.update.error')->get(),
 					'errors'  => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : array(),
-				), API::STATUS_UNPROCESSABLE_ENTITY);
+				), ($user->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 			}
 		}
 		catch (Exception $e)
@@ -190,7 +190,7 @@ class Users_API_Users_Controller extends API_Controller
 			return new Response(array(
 				'message' => "An error occured while deleting the user [$id]",
 				'errors'  => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : array(),
-			), API::STATUS_UNPROCESSABLE_ENTITY);
+			), ($user->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 		}
 		catch (Exception $e)
 		{
@@ -333,7 +333,7 @@ class Users_API_Users_Controller extends API_Controller
 				return new Response(array(
 					'message' => Lang::line('user::users.create.error')->get(),
 					'errors'  => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : array(),
-				), API::STATUS_UNPROCESSABLE_ENTITY);
+				), ($user->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 
 			}
 		}

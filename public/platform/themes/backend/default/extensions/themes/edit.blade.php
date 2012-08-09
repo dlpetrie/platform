@@ -43,11 +43,6 @@
 					{{ Form::token() }}
 
 					<div class="well">
-						<input type="hidden" name="theme" value="{{ $theme['dir'] }}">
-						@if (isset($theme['id']))
-						<input type="hidden" name="id" value="{{ $theme['id'] }}">
-						@endif
-
 						@foreach ($theme['options'] as $id => $option)
 						<fieldset>
 							<legend>{{ $option['text'] }}</legend>
@@ -59,8 +54,10 @@
 						@endforeach
 					</div>
 
-		            <button class="btn btn-large" type="submit" name="form_options" value="apply">{{ Lang::line('themes::themes.button.apply') }}</button>
-		            <a class="btn btn-large" href="../../{{ URI::segment(4) }}">{{ Lang::line('themes::themes.button.complete') }}</a>
+		            <button class="btn btn-large btn-primary" type="submit">
+		            	{{ Lang::line('themes::themes.button.apply') }}
+		            </button>
+		            <a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/themes/'.$type) }}">{{ Lang::line('themes::themes.button.complete') }}</a>
 
 				{{ Form::close() }}
 
