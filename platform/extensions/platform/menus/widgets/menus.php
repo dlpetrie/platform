@@ -21,6 +21,7 @@
 namespace Platform\Menus\Widgets;
 
 use API;
+use APIClientException;
 use Input;
 use Sentry;
 use Theme;
@@ -44,32 +45,8 @@ class Menus
 	 */
 	public function nav($start = 0, $children_depth = 0, $class = null, $before_uri = null)
 	{
-		// Get the active menu
-		$active_result = API::get('menus/active');
-
-		if ( ! $active_result['status'])
-		{
-			return '';
-		}
-
-		// Check if the start is a int
-		if (is_numeric($start))
-		{
-			// Check the start depth exists
-			if ( ! isset($active_result['active_path'][(int) $start]))
-			{
-				return '';
-			}
-
-			// Grab all children items from the API
-			$items_result = API::get('menus/children', array(
-				'id'       => $active_result['active_path'][(int) $start],
-				'depth'    => (int) $children_depth,
-			));
-		}
-
-		// Else, we have the slug?
-		elseif (is_string($start))
+		// We have the slug?
+		if ( ! is_numeric($start))
 		{
 			// Make sure we have a slug
 			if ( ! strlen($start))
@@ -77,24 +54,61 @@ class Menus
 				return '';
 			}
 
-			// Grab all children items from the API
-			$items_result = API::get('menus/children', array(
-				'slug'  => $start,
-				'depth' => (int) $children_depth,
-			));
+			try
+			{
+				$items = API::get('menus/'.$start.'/children', array(
+					// Pass through the children depth
+					'limit' => $children_depth ?: false,
+
+					// We want to automatically filter
+					// what items show (according to Session)
+					// data
+					'filter_type' => 'automatic',
+				));
+			}
+			catch (APIClientException $e)
+			{
+				return '';
+			}
 		}
 
-		// If there are no children of the given menu,
-		// return an empty string
-		if ( ! isset($items_result['children']) or ! is_array($items_result['children']) or empty($items_result['children']))
+		try
 		{
-			return '';
+			$active_path = API::get('menus/active_path');
+		}
+		catch (APIClientException $e)
+		{
+			// Empty active path
+			$active_path = array();
 		}
 
-		// Return teh
+		// Le'ts get menus according to the
+		// start depth and what is the active menu.
+		if (is_numeric($start))
+		{
+			// Check the start depth exists
+			if ( ! isset($active_path[(int) $start]))
+			{
+				return '';
+			}
+
+			// Items
+			try
+			{
+				$items = API::get('menus/'.$active_path[(int) $start].'/children', array(
+					'limit' => $children_depth ?: false,
+				));
+			}
+			catch (APIClientException $e)
+			{
+				return '';
+			}
+		}
+
+		// Return the widget
 		return Theme::make('menus::widgets.nav')
-		            ->with('items', $items_result['children'])
-		            ->with('active_path', $active_result['active_path'])
+		            ->with('items', $items)
+		            ->with('active_path', $active_path)
 		            ->with('class', $class)
 		            ->with('before_uri', $before_uri);
 	}

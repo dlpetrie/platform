@@ -24,6 +24,9 @@
 			typeInputSelector:   '.item-type',
 			targetInputSelector: '.item-target',
 
+			// Name
+			rootNameSelector: '#menu-name',
+
 			// Root menu item slug
 			rootSlug: null,
 
@@ -127,6 +130,11 @@
 
 				$(this).val($(this).slugify())
 				       .trigger('change');
+			});
+
+			$(self.settings.rootNameSelector).on('focus keyup change', function() {
+				$(self.settings.rootSlugSelector).val($(this).slugify())
+				                                 .trigger('change');
 			});
 
 			// New slug

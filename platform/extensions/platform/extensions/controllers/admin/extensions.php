@@ -52,6 +52,8 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 			{
 				Platform::messages()->error($error);
 			}
+
+			return Redirect::to_secure(ADMIN);
 		}
 
 		$data = array(

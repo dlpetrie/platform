@@ -116,7 +116,7 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
 
 			// Currently, status is never passed
 			// through by the input
-			'status' => Input::get('status', 1),
+			'status'  => Input::get('status', 1),
 			'options' => Input::get('options', array()),
 		);
 

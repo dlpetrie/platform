@@ -33,8 +33,24 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 
 	public function get_index()
 	{
+		try
+		{
+			$menus = API::get('menus');
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+
+			return Redirect::to(ADMIN);
+		}
+
 		return Theme::make('menus::index')
-		            ->with('menus', API::get('menus'));
+		            ->with('menus', $menus);
 	}
 
 	public function get_create()
@@ -42,37 +58,82 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 		return $this->get_edit();
 	}
 
-	public function get_edit($id = false)
+	/**
+	 * Returns the edit / create view for
+	 * a menu.
+	 *
+	 * @param   string  $slug
+	 * @return  Response
+	 */
+	public function get_edit($slug = false)
 	{
-		// Get menu from API
-		$result = API::get('menus/menu', array(
-			'id' => $id,
-		));
-		$menu   = $result['menu'];
+		// If we are editing a menu
+		if ($slug != false)
+		{
+			try
+			{
+				$menu = API::get('menus/'.$slug, array(
+					'children' => true,
+				));
+			}
+			catch (APIClientException $e)
+			{
+				Platform::messages()->error($e->getMessage());
 
-		// Get last item ID
-		$result       = API::get('menus/last_item_id');
-		$last_item_id = $result['last_item_id'];
+				foreach ($e->errors() as $error)
+				{
+					Platform::messages()->error($error);
+				}
 
-		// Get
-		$result = API::get('menus/slugs', array(
-			'not_id' => isset($menu['id']) ? $menu['id'] : false,
-		));
-		$persisted_slugs  = $result['slugs'];
+				return Redirect::to_secure(ADMIN.'/menus');
+			}
+		}
+		else
+		{
+			// Fallback array
+			$menu = array();
+		}
 
+		// Get all items
+		try
+		{
+			$all_items = API::get('menus/flat');
+		}
+		catch (APIClientException $e)
+		{
+			$all_items = array();
+		}
+
+		// Get the last item's ID
+		$last_item_id = array_get(end($all_items), 'id', 0);
+
+		// Get array of persisted menu slugs. It's used
+		// by javascript to validate unique slugs on
+		// client end in addition to server end.
+		$persisted_slugs = array();
+		foreach ($all_items as $item)
+		{
+			$persisted_slugs[] = array_get($item, 'slug');
+		}
+
+		// Return the edit view
 		return Theme::make('menus::edit')
 		            ->with('menu', $menu)
-		            ->with('menu_id', (isset($menu['id'])) ? $menu['id'] : false)
+		            ->with('menu_slug', array_get($menu, 'slug', false))
 		            ->with('item_template', json_encode(Theme::make('menus::edit/item_template')->render()))
 		            ->with('last_item_id', $last_item_id)
 		            ->with('root_slug', isset($menu['slug']) ? $menu['slug'] : null)
 		            ->with('persisted_slugs', json_encode($persisted_slugs));
 	}
 
-	public function post_edit($id = false)
+	/**
+	 * Processes editing / creating a menu.
+	 *
+	 * @param   string  $slug
+	 * @return  Response
+	 */
+	public function post_edit($slug = false)
 	{
-		$items = array();
-
 		$input_hierarchy = Input::get('items_hierarchy');
 
 		// JSON string on non-AJAX form
@@ -81,43 +142,93 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 			$input_hierarchy = json_decode($input_hierarchy, true);
 		}
 
+		// Check for input hierarchy
+		if ( ! $input_hierarchy or ! is_array($input_hierarchy))
+		{
+			if (Request::ajax())
+			{
+				return new Response(array(
+					'message' => 'No items hierarchy was provided.'
+				), API::STATUS_BAD_REQUEST);
+			}
+
+			Platform::messages()->error('No items hierarchy was provided.');
+
+			return Redirect::to_secure(ADMIN.'/menus'.(($slug) ? '/edit/'.$slug : null));
+		}
+
+		// Prepare our items
+		$items = array();
+
 		foreach ($input_hierarchy as $item)
 		{
 			$this->process_item_recursively($item, $items);
 		}
 
-		$result = API::post('menus/menu', array(
-			'id'    => $id,
-			'name'  => Input::get('name'),
-			'slug'  => Input::get('slug'),
-			'items' => $items,
-		));
+		// Prepare data for the API
+		$data = array();
 
-		// Ajax form
-		if (Request::ajax())
+		if ($name = Input::get('name'))
 		{
-			// The menu is usually a property of the
-			// API response, don't need to transport
-			// all of this data...
-			array_forget($result, 'menu');
-
-			return new Response(json_encode($result));
+			$data['name'] = $name;
+		}
+		if ($_slug = Input::get('slug'))
+		{
+			$data['slug'] = $_slug;
+		}
+		if (count($items) > 0)
+		{
+			$data['children'] = $items;
 		}
 
-		// Traditional form submission
-		if ( ! $result['status'])
+		try
 		{
-			Cartalyst::messages()->error($result['message']);
+			// If we're updating a menu
+			if ($slug != false)
+			{
+				API::put('menus/'.$slug, $data);
+			}
+			else
+			{
+				API::post('menus', $data);
+			}
+		}
+		catch (APIClientException $e)
+		{
+			if (Request::ajax())
+			{
+				return new Response(array(
+					'message' => $e->getMessage(),
+				), $e->getCode());
+			}
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+
+			return Redirect::to_secure(ADMIN.'/menus'.(($slug) ? '/edit/'.$slug : null));
 		}
 
-		return Redirect::to_secure(ADMIN.'/menus/edit/'.array_get($result, 'menu.id'));
+		return Redirect::to_secure(ADMIN.'/menus');
 	}
 
-	public function get_delete($id)
+	public function get_delete($slug)
 	{
-		$result = API::post('menus/delete', array(
-			'id' => $id,
-		));
+		try
+		{
+			API::delete('menus/'.$slug);
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+		}
 
 		return Redirect::to_secure(ADMIN.'/menus');
 	}

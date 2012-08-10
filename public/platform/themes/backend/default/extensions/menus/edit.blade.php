@@ -81,17 +81,17 @@
 
 	<hr>
 
-	{{ Form::open(ADMIN.'/menus/edit/'.$menu_id ?: null, 'POST', array('id' => 'platform-menu', 'autocomplete' => 'off', 'novalidate')) }}
+	{{ Form::open(ADMIN.'/menus/edit/'.$menu_slug ?: null, 'POST', array('id' => 'platform-menu', 'autocomplete' => 'off', 'novalidate')) }}
 
 		{{ Form::token() }}
 
 		<div class="tabbable">
 			<ul class="nav nav-tabs">
-				<li class="{{ ($menu_id) ? 'active' : null }}"><a href="#menus-edit-items" data-toggle="tab">{{ Lang::line('menus::menus.tabs.items') }}</a></li>
-				<li class="{{ ( ! $menu_id) ? 'active' : null }}"><a href="#menus-edit-menu-options" data-toggle="tab">{{ Lang::line('menus::menus.tabs.options') }}</a></li>
+				<li class="{{ ($menu_slug) ? 'active' : null }}"><a href="#menus-edit-items" data-toggle="tab">{{ Lang::line('menus::menus.tabs.items') }}</a></li>
+				<li class="{{ ( ! $menu_slug) ? 'active' : null }}"><a href="#menus-edit-menu-options" data-toggle="tab">{{ Lang::line('menus::menus.tabs.options') }}</a></li>
 			</ul>
 			<div class="tab-content">
-				<div class="tab-pane {{ ($menu_id) ? 'active' : null }}" id="menus-edit-items">
+				<div class="tab-pane {{ ($menu_slug) ? 'active' : null }}" id="menus-edit-items">
 
 					<div class="clearfix">
 						<a class="pull-right btn items-toggle-all">{{ Lang::line('menus::menus.button.toggle_items_details') }} <i class="icon-edit"></i></a>
@@ -149,7 +149,7 @@
 						</div>
 
 						<ol class="platform-menu">
-							@if ($menu['children'])
+							@if (isset($menu['children']) and (is_array($menu['children'])))
 								@foreach ($menu['children'] as $child)
 									@render('menus::edit.item', array('item' => $child))
 								@endforeach
@@ -159,7 +159,7 @@
 					</div>
 
 				</div>
-				<div class="tab-pane {{ ( ! $menu_id) ? 'active' : null }}" id="menus-edit-menu-options">
+				<div class="tab-pane {{ ( ! $menu_slug) ? 'active' : null }}" id="menus-edit-menu-options">
 
 					{{ Form::label('menu-name', Lang::line('menus::menus.general.name')) }}
 					{{ Form::text('name', isset($menu['name']) ? $menu['name'] : null, array('id' => 'menu-name', 'placeholder' => Lang::line('menus::menus.general.name'), (isset($menu['user_editable']) and ! $menu['user_editable']) ? 'disabled' : 'required')) }}
@@ -174,7 +174,7 @@
 		<div class="form-actions">
 
 			<button type="submit" class="btn btn-primary btn-save-menu">
-				{{ Lang::line('menus::menus.button.'.(($menu_id) ? 'update' : 'create')) }}
+				{{ Lang::line('menus::menus.button.'.(($menu_slug) ? 'update' : 'create')) }}
 			</button>
 
 			{{ HTML::link_to_secure(ADMIN.'/menus', Lang::line('menus::menus.button.cancel'), array('class' => 'btn')) }}

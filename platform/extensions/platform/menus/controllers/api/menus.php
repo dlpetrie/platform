@@ -24,96 +24,257 @@ class Menus_API_Menus_Controller extends API_Controller
 {
 
 	/**
-	 * Get a list of menus
+	 * Returns an array of menus or a given
+	 * menu, should the slug be provided.
 	 *
-	 * @return array
+	 *	<code>
+	 *		$menus = API::get('menus');
+	 *		$admin = API::get('menus/admin');
+	 *	</code>
+	 *
+	 * @param   string  $slug
+	 * @return  array
 	 */
-	public function get_index()
+	public function get_index($slug = false)
 	{
-		return Menu::menus();
-		return ($id = Input::get('id')) ? Menu::find($id) : Menu::menus();
-	}
-
-	/**
-	 * Gets a menu by the provided id
-	 */
-	public function get_menu()
-	{
-		$menu = Menu::find(Input::get('id'));
-
-		if ($menu)
+		// All menus
+		if ($slug == false)
 		{
-			$menu->children();
+			// Get menus
+			$menus = Menu::menus();
+
+			foreach ($menus as $menu)
+			{
+				// Adding children?
+				if (Input::get('children'))
+				{
+					$menu->children();
+				}
+				else
+				{
+					unset($menu->children);
+				}
+			}
+
+			return new Response($menus);
+		}
+
+		if (($menu = Menu::find_root($slug)) === null)
+		{
+			return new Response(array(
+				'message' => "Menu [$slug] either not a root menu item or doesn't exist.",
+			), API::STATUS_NOT_FOUND);
+		}
+
+		// Adding children?
+		if (Input::get('children'))
+		{
+			$menu->children(Input::get('limit', false));
 		}
 		else
 		{
-			$menu = new Menu();
+			unset($menu->children);
 		}
 
-		return array(
-			'status' => true,
-			'menu'   => $menu,
-		);
+		return new Response($menu);
 	}
 
 	/**
-	 * Gets the last item ID from the table (used by JS)
+	 * Creates a menu with the given properties.
+	 *
+	 *	<code>
+	 *		$menu = API::post('menus', $data);
+	 *	</code>
+	 *
+	 * @return  Response
 	 */
-	public function get_last_item_id()
+	public function post_index()
 	{
-		return array(
-			'status'       => true,
-			'last_item_id' => (($last_item = Menu::find('last')) === null) ? 0 : $last_item->id,
-		);
-	}
+		// Check for valid data
+		if (($children = Input::get('children')) === null or ! is_array($children) or count($children) === 0)
+		{
+			return new Response(array(
+				'message' => "Invalid children provided to create Menu [$slug]. ",
+			), API::STATUS_UNPROCESSABLE_ENTITY);
+		}
 
-	/**
-	 * Saves a menu
-	 */
-	public function post_menu()
-	{
+		$name = Input::get('name');
+		$slug = Input::get('slug');
+
 		try
 		{
-			$id   = Input::get('id');
-			$name = Input::get('name');
-			$slug = Input::get('slug');
-
-			$menu = Menu::from_hierarchy_array($id, Input::get('items'), function($root_item) use ($id, $name, $slug)
+			$menu = Menu::from_hierarchy_array(false, $children, function($root_item) use ($name, $slug)
 			{
-				if ($name and ( ! $id or $root_item->user_editable))
+				// Add values
+				$root_item->name = $name;
+				$root_item->slug = $slug;
+
+				// All new created items are user editable
+				$root_item->user_editable = 1;
+
+				return $root_item;
+			});
+		}
+		catch (Exception $e)
+		{
+			return new Response(array(
+				'message' => $e->getMessage(),
+			), API::STATUS_UNPROCESSABLE_ENTITY);
+		}
+
+		return new Response($menu);
+	}
+
+	/**
+	 * Updates a menu with the given properties.
+	 *
+	 *	<code>
+	 *		$menu = API::put('menus/admin', $data);
+	 *	</code>
+	 *
+	 * @param   string  $slug
+	 * @return  Response
+	 */
+	public function put_index($slug)
+	{
+		// Validate the menu is a root item
+		if (($menu = Menu::find_root($slug)) === null)
+		{
+			return new Response(array(
+				'message' => "Menu [$slug] either not a root menu item or doesn't exist.",
+			), API::STATUS_NOT_FOUND);
+		}
+
+		// Check for valid data
+		if (($children = Input::get('children')) === null or ! is_array($children))
+		{
+			return new Response(array(
+				'message' => "Invalid children provided for Menu [$slug]. To remove children, pass an empty array through instead.",
+			), API::STATUS_UNPROCESSABLE_ENTITY);
+		}
+
+		$name = Input::get('name', $menu['name']);
+		$slug = Input::get('slug', $slug);
+
+		try
+		{
+			$menu = Menu::from_hierarchy_array($menu['id'], $children, function($root_item) use ($name, $slug)
+			{
+				if ($name and ($root_item->user_editable))
 				{
 					$root_item->name = $name;
 				}
 
-				if ($slug and ( ! $id or $root_item->user_editable))
+				if ($slug and ($root_item->user_editable))
 				{
 					$root_item->slug = $slug;
-				}
-
-				if ( ! $id)
-				{
-					$root_item->user_editable = 1;
 				}
 
 				return $root_item;
 			});
 
+			// Load in children
 			$menu->children();
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			echo $e->getMessage();
-			exit;
-			return array(
-				'status'  => true,
+			return new Response(array(
 				'message' => $e->getMessage(),
-			);
+			), API::STATUS_UNPROCESSABLE_ENTITY);
 		}
 
-		return array(
-			'status' => true,
-			'menu'   => $menu,
-		);
+		return new Response($menu);
+	}
+
+	/**
+	 * Returns a (recursive) array of menu
+	 * children for a given menu slug.
+	 *
+	 *	<code>
+	 *		$admin_children = API::get('menus/admin/children');
+	 *	</code>
+	 *
+	 * @param   string  $slug
+	 * @return  Response
+	 */
+	public function get_children($slug)
+	{
+		// Find the children belonging to either a root item
+		// or a child item
+		if (($menu = Menu::find_root($slug)) === null and ($menu = Menu::find($slug)) === null)
+		{
+			return new Response(array(
+				'message' => "Menu [$slug] either not a root menu item or doesn't exist.",
+			), API::STATUS_NOT_FOUND);
+		}
+
+		$children = $menu->children(Input::get('limit', false));
+
+		// If the person wants to filter by the type
+		if (($filter_type = Input::get('filter_type')) !== null)
+		{
+			// If they're asking for a particular filter
+			// type. The range() matches the constants
+			// found in Platform\Menus\Menu. Alernatively,
+			// a string 'automatic' can be passed through in
+			// which case we'll use Session data to filter types.
+			if ((is_numeric($filter_type) and in_array((int) $filter_type, range(0, 3))) or $filter_type === 'automatic')
+			{
+				$this->filter_children_recursively($children, $filter_type);
+			}
+		}
+
+		return new Response($children);
+	}
+
+	/**
+	 * Returns a flat array of menu children.
+	 *
+	 *	<code>
+	 *		$all_menu_children_flat = API::get('menus/flat');
+	 *		$admin_children_flat    = API::get('menus/admin/children/flat');
+	 *	</code>
+	 *
+	 * @param   string  $slug
+	 * @return  Response
+	 */
+	public function get_flat($slug = false)
+	{
+		if ($slug == false)
+		{
+			$menus = Menu::all();
+
+			// Unset the children array as it's
+			// irrelevent with flat children
+			foreach ($menus as $menu)
+			{
+				unset($menu->children);
+			}
+
+			return new Response($menus);
+		}
+
+		// Find the children belonging to either a root item
+		// or a child item
+		if (($menu = Menu::find_root($slug)) === null and ($menu = Menu::find($slug)) === null)
+		{
+			return new Response(array(
+				'message' => "Menu [$slug] either not a root menu item or doesn't exist.",
+			), API::STATUS_NOT_FOUND);
+		}
+
+		// Find all children that are between the menu's properties
+		$children = Menu::all(function($query) use ($menu)
+		{
+			return $query->where(Menu::nesty_col('left'), 'BETWEEN', DB::raw('\''.($menu->{Menu::nesty_col('left')} + 1).'\' AND \''.$menu->{Menu::nestY_col('right')}.'\''));
+		});
+
+		foreach ($children as $item)
+		{
+			unset($item->children);
+		}
+
+		return new Response($children);
 	}
 
 	/**
@@ -129,7 +290,7 @@ class Menus_API_Menus_Controller extends API_Controller
 	 *
 	 * @return  array
 	 */
-	public function get_children()
+	public function geat_children()
 	{
 		if ($id = Input::get('id'))
 		{
@@ -168,7 +329,7 @@ class Menus_API_Menus_Controller extends API_Controller
 			);
 		}
 
-		// filter out children items based on type
+		// filter out children children based on type
 		$menu_children = array();
 		foreach($children as $child)
 		{
@@ -234,17 +395,29 @@ class Menus_API_Menus_Controller extends API_Controller
 	{
 		if ( ! $active = Menu::active())
 		{
-			return array(
-				'status'  => false,
-				'message' => 'There is no active menu defined.',
-			);
+			return new Response(array(
+				'message' => 'No active menu set.',
+			), API::STATUS_NOT_FOUND);
 		}
 
-		return array(
-			'status'      => true,
-			'active'      => $active,
-			'active_path' => Menu::active_path(), // Always returns something if Menu::active() does
-		);
+		return new Response($active);
+	}
+
+	/**
+	 * Returns the active path
+	 *
+	 * @return  array
+	 */
+	public function get_active_path()
+	{
+		if ( ! $active = Menu::active())
+		{
+			return new Response(array(
+				'message' => 'No active menu set.',
+			), API::STATUS_NOT_FOUND);
+		}
+
+		return new Response(Menu::active_path());
 	}
 
 	/**
@@ -378,100 +551,94 @@ class Menus_API_Menus_Controller extends API_Controller
 	}
 
 	/**
-	 * Deletes a menu. Must be a root item.
+	 * Deletes a menu.
 	 *
-	 * @return  array
+	 *	<code>
+	 *		API::delete('menus/admin');
+	 *	</code>
+	 *
+	 * @param   string  $slug
+	 * @return  Response
 	 */
-	public function post_delete()
+	public function delete_index($slug)
 	{
-		if ( ! $id = Input::get('id'))
+		// Validate the menu is a root item
+		if (($menu = Menu::find_root($slug)) === null)
 		{
-			return array(
-				'status'  => false,
-				'message' => 'A Menu ID must be provided.',
-			);
+			return new Response(array(
+				'message' => "Menu [$slug] either not a root menu item or doesn't exist.",
+			), API::STATUS_NOT_FOUND);
 		}
 
-		$menu = Menu::find($id);
+		// Delete
+		$menu->delete();
 
-		if ($menu === null)
-		{
-			return array(
-				'status'  => false,
-				'message' => 'Couldn\'t find menu to delete.',
-			);
-		}
-
-		if ( ! $menu->is_root())
-		{
-			return array(
-				'status'  => false,
-				'message' => 'Provided menu to delete wasn\'t a root node.',
-			);
-		}
-
-		if ( ! $menu->user_editable)
-		{
-			return array(
-				'status'  => false,
-				'message' => 'Menu is not user editable. Cannot be deleted.',
-			);
-		}
-
-		try
-		{
-			$result = $menu->delete_with_children();
-
-			return array(
-				'status'  => true,
-				'result'  => $result,
-			);
-		}
-		catch (Exception $e)
-		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage(),
-			);
-		}
+		return new Response(null, API::STATUS_NO_CONTENT);
 	}
 
 	/**
-	 * Returns an array of menu slugs.
+	 * Recursively filters menu items.
 	 *
-	 * @return  array
+	 * @param   array   $children
+	 * @param   string  $type
+	 * @return  void
 	 */
-	public function get_slugs()
+	protected function filter_children_recursively(array &$children, $type)
 	{
-		// Get an array of slugs
-		$slugs = array();
-
-		// The ID of the menu to not include
-		// when fetching slugs. This is used
-		// in the menu scaffolding
-		$not_id = Input::get('not_id', false);
-
-		// Get items
-		$items = Menu::all(function($query) use ($not_id)
+		foreach ($children as $index => &$child)
 		{
-			if ($not_id !== false)
+			if ($type == 'automatic')
 			{
-				$query->where(Menu::nesty_col('tree'), '!=', $not_id);
+				// Do a switch based on the menu item
+				// type
+				switch ($child->type)
+				{
+					// Remove from anyone who's not logged in
+					case Menu::TYPE_LOGGED_IN:
+						if ( ! Sentry::check())
+						{
+							array_splice($children, $index, 1);
+						}
+						break;
+
+					// Remove from anyone who's logged in
+					case Menu::TYPE_LOGGED_OUT:
+						if (Sentry::check())
+						{
+							array_splice($children, $index, 1);
+						}
+						break;
+
+					// Remove from anyone who's not admin
+					case Menu::TYPE_ADMIN:
+						if (Sentry::check() and Sentry::user()->has_access(array('is_admin', 'superuser')))
+						{
+							$child['uri'] = ADMIN.'/'.$child['uri'];
+						}
+						else
+						{
+							array_splice($children, $index, 1);
+						}
+						break;
+				}
 			}
 
-			return $query;
-		}, array('slug'));
+			// Do a switch based on the filter type requested
+			elseif (in_array($type, range(0, 3)))
+			{
+				// Check the type matches the requested typ
+				if ($child->type != $type)
+				{
+					array_splice($children, $index, 1);
+				}
+			}
 
-		foreach ($items as $item)
-		{
-			$slugs[] = $item->slug;
+			// Recursive baby!
+			if (count($child->children) > 0)
+			{
+				$this->filter_children_recursively($child->children, $type);
+			}
 		}
-
-		// We can't really go wrong, can we?
-		return array(
-			'status' => true,
-			'slugs'  => $slugs,
-		);
 	}
 
 }

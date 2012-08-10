@@ -30,6 +30,16 @@ class Menu extends Nesty
 {
 
 	/**
+	 * Possible menu item types
+	 *
+	 * @constant
+	 */
+	const TYPE_ALWAYS     = 0;
+	const TYPE_LOGGED_IN  = 1;
+	const TYPE_LOGGED_OUT = 2;
+	const TYPE_ADMIN      = 3;
+
+	/**
 	 * The name of the table associated with the model.
 	 *
 	 * @var string
@@ -69,13 +79,23 @@ class Menu extends Nesty
 	);
 
 	/**
+	 * Validation rules for model attributes.
+	 *
+	 * @var array
+	 */
+	protected static $_rules = array(
+		'name' => 'required',
+		'slug' => 'required|unique:menus,slug',
+	);
+
+	/**
 	 * Returns an array of root menu items.
 	 *
 	 * @return  array
 	 */
 	public static function menus($condition = null)
 	{
-		return static::all(function($query) use ($condition)
+		$menus = static::all(function($query) use ($condition)
 		{
 			// Modify the query
 			$query->where(Menu::nesty_col('left'), '=', 1);
@@ -86,7 +106,60 @@ class Menu extends Nesty
 			}
 
 			return $query;
-		});
+		}, array(
+			'id', 'extension', 'name', 'slug', 'user_editable',
+			'lft', 'rgt', 'menu_id', 'status',
+		));
+
+		return $menus;
+	}
+
+	public static function find_root($slug, $columns = array('id', 'extension', 'name', 'slug', 'user_editable', '_lft_', '_rgt_', '_menu_id_', 'status'), $events = array('before', 'after'))
+	{
+		// Translate property names
+		if (($key = array_search('_lft_', $columns)) !== false)
+		{
+			$columns[$key] = static::nesty_col('left');
+		}
+		if (($key = array_search('_rgt_', $columns)) !== false)
+		{
+			$columns[$key] = static::nesty_col('right');
+		}
+		if (($key = array_search('_menu_id_', $columns)) !== false)
+		{
+			$columns[$key] = static::nesty_col('tree');
+		}
+		
+		$menu = static::find(function($query) use ($slug)
+		{
+			return $query->where('slug', '=', $slug)
+			             ->or_where('id', '=', $slug)
+			             ->where(Menu::nesty_col('left'), '=', 1);
+		}, $columns, $events);
+
+		return $menu;
+	}
+
+	/**
+	 * Find a model by either it's primary key
+	 * or a condition that modifies the query object.
+	 *
+	 * @param   string  $condition
+	 * @param   array   $columns
+	 * @return  Crud
+	 */
+	public static function find($condition = 'first', $columns = array('*'), $events = array('before', 'after'))
+	{
+		// Find by slug
+		if (is_string($condition) and ! is_numeric($condition) and ! in_array($condition, array('first', 'last')))
+		{
+			return parent::find(function($query) use ($condition)
+			{
+				return $query->where('slug', '=', $condition);
+			}, $columns, $events);
+		}
+
+		return parent::find($condition, $columns, $events);
 	}
 
 	/**
@@ -294,7 +367,7 @@ SQL;
 		// Default the closure...
 		if ($before_persist === null)
 		{
-			$before_persist = function($item)
+			$before_persist = function($item) use ($id)
 			{
 				if ( ! $item->is_new() and ! $item->user_editable)
 				{
@@ -310,6 +383,14 @@ SQL;
 				elseif ($item->is_new())
 				{
 					$item->user_editable = 1;
+				}
+
+				// Any user editable items, we'll
+				// check their slug starts with the root
+				// item's slug
+				if ($item->user_editable and $root = static::find_root($id) and starts_with($item->slug, $root->slug))
+				{
+					$item->slug = $root->slug.'-'.$item->slug;
 				}
 
 				return $item;
@@ -396,6 +477,25 @@ SQL;
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Gets called before the validation is ran.
+	 *
+	 * @param   array  $data
+	 * @param   array  $rults
+	 * @return  array
+	 */
+	protected function before_validation($data, $rules)
+	{
+		// If we have an ID, exclude it from
+		// the slug validation
+		if (isset($this->id) and $id = $this->id)
+		{
+			$rules['slug'] .= ','.$this->id;	
+		}
+
+		return array($data, $rules);
 	}
 
 	/**

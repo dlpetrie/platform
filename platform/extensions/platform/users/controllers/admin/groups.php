@@ -143,7 +143,6 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 	 */
 	public function get_delete($id)
 	{
-
 		try
 		{
 			API::delete('users/groups/'.$id);
