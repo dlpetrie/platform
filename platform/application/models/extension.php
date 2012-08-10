@@ -53,7 +53,7 @@ class Extension extends Crud
 	public static function find($condition = 'first', $columns = array('*'), $events = array('before', 'after'))
 	{
 		// Find by slug
-		if (is_string($condition) and ! in_array($condition, array('first', 'last')))
+		if (is_string($condition) and ! is_numeric($condition) and ! in_array($condition, array('first', 'last')))
 		{
 			return parent::find(function($query) use ($condition)
 			{
