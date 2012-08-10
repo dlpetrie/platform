@@ -73,11 +73,19 @@ class Menu extends Nesty
 	 *
 	 * @return  array
 	 */
-	public static function menus()
+	public static function menus($condition = null)
 	{
-		return static::all(function($query)
+		return static::all(function($query) use ($condition)
 		{
-			return $query->where(Menu::nesty_col('left'), '=', 1);
+			// Modify the query
+			$query->where(Menu::nesty_col('left'), '=', 1);
+
+			if (is_callable($condition) and ! is_string($condition))
+			{
+				$query = $condition($query);
+			}
+
+			return $query;
 		});
 	}
 
@@ -370,6 +378,42 @@ SQL;
 	public static function active_path()
 	{
 		return static::$_active_path;
+	}
+
+	/**
+	 * Gets call after the find() query is exectuted to modify the result
+	 * Must return a proper result
+	 *
+	 * @param   Query  $query
+	 * @param   array  $columns
+	 * @return  array
+	 */
+	protected function after_find($result)
+	{
+		if ($result)
+		{
+			$result->status = (bool) $result->status;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Gets called after the all() query is exectuted to modify the result
+	 * Must return a proper result
+	 *
+	 * @param   array  $results
+	 * @return  array  $results
+	 */
+	protected static function after_all($results)
+	{
+		foreach ($results as $result)
+		{
+			$result->status        = (bool) $result->status;
+			$result->user_editable = (bool) $result->user_editable;
+		}
+
+		return $results;
 	}
 
 }

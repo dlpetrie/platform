@@ -347,19 +347,26 @@ class User extends Crud
 	 * Gets call after the find() query is exectuted to modify the result
 	 * Must return a proper result
 	 *
-	 * @return  object  Model object result
+	 * @param   Query  $query
+	 * @param   array  $columns
+	 * @return  array
 	 */
 	protected function after_find($result)
 	{
 		if ($result)
 		{
 			$result->metadata = array();
+
 			foreach ($result as $key => $val)
 			{
 				if ( ! in_array($key, static::$_fields))
 				{
 					$result->metadata[$key] = $val;
 					unset($result->{$key});
+				}
+				elseif (in_array($key, array('status', 'activated')))
+				{
+					$result->$key = (bool) $val;
 				}
 			}
 		}
@@ -423,14 +430,15 @@ class User extends Crud
 	}
 
 	/**
-	 * Gets call after the all() query is exectuted to modify the result
+	 * Gets called after the all() query is exectuted to modify the result
 	 * Must return a proper result
 	 *
-	 * @return  object  Model object result
+	 * @param   array  $results
+	 * @return  array  $results
 	 */
-	protected static function after_all($result)
+	protected static function after_all($results)
 	{
-		foreach ($result as &$user)
+		foreach ($results as &$user)
 		{
 			$user->metadata = array();
 			foreach ($user as $key => $val)
@@ -440,10 +448,14 @@ class User extends Crud
 					$user->metadata[$key] = $val;
 					unset($user->{$key});
 				}
+				elseif (in_array($key, array('status', 'activated')))
+				{
+					$user->$key = (bool) $val;
+				}
 			}
 		}
 
-		return $result;
+		return $results;
 	}
 
 	/**

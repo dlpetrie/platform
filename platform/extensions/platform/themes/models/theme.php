@@ -149,6 +149,7 @@ class Theme extends Crud
 		if ($result)
 		{
 			$result->options = ($result->options) ? json_decode($result->options) : array();
+			$result->status = (bool) $result->status;
 		}
 
 		return $result;
