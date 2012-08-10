@@ -37,6 +37,12 @@ return array(
 		'actions'     => 'Actions',
 	),
 
+	'button' => array(
+		'install'   => 'install',
+		'uninstall' => 'uninstall',
+		'update'    => 'update',
+	),
+
 	// Values for tinyint fields
 	'bool' => array(
 		'yes' => 'Yes',
