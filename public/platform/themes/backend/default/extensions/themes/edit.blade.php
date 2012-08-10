@@ -55,9 +55,9 @@
 					</div>
 
 		            <button class="btn btn-large btn-primary" type="submit">
-		            	{{ Lang::line('themes::themes.button.apply') }}
+		            	{{ Lang::line('buttons.update') }}
 		            </button>
-		            <a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/themes/'.$type) }}">{{ Lang::line('themes::themes.button.complete') }}</a>
+		            <a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/themes/'.$type) }}">{{ Lang::line('buttons.cancel') }}</a>
 
 				{{ Form::close() }}
 

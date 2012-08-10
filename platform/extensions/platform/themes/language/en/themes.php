@@ -30,12 +30,6 @@ return array(
 		'version'     => 'Version:'
 	),
 
-	/* Buttons */
-	'button' => array(
-		'apply'    => 'Apply Changes',
-		'complete' => 'Complete',
-	),
-
 	/* Messages */
 	'message' => array(
 		'no_options' => 'This theme has no options available.',

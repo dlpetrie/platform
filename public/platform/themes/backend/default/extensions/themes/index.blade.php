@@ -44,7 +44,7 @@
 						<p class="version">{{ Lang::line('themes::themes.general.version') }} {{ $active['version'] }}</p>
 						<p class="author">{{ Lang::line('themes::themes.general.author') }}  {{ $active['author'] }}</p>
 						<p>{{ $active['description'] }}</p>
-						<a href="{{ URL::to_secure(ADMIN.'/themes/edit/'.$type.'/'.$active['theme']) }}" class="btn" data-theme="{{ $active['theme'] }}" data-type="backend">Edit</a>
+						<a href="{{ URL::to_secure(ADMIN.'/themes/edit/'.$type.'/'.$active['theme']) }}" class="btn" data-theme="{{ $active['theme'] }}" data-type="backend">{{ Lang::line('buttons.edit') }}</a>
 					</div>
 				</div>
 			</div>
@@ -67,7 +67,7 @@
 						<p>{{ $theme['description'] }}</p>
 						<p>{{ Lang::line('themes::themes.general.version') }} {{ $theme['version'] }}</p>
 						<p>{{ Lang::line('themes::themes.general.author') }}  {{ $theme['author'] }}</p>
-						<a href="{{ URL::to_secure(ADMIN.'/themes/activate/'.$type.'/'.$theme['theme']) }}" class="btn activate" data-token="{{ Session::token() }}" data-theme="{{ $theme['theme'] }}" data-type="{{ URI::segment(3) }}">Activate</a>
+						<a href="{{ URL::to_secure(ADMIN.'/themes/activate/'.$type.'/'.$theme['theme']) }}" class="btn activate" data-token="{{ Session::token() }}" data-theme="{{ $theme['theme'] }}" data-type="{{ URI::segment(3) }}">{{ Lang::line('buttons.enable') }}</a>
 					</div>
 				</div>
 			</div>

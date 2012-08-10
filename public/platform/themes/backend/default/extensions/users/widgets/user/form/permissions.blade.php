@@ -18,6 +18,6 @@
 		@endforeach
 	</div>
 
-	<button class="btn btn-large" type="submit" value="{{ Lang::line('users::users.button.update') }}">{{ Lang::line('users::users.button.update') }}</button>
-	<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users') }}">{{ Lang::line('users::users.button.cancel') }}</a>
+	<button class="btn btn-large btn-primary" type="submit">{{ Lang::line('buttons.update') }}</button>
+	<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users') }}">{{ Lang::line('buttons.cancel') }}</a>
 {{ Form::close() }}

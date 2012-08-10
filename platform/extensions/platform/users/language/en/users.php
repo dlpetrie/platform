@@ -54,14 +54,9 @@ return array(
 
 	/* Buttons */
 	'button' => array(
-		'create'         => 'Create User',
-		'cancel'         => 'Cancel',
-		'delete'         => 'Delete',
-		'edit'           => 'Edit',
 		'login'          => 'Sign In',
 		'register'       => 'Join Platform',
 		'reset_password' => 'Reset',
-		'update'         => 'Save Changes',
 	),
 
 	/* Login User */

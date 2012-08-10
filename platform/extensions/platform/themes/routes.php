@@ -46,5 +46,8 @@ Route::any(API.'/themes/('.implode('|', Theme::types()).')/(:any)/options', func
 	return Controller::call('themes::api.themes@options', array($type, $name));
 });
 
-Route::any(ADMIN.'/themes', 'themes::admin.themes@frontend');
+Route::any(ADMIN.'/themes', function() {
+	return Redirect::to(ADMIN.'/themes/frontend');
+});
+
 Route::controller(Controller::detect('themes'));

@@ -37,17 +37,6 @@ return array(
 		'not_found'    => 'Group not found.',
 	),
 
-	/* Buttons */
-	'button' => array(
-		'create'         => 'Create Group',
-		'cancel'         => 'Cancel',
-		'delete'         => 'Delete',
-		'edit'           => 'Edit',
-		'login'          => 'Sign In',
-		'reset_password' => 'Reset',
-		'update'         => 'Save Changes',
-	),
-
 	/* Create Group */
 	'create' => array(
 		'title'          => 'Create Group',
