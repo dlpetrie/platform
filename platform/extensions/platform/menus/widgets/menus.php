@@ -57,6 +57,10 @@ class Menus
 			try
 			{
 				$items = API::get('menus/'.$start.'/children', array(
+
+					// Only enabled
+					'enabled' => true,
+
 					// Pass through the children depth
 					'limit' => $children_depth ?: false,
 

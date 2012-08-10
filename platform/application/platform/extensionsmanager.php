@@ -168,9 +168,23 @@ class ExtensionsManager
 		// Disable menus related to the extension
 		if ( ! $is_core and ! $enable)
 		{
-			API::post('menus/disable', array(
-				'extension' => $slug,
-			));
+			try
+			{
+				$menus = API::get('menus/flat', array(
+					'extension' => $slug,
+				));
+
+				foreach ($menus as $menu)
+				{
+					API::put('menus/'.$menu['slug'], array(
+						'status' => false,
+					));
+				}
+			}
+			catch (APIClientException $e)
+			{
+
+			}
 		}
 
 		return $this->get($slug);
@@ -239,10 +253,23 @@ class ExtensionsManager
 			throw new Exception('Platform extension [$slug] doesn\'t exist.');
 		}
 
-		// Enable menus related to the extension
-		API::post('menus/enable', array(
-			'extension' => $extension->slug,
-		));
+		try
+		{
+			$menus = API::get('menus/flat', array(
+				'extension' => $slug,
+			));
+
+			foreach ($menus as $menu)
+			{
+				API::put('menus/'.$menu['slug'], array(
+					'status' => true,
+				));
+			}
+		}
+		catch (APIClientException $e)
+		{
+
+		}
 
 		$extension->enabled = 1;
 		$extension->save();
@@ -265,10 +292,23 @@ class ExtensionsManager
 			throw new Exception('Platform extension [$slug] doesn\'t exist.');
 		}
 
-		// Disable menus related to the extension
-		API::post('menus/disable', array(
-			'extension' => $extension->slug,
-		));
+		try
+		{
+			$menus = API::get('menus/flat', array(
+				'extension' => $slug,
+			));
+
+			foreach ($menus as $menu)
+			{
+				API::put('menus/'.$menu['slug'], array(
+					'status' => false,
+				));
+			}
+		}
+		catch (APIClientException $e)
+		{
+
+		}
 
 		$extension->enabled = 0;
 		$extension->save();
