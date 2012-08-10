@@ -53,7 +53,7 @@
 			</div>
 
 			<button class="pull-right btn btn-danger btn-mini item-remove">
-				Remove Item
+				{{ Lang::line('menus::menus.button.remove_item') }}
 			</button>
 
 		</section>

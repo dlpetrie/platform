@@ -23,7 +23,7 @@
 			{{ Form::select('groups[]', $groups, null, array('multiple' => 'multiple')) }}
 		</fieldset>
 	</div>
-	<button class="btn btn-large btn-primary" type="submit">{{ Lang::line('buttons.create') }}</button>
-	<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users') }}">{{ Lang::line('buttons.cancel') }}</a>
+	<button class="btn btn-large btn-primary" type="submit">{{ Lang::line('button.create') }}</button>
+	<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users') }}">{{ Lang::line('button.cancel') }}</a>
 
 {{ Form::close() }}

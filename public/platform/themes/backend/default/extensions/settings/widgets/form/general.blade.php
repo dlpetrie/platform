@@ -17,5 +17,5 @@
 		</fieldset>
 	</div>
 
-	<button class="btn btn-large" type="submit" value="{{ Lang::line('users::users.button.create') }}">{{ Lang::line('users::users.button.update') }}</button>
+	<button class="btn btn-large btn-primary" type="submit">{{ Lang::line('button.update') }}</button>
 {{ Form::close() }}

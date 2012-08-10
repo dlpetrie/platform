@@ -9,8 +9,8 @@
 
 		</div>
 		<div>
-			<button class="btn btn-large btn-primary" type="submit">{{ Lang::line('buttons.create') }}</button>
-			<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users/groups') }}">{{ Lang::line('buttons.cancel') }}</a>
+			<button class="btn btn-large btn-primary" type="submit">{{ Lang::line('button.create') }}</button>
+			<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users/groups') }}">{{ Lang::line('button.cancel') }}</a>
 		</div>
 	</fieldset>
 {{ Form::close() }}

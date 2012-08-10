@@ -28,7 +28,7 @@
 				<p>{{ Lang::line('menus::menus.tagline') }}</p>
 			</div>
 			<nav class="actions span8 pull-right">
-				{{ HTML::link_to_secure(ADMIN.'/menus/create', Lang::line('menus::menus.button.create'), array('class' => 'btn btn-large btn-primary')) }}
+				{{ HTML::link_to_secure(ADMIN.'/menus/create', Lang::line('button.create'), array('class' => 'btn btn-large btn-primary')) }}
 			</nav>
 	</header>
 

@@ -174,10 +174,10 @@
 		<div class="form-actions">
 
 			<button type="submit" class="btn btn-primary btn-save-menu">
-				{{ Lang::line('menus::menus.button.'.(($menu_slug) ? 'update' : 'create')) }}
+				{{ Lang::line('button.'.(($menu_slug) ? 'update' : 'create')) }}
 			</button>
 
-			{{ HTML::link_to_secure(ADMIN.'/menus', Lang::line('menus::menus.button.cancel'), array('class' => 'btn')) }}
+			{{ HTML::link_to_secure(ADMIN.'/menus', Lang::line('button.cancel'), array('class' => 'btn')) }}
 
 		</div>
 
