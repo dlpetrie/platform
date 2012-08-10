@@ -68,6 +68,7 @@
 	<div id="page" class="rows expand">
 		<div class="grid">
 			<div class="content column expand">
+				@widget('platform.application::messages.all')
 				@yield('content')
 			</div>
 		</div>
