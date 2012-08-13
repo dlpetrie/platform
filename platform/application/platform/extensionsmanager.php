@@ -331,7 +331,7 @@ class ExtensionsManager
 		// Get the info from the extension.php file
 		$extension = $this->get_extensionphp($slug);
 
-		// Return 
+		// Return
 		return (version_compare($extension['info']['version'], $model->version) > 0);
 	}
 
@@ -621,7 +621,7 @@ class ExtensionsManager
 	 * @param   array  $extensions
 	 * @return  array  $extensions
 	 */
-	public function sort_dependencies(&$slugs = array())
+	public function sort_dependencies(&$extensions = array())
 	{
 		// Array of extensions dependencies, where
 		// the key is the slug of the extension
@@ -629,16 +629,17 @@ class ExtensionsManager
 		// on which that extension depends.
 		$extensions_dependencies = array();
 
-		foreach ($slugs as $slug)
+		foreach ($extensions as $extension)
 		{
-			try
-			{
-				$extension = $this->get_extensionphp($slug);
-			}
-			catch (Exception $e)
-			{
-				continue;
-			}
+			$slug = $extension['info']['slug'];
+			// try
+			// {
+			// 	$extension = $this->get_extensionphp($slug);
+			// }
+			// catch (Exception $e)
+			// {
+			// 	continue;
+			// }
 
 			if ($dependencies = array_get($extension, 'dependencies') and is_array($dependencies))
 			{

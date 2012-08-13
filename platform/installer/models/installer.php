@@ -190,7 +190,7 @@ class Installer
 
 		foreach ($extensions as $extension)
 		{
-			$info = Platform::extensions_manager()->info($extension);
+			$info = Platform::extensions_manager()->get($extension);
 
 			if (isset($info['info']['is_core']) and $info['info']['is_core'])
 			{
