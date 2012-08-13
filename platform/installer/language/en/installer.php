@@ -21,13 +21,32 @@
 
 return array(
 
-	/* Header */
-	'title'			=> 	'Installer',
-	'description'	=>	'You can change your preferences at anytime by choosing from the sections below.',
-
-	/* Form General */
+	/* General */
 	'general' => array(
-		'legend'           => 'General Settings',
+		'title'			=> 	'Installer',
+		'description'	=>	'You can change your preferences at anytime by choosing from the sections below.',
+		'step_1'        =>  'Step 1:',
+		'step_1_title'  =>  'Prepare Installation',
+		'step_2'        =>  'Step 2:',
+		'step_2_title'  =>  'Database Credentials',
+		'step_3'        =>  'Step 3:',
+		'step_3_title'  =>  'Administration',
+		'step_4'        =>  'Step 4:',
+		'step_4_title'  =>  'Complete',
+	),
+
+	/* Forms */
+	'database' => array(
+		'legend'           => 'Database Credentials',
+		'description'      => '',
+		'title'            => 'Site Title',
+		'tagline'          => 'Site Tagline',
+		'site-email'     => 'Site Email Address',
+		'brand'   => 'Brand',
+	),
+
+	'user' => array(
+		'legend'           => 'Database Credentials',
 		'description'      => '',
 		'title'            => 'Site Title',
 		'tagline'          => 'Site Tagline',

@@ -126,15 +126,6 @@ pre code{display:block;padding:8px;background:#fbfbfb;border:1px solid #fff;}*/
 		margin:0 auto;
 	}
 
-	.messages {
-
-	}
-	#installer .breadcrumbs .messages {
-		width:240px;
-		height:50px;
-		margin:8px auto;
-		margin-bottom:0;
-	}
 	#installer .breadcrumbs .active {
 		background: #fff;
 		padding:14px 10px;
@@ -171,22 +162,26 @@ pre code{display:block;padding:8px;background:#fbfbfb;border:1px solid #fff;}*/
 		padding:10px;
 	}
 
-	#installer fieldset {
-		width:290px;
+	/* Forms - overides form.css*/
+
+	#installer form {
+		width:400px;
 		margin:0 auto;
 	}
-
-	#installer legend {
-		border-bottom:none;
+	#installer form legend {
+		text-align:center;
 	}
-
-	#installer input,
-	#installer select {
-		height:30px;
+	#installer form .help {
+		display:block;
+		margin-left:140px;
+		min-width:220px;
 	}
-
-	#installer .actions {
+	#installer form .actions {
+		text-align:center;
 		padding:20px 0;
-		border:1px solid #ddd;
-		background:#f7f7f7;
+	}
+
+	#installer form .messages {
+		margin:8px auto;
+		margin-bottom:0;
 	}
