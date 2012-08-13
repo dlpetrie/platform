@@ -52,8 +52,8 @@ class Admin_Controller extends Authorized_Controller
 
 		// Set the active theme based on the database contents,
 		// falling back to the theme config.
-		Theme::active('backend/'.Platform::get('themes.theme.backend'));
-		Theme::fallback('backend/default');
+		Theme::active('backend'.DS.Platform::get('themes.theme.backend'));
+		Theme::fallback('backend'.DS.'default');
 	}
 
 }
