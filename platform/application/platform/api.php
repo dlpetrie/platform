@@ -59,6 +59,7 @@ class APIUnauthorizedException        extends APIClientException {}
 class APIForbiddenException           extends APIClientException {}
 class APINotFoundException            extends APIClientException {}
 class APINotAllowedException          extends APIClientException {}
+class APIUnprocessableEntityException extends APIClientException {}
 
 // Server exceptions
 class APIServerException              extends APIException {}
@@ -433,6 +434,9 @@ class API
 						break;
 					case 405:
 						$class = 'APINotAllowedException';
+						break;
+					case 422:
+						$class = 'APIUnprocessableEntityException';
 						break;
 				}
 			}
