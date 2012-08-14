@@ -1,38 +1,41 @@
 $(document).ready(function() {
 
-	// Setup the tepo templates.
-	var permissionsPass = Tempo.prepare('permissions-pass', {
-		'var_braces' : '\\[\\[\\]\\]',
-		'tag_braces' : '\\[\\?\\?\\]'
-	});
-	var permissionsFail = Tempo.prepare('permissions-fail', {
-		'var_braces' : '\\[\\[\\]\\]',
-		'tag_braces' : '\\[\\?\\?\\]'
-	});
+	if ($('#permissions-pass').length && $('#permissions-fail').length) {
 
-	// Attach a $.data() reference to setInterval()
-	$('body').data('passInterval', setInterval(function() {
-
-		// Trigger a check
-		$('body').trigger('checkPassInterval');
-	}, 1000));
-
-	// Bind the check
-	$('body').bind('checkPassInterval', function() {
-		$.getJSON(platform.url.base('installer/permissions'), function(data) {
-			permissionsPass.render(data.pass);
-			permissionsFail.render(data.fail);
-
-			// If there's no more errors
-			if (data.fail.length == 0) {
-				$('#continue-btn').removeAttr('disabled');
-				clearInterval($('body').data('passInterval'));
-			}
+		// Setup the tepo templates.
+		var permissionsPass = Tempo.prepare('permissions-pass', {
+			'var_braces' : '\\[\\[\\]\\]',
+			'tag_braces' : '\\[\\?\\?\\]'
 		});
-	});
+		var permissionsFail = Tempo.prepare('permissions-fail', {
+			'var_braces' : '\\[\\[\\]\\]',
+			'tag_braces' : '\\[\\?\\?\\]'
+		});
 
-	// Trigger a check immediately on body load
-	$('body').trigger('checkPassInterval');
+		// Attach a $.data() reference to setInterval()
+		$('body').data('passInterval', setInterval(function() {
+
+			// Trigger a check
+			$('body').trigger('checkPassInterval');
+		}, 1000));
+
+		// Bind the check
+		$('body').bind('checkPassInterval', function() {
+			$.getJSON(platform.url.base('installer/permissions'), function(data) {
+				permissionsPass.render(data.pass);
+				permissionsFail.render(data.fail);
+
+				// If there's no more errors
+				if (data.fail.length == 0) {
+					$('#continue-btn').removeAttr('disabled');
+					clearInterval($('body').data('passInterval'));
+				}
+			});
+		});
+
+		// Trigger a check immediately on body load
+		$('body').trigger('checkPassInterval');
+	}
 
 	/*
 	|-------------------------------------
