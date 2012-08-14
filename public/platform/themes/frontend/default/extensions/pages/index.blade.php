@@ -2,7 +2,7 @@
 
 <!-- Page Title -->
 @section('title')
-	@get.settings.general.title
+	@get.settings.site.title
 @endsection
 
 <!-- Queue Styles | e.g Theme::queue_asset('name', 'path_to_css', 'dependency')-->
