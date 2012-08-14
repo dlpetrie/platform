@@ -19,16 +19,21 @@
 	{{ Form::open('installer/step_1', 'POST', array('id' => 'writable-form')) }}
 		
 		{{ Form::token() }}
-		
-		<div class="files">
-			@foreach ($permissions as $path => $value)
-				<code class="{{ ($value) ? 'alert alert-success' : 'alert alert-error' }}">{{ $path }}</code>
-			@endforeach
+
+		<div class="permissions" id="permissions-pass">
+			<div data-template>
+				<code class="alert alert-success">[[.]]</code>
+			</div>
+		</div>
+		<div class="permissions" id="permissions-fail">
+			<div data-template>
+				<code class="alert alert-error">[[.]]</code>
+			</div>
 		</div>
 
 		<div class="actions">
 			<a class="btn btn-large step1-refresh">Refresh</a>
-			<button type="submit" class="btn btn-large" {{ $enabled }}>
+			<button type="submit" class="btn btn-large" id="continue-btn" {{ (count($permissions['fail']) > 0) ? 'disabled' : null }}>
 				Continue to Step 2
 			</button>
 		</div>

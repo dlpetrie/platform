@@ -32,42 +32,59 @@ class Installer_Index_Controller extends Base_Controller
 	{
 		parent::before();
 
-		// Always make the system prepared for an install, as
-		// we never know which step we're landing on.
-		// Installer::prepare();
-
 		// Setup CSS
 		Asset::add('bootstrap', 'platform/installer/css/bootstrap.min.css');
 		Asset::add('forms', 'platform/installer/css/form.css');
 		Asset::add('installer', 'platform/installer/css/installer.css');
-
 
 		// Setup JS
 		Asset::add('jquery', 'platform/installer/js/jquery.js');
 		Asset::add('url', 'platform/installer/js/url.js');
 		Asset::add('bootstrap', 'platform/installer/js/bootstrap.js', array('jquery'));
 		Asset::add('validation', 'platform/installer/js/validate.js', array('jquery'));
+		Asset::add('tempo', 'platform/installer/js/tempo.js', array('jquery'));
 		Asset::add('installer', 'platform/installer/js/installer.js', array('jquery'));
 
+		// If we're already installed
 		if (Platform::is_installed() and URI::segment(2) !== 'step_4')
 		{
 			Redirect::to('installer/step_4')->send();
 			exit;
 		}
+
+		// If we're not prepared for installation
+		if ( ! Installer::is_prepared() and ! in_array(URI::segment(2, 'step_1'), array('step_1', 'permissions')))
+		{
+			Redirect::to('installer')->send();
+			exit;
+		}
 	}
 
+	/**
+	 * Alias for step 1.
+	 *
+	 * @return  View
+	 */
 	public function get_index()
 	{
-		Session::flush();
+		return $this->get_step_1();
+	}
 
+	/**
+	 * Returns the first step of the installation process.
+	 *
+	 * This step is a pre-installation checklist to make sure
+	 * the system is prepared to be installed.
+	 *
+	 * @return  View
+	 */
+	public function get_step_1()
+	{
+		// Prepare our database
+		Installer::prepare();
+
+		// Get an array of permissions
 		$data['permissions'] = Installer::permissions();
-
-		$data['enabled'] = '';
-
-		foreach ($data['permissions'] as $perm => $val)
-		{
-			if ( ! $val) $data['enabled'] = 'disabled';
-		}
 
 		return View::make('installer::step_1', $data);
 	}
@@ -79,7 +96,7 @@ class Installer_Index_Controller extends Base_Controller
 
 	public function get_step_2()
 	{
-		// initialize data array
+		// Initialize data array
 		$data = array(
 			'driver'   => null,
 			'host'     => null,
@@ -184,13 +201,20 @@ class Installer_Index_Controller extends Base_Controller
 	}
 
 	/**
-	 * Confirm Writable files
+	 * Returns a JSON encoded array of filesystem
+	 * permissions.
+	 *
+	 * @return  Response
 	 */
-	public function post_confirm_writable()
+	public function get_permissions()
 	{
-		return json_encode(Installer::permissions());
-	}
+		if ( ! Request::ajax())
+		{
+			return $this->get_index();
+		}
 
+		return new Response(json_encode(Installer::permissions()));
+	}
 
 	/**
 	 * Confirm database - Step 1

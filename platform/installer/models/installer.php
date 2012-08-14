@@ -28,6 +28,7 @@ use Exception;
 use Laravel\CLI\Command;
 use Platform;
 use Session;
+use Theme\Theme;
 use Str;
 
 /**
@@ -51,8 +52,6 @@ class Installer
 		Session::flush();
 	}
 
-
-
 	/**
 	 * Check file & folder permissions
 	 *
@@ -60,22 +59,58 @@ class Installer
 	 */
 	public static function permissions()
 	{
+		// The array we're returning
+		$permissions = array(
+			'pass' => array(),
+			'fail' => array(),
+		);
 
-		 //Folders
-        $files = array(
-                path('app').'config'.DS.'application.php',
-                path('app').'config'.DS.'database.php',
-                path('public').'platform'.DS.'themes'.DS.'compiled'.DS,
-        );
+		// Array of directories to check
+		$directories = array(
 
-        $permissions = array();
-        foreach ($files as $path)
-        {
-            $permissions[$path] = is_writable($path);
-        }
+			// Config directory MUST be writable
+			path('app').'config',
 
-        return $permissions;
+			// Themes
+			Theme::compile_directory(),
+		);
 
+		// Loop through directories. If the directories
+		// don't exist they fail to pass, because they're
+		// required.
+		foreach ($directories as $directory)
+		{
+			$permissions[(is_dir($directory) and is_writable($directory)) ? 'pass' : 'fail'][] = $directory;
+		}
+
+		// Array of files to check
+		$files = array(
+
+			// Database configuration file
+			path('app').'config'.DS.'database'.EXT,
+		);
+
+		// Loop through files. The files are not required
+		// to exist, because their containing directories
+		// have already been checked for write permissions.
+		// If the files exist and aren't writeable, then we
+		// will give an error.
+		foreach ($files as $file)
+		{
+			if ( ! is_file($file))
+			{
+				continue;
+			}
+
+			$permissions[(is_writable($file)) ? 'pass' : 'fail'][] = $file;
+		}
+
+		// Let's just quickly sort the
+		// permissions out
+		sort($permissions['pass']);
+		sort($permissions['fail']);
+
+		return $permissions;
 	}
 
 	/**
@@ -218,10 +253,14 @@ class Installer
 
 	public static function get_step_data($step = null, $default = null)
 	{
-		// echo Config::get('installer::installer.session_key', 'installer').'.steps'.($step ? '.'.$step : null);
 		return Session::get(Config::get('installer::installer.session_key', 'installer').'.steps'.($step ? '.'.$step : null), $default);
 	}
 
+	/**
+	 * Generates a random key for the application.
+	 *
+	 * @return  void
+	 */
 	public static function generate_key()
 	{
 		/**
@@ -240,6 +279,18 @@ class Installer
 		 * @todo remove when my pull request gets accepted
 		 */
 		ob_end_clean();
+	}
+
+	/**
+	 * Returns if the installer is prepared (which just
+	 * checks the filesystem).
+	 *
+	 * @return  bool
+	 */
+	public static function is_prepared()
+	{
+		$permissions = static::permissions();
+		return (bool) (count($permissions['fail']) === 0);
 	}
 
 }
