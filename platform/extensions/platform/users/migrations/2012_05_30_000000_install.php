@@ -70,7 +70,20 @@ class Users_Install
 			'status'        => 1,
 		));
 
-		$users->last_child_of($admin);
+		// Find the system menu
+		$system = Menu::find(function($query)
+		{
+			return $query->where('slug', '=', 'admin-system');
+		});
+
+		if ($system === null)
+		{
+			$users->last_child_of($admin);
+		}
+		else
+		{
+			$users->previous_sibling_of($system);
+		}
 
 		// Create users list link
 		$users_list = new Menu(array(
