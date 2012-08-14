@@ -89,11 +89,25 @@ class Installer_Index_Controller extends Base_Controller
 		return View::make('installer::step_1', $data);
 	}
 
+	/**
+	 * Not used just now. Developers may
+	 * attach a license agreement or other form
+	 * data to get_step_1() and process it here
+	 *
+	 * @return  Redirect
+	 */
 	public function post_step_1()
 	{
 		return Redirect::to('installer/step_2');
 	}
 
+	/**
+	 * Returns the second step of the installation process.
+	 *
+	 * This step is we check the database.
+	 *
+	 * @return  View
+	 */
 	public function get_step_2()
 	{
 		// Initialize data array
@@ -114,6 +128,11 @@ class Installer_Index_Controller extends Base_Controller
 		return View::make('installer::step_2')->with('drivers', Installer::database_drivers())->with('credentials', $data);
 	}
 
+	/**
+	 * Stores the database credentials to the session.
+	 *
+	 * @return  Redirect
+	 */
 	public function post_step_2()
 	{
 		Installer::remember_step_data(2, Input::get());
@@ -121,11 +140,23 @@ class Installer_Index_Controller extends Base_Controller
 		return Redirect::to('installer/step_3');
 	}
 
+	/**
+	 * Returns the third step of the installation process.
+	 *
+	 * This step is where we put admin credentials in.
+	 *
+	 * @return  View
+	 */
 	public function get_step_3()
 	{
 		return View::make('installer::step_3');
 	}
 
+	/**
+	 * Stores the admin credentials to the session
+	 *
+	 * @return  Redirect
+	 */
 	public function post_step_3()
 	{
 		Installer::remember_step_data(3, Input::get());
@@ -133,6 +164,11 @@ class Installer_Index_Controller extends Base_Controller
 		return Redirect::to('installer/install');
 	}
 
+	/**
+	 * Actually does the install process.
+	 *
+	 * @return  Redirect
+	 */
 	public function get_install()
 	{
 		// 1. Create the database config file
@@ -192,12 +228,16 @@ class Installer_Index_Controller extends Base_Controller
 		return Redirect::to('installer/step_4');
 	}
 
+	/**
+	 * The completion step
+	 *
+	 * @return  View
+	 */
 	public function get_step_4()
 	{
 		Session::forget('installer');
 
-		return View::make('installer::step_4')
-		           ->with('key', Config::get('application.key'));
+		return View::make('installer::step_4');
 	}
 
 	/**
