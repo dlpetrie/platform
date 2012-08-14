@@ -40,6 +40,7 @@ return array(
 		'invalid_login'         => 'Invalid user name or password.',
 		'last_name'             => 'Last Name',
 		'login'                 => 'Login',
+		'register'              => 'Register',
 		'new_password'          => 'New Password',
 		'not_admin'             => 'Invalid admin user.',
 		'not_found'             => 'User not found.',
