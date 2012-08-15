@@ -33,7 +33,14 @@ class User extends Crud
 	 *
 	 * @var string
 	 */
-	public static $key = 'users.id';
+	protected static $_key = 'users.id';
+
+	/**
+	 * Indicates if the model has update and creation timestamps.
+	 *
+	 * @var bool
+	 */
+	protected static $_timestamps = true;
 
 	/**
 	 * @var  array  $rules  Validation rules for model attributes
@@ -60,11 +67,13 @@ class User extends Crud
 	 */
 	public function save($events = array('before', 'after'))
 	{
-		// first check if we want timestamps as this will append to attributes
+		// First check if we want timestamps as this will append to attributes
 		if (static::$_timestamps)
 		{
 			$this->timestamp();
 		}
+
+		die();
 
 		// now we grab the attributes
 		$attributes = $this->attributes();
