@@ -1,7 +1,7 @@
 {{ Form::open('reset_password', 'POST', array('id' => 'password-reset-form', 'class' => 'form-horizontal')) }}
 {{ Form::token() }}
 	<fieldset>
-		<legend>{{ Lang::line('users::users.general.login') }}</legend>
+		<legend>{{ Lang::line('users::users.general.reset_password') }}</legend>
 
 		<!-- Email Address -->
 		<div>
@@ -16,8 +16,6 @@
 			{{ Form::password('password', array('placeholder' => lang::line('users::users.general.new_password'), 'required')) }}
 			<span class="help">Type your new password.</span>
 		</div>
-
-		<p class="help-block"><a href="{{ URL::to_secure('/reset_password') }}">{{ Lang::line('users::users.general.reset_password') }}</a></p>
 
 		<p class="help-block">{{ Lang::line('users::users.general.reset_help') }}</p>
 
