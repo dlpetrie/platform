@@ -34,7 +34,6 @@ class Installer_Index_Controller extends Base_Controller
 
 		// Setup CSS
 		Asset::add('bootstrap', 'platform/installer/css/bootstrap.min.css');
-		Asset::add('forms', 'platform/installer/css/form.css');
 		Asset::add('installer', 'platform/installer/css/installer.css');
 
 		// Setup JS

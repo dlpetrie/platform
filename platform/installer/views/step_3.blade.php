@@ -4,6 +4,18 @@
 <script>
 	$(document).ready(function() {
 
+		//Match Email
+		var password = document.getElementById("password"),
+			passwordConfirm = document.getElementById("password-confirm");
+
+		$('#password, #password-confirm').keyup(function() {
+			if(passwordConfirm.value !== password.value) {
+				passwordConfirm.setCustomValidity("Your password doesn't match");
+			} else {
+				passwordConfirm.setCustomValidity("");
+			}
+		});
+
 		Validate.setup($("#user-form"));
 
 	});
@@ -57,14 +69,14 @@
 			<!-- User Password -->
 			<div>
 				{{ Form::label('password', 'Password:') }}
-				{{ Form::password('password', array('placeholder' => 'Password', 'required')) }}
+				{{ Form::password('password', array('id' => 'password', 'placeholder' => 'Password', 'required')) }}
 				<span class="help">Password for admin.</span>
 			</div>
 
 			<!-- User Password Confirm -->
 			<div>
 				{{ Form::label('password_confirmation', 'Confirm Password:') }}
-				{{ Form::password('password_confirmation', array('placeholder' => 'Confirm Password', 'required')) }}
+				{{ Form::password('password_confirmation', array('id' => 'password-confirm', 'placeholder' => 'Confirm Password', 'required')) }}
 				<span class="help">Password confirmation for admin.</span>
 			</div>
 
