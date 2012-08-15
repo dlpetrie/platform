@@ -163,7 +163,7 @@ class Users_API_Users_Controller extends API_Controller
 	 * given ID
 	 *
 	 *	<code>
-	 *		API::delete('usrs/:id');
+	 *		API::delete('users/:id');
 	 *	</code>
 	 *
 	 * @param   int  $id
