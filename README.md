@@ -4,6 +4,7 @@ Platform
 Platform is an application base, a bootstrap for Laravel. The fundamentals + a few essentials included. It's well documented, feature awesome, open source, and always free.
 
 [official website & documentation](http://www.getplatform.com)
+
 ---
 
 # A Few Fundamental Features
@@ -26,6 +27,3 @@ Platform is an application base, a bootstrap for Laravel. The fundamentals + a f
 * **Settings** -  Configure and present extension settings, and access them anywhere.
 *  **Themes** - Manage the themes you have created for your application.
 *  **Users** - A complete user management system for users, groups/roles, & permissions.
-
-
-
