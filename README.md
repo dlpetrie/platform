@@ -7,6 +7,12 @@ Platform is an application base, a bootstrap for Laravel. The fundamentals + a f
 
 ---
 
+##Platform is meant to save you time, and lots of it.
+By providing a well documented application framework so that as a developer, you can focus on the features that make your project unique.
+
+##Platform is meant to be extended.
+As developers create, and release their extensions on our market we hope to give developers the ability to quickly provide features and functionality they would otherwise have to build, or integrate into existing infrastructure. 
+
 # A Few Fundamental Features
 
 * Fully featured authentication & authorization
