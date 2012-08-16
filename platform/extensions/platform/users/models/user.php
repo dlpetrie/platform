@@ -33,7 +33,7 @@ class User extends Crud
 	 *
 	 * @var string
 	 */
-	protected static $_key = 'users.id';
+	protected static $_key = 'id';
 
 	/**
 	 * Indicates if the model has update and creation timestamps.
