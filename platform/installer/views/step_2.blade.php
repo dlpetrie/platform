@@ -73,7 +73,7 @@
 			<!-- Drop Table Warning -->
 			<div>
 				{{ Form::label('disclaimer', 'Warning:') }}
-				{{ Form::checkbox('disclaimer', '', false, array('id' => 'disclaimer', 'required')) }}
+				{{ Form::checkbox('disclaimer', '', false, array('required')) }}
 				<span class="help">If the database has existing tables that conflict with Platform, they will be dropped during the Platform Installation process. You may want to back up your existing database.</span>
 			</div>
 

@@ -17,7 +17,7 @@
 <div class="grid contain">
 	<h2>We'll need to make sure we can write to a few files and directories. After installation, we'll change them back, safe and secure, warm and cozy.</h2>
 	{{ Form::open('installer/step_1', 'POST', array('id' => 'writable-form')) }}
-		
+
 		{{ Form::token() }}
 
 		<div class="permissions" id="permissions-pass">
