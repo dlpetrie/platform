@@ -145,7 +145,13 @@ class API
 	 * Unauthorized
 	 *
 	 * You need to identify yourself before the
-	 * request will be able to continue
+	 * request will be able to continue.
+	 *
+	 * Note: Requests that require authentication
+	 *       will return 404, instead of 401 or 403, in
+	 *       some places. This is to prevent the
+	 *       accidental leakage of private data
+	 *       to unauthorized users.
 	 *
 	 * @constant
 	 */
@@ -160,12 +166,6 @@ class API
 	 *
 	 * This is usually an ACL issue.
 	 *
-	 * Note: Requests that require authentication
-	 *       will return 404, instead of 403, in
-	 *       some places. This is to prevent the
-	 *       accidental leakage of private data
-	 *       to unauthorized users.
-	 *
 	 * @constant
 	 */
 	const STATUS_FORBIDDEN = 403;
@@ -173,7 +173,7 @@ class API
 	/**
 	 * Not Found
 	 *
-	 * The requested resource does not exist
+	 * The requested resource does not exist.
 	 *
 	 * @constant
 	 */
@@ -183,7 +183,7 @@ class API
 	 * Not Allowed
 	 *
 	 * The requested HTTP verb is not
-	 * allowed for this resource
+	 * allowed for this resource.
 	 *
 	 * @constant
 	 */
@@ -194,16 +194,16 @@ class API
 	 *
 	 * You have provided the right type of data
 	 * (thus avoiding a 400) but validation
-	 * failed
+	 * failed.
 	 *
 	 * @constant
 	 */
 	const STATUS_UNPROCESSABLE_ENTITY = 422;
 
 	/**
-	 * Internal SErver Error
+	 * Internal Server Error
 	 *
-	 * General or Unkown error
+	 * General or Unkown error.
 	 *
 	 * @constant
 	 */
@@ -212,7 +212,7 @@ class API
 	/**
 	 * Service Unavailable
 	 *
-	 * Usually indicates app server or database is unavailable 
+	 * Usually indicates app server or database is unavailable.
 	 *
 	 * @constant
 	 */

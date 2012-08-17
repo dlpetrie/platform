@@ -55,7 +55,7 @@
 			</p>
 		</div>
 		<div class="span4">
-			<h3>Boodstrap Ready</h3>
+			<h3>Bootstrap Ready</h3>
 			<p>
 				We chose bootstrap for both our front and backend themes. But use whatever you want.
 			</p>
