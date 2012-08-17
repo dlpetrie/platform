@@ -4,11 +4,11 @@
 <script>
 	$(document).ready(function() {
 
-		//Match Email
+		//Match Password
 		var password = document.getElementById("password"),
-			passwordConfirm = document.getElementById("password-confirm");
+			passwordConfirm = document.getElementById("password_confirmation");
 
-		$('#password, #password-confirm').keyup(function() {
+		$('#password, #password_confirmation').keyup(function() {
 			if(passwordConfirm.value !== password.value) {
 				passwordConfirm.setCustomValidity("Your password doesn't match");
 			} else {
@@ -76,16 +76,14 @@
 			<!-- User Password Confirm -->
 			<div>
 				{{ Form::label('password_confirmation', 'Confirm Password:') }}
-				{{ Form::password('password_confirmation', array('id' => 'password-confirm', 'placeholder' => 'Confirm Password', 'required')) }}
+				{{ Form::password('password_confirmation', array('placeholder' => 'Confirm Password', 'required')) }}
 				<span class="help">Password confirmation for admin.</span>
 			</div>
-
-			<div class="messages alert"></div>
 
 		</fieldset>
 
 		<div class="actions">
-			<button type="submit" class="btn btn-large" disabled>
+			<button type="submit" class="btn btn-large">
 				Continue to Step 4
 			</button>
 		</div>

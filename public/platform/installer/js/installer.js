@@ -110,62 +110,6 @@ $(document).ready(function() {
 		return db_pass;
 	}
 
-	var checkUserCredentials = function() {
-
-		length = $('#user-form').find('input').filter(function()
-		{
-			return $(this).val() == '';
-		}).length;
-
-		if (length == 0)
-		{
-			$.ajax({
-				type     : 'POST',
-				url      : platform.url.base('installer/confirm_user'),
-				data     : $('#user-form').serialize(),
-				dataType : 'JSON',
-				success  : function(data, textStatus, jqXHR) {
-
-					message = data.message[0];
-
-					// $.each(data.message, function(idx, val) {
-					// 	message += val;
-					// });
-
-					// Show success message and enable continue button
-					$('.messages').html(message)
-					                [data.error ? 'addClass' : 'removeClass']('alert-error')
-					                [data.error ? 'removeClass' : 'addClass']('alert-success')
-					                .show();
-
-					if (data.error) {
-	            	    $('#user-form button:submit').attr('disabled', 'disabled');
-					}
-					else {
-						$('#user-form button:submit').removeAttr('disabled', 'disabled');
-					}
-				},
-				error    : function(jqXHR, textStatus, errorThrown) {
-
-					// Don't know
-					if (jqXHR.status != 0) {
-						alert(jqXHR.status + ' ' + errorThrown);
-					}
-				}
-			});
-		}
-		else
-		{
-			$('.messages')
-				.removeClass('alert-success')
-				.removeClass('alert-error')
-				.addClass('alert')
-				.html('Awaiting Credentials');
-
-			$('#user-form button:submit').attr('disabled', 'disabled');
-		}
-	}
-
 	if ($('.step1-refresh').length)
 	{
 		var $files = $('.files code');
@@ -230,29 +174,6 @@ $(document).ready(function() {
 				else {
 					$('#database-form button:submit').attr('disabled', 'disabled');
 				}
-			}, 1000);
-
-		});
-	}
-
-	if ($('#user-form').length)
-	{
-		checkUserCredentials();
-
-		$('#user-form').find('input').on('focus keyup change', function(e) {
-
-			if (typeof(checkUserTimer) != "undefined") {
-				clearTimeout(checkUserTimer);
-			}
-
-			// Check keycode - enter
-			// shouldn't trigger it
-			if (e.keyCode === 13) {
-				return;
-			}
-
-			checkUserTimer = setTimeout(function() {
-				checkUserCredentials();
 			}, 1000);
 
 		});

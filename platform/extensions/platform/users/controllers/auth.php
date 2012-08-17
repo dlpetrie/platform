@@ -42,9 +42,9 @@ class Users_Auth_Controller extends Public_Controller
 	{
 		$data = array(
 			'email'                 => Input::get('email'),
-			'email_confirmation'    => Input::get('email_confirm'),
+			'email_confirmation'    => Input::get('email_confirmation'),
 			'password'              => Input ::get('password'),
-			'password_confirmation' => Input::get('password_confirm'),
+			'password_confirmation' => Input::get('password_confirmation'),
 			'metadata' => array(
 				'first_name' => Input::get('first_name'),
 				'last_name'  => Input::get('last_name'),

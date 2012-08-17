@@ -52,7 +52,7 @@ return array(
 			if ( ! Bundle::exists($page))
 			{
 				$page = ($page == 'home') ? 'index' : $page;
-				$params = explode('/', $params);
+				$params = explode('/', substr($params, 1));
 
 				return Controller::call('pages::pages@'.$page, $params);
 			}

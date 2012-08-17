@@ -33,7 +33,7 @@ class User extends Crud
 	 *
 	 * @var string
 	 */
-	protected static $_key = 'users.id';
+	protected static $_key = 'id';
 
 	/**
 	 * Indicates if the model has update and creation timestamps.
@@ -72,8 +72,6 @@ class User extends Crud
 		{
 			$this->timestamp();
 		}
-
-		die();
 
 		// now we grab the attributes
 		$attributes = $this->attributes();
@@ -162,7 +160,7 @@ class User extends Crud
 				}
 
 				$result = Sentry::user((int) $key)->update($attributes) === true;
-				
+
 				if (in_array('after', $events))
 				{
 					$result = $this->after_update($result);
@@ -199,7 +197,7 @@ class User extends Crud
 
 					if (in_array('after', $events))
 					{
-						$result['id'] = $this->after_insert($result);	
+						$result['id'] = $this->after_insert($result);
 					}
 
 					$user_id = (int) $result['id'];

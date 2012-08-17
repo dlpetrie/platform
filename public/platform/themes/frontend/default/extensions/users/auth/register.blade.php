@@ -23,9 +23,9 @@
 
 		//Match Email
 		var email = document.getElementById("email"),
-			emailConfirm = document.getElementById("email-confirm");
+			emailConfirm = document.getElementById("email_confirmation");
 
-		$('#email, #email-confirm').keyup(function() {
+		$('#email, #email_confirmation').keyup(function() {
 			if(emailConfirm.value !== email.value) {
 				emailConfirm.setCustomValidity("Your email doesn't match");
 			} else {
@@ -35,9 +35,9 @@
 
 		//Match Email
 		var password = document.getElementById("password"),
-			passwordConfirm = document.getElementById("password-confirm");
+			passwordConfirm = document.getElementById("password_confirmation");
 
-		$('#password, #password-confirm').keyup(function() {
+		$('#password, #password_confirmation').keyup(function() {
 			if(passwordConfirm.value !== password.value) {
 				passwordConfirm.setCustomValidity("Your password doesn't match");
 			} else {
