@@ -120,7 +120,7 @@ $(document).ready(function() {
 				.html('Awaiting Credentials');
 		}
 
-		return db_pass;
+		return dbPass;
 	}
 
 	// Check we have a database form present
