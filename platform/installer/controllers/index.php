@@ -288,14 +288,12 @@ class Installer_Index_Controller extends Base_Controller
 			if ($e->getCode() !== 0)
 			{
 				return new Response(json_encode(array(
-					'error'   => true,
 					'message' => $e->getMessage(),
-				)));
+				)), API::STATUS_BAD_REQUEST);
 			}
 		}
 
 		return json_encode(array(
-			'error'   => false,
 			'message' => 'Successfully connected to the database',
 		));
 	}

@@ -1,5 +1,18 @@
 $(document).ready(function() {
 
+	/*
+	|-------------------------------------
+	| Installer Preparation
+	|-------------------------------------
+	|
+	| The first step of the installer is
+	| the preparation step. We need to check
+	| the system is compatible and permissions
+	| are correct.
+	*/
+
+	// Look for permissions Tempo template
+	// DOM elements.
 	if ($('#permissions-pass').length && $('#permissions-fail').length) {
 
 		// Setup the tepo templates.
@@ -51,14 +64,15 @@ $(document).ready(function() {
 
 	$('.messages').html('Awaiting Credentials');
 
-	var checkDisclaimer = function()
-	{
-		return $('#disclaimer').is(':checked');
-	}
-
+	/**
+	 * Function to check database credentials.
+	 *
+	 * @return  bool
+	 */
 	var checkDBCredentials = function() {
 
-		var db_pass = false;
+		// By default, we don't succesd
+		var dbPass = false;
 
 		length = $('#database-form').find('select, input:not([type=password], [type=checkbox])').filter(function()
 		{
@@ -77,87 +91,46 @@ $(document).ready(function() {
 
 					// Show success message and enable continue button
 					$('.messages').html(data.message)
-					                [data.error ? 'addClass' : 'removeClass']('alert-error')
-					                [data.error ? 'removeClass' : 'addClass']('alert-success')
-					                .show();
+					              .removeClass('alert-error')
+					              .addClass('alert-success')
+					              .show();
 
-					db_pass = ! data.error;
-
-					// $('#database-form button:submit')[data.error ? 'attr' : 'removeAttr']('disabled', 'disabled');
+					dbPass = true;
 				},
 				error    : function(jqXHR, textStatus, errorThrown) {
-					db_pass = false;
-					// Don't know
+
+					// Don't know, this fixes some
+					// dumb alert
 					if (jqXHR.status != 0) {
-						alert(jqXHR.status + ' ' + errorThrown);
+						$('.messages').html($.parseJSON(jqXHR.responseText).message)
+						              .removeClass('alert-success')
+						              .addClass('alert-error');
+						console.log(jqXHR);
+
 					}
 				}
 			});
 		}
 		else
 		{
-			db_pass = false;
-
 			$('.messages')
 				.removeClass('alert-success')
 				.removeClass('alert-error')
 				.addClass('alert')
 				.html('Awaiting Credentials');
-
-			$('#database-form button:submit').attr('disabled', 'disabled');
 		}
 
 		return db_pass;
 	}
 
-	if ($('.step1-refresh').length)
-	{
-		var $files = $('.files code');
-
-		$('.step1-refresh').on('click', function(e) {
-			e.preventDefault();
-
-			$.ajax({
-				type     : 'POST',
-				url      : platform.url.base('installer/confirm_writable'),
-				data     : $('#writable-form').serialize(),
-				dataType : 'JSON',
-				success  : function(data, textStatus, jqXHR) {
-					var i = 0;
-					var enabled = true;
-					$.each(data, function(idx, val) {
-						file = $($files[i]);
-						if (val) {
-							file.removeClass('alert-error').addClass('alert-success');
-						}
-						else {
-							file.removeClass('alert-success').addClass('alert-error');
-							enabled = false;
-						}
-						i++;
-					});
-
-					if (enabled) {
-						$('#writable-form button:submit').removeAttr('disabled');
-					}
-					else {
-						$('#writable-form button:submit').attr('disabled', 'disabled');
-					}
-				},
-				error    : function(jqXHR, textStatus, errorThrown) {
-
-				}
-		});
-		})
-	}
-
-	if ($('#database-form').length)
-	{
-		db = checkDBCredentials();
+	// Check we have a database form present
+	if ($('#database-form').length) {
 
 		$('#database-form').find('select, input').on('focus keyup change', function(e) {
 
-			if (typeof(checkDBTimer) != "undefined") {
+			// Clear the timeout on keyup
+			// this stops multiple AJAX calls bubbling up
+			if (typeof(checkDBTimer) != 'undefined') {
 				clearTimeout(checkDBTimer);
 			}
 
@@ -167,14 +140,10 @@ $(document).ready(function() {
 				return;
 			}
 
+			// Set a new timer
 			checkDBTimer = setTimeout(function() {
-				if (checkDBCredentials() && checkDisclaimer()) {
-					$('#database-form button:submit').removeAttr('disabled', 'disabled');
-				}
-				else {
-					$('#database-form button:submit').attr('disabled', 'disabled');
-				}
-			}, 1000);
+				$('#database-form button:submit')[(checkDBCredentials()) ? 'removeAttr' : 'attr']('disabled', 'disabled');
+			}, 500);
 
 		});
 	}
