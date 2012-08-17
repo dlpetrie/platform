@@ -30,50 +30,56 @@
 <div class="grid contain">
 	<h2>Now its time to create a database, then give us the details and we'll do the rest.</h2>
 
-	{{ Form::open(null, 'POST', array('id' => 'database-form', 'class' => 'form-horizontal')) }}
-	{{ Form::token() }}
+	<form id="database-form" class="form-horizontal" method="POST" accept-char="UTF-8">
+	<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
+
 		<fieldset>
 			<legend>{{ Lang::line('installer::installer.database.legend') }}</legend>
 
 			<!-- Database Driver Select -->
 			<div>
-				{{ Form::label('driver', 'Database Driver:') }}
-				{{ Form::select('driver', array(null => 'Database Driver') + $drivers, $credentials['driver'], array('required')) }}
+				<label for="driver">Database Driver:</label>
+				<select name="driver" id="driver" required>
+					<option value="">Database Driver</option>
+					@foreach ($drivers as $value => $name)
+						<option value="{{ $value }}">{{ $name }}</option>
+					@endforeach
+				</select>
 				<span class="help">Select a driver.</span>
 			</div>
 
 			<!-- Database Username -->
 			<div>
-				{{ Form::label('host', 'Server:') }}
-				{{ Form::text('host', $credentials['host'], array('placeholder' => 'Database Server', 'required')) }}
+				<label for="host">Server:</label>
+				<input id="host" name="host" type="text" value="{{ $credentials['host'] }}" placeholder="Database Server" required>
 				<span class="help">Input your database host, e.g. localhost</span>
 			</div>
 
 			<!-- Database Username -->
 			<div>
-				{{ Form::label('username', 'Username:') }}
-				{{ Form::text('username', $credentials['username'], array('placeholder' => 'User Name', 'required')) }}
+				<label for="username">Username:</label>
+				<input id="username" name="username" type="text" value="{{ $credentials['username'] }}" placeholder="User Name" required>
 				<span class="help">Input your database user.</span>
 			</div>
 
 			<!-- Database Password -->
 			<div>
-				{{ Form::label('password', 'Password:') }}
-				{{ Form::password('password', array('placeholder' => 'Password')) }}
-				<span class="help"></span>
+				<label for="password">Password:</label>
+				<input id="password" name="password" type="password" placeholder="Password">
+				<span class="help">Your database users password</span>
 			</div>
 
 			<!-- Database Name -->
 			<div>
-				{{ Form::label('database', 'Database:') }}
-				{{ Form::text('database', $credentials['database'], array('placeholder' => 'Database Name', 'required')) }}
+				<label for="database">Database:</label>
+				<input id="database" name="database" type="text" value="{{ $credentials['database'] }}" placeholder="User Name" required>
 				<span class="help">Input the name of your database.</span>
 			</div>
 
 			<!-- Drop Table Warning -->
 			<div>
-				{{ Form::label('disclaimer', 'Warning:') }}
-				{{ Form::checkbox('disclaimer', '', false, array('required')) }}
+				<label for="disclaimer">Warning:</label>
+				<input type="checkbox" name="disclaimer" value="" required>
 				<span class="help">If the database has existing tables that conflict with Platform, they will be dropped during the Platform Installation process. You may want to back up your existing database.</span>
 			</div>
 
