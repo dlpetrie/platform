@@ -32,7 +32,6 @@
 
 	<form id="database-form" class="form-horizontal" method="POST" accept-char="UTF-8">
 	<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
-
 		<fieldset>
 			<legend>{{ Lang::line('installer::installer.database.legend') }}</legend>
 
@@ -51,28 +50,28 @@
 			<!-- Database Username -->
 			<div>
 				<label for="host">Server:</label>
-				<input id="host" name="host" type="text" value="{{ $credentials['host'] }}" placeholder="Database Server" required>
+				<input type="text" name="host" id="host" value="{{ $credentials['host'] }}" placeholder="Database Server" required>
 				<span class="help">Input your database host, e.g. localhost</span>
 			</div>
 
 			<!-- Database Username -->
 			<div>
 				<label for="username">Username:</label>
-				<input id="username" name="username" type="text" value="{{ $credentials['username'] }}" placeholder="User Name" required>
+				<input type="text" name="username" id="username" value="{{ $credentials['username'] }}" placeholder="User Name" required>
 				<span class="help">Input your database user.</span>
 			</div>
 
 			<!-- Database Password -->
 			<div>
 				<label for="password">Password:</label>
-				<input id="password" name="password" type="password" placeholder="Password">
+				<input type="password" name="password" id="password" placeholder="Password">
 				<span class="help">Your database users password</span>
 			</div>
 
 			<!-- Database Name -->
 			<div>
 				<label for="database">Database:</label>
-				<input id="database" name="database" type="text" value="{{ $credentials['database'] }}" placeholder="User Name" required>
+				<input type="text" name="database" id="database" value="{{ $credentials['database'] }}" placeholder="User Name" required>
 				<span class="help">Input the name of your database.</span>
 			</div>
 
@@ -83,7 +82,7 @@
 				<span class="help">If the database has existing tables that conflict with Platform, they will be dropped during the Platform Installation process. You may want to back up your existing database.</span>
 			</div>
 
-			<div class="messages alert"></div>
+			<p class="messages alert"></p>
 
 		</fieldset>
 
