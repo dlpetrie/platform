@@ -38,7 +38,12 @@
 			<!-- Database Driver Select -->
 			<div>
 				{{ Form::label('driver', 'Database Driver:') }}
-				{{ Form::select('driver', array(null => 'Database Driver') + $drivers, $credentials['driver'], array('required')) }}
+				<select name="driver" id="driver">
+					<option value="">Database Driver</option>
+					@foreach ($drivers as $value => $name)
+						<option value="{{ $value }}">{{ $name }}</option>
+					@endforeach
+				</select>
 				<span class="help">Select a driver.</span>
 			</div>
 
