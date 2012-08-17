@@ -142,6 +142,7 @@ $(document).ready(function() {
 
 			// Set a new timer
 			checkDBTimer = setTimeout(function() {
+				console.log('wtf');
 				$('#database-form button:submit')[(checkDBCredentials()) ? 'removeAttr' : 'attr']('disabled', 'disabled');
 			}, 500);
 
