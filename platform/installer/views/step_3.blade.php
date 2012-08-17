@@ -39,44 +39,45 @@
 @section('content')
 <div class="grid contain">
 	<h2>Now you need an administrator, create your initial user and you're almost ready to rock.</h2>
-	{{ Form::open(null, 'POST', array('id' => 'user-form', 'class' => 'form-horizontal')) }}
-	{{ Form::token() }}
+
+	<form id="user-form" class="form-horizontal" method="POST" accept-char="UTF-8">
+	<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
 		<fieldset>
 			<legend>{{ Lang::line('installer::installer.user.legend') }}</legend>
 
 			<!-- User First Name -->
 			<div>
-				{{ Form::label('first_name', 'First Name:') }}
-				{{ Form::text('first_name', null, array('placeholder' => 'First Name', 'required')) }}
+				<label for="first_name">First Name:</label>
+				<input type="text" name="first_name" id="first_name" value="" placeholder="First Name" required>
 				<span class="help">First name of admin.</span>
 			</div>
 
 
 			<!-- User Last Name -->
 			<div>
-				{{ Form::label('last_name', 'Last Name:') }}
-				{{ Form::text('last_name', null, array('placeholder' => 'Last Name', 'required')) }}
+				<label for="last_name">Last Name:</label>
+				<input type="text" name="last_name" id="last_name" value="" placeholder="Last Name" required>
 				<span class="help">Last name of admin.</span>
 			</div>
 
 			<!-- User Email Addres -->
 			<div>
-				{{ Form::label('email', 'Email Address:') }}
-				{{ Form::email('email', null, array('placeholder' => 'Email Address', 'required')) }}
+				<label for="email">Email Address:</label>
+				<input type="email" name="email" id="email" value="" placeholder="Email Address" required>
 				<span class="help">Email address of admin.</span>
 			</div>
 
 			<!-- User Password -->
 			<div>
-				{{ Form::label('password', 'Password:') }}
-				{{ Form::password('password', array('id' => 'password', 'placeholder' => 'Password', 'required')) }}
+				<label for="password">Password:</label>
+				<input type="password" name="password" id="password" placeholder="Password" required>
 				<span class="help">Password for admin.</span>
 			</div>
 
 			<!-- User Password Confirm -->
 			<div>
-				{{ Form::label('password_confirmation', 'Confirm Password:') }}
-				{{ Form::password('password_confirmation', array('placeholder' => 'Confirm Password', 'required')) }}
+				<label for="password_confirmation">Confirm Password:</label>
+				<input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" required>
 				<span class="help">Password confirmation for admin.</span>
 			</div>
 
