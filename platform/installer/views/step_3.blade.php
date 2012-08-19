@@ -27,10 +27,11 @@
 	<p class="step">An account to rule them all</p>
 	<div class="breadcrumbs">
 		<ul class="nav">
-			<li><span>Step 1:</span> Prepare installation</li>
-			<li><span>Step 2:</span> Database Credentials</li>
-			<li class="active"><span>Step 3:</span> Administration</li>
-			<li><span>Step 4:</span> Complete</li>
+			<ul class="nav">
+			<li><span>{{ Lang::line('installer::general.step_1.step') }}</span> {{ Lang::line('installer::general.step_1.step_description') }}</li>
+			<li><span>{{ Lang::line('installer::general.step_2.step') }}</span> {{ Lang::line('installer::general.step_2.step_description') }}</li>
+			<li class="active"><span>{{ Lang::line('installer::general.step_3.step') }}</span> {{ Lang::line('installer::general.step_3.step_description') }}</li>
+			<li><span>{{ Lang::line('installer::general.step_4.step') }}</span> {{ Lang::line('installer::general.step_4.step_description') }}</li>
 		</ul>
 	</div>
 @endsection
@@ -38,55 +39,51 @@
 
 @section('content')
 <div class="grid contain">
-	<h2>Now you need an administrator, create your initial user and you're almost ready to rock.</h2>
-
 	<form id="user-form" class="form-horizontal" method="POST" accept-char="UTF-8">
 	<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
 		<fieldset>
-			<legend>{{ Lang::line('installer::installer.user.legend') }}</legend>
-
+			<legend>{{ Lang::line('installer::form.user.legend') }}</legend>
+			<h2>{{ Lang::line('installer::form.user.description') }}</h2>
 			<!-- User First Name -->
 			<div>
-				<label for="first_name">First Name:</label>
-				<input type="text" name="first_name" id="first_name" value="" placeholder="First Name" required>
-				<span class="help">First name of admin.</span>
+				<label for="first_name">{{ Lang::line('installer::form.user.first_name') }}</label>
+				<input type="text" name="first_name" id="first_name" value="" placeholder="{{ Lang::line('installer::form.user.first_name') }}" required>
+				<span class="help">{{ Lang::line('installer::form.user.first_name_help') }}</span>
 			</div>
 
 
 			<!-- User Last Name -->
 			<div>
-				<label for="last_name">Last Name:</label>
-				<input type="text" name="last_name" id="last_name" value="" placeholder="Last Name" required>
-				<span class="help">Last name of admin.</span>
+				<label for="last_name">{{ Lang::line('installer::form.user.last_name') }}</label>
+				<input type="text" name="last_name" id="last_name" value="" placeholder="{{ Lang::line('installer::form.user.last_name') }}" required>
+				<span class="help">{{ Lang::line('installer::form.user.last_name_help') }}</span>
 			</div>
 
 			<!-- User Email Addres -->
 			<div>
-				<label for="email">Email Address:</label>
-				<input type="email" name="email" id="email" value="" placeholder="Email Address" required>
-				<span class="help">Email address of admin.</span>
+				<label for="email">{{ Lang::line('installer::form.user.email') }}</label>
+				<input type="email" name="email" id="email" value="" placeholder="{{ Lang::line('installer::form.user.email') }}" required>
+				<span class="help">{{ Lang::line('installer::form.user.email_help') }}</span>
 			</div>
 
 			<!-- User Password -->
 			<div>
-				<label for="password">Password:</label>
-				<input type="password" name="password" id="password" placeholder="Password" required>
-				<span class="help">Password for admin.</span>
+				<label for="password">{{ Lang::line('installer::form.user.password') }}</label>
+				<input type="password" name="password" id="password" placeholder="{{ Lang::line('installer::form.user.password') }}" required>
+				<span class="help">{{ Lang::line('installer::form.user.password_help') }}</span>
 			</div>
 
 			<!-- User Password Confirm -->
 			<div>
-				<label for="password_confirmation">Confirm Password:</label>
-				<input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" required>
-				<span class="help">Password confirmation for admin.</span>
+				<label for="password_confirmation">{{ Lang::line('installer::form.user.password_confirm') }}</label>
+				<input type="password" name="password_confirmation" id="password_confirmation" placeholder="{{ Lang::line('installer::form.user.password_confirm') }}" required>
+				<span class="help">{{ Lang::line('installer::form.user.password_confirm_help') }}</span>
 			</div>
 
 		</fieldset>
 
 		<div class="actions">
-			<button type="submit" class="btn btn-large">
-				Continue to Step 4
-			</button>
+			<button type="submit" class="btn btn-large">{{ Lang::line('installer::button.next') }}</button>
 		</div>
 	{{ Form::close() }}
 </div>

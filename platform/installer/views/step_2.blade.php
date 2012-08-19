@@ -11,16 +11,15 @@
 @endsection
 
 @section('navigation')
-	<h1>Database</h1>
-	<p class="step">Let's take some database credentials</p>
+	<h1>{{ Lang::line('installer::general.step_2.title') }}</h1>
+	<p class="step">{{ Lang::line('installer::general.step_2.description') }}</p>
 	<div class="breadcrumbs">
 		<ul class="nav">
-			<li><span>{{ Lang::line('installer::installer.general.step_1') }}</span> {{ Lang::line('installer::installer.general.step_1_title') }}</li>
-			<li class="active">
-				<span>{{ Lang::line('installer::installer.general.step_2') }}</span> {{ Lang::line('installer::installer.general.step_2_title') }}
-			</li>
-			<li><span>{{ Lang::line('installer::installer.general.step_3') }}</span> {{ Lang::line('installer::installer.general.step_3_title') }}</li>
-			<li><span>{{ Lang::line('installer::installer.general.step_4') }}</span> {{ Lang::line('installer::installer.general.step_4_title') }}</li>
+			<ul class="nav">
+			<li><span>{{ Lang::line('installer::general.step_1.step') }}</span> {{ Lang::line('installer::general.step_1.step_description') }}</li>
+			<li class="active"><span>{{ Lang::line('installer::general.step_2.step') }}</span> {{ Lang::line('installer::general.step_2.step_description') }}</li>
+			<li><span>{{ Lang::line('installer::general.step_3.step') }}</span> {{ Lang::line('installer::general.step_3.step_description') }}</li>
+			<li><span>{{ Lang::line('installer::general.step_4.step') }}</span> {{ Lang::line('installer::general.step_4.step_description') }}</li>
 		</ul>
 	</div>
 @endsection
@@ -28,58 +27,56 @@
 
 @section('content')
 <div class="grid contain">
-	<h2>Now its time to create a database, then give us the details and we'll do the rest.</h2>
-
 	<form id="database-form" class="form-horizontal" method="POST" accept-char="UTF-8">
 	<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
 		<fieldset>
-			<legend>{{ Lang::line('installer::installer.database.legend') }}</legend>
-
+			<legend>{{ Lang::line('installer::form.database.legend') }}</legend>
+			<h2>{{ Lang::line('installer::form.database.description') }}</h2>
 			<!-- Database Driver Select -->
 			<div>
-				<label for="driver">Database Driver:</label>
+				<label for="driver">{{ Lang::line('installer::form.database.driver') }}</label>
 				<select name="driver" id="driver" required>
-					<option value="">Database Driver</option>
+					<option value="">{{ Lang::line('installer::form.database.driver') }}</option>
 					@foreach ($drivers as $value => $name)
 						<option value="{{ $value }}">{{ $name }}</option>
 					@endforeach
 				</select>
-				<span class="help">Select a driver.</span>
+				<span class="help">{{ Lang::line('installer::form.database.driver_help') }}</span>
 			</div>
 
 			<!-- Database Username -->
 			<div>
-				<label for="host">Server:</label>
-				<input type="text" name="host" id="host" value="{{ $credentials['host'] }}" placeholder="Database Server" required>
-				<span class="help">Input your database host, e.g. localhost</span>
+				<label for="host">{{ Lang::line('installer::form.database.server') }}</label>
+				<input type="text" name="host" id="host" value="{{ $credentials['host'] }}" placeholder="{{ Lang::line('installer::form.database.server') }}" required>
+				<span class="help">{{ Lang::line('installer::form.database.server_help') }}</span>
 			</div>
 
 			<!-- Database Username -->
 			<div>
-				<label for="username">Username:</label>
-				<input type="text" name="username" id="username" value="{{ $credentials['username'] }}" placeholder="User Name" required>
-				<span class="help">Input your database user.</span>
+				<label for="username">{{ Lang::line('installer::form.database.username') }}</label>
+				<input type="text" name="username" id="username" value="{{ $credentials['username'] }}" placeholder="{{ Lang::line('installer::form.database.username') }}" required>
+				<span class="help">{{ Lang::line('installer::form.database.username_help') }}</span>
 			</div>
 
 			<!-- Database Password -->
 			<div>
-				<label for="password">Password:</label>
-				<input type="password" name="password" id="password" placeholder="Password">
-				<span class="help">Your database users password</span>
+				<label for="password">{{ Lang::line('installer::form.database.password') }}</label>
+				<input type="password" name="password" id="password" placeholder="{{ Lang::line('installer::form.database.password') }}">
+				<span class="help">{{ Lang::line('installer::form.database.password_help') }}</span>
 			</div>
 
 			<!-- Database Name -->
 			<div>
-				<label for="database">Database:</label>
-				<input type="text" name="database" id="database" value="{{ $credentials['database'] }}" placeholder="User Name" required>
-				<span class="help">Input the name of your database.</span>
+				<label for="database">{{ Lang::line('installer::form.database.database') }}</label>
+				<input type="text" name="database" id="database" value="{{ $credentials['database'] }}" placeholder="{{ Lang::line('installer::form.database.database') }}" required>
+				<span class="help">{{ Lang::line('installer::form.database.database_help') }}</span>
 			</div>
 
 			<!-- Drop Table Warning -->
 			<div>
-				<label for="disclaimer">Warning:</label>
+				<label for="disclaimer">{{ Lang::line('installer::form.database.disclaimer') }}</label>
 				<input type="checkbox" name="disclaimer" value="" required>
-				<span class="help">If the database has existing tables that conflict with Platform, they will be dropped during the Platform Installation process. You may want to back up your existing database.</span>
+				<span class="help">{{ Lang::line('installer::form.database.disclaimer_help') }}</span>
 			</div>
 
 			<p class="messages alert"></p>
@@ -87,8 +84,8 @@
 		</fieldset>
 
 		<div class="actions">
-			<a class="btn btn-large" href="{{URL::to('installer/step_1');}}">Back</a>
-			<button type="submit" class="btn btn-large" disabled>Continue to Step 3</button>
+			<a class="btn btn-large" href="{{URL::to('installer/step_1');}}">{{ Lang::line('installer::button.previous') }}</a>
+			<button type="submit" class="btn btn-large" disabled>{{ Lang::line('installer::button.next') }}</button>
 		</div>
 	{{ Form::close() }}
 </div>
