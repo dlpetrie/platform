@@ -32,14 +32,14 @@
 		<!-- Password Confirm -->
 		<div>
 			<label for="password_confirmation">{{ lang::line('users::form.users.create.password_confirm') }}:</label>
-			<input type="password" name="password_confirmation" id="" placeholder="{{ lang::line('users::form.users.create.password_confirm') }}" required>
+			<input type="password" name="password_confirmation" id="password_confirmation" placeholder="{{ lang::line('users::form.users.create.password_confirm') }}" required>
 			<span class="help">{{ lang::line('users::form.users.create.password_confirm_help') }}</span>
 		</div>
 
 		<!-- Groups -->
 		<div>
 			<label for="groups">{{ Lang::line('users::form.users.create.groups') }}</label>
-			<select name="driver" id="driver" multiple required>
+			<select name="groups" id="groups" multiple required>
 				@foreach ($groups as $value => $name)
 					<option value="{{ $value }}">{{ $name }}</option>
 				@endforeach
