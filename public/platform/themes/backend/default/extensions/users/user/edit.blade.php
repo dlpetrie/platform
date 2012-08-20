@@ -12,9 +12,29 @@
 @endsection
 
 <!-- Queue Scripts -->
-{{ Theme::queue_asset('bootstrap-tab', 'js/bootstrap/tab.js', 'jquery') }}
+{{ Theme::queue_asset('validate', 'js/validate.js', 'jquery') }}
+{{ Theme::queue_asset('bootstrap-tab','js/bootstrap/tab.js', 'jquery') }}
+
 <!-- Scripts -->
 @section('scripts')
+<script>
+	$(document).ready(function() {
+
+		//Match Password
+		var password = document.getElementById("password"),
+			passwordConfirm = document.getElementById("password_confirmation");
+
+		$('#password, #password_confirmation').keyup(function() {
+			if(passwordConfirm.value !== password.value) {
+				passwordConfirm.setCustomValidity("Your password doesn't match");
+			} else {
+				passwordConfirm.setCustomValidity("");
+			}
+		});
+
+		Validate.setup($("#edit-form"));
+	});
+</script>
 @endsection
 
 <!-- Page Content -->

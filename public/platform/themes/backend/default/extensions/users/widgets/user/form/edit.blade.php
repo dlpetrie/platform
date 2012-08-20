@@ -1,32 +1,55 @@
-{{ Form::open(ADMIN.'/users/edit/'.$user['id'], 'POST', array('class' => 'form-horizontal')) }}
+<form action="{{ URL::to_secure(ADMIN.'/users/edit/'.$user['id']) }}" id="edit-form" class="form-horizontal" method="POST" accept-char="UTF-8">
+<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
+	<fieldset>
+		<!-- First Name -->
+		<div>
+			<label for="first_name">{{ lang::line('users::form.users.create.first_name') }}:</label>
+			<input type="text" name="first_name" id="first_name" value="{{ Input::old('metadata.first_name', $user['metadata']['first_name']); }}" placeholder="{{ lang::line('users::form.users.create.first_name') }}" required>
+			<span class="help">{{ lang::line('users::form.users.create.first_name_help') }}</span>
+		</div>
 
-	{{ Form::token() }}
+		<!-- Last Name -->
+		<div>
+			<label for="last_name">{{ lang::line('users::form.users.create.last_name') }}:</label>
+			<input type="text" name="last_name" id="last_name" value="{{ Input::old('metadata.last_name', $user['metadata']['last_name']); }}" placeholder="{{ lang::line('users::form.users.create.last_name') }}" required>
+			<span class="help">{{ lang::line('users::form.users.create.last_name_help') }}</span>
+		</div>
 
-	<div class="well">
-		<fieldset>
+		<!-- Email Address -->
+		<div>
+			<label for="email">{{ lang::line('users::form.users.create.email') }}:</label>
+			<input type="email" name="email" id="email" value="{{ Input::old('email', $user['email']); }}" placeholder="{{ lang::line('users::form.users.create.email') }}" required>
+			<span class="help">{{ lang::line('users::form.users.create.email_help') }}</span>
+		</div>
 
-			<label for="first_name">{{ Lang::line('users::form.users.edit.first_name') }}</label>
-			<input type="text" id="first_name" name="first_name" value="{{ Input::old('metadata.first_name', $user['metadata']['first_name']); }}">
+		<!-- Password -->
+		<div>
+			<label for="password">{{ lang::line('users::form.users.create.password') }}:</label>
+			<input type="password" name="password" id="password" placeholder="{{ lang::line('users::form.users.create.password') }}">
+			<span class="help">Type your password.</span>
+		</div>
 
-			<label for="last_name">{{ Lang::line('users::form.users.edit.last_name') }}</label>
-			<input type="text" id="last_name" name="last_name" value="{{ Input::old('metadata.last_name', $user['metadata']['last_name']); }}">
+		<!-- Password Confirm -->
+		<div>
+			<label for="password_confirmation">{{ lang::line('users::form.users.create.password_confirm') }}:</label>
+			<input type="password" name="password_confirmation" id="" placeholder="{{ lang::line('users::form.users.create.password_confirm') }}">
+			<span class="help">{{ lang::line('users::form.users.create.password_confirm_help') }}</span>
+		</div>
 
-			<label for="email">{{ Lang::line('users::form.users.edit.email') }}</label>
-			<input type="text" id="email" name="email" value="{{ Input::old('email', $user['email']); }}">
-
-
-			<label for="password">{{ Lang::line('users::form.users.edit.password') }}</label>
-			<input type="password" id="password" name="password">
-
-			<label for="password_confirmation">{{ Lang::line('users::form.users.edit.password_confirm') }}</label>
-			<input type="password" id="password_confirmation" name="password_confirmation">
-
-			<label for="groups">{{ Lang::line('users::form.users.edit.groups') }}</label>
+		<!-- Groups -->
+		<div>
+			<label for="groups">{{ Lang::line('users::form.users.create.groups') }}</label>
 			{{ Form::select('groups[]', $user_groups, $user['groups'], array('multiple' => 'multiple')) }}
+			<span class="help">{{ Lang::line('users::form.users.create.groups_help') }}</span>
+		</div>
 
-		</fieldset>
+	</fieldset>
+
+	<p class="messages"></p>
+	<hr>
+
+	<div class="actions">
+		<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users') }}">{{ Lang::line('button.cancel') }}</a>
+		<button class="btn btn-large btn-primary" type="submit">{{ Lang::line('button.update') }}</button>
 	</div>
-
-	<button class="btn btn-large btn-primary" type="submit">{{ Lang::line('button.update') }}</button>
-	<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users') }}">{{ Lang::line('button.cancel') }}</a>
-{{ Form::close() }}
+</form>

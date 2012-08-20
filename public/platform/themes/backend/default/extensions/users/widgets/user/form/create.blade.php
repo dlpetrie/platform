@@ -1,29 +1,59 @@
-{{ Form::open(ADMIN.'/users/create', 'POST', array('class' => 'form-horizontal')) }}
+<form action="{{ URL::to_secure(ADMIN.'/users/create') }}" id="create-form" class="form-horizontal" method="POST" accept-char="UTF-8">
+<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
+	<fieldset>
+		<!-- First Name -->
+		<div>
+			<label for="first_name">{{ lang::line('users::form.users.create.first_name') }}:</label>
+			<input type="text" name="first_name" id="first_name" value="{{ Input::old('first_name') }}" placeholder="{{ lang::line('users::form.users.create.first_name') }}" required>
+			<span class="help">{{ lang::line('users::form.users.create.first_name_help') }}</span>
+		</div>
 
-	{{ Form::token() }}
+		<!-- Last Name -->
+		<div>
+			<label for="last_name">{{ lang::line('users::form.users.create.last_name') }}:</label>
+			<input type="text" name="last_name" id="last_name" value="{{ Input::old('last_name') }}" placeholder="{{ lang::line('users::form.users.create.last_name') }}" required>
+			<span class="help">{{ lang::line('users::form.users.create.last_name_help') }}</span>
+		</div>
 
-	<div class="well">
-		<fieldset>
-			<label for="first_name">{{ Lang::line('users::form.users.create.first_name') }}</label>
-			<input type="text" id="first_name" name="first_name" value="{{ Input::old('first_name'); }}">
+		<!-- Email Address -->
+		<div>
+			<label for="email">{{ lang::line('users::form.users.create.email') }}:</label>
+			<input type="email" name="email" id="email" value="{{ Input::old('email') }}" placeholder="{{ lang::line('users::form.users.create.email') }}" required>
+			<span class="help">{{ lang::line('users::form.users.create.email_help') }}</span>
+		</div>
 
-			<label for="last_name">{{ Lang::line('users::form.users.create.last_name') }}</label>
-			<input type="text" id="last_name" name="last_name" value="{{ Input::old('last_name'); }}">
+		<!-- Password -->
+		<div>
+			<label for="password">{{ lang::line('users::form.users.create.password') }}:</label>
+			<input type="password" name="password" id="password" placeholder="{{ lang::line('users::form.users.create.password') }}" required>
+			<span class="help">Type your password.</span>
+		</div>
 
-			<label for="email">{{ Lang::line('users::form.users.create.email') }}</label>
-			<input type="text" id="email" name="email" value="{{ Input::old('email'); }}">
+		<!-- Password Confirm -->
+		<div>
+			<label for="password_confirmation">{{ lang::line('users::form.users.create.password_confirm') }}:</label>
+			<input type="password" name="password_confirmation" id="" placeholder="{{ lang::line('users::form.users.create.password_confirm') }}" required>
+			<span class="help">{{ lang::line('users::form.users.create.password_confirm_help') }}</span>
+		</div>
 
-			<label for="password">{{ Lang::line('users::form.users.create.password') }}</label>
-			<input type="password" id="password" name="password">
-
-			<label for="password_confirmation">{{ Lang::line('users::form.users.create.password_confirm') }}</label>
-			<input type="password" id="password_confirmation" name="password_confirmation">
-
+		<!-- Groups -->
+		<div>
 			<label for="groups">{{ Lang::line('users::form.users.create.groups') }}</label>
-			{{ Form::select('groups[]', $groups, null, array('multiple' => 'multiple')) }}
-		</fieldset>
-	</div>
-	<button class="btn btn-large btn-primary" type="submit">{{ Lang::line('button.create') }}</button>
-	<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users') }}">{{ Lang::line('button.cancel') }}</a>
+			<select name="driver" id="driver" multiple required>
+				@foreach ($groups as $value => $name)
+					<option value="{{ $value }}">{{ $name }}</option>
+				@endforeach
+			</select>
+			<span class="help">{{ Lang::line('users::form.users.create.groups_help') }}</span>
+		</div>
 
-{{ Form::close() }}
+	</fieldset>
+
+	<p class="messages"></p>
+	<hr>
+
+	<div class="actions">
+		<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users') }}">{{ Lang::line('button.cancel') }}</a>
+		<button class="btn btn-large btn-primary" type="submit">{{ Lang::line('button.create') }}</button>
+	</div>
+</form>

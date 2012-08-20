@@ -1,12 +1,11 @@
-{{ Form::open(ADMIN.'/users/groups/edit/'.$group['id'], 'POST', array('class' => 'form-horizontal')) }}
-
-	{{ Form::token() }}
+<form action="{{ URL::to_secure(ADMIN.'/users/groups/edit/'.$group['id']) }}" id="edit-form" class="form-horizontal" method="POST" accept-char="UTF-8">
+	<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
 
 	<div class="well">
 		<fieldset>
 
 			<label for="name">{{ Lang::line('users::form.groups.edit.name') }}</label>
-			<input type="text" id="name" name="name" value="{{ Input::old('name', $group['name']); }}">
+			<input type="text" id="name" name="name" value="{{ Input::old('name', $group['name']); }}" required>
 
 		</fieldset>
 	</div>

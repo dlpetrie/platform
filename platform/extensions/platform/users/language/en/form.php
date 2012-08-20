@@ -23,21 +23,37 @@ return array(
 	'users' => array(
 
 		'create' => array(
+			'legend' => 'Create User',
+			'summary' => 'Add a user to your application.',
 			'first_name'       => 'First Name',
+			'first_name_help' => 'Type your first name.',
 			'last_name'        => 'Last Name',
+			'last_name_help' => 'Type your last name.',
 			'email'            => 'Email',
+			'email_help' => 'Type your email address.',
 			'password'         => 'Password',
+			'password_help' => 'Type your password.',
 			'password_confirm' => 'Confirm Password',
+			'password_confirm_help' => 'Confirm your password.',
 			'groups'           => 'Groups',
+			'groups_help' => 'Select a group to assign to the user, remember that a user takes on the permissions of the group they are assigned.',
 		),
 
 		'edit' => array(
+			'legend' => 'Create User',
+			'summary' => 'Add a user to your application.',
 			'first_name'       => 'First Name',
+			'first_name_help' => 'Type your first name.',
 			'last_name'        => 'Last Name',
+			'last_name_help' => 'Type your last name.',
 			'email'            => 'Email',
+			'email_help' => 'Type your email address.',
 			'password'         => 'Password',
+			'password_help' => 'Type your password.',
 			'password_confirm' => 'Confirm Password',
+			'password_confirm_help' => 'Confirm your password.',
 			'groups'           => 'Groups',
+			'groups_help' => 'Select a group to assign to the user, remember that a user takes on the permissions of the group they are assigned.',
 		),
 
 	),
@@ -46,10 +62,12 @@ return array(
 
 		'create' => array(
 			'name' => 'Name',
+			'name_help' => 'What do you want to call this group?',
 		),
 
 		'edit' => array(
 			'name' => 'Name',
+			'name_help' => 'What do you want to call this group?',
 		),
 	),
 
