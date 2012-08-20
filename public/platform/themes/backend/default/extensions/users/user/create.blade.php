@@ -2,7 +2,7 @@
 
 <!-- Page Title -->
 @section('title')
-	{{ Lang::line('users::users.create.title') }}
+	{{ Lang::line('users::general.users.create.title') }}
 @endsection
 
 <!-- Queue Styles | e.g Theme::queue_asset('name', 'path_to_css', 'dependency')-->
@@ -24,8 +24,8 @@
 
 	<header class="head row">
 		<div class="span4">
-			<h1>{{ Lang::line('users::users.create.title') }}</h1>
-			<p>{{ Lang::line('users::users.create.description') }}</p>
+			<h1>{{ Lang::line('users::general.users.create.title') }}</h1>
+			<p>{{ Lang::line('users::general.users.create.description') }}</p>
 		</div>
 	</header>
 

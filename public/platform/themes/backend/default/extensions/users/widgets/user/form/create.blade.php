@@ -4,22 +4,22 @@
 
 	<div class="well">
 		<fieldset>
-			<label for="first_name">{{ Lang::line('users::users.general.first_name') }}</label>
+			<label for="first_name">{{ Lang::line('users::form.users.create.first_name') }}</label>
 			<input type="text" id="first_name" name="first_name" value="{{ Input::old('first_name'); }}">
 
-			<label for="last_name">{{ Lang::line('users::users.general.last_name') }}</label>
+			<label for="last_name">{{ Lang::line('users::form.users.create.last_name') }}</label>
 			<input type="text" id="last_name" name="last_name" value="{{ Input::old('last_name'); }}">
 
-			<label for="email">{{ Lang::line('users::users.general.email') }}</label>
+			<label for="email">{{ Lang::line('users::form.users.create.email') }}</label>
 			<input type="text" id="email" name="email" value="{{ Input::old('email'); }}">
 
-			<label for="password">{{ Lang::line('users::users.general.password') }}</label>
+			<label for="password">{{ Lang::line('users::form.users.create.password') }}</label>
 			<input type="password" id="password" name="password">
 
-			<label for="password_confirmation">{{ Lang::line('users::users.general.password_confirmation') }}</label>
+			<label for="password_confirmation">{{ Lang::line('users::form.users.create.password_confirm') }}</label>
 			<input type="password" id="password_confirmation" name="password_confirmation">
 
-			<label for="groups">{{ Lang::line('users::users.general.groups') }}</label>
+			<label for="groups">{{ Lang::line('users::form.users.create.groups') }}</label>
 			{{ Form::select('groups[]', $groups, null, array('multiple' => 'multiple')) }}
 		</fieldset>
 	</div>
