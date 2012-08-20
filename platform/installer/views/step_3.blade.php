@@ -38,7 +38,7 @@
 
 
 @section('content')
-<div class="grid contain">
+<div class="contain">
 	<h2>{{ Lang::line('installer::general.step_3.description') }}</h2>
 	<hr>
 	<form id="user-form" class="form-horizontal" method="POST" accept-char="UTF-8">
@@ -86,6 +86,6 @@
 		<div class="actions">
 			<button type="submit" class="btn btn-large">{{ Lang::line('installer::button.next') }}</button>
 		</div>
-	{{ Form::close() }}
+	</form>
 </div>
 @endsection
