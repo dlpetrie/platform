@@ -2,7 +2,7 @@
 
 @section('navigation')
 	<h1>{{ Lang::line('installer::general.step_1.title') }}</h1>
-	<p class="step">{{ Lang::line('installer::general.step_1.description') }}</p>
+	<p class="step">{{ Lang::line('installer::general.step_1.tagline') }}</p>
 	<div class="breadcrumbs">
 		<ul class="nav">
 			<ul class="nav">
@@ -16,26 +16,22 @@
 
 @section('content')
 <div class="contain">
-	<h2>{{ Lang::line('installer::form.prepare.description') }}</h2>
-	<!-- <form id="prepare-form" class="form-horizontal" method="POST" accept-char="UTF-8" action="{{ URL::to('installer/step_1') }}"> -->
-	<!-- <input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}"> -->
+	<h2>{{ Lang::line('installer::general.step_1.description') }}</h2>
+	<div class="permissions" id="permissions-pass">
+		<div data-template>
+			<code class="alert alert-success">[[.]]</code>
+		</div>
+	</div>
+	<div class="permissions" id="permissions-fail">
+		<div data-template>
+			<code class="alert alert-error">[[.]]</code>
+		</div>
+	</div>
 
-		<div class="permissions" id="permissions-pass">
-			<div data-template>
-				<code class="alert alert-success">[[.]]</code>
-			</div>
-		</div>
-		<div class="permissions" id="permissions-fail">
-			<div data-template>
-				<code class="alert alert-error">[[.]]</code>
-			</div>
-		</div>
-
-		<div class="actions">
-			<a href="{{ URL::to('installer/step_2') }}" class="btn btn-large {{ (count($permissions['fail']) > 0) ? 'disabled' : null }}" id="continue-btn">
-				{{ Lang::line('installer::button.next') }}
-			</a>
-		</div>
-	<!-- </form> -->
+	<div class="actions">
+		<a href="{{ URL::to('installer/step_2') }}" class="btn btn-large {{ (count($permissions['fail']) > 0) ? 'disabled' : null }}" id="continue-btn">
+			{{ Lang::line('installer::button.next') }}
+		</a>
+	</div>
 </div>
 @endsection

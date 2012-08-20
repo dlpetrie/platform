@@ -1,8 +1,8 @@
 @layout('installer::template')
 
 @section('navigation')
-	<h1>Administration</h1>
-	<p class="step">An account to rule them all</p>
+	<h1>{{ Lang::line('installer::general.step_4.title') }}</h1>
+	<p class="step">{{ Lang::line('installer::general.step_4.tagline') }}</p>
 	<div class="breadcrumbs">
 		<ul class="nav">
 			<ul class="nav">
@@ -15,13 +15,14 @@
 @endsection
 
 @section('content')
-<div class="grid contain">
+<div class="contain">
 
-	<h2>Installation Complete</h2>
+	<h2>{{ Lang::line('installer::general.step_4.description') }}</h2>
+	<p class="lead">{{ Lang::line('installer::general.step_4.licence') }}</p>
 
-	<p class="lead">Congratulations - you've installed Platform! <strong>But wait! Not so fast</strong>, you must agree to our license agreement!</p>
-
-	<pre style="word-break: break-word;"><?=$license?></pre>
+	<div class="well">
+		<pre style="word-break: break-word;">{{ $license }}</pre>
+	</div>
 
 	<div class="actions">
 		<p>
@@ -30,5 +31,4 @@
 	</div>
 
 </div>
-
 @endsection

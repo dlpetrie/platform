@@ -23,8 +23,8 @@
 @endsection
 
 @section('navigation')
-	<h1>Administration</h1>
-	<p class="step">An account to rule them all</p>
+	<h1>{{ Lang::line('installer::general.step_3.title') }}</h1>
+	<p class="step">{{ Lang::line('installer::general.step_3.tagline') }}</p>
 	<div class="breadcrumbs">
 		<ul class="nav">
 			<ul class="nav">
@@ -39,11 +39,11 @@
 
 @section('content')
 <div class="grid contain">
+	<h2>{{ Lang::line('installer::general.step_3.description') }}</h2>
 	<form id="user-form" class="form-horizontal" method="POST" accept-char="UTF-8">
 	<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
 		<fieldset>
 			<legend>{{ Lang::line('installer::form.user.legend') }}</legend>
-			<h2>{{ Lang::line('installer::form.user.description') }}</h2>
 			<!-- User First Name -->
 			<div>
 				<label for="first_name">{{ Lang::line('installer::form.user.first_name') }}</label>

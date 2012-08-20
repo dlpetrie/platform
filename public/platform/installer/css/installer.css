@@ -255,6 +255,8 @@ form .actions {
 		line-height: 1.2em;
 		color:#666;
 		margin-bottom:15px;
+		width:90%;
+		margin:0 auto;
 	}
 
 	#installer .content code {
