@@ -81,9 +81,8 @@
 
 	<hr>
 
-	{{ Form::open(ADMIN.'/menus/edit/'.$menu_slug ?: null, 'POST', array('id' => 'platform-menu', 'autocomplete' => 'off', 'novalidate')) }}
-
-		{{ Form::token() }}
+	<form action="{{ URL::to_secure(ADMIN.'/menus/edit/'.$menu_slug ?: null) }}" id="platform-menu" class="form-horizontal" method="POST" accept-char="UTF-8" autocomplete="off">
+		<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
 
 		<div class="tabbable">
 			<ul class="nav nav-tabs">
@@ -103,43 +102,43 @@
 
 							<div class="well">
 
-								<h3>{{ Lang::line('menus::menus.general.new_item') }}</h3>
+								<legend>{{ Lang::line('menus::menus.general.new_item') }}</legend>
 								<hr>
 
-								<div class="control-group">
-									{{ Form::label('new-item-name', Lang::line('menus::menus.general.name')) }}
-									{{ Form::text(null, null, array('class' => 'input-block-level', 'id' => 'new-item-name', 'placeholder' => Lang::line('menus::menus.general.name'), 'required')) }}
-								</div>
+								<fieldset>
 
-								<div class="control-group">
-									{{ Form::label('new-item-slug', Lang::line('menus::menus.general.slug')) }}
-									{{ Form::text(null, null, array('class' => 'input-block-level item-slug', 'id' => 'new-item-slug', 'placeholder' => Lang::line('menus::menus.general.slug'), 'required')) }}
-								</div>
+									<div>
+										{{ Form::text(null, null, array('class' => 'input-block-level', 'id' => 'new-item-name', 'placeholder' => Lang::line('menus::menus.general.name'), 'required')) }}
+									</div>
 
-								<div class="control-group">
-									{{ Form::label('new-item-uri', Lang::line('menus::menus.general.uri')) }}
-									{{ Form::text(null, null, array('class' => 'input-block-level', 'id' => 'new-item-uri', 'placeholder' => Lang::line('menus::menus.general.uri'), 'required')) }}
-								</div>
+									<div>
+										{{ Form::text(null, null, array('class' => 'input-block-level item-slug', 'id' => 'new-item-slug', 'placeholder' => Lang::line('menus::menus.general.slug'), 'required')) }}
+									</div>
 
-								<div class="control-group">
-									<label class="checkbox">
-										{{ Form::checkbox(null, 1, false, array('id' => 'new-item-secure')) }}
-										{{ Lang::line('menus::menus.general.secure') }}
-									</label>
-								</div>
+									<div>
+										{{ Form::label('new-item-uri', Lang::line('menus::menus.general.uri')) }}
+										{{ Form::text(null, null, array('class' => 'input-block-level', 'id' => 'new-item-uri', 'placeholder' => Lang::line('menus::menus.general.uri'), 'required')) }}
+									</div>
 
-								<div class="control-group">
-									<label class="checkbox">
-										{{ Form::checkbox(null, 1, false, array('id' => 'new-item-target')) }}
-										{{ Lang::line('menus::menus.general.target') }}
-									</label>
-								</div>
+									<div>
+										<label class="checkbox">
+											{{ Form::checkbox(null, 1, false, array('id' => 'new-item-secure')) }}
+											{{ Lang::line('menus::menus.general.secure') }}
+										</label>
+									</div>
 
-								<div class="control-group">
-									{{ Form::label('new-item-type', Lang::line('menus::menus.general.type')) }}
-									{{ Form::select(null, array('0' => Lang::line('menus::menus.general.show_always'), '1' => Lang::line('menus::menus.general.logged_in'), '2' => Lang::line('menus::menus.general.logged_out'), '3' => Lang::line('menus::menus.general.admin')), '0', array('id' => 'new-item-type')) }}
-								</div>
+									<div>
+										<label class="checkbox">
+											{{ Form::checkbox(null, 1, false, array('id' => 'new-item-target')) }}
+											{{ Lang::line('menus::menus.general.target') }}
+										</label>
+									</div>
 
+									<div>
+										{{ Form::label('new-item-type', Lang::line('menus::menus.general.type')) }}
+										{{ Form::select(null, array('0' => Lang::line('menus::menus.general.show_always'), '1' => Lang::line('menus::menus.general.logged_in'), '2' => Lang::line('menus::menus.general.logged_out'), '3' => Lang::line('menus::menus.general.admin')), '0', array('id' => 'new-item-type')) }}
+									</div>
+								</fieldset>
 								<hr>
 
 								<button type="button" class="btn btn-small btn-primary items-add-new">{{ Lang::line('menus::menus.button.add_item') }}</button>
@@ -160,12 +159,17 @@
 
 				</div>
 				<div class="tab-pane {{ ( ! $menu_slug) ? 'active' : null }}" id="menus-edit-menu-options">
+					<fieldset>
+						<div>
+							{{ Form::label('menu-name', Lang::line('menus::menus.general.name')) }}
+							{{ Form::text('name', isset($menu['name']) ? $menu['name'] : null, array('id' => 'menu-name', 'placeholder' => Lang::line('menus::menus.general.name'), (isset($menu['user_editable']) and ! $menu['user_editable']) ? 'disabled' : 'required')) }}
+						</div>
 
-					{{ Form::label('menu-name', Lang::line('menus::menus.general.name')) }}
-					{{ Form::text('name', isset($menu['name']) ? $menu['name'] : null, array('id' => 'menu-name', 'placeholder' => Lang::line('menus::menus.general.name'), (isset($menu['user_editable']) and ! $menu['user_editable']) ? 'disabled' : 'required')) }}
-
-					{{ Form::label('menu-slug', Lang::line('menus::menus.general.slug')) }}
-					{{ Form::text('slug', isset($menu['slug']) ? $menu['slug'] : null, array('id' => 'menu-slug', 'placeholder' => Lang::line('menus::menus.general.slug'), (isset($menu['user_editable']) and ! $menu['user_editable']) ? 'disabled' : 'required')) }}
+						<div>
+							{{ Form::label('menu-slug', Lang::line('menus::menus.general.slug')) }}
+							{{ Form::text('slug', isset($menu['slug']) ? $menu['slug'] : null, array('id' => 'menu-slug', 'placeholder' => Lang::line('menus::menus.general.slug'), (isset($menu['user_editable']) and ! $menu['user_editable']) ? 'disabled' : 'required')) }}
+						</div>
+					</fieldset>
 
 				</div>
 			</div>
@@ -181,7 +185,7 @@
 
 		</div>
 
-	{{ Form::close() }}
+	</form>
 
 </section>
 @endsection
