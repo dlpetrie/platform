@@ -74,8 +74,8 @@ class Admin_User_Form
 
 		// set status options
 		$data['status_options'] = array(
-			1 => Lang::line('general.enabled'),
-			0 => Lang::line('general.disabled'),
+			1 => Lang::line('general.enabled')->get(),
+			0 => Lang::line('general.disabled')->get(),
 		);
 
 		// get and set group options
