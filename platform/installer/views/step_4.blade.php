@@ -19,7 +19,7 @@
 
 	<h2>{{ Lang::line('installer::general.step_4.description') }}</h2>
 	<p class="lead">{{ Lang::line('installer::general.step_4.licence') }}</p>
-
+	<hr>
 	<div class="well">
 		<pre style="word-break: break-word;">{{ $license }}</pre>
 	</div>
