@@ -25,32 +25,6 @@ return array(
 	'title'			=> 	'Settings',
 	'description'	=>	'You can change your preferences at anytime by choosing from the sections below.',
 
-	/* Form General */
-	'general' => array(
-		'legend'           => 'General Settings',
-		'description'      => '',
-		'title'            => 'Site Title',
-		'tagline'          => 'Site Tagline',
-		'site-email'     => 'Site Email Address',
-		'brand'   => 'Brand',
-
-		'address' => array(
-			'name'    => 'Name',
-			'country' => 'Country',
-			'street'  => 'Street',
-			'city'    => 'City',
-			'state'   => 'State',
-			'zip'     => 'Zip/Post Code',
-		),
-
-		'fieldset' => array(
-			'details' => 'Site Details',
-			'address' => 'Site Address',
-			'brand'   => 'Site Branding',
-		),
-
-	),
-
 	'localization' => array(
 		/* Form localization */
 		'title'       => 'Localization',
@@ -58,9 +32,7 @@ return array(
 		'country'     => 'Country',
 	),
 
-
-	/* Descriptions */
-
+	// remove?
 	'section_2_desc'	=>	'It is highly recommended that you have a SSL Certificate if in production. Below are some extra security settings to help assist you during development vs production.',
 	'section_3_desc'	=>	'',
 

@@ -5,13 +5,13 @@
 	<div class="well">
 		<fieldset>
 
-			<label for="site-title">{{ Lang::line('settings::settings.general.title') }}</label>
+			<label for="site-title">{{ Lang::line('settings::form.title') }}</label>
 			<input type="text" id="title" name="site:title" value="@get.settings.site.title">
 
-			<label for="site-tagline">{{ Lang::line('settings::settings.general.tagline') }}</label>
+			<label for="site-tagline">{{ Lang::line('settings::form.tagline') }}</label>
 			<input type="text" id="tagline" name="site:tagline" value="@get.settings.site.tagline">
 
-			<label for="site-email">{{ Lang::line('settings::settings.general.site-email') }}</label>
+			<label for="site-email">{{ Lang::line('settings::form.site_email') }}</label>
 			<input type="text" id="email" name="site:email" value="@get.settings.site.email">
 
 		</fieldset>
