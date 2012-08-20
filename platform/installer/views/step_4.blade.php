@@ -17,14 +17,21 @@
 @section('content')
 <div class="grid contain">
 
-		<h2>Installation Complete</h2>
+	<h2>Installation Complete</h2>
 
-		<p class="lead">Congratulations - you've installed Platform! <strong>But wait! Not so fast</strong>, we highly recommend you delete the following folders now that you have completed the installation process.</p>
-		<pre><code>platform/installer/*</code></pre>
-		<pre><code>public/installer/*</code></pre>
-		<div class="actions">
-			<p><a href="{{ url(ADMIN) }}" class="btn btn-large">Login to Admin</a> <a href="{{ URL::base() }}" class="btn btn-large">Or visit the Home Page</a></p>
-		</div>
+	<p class="lead">Congratulations - you've installed Platform! <strong>But wait! Not so fast</strong>, we highly recommend you delete the following folders now that you have completed the installation process.</p>
+	<pre><code>platform/installer/*</code></pre>
+	<pre><code>public/installer/*</code></pre>
+
+	<h2>Platform License Agreement</h2>
+	<pre style="word-break: break-word;"><?=$license?></pre>
+	<pre style="word-break: break-word;"><?=$laravel_license?></pre>
+
+	<div class="actions">
+		<p>
+			<a href="{{ URL::base() }}" class="btn btn-large">I Agree, Continue to the Home Page</a>
+		</p>
+	</div>
 
 </div>
 

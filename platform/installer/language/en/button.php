@@ -23,6 +23,5 @@ return array(
 	/* General */
 	'previous' => 'Back',
 	'next'     => 'Continue',
-	'refresh'  => 'Refresh',
 
 );

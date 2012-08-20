@@ -2,6 +2,21 @@ $(document).ready(function() {
 
 	/*
 	|-------------------------------------
+	| Common
+	|-------------------------------------
+	|
+	| Common Javascript among multiple steps
+	|
+	*/
+
+	// Disabled continue button
+	$('#continue-btn.disabled').on('click.disabled', function(e) {
+		e.preventDefault();
+		return false;
+	});
+
+	/*
+	|-------------------------------------
 	| Installer Preparation
 	|-------------------------------------
 	|
@@ -9,6 +24,7 @@ $(document).ready(function() {
 	| the preparation step. We need to check
 	| the system is compatible and permissions
 	| are correct.
+	|
 	*/
 
 	// Look for permissions Tempo template
@@ -40,7 +56,8 @@ $(document).ready(function() {
 
 				// If there's no more errors
 				if (data.fail.length == 0) {
-					$('#continue-btn').removeAttr('disabled');
+					$('#continue-btn').removeClass('disabled')
+					                  .off('click.disabled');
 					clearInterval($('body').data('passInterval'));
 				}
 			});
@@ -60,6 +77,7 @@ $(document).ready(function() {
 	| an ajax call to check the database
 	| credentials before allowing them to
 	| continue with the install process.
+	|
 	*/
 
 	$('.messages').html('Awaiting Credentials');

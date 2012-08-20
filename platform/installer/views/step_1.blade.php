@@ -17,8 +17,8 @@
 @section('content')
 <div class="contain">
 	<h2>{{ Lang::line('installer::form.prepare.description') }}</h2>
-	<form id="prepare-form" class="form-horizontal" method="POST" accept-char="UTF-8">
-	<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
+	<!-- <form id="prepare-form" class="form-horizontal" method="POST" accept-char="UTF-8" action="{{ URL::to('installer/step_1') }}"> -->
+	<!-- <input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}"> -->
 
 		<div class="permissions" id="permissions-pass">
 			<div data-template>
@@ -32,11 +32,10 @@
 		</div>
 
 		<div class="actions">
-			<a class="btn btn-large step1-refresh">{{ Lang::line('installer::button.refresh') }}</a>
-			<button type="submit" class="btn btn-large" id="continue-btn" {{ (count($permissions['fail']) > 0) ? 'disabled' : null }}>
+			<a href="{{ URL::to('installer/step_2') }}" class="btn btn-large {{ (count($permissions['fail']) > 0) ? 'disabled' : null }}" id="continue-btn">
 				{{ Lang::line('installer::button.next') }}
-			</button>
+			</a>
 		</div>
-	</form>
+	<!-- </form> -->
 </div>
 @endsection

@@ -344,6 +344,12 @@ class Platform
 		return call_user_func_array(array($plugin, $method), $parameters);
 	}
 
+	/**
+	 * Starts the Platform installer.
+	 *
+	 * @param   bool  Redirect
+	 * @return  void
+	 */
 	public static function start_installer($redirect = true)
 	{
 		Bundle::register('installer', array(
@@ -444,4 +450,31 @@ class Platform
 
 		return true;
 	}
+
+	/**
+	 * Returns the string for a Platform license.
+	 *
+	 * If no extension is defined, we assume the
+	 * default extension to be .txt
+	 *
+	 * @param   string  $license
+	 * @param   mixed   $default
+	 * @return  string
+	 */
+	public static function license($file = null, $default = null)
+	{
+		if ($file === null)
+		{
+			return File::get(path('licenses').DS.'platform.txt');
+		}
+
+		// Default extension
+		if ( ! pathinfo($file, PATHINFO_EXTENSION))
+		{
+			$file.='.txt';
+		}
+
+		return File::get(path('licenses').DS.$file, $default);
+	}
+
 }
