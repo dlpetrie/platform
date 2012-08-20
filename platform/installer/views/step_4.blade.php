@@ -5,12 +5,11 @@
 	<p class="step">An account to rule them all</p>
 	<div class="breadcrumbs">
 		<ul class="nav">
-			<li><span>Step 1:</span> Prepare installation</li>
-			<li><span>Step 2:</span> Database Credentials</li>
-			<li><span>Step 3:</span> Administration</li>
-			<li class="active">
-				<span>Step 4:</span> Complete
-			</li>
+			<ul class="nav">
+			<li><span>{{ Lang::line('installer::general.step_1.step') }}</span> {{ Lang::line('installer::general.step_1.step_description') }}</li>
+			<li><span>{{ Lang::line('installer::general.step_2.step') }}</span> {{ Lang::line('installer::general.step_2.step_description') }}</li>
+			<li><span>{{ Lang::line('installer::general.step_3.step') }}</span> {{ Lang::line('installer::general.step_3.step_description') }}</li>
+			<li class="active"><span>{{ Lang::line('installer::general.step_4.step') }}</span> {{ Lang::line('installer::general.step_4.step_description') }}</li>
 		</ul>
 	</div>
 @endsection

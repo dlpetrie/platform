@@ -230,28 +230,31 @@ form .actions {
 
 
 	#installer .content {
-		background: #f7f7f7;
+		background: #fbfbfb;
 		border:1px solid #fff;
 		margin:0;
-		padding:20px;
+		/*padding:20px;*/
 		text-align: center;
 	}
 
 	#installer .content .contain {
-		background:#fbfbfb;
-		border:1px solid #ddd;
-		padding:20px;
+		/*background:#fbfbfb;*/
+		/*border:1px solid #ddd;*/
+		/*padding:20px;*/
+		max-width:960px;
+		margin:0 auto;
 	}
 
 	#installer .content h2 {
 		font-family: Helvetica, Arial, sans-serif;
-		font-size: 32px;
+		font-size: 26px;
 		font-style: normal;
 		font-weight: bold;
 		text-transform: normal;
 		letter-spacing: -2px;
 		line-height: 1.2em;
 		color:#666;
+		margin-bottom:15px;
 	}
 
 	#installer .content code {
