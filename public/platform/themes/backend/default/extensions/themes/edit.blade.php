@@ -64,7 +64,7 @@
 			@else
 
 			<div class="unavailable">
-				{{ Lang::line('themes::themes.message.no_options') }}
+				{{ Lang::line('themes::messages.no_options') }}
 			</div>
 
 			@endif

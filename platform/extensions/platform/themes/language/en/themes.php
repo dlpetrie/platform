@@ -27,12 +27,7 @@ return array(
 	/* General */
 	'general' => array(
 		'author'      => 'Author:',
-		'version'     => 'Version:'
-	),
-
-	/* Messages */
-	'message' => array(
-		'no_options' => 'This theme has no options available.',
+		'version'     => 'Version:',
 	),
 
 );
