@@ -5,7 +5,7 @@
 	<div class="well">
 		<fieldset>
 
-			<label for="name">{{ Lang::line('users::groups.general.name') }}</label>
+			<label for="name">{{ Lang::line('users::form.groups.edit.name') }}</label>
 			<input type="text" id="name" name="name" value="{{ Input::old('name', $group['name']); }}">
 
 		</fieldset>

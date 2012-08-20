@@ -2,7 +2,7 @@
 
 <!-- Page Title -->
 @section('title')
-	{{ Lang::line('users::users.general.title') }}
+	{{ Lang::line('users::general.users.title') }}
 @endsection
 
 <!-- Queue Styles -->
@@ -26,8 +26,8 @@
 
 	<header class="head row">
 		<div class="span4">
-			<h1>{{ Lang::line('users::users.general.title') }}</h1>
-			<p>{{ Lang::line('users::users.general.description') }}</p>
+			<h1>{{ Lang::line('users::general.users.title') }}</h1>
+			<p>{{ Lang::line('users::general.users.description') }}</p>
 		</div>
 		<nav class="tertiary-navigation span8">
 			@widget('platform.menus::menus.nav', 2, 1, 'nav nav-pills pull-right', ADMIN)
