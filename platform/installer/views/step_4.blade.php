@@ -19,13 +19,9 @@
 
 	<h2>Installation Complete</h2>
 
-	<p class="lead">Congratulations - you've installed Platform! <strong>But wait! Not so fast</strong>, we highly recommend you delete the following folders now that you have completed the installation process.</p>
-	<pre><code>platform/installer/*</code></pre>
-	<pre><code>public/installer/*</code></pre>
+	<p class="lead">Congratulations - you've installed Platform! <strong>But wait! Not so fast</strong>, you must agree to our license agreement!</p>
 
-	<h2>Platform License Agreement</h2>
 	<pre style="word-break: break-word;"><?=$license?></pre>
-	<pre style="word-break: break-word;"><?=$laravel_license?></pre>
 
 	<div class="actions">
 		<p>
