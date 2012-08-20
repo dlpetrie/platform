@@ -1,54 +1,60 @@
-{{ Form::open('register', 'POST', array('id' => 'register-form', 'class' => 'form-horizontal')) }}
-{{ Form::token() }}
-	<fieldset>
-		<legend>{{ Lang::line('users::users.general.register') }}</legend>
 
+<form action="{{ URL::to_secure('/register') }}" id="register-form" class="form-horizontal" method="POST" accept-char="UTF-8">
+<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
+	<fieldset>
+		<legend>{{ Lang::line('users::form.auth.create.legend') }}</legend>
+		<p class="summary">{{ Lang::line('users::form.auth.create.summary') }}</p>
+		<hr>
 		<!-- First Name -->
 		<div>
-			{{ Form::label('first_name', lang::line('users::users.general.first_name')) }}
-			{{ Form::text('first_name', Input::old('first_name'), array('placeholder' => lang::line('users::users.general.first_name'), 'required')) }}
-			<span class="help">Type your first name.</span>
+			<label for="first_name">{{ lang::line('users::form.auth.create.first_name') }}:</label>
+			<input type="text" name="first_name" id="first_name" value="{{ Input::old('first_name') }}" placeholder="{{ lang::line('users::form.auth.create.first_name') }}" required>
+			<span class="help">{{ lang::line('users::form.auth.create.first_name_help') }}</span>
 		</div>
 
 		<!-- Last Name -->
 		<div>
-			{{ Form::label('last_name', lang::line('users::users.general.last_name')) }}
-			{{ Form::text('last_name', Input::old('last_name'), array('placeholder' => lang::line('users::users.general.last_name'), 'required')) }}
-			<span class="help">Type your last name.</span>
+			<label for="last_name">{{ lang::line('users::form.auth.create.last_name') }}:</label>
+			<input type="text" name="last_name" id="last_name" value="{{ Input::old('last_name') }}" placeholder="{{ lang::line('users::form.auth.create.last_name') }}" required>
+			<span class="help">{{ lang::line('users::form.auth.create.last_name_help') }}</span>
 		</div>
 
 		<!-- Email Address -->
 		<div>
-			{{ Form::label('email', lang::line('users::users.general.email')) }}
-			{{ Form::email('email', Input::old('email'), array('placeholder' => lang::line('users::users.general.email'), 'required')) }}
-			<span class="help">Type in your email address.</span>
+			<label for="email">{{ lang::line('users::form.auth.create.email') }}:</label>
+			<input type="email" name="email" id="email" value="{{ Input::old('email') }}" placeholder="{{ lang::line('users::form.auth.create.email') }}" required>
+			<span class="help">{{ lang::line('users::form.auth.create.email_help') }}</span>
 		</div>
 
 		<!-- Email Confirm -->
 		<div>
-			{{ Form::label('email_confirmation', lang::line('users::users.general.email_confirmation')) }}
-			{{ Form::email('email_confirmation', null, array('placeholder' => lang::line('users::users.general.email_confirmation'), 'required')) }}
-			<span class="help">Confirm your email address.</span>
+			<label for="email_confirmation">{{ lang::line('users::form.auth.create.email_confirm') }}:</label>
+			<input type="email" name="email_confirmation" id="email_confirmation" value="" placeholder="{{ lang::line('users::form.auth.create.email_confirm') }}" required>
+			<span class="help">{{ lang::line('users::form.auth.create.email_confirm_help') }}</span>
 		</div>
 
 		<!-- Password -->
 		<div>
-			{{ Form::label('password', lang::line('users::users.general.password')) }}
-			{{ Form::password('password', array('placeholder' => lang::line('users::users.general.password'), 'required')) }}
+			<label for="password">{{ lang::line('users::form.auth.create.password') }}:</label>
+			<input type="password" name="password" id="password" placeholder="{{ lang::line('users::form.auth.create.password') }}" required>
 			<span class="help">Type your password.</span>
 		</div>
 
 		<!-- Password Confirm -->
 		<div>
-			{{ Form::label('password_confirmation', lang::line('users::users.general.password_confirmation')) }}
-			{{ Form::password('password_confirmation', array('placeholder' => lang::line('users::users.general.password_confirmation'), 'required')) }}
-			<span class="help">confirm your password.</span>
+			<label for="password_confirmation">{{ lang::line('users::form.auth.create.password_confirm') }}:</label>
+			<input type="password" name="password_confirmation" id="" placeholder="{{ lang::line('users::form.auth.create.password_confirm') }}" required>
+			<span class="help">{{ lang::line('users::form.auth.create.password_confirm_help') }}</span>
 		</div>
 	</fieldset>
 
 	<p class="messages"></p>
+	<hr>
 
 	<div class="actions">
-		<button class="btn" type="submit">{{ Lang::line('users::users.button.register') }}</button>
+		<button class="btn" type="submit">{{ Lang::line('users::form.auth.create.submit') }}</button>
+		<p class="sub-actions">
+			<a href="{{ URL::to_secure('/') }}">{{ Lang::line('users::form.auth.create.cancel') }}</a>
+		</p>
 	</div>
 {{ Form::close() }}

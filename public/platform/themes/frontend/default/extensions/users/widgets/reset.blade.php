@@ -1,23 +1,26 @@
-{{ Form::open('reset_password', 'POST', array('id' => 'password-reset-form', 'class' => 'form-horizontal')) }}
-{{ Form::token() }}
+<form action="{{ URL::to_secure('/reset_password') }}" id="password-reset-form" class="form-horizontal" method="POST" accept-char="UTF-8">
+<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
 	<fieldset>
-		<legend>{{ Lang::line('users::users.general.reset_password') }}</legend>
+
+		<legend>{{ Lang::line('users::form.auth.reset.legend') }}</legend>
+		<p class="summary">{{ Lang::line('users::form.auth.reset.summary') }}</p>
+		<hr>
 
 		<!-- Email Address -->
 		<div>
-			{{ Form::label('email', lang::line('users::users.general.email')) }}
-			{{ Form::email('email', Input::old('email'), array('id' => 'email', 'placeholder' => lang::line('users::users.general.email'), 'required')) }}
-			<span class="help">Type in your email address.</span>
+			<label for="email">{{ lang::line('users::form.auth.login.email') }}:</label>
+			<input type="email" name="email" id="email" value="{{ Input::old('email') }}" placeholder="{{ lang::line('users::form.auth.login.email') }}" required>
+			<span class="help">{{ lang::line('users::form.auth.reset.email_help') }}</span>
 		</div>
 
 		<!-- Password -->
 		<div>
-			{{ Form::label('password', lang::line('users::users.general.new_password')) }}
-			{{ Form::password('password', array('placeholder' => lang::line('users::users.general.new_password'), 'required')) }}
-			<span class="help">Type your new password.</span>
+			<label for="password">{{ lang::line('users::form.auth.reset.password') }}:</label>
+			<input type="password" name="password" id="password" placeholder="{{ lang::line('users::form.auth.reset.password') }}" required>
+			<span class="help">{{ lang::line('users::form.auth.reset.password_help') }}</span>
 		</div>
 
-		<p class="help-block">{{ Lang::line('users::users.general.reset_help') }}</p>
+
 
 	</fieldset>
 
@@ -26,7 +29,12 @@
 
 	<p id="reset-feedback" data-wait="{{ Lang::line('users::users.reset.wait') }}" data-redirecting="{{ Lang::line('users::users.reset.redirect') }}"></p>
 
+	<hr>
+
 	<div class="actions">
-		<button class="btn" type="submit"/>{{ Lang::line('users::users.button.reset_password') }}</button>
+		<button class="btn" type="submit"/>{{ Lang::line('users::form.auth.reset.submit') }}</button>
+		<p class="sub-actions">
+			<a href="{{ URL::to_secure('/login') }}">{{ Lang::line('users::form.auth.reset.cancel') }}</a>
+		</p>
 	</div>
 {{ Form::close() }}

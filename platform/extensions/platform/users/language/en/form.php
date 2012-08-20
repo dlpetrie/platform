@@ -21,7 +21,7 @@
 return array(
 
 	'users' => array(
-		
+
 		'create' => array(
 			'first_name'       => 'First Name',
 			'last_name'        => 'Last Name',
@@ -51,6 +51,51 @@ return array(
 		'edit' => array(
 			'name' => 'Name',
 		),
+	),
+
+	'auth' => array(
+
+		'create' => array(
+			'legend'                => 'Register',
+			'summary'               => 'Join Platform',
+			'first_name'            => 'First Name',
+			'first_name_help'       => 'Type your first name.',
+			'last_name'             => 'Last Name',
+			'last_name_help'        => 'Type your last name.',
+			'email'                 => 'Email',
+			'email_help'            => 'Type your email address.',
+			'email_confirm'         => 'Confirm Email',
+			'email_confirm_help'    => 'Confirm your email address.',
+			'password'              => 'Password',
+			'password_help'         => 'Type your password.',
+			'password_confirm'      => 'Confirm Password',
+			'password_confirm_help' => 'Confirm your password.',
+			'submit'                => 'Register',
+			'cancel'                => 'Cancel',
+			),
+
+		'login' => array(
+			'legend'           => 'Login',
+			'summary'          => 'Welcome Back! Please sign in below.',
+			'email'            => 'Email',
+			'email_help'       => 'Type your email address.',
+			'password'         => 'Password',
+			'password_help'    => 'Type your password.',
+			'submit'           => 'Login',
+			'reset_password'   => 'Reset Password',
+		),
+
+		'reset' => array(
+			'legend'           => 'Reset Password',
+			'summary'          => 'An email will be sent with instructions',
+			'email'            => 'Email',
+			'email_help'       => 'Type your email address.',
+			'password'         => 'New Password',
+			'password_help'    => 'Type your new password.',
+			'submit'           => 'Reset Password',
+			'cancel'           => 'Cancel',
+		),
+
 	),
 
 );
