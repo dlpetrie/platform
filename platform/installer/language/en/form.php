@@ -20,15 +20,8 @@
 
 return array(
 
-	/* Forms */
-	'prepare' => array(
-		'legend'      => 'Prepare for Installation',
-		'description' => 'We\'ll need to make sure we can write to a few directories first. After installation, we\'ll have you change them back, safe and secure, warm and cozy.',
-	),
-
 	'database' => array(
 		'legend'          => 'Database Credentials',
-		'description'     => 'Now its time to create a database, then give us the details and we\'ll do the rest.',
 		'driver'          => 'Database Driver',
 		'driver_help'     => 'Select a driver.',
 		'server'          => 'Server',
@@ -45,7 +38,6 @@ return array(
 
 	'user' => array(
 		'legend'                => 'Database Credentials',
-		'description'           => 'Now you need an administrator, create your initial user and you\'re almost ready to rock.',
 		'first_name'            => 'First Name',
 		'first_name_help'       => 'First name of admin.',
 		'last_name'             => 'Last Name',

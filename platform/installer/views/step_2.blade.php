@@ -12,7 +12,7 @@
 
 @section('navigation')
 	<h1>{{ Lang::line('installer::general.step_2.title') }}</h1>
-	<p class="step">{{ Lang::line('installer::general.step_2.description') }}</p>
+	<p class="step">{{ Lang::line('installer::general.step_2.tagline') }}</p>
 	<div class="breadcrumbs">
 		<ul class="nav">
 			<ul class="nav">
@@ -27,11 +27,11 @@
 
 @section('content')
 <div class="grid contain">
+	<h2>{{ Lang::line('installer::general.step_2.description') }}</h2>
 	<form id="database-form" class="form-horizontal" method="POST" accept-char="UTF-8">
 	<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
 		<fieldset>
 			<legend>{{ Lang::line('installer::form.database.legend') }}</legend>
-			<h2>{{ Lang::line('installer::form.database.description') }}</h2>
 			<!-- Database Driver Select -->
 			<div>
 				<label for="driver">{{ Lang::line('installer::form.database.driver') }}</label>
@@ -87,6 +87,6 @@
 			<a class="btn btn-large" href="{{URL::to('installer/step_1');}}">{{ Lang::line('installer::button.previous') }}</a>
 			<button type="submit" class="btn btn-large" disabled>{{ Lang::line('installer::button.next') }}</button>
 		</div>
-	{{ Form::close() }}
+	</form>
 </div>
 @endsection
