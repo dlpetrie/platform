@@ -236,7 +236,9 @@ class Installer_Index_Controller extends Base_Controller
 	{
 		Session::forget('installer');
 
-		return View::make('installer::step_4');
+		return View::make('installer::step_4')
+		           ->with('license', Platform::license())
+		           ->with('laravel_license', Platform::license('laravel'));
 	}
 
 	/**
