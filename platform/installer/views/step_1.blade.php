@@ -17,6 +17,7 @@
 @section('content')
 <div class="contain">
 	<h2>{{ Lang::line('installer::general.step_1.description') }}</h2>
+	<hr>
 	<div class="permissions" id="permissions-pass">
 		<div data-template>
 			<code class="alert alert-success">[[.]]</code>
@@ -27,7 +28,6 @@
 			<code class="alert alert-error">[[.]]</code>
 		</div>
 	</div>
-
 	<div class="actions">
 		<a href="{{ URL::to('installer/step_2') }}" class="btn btn-large {{ (count($permissions['fail']) > 0) ? 'disabled' : null }}" id="continue-btn">
 			{{ Lang::line('installer::button.next') }}

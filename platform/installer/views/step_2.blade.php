@@ -26,8 +26,9 @@
 
 
 @section('content')
-<div class="grid contain">
+<div class="contain">
 	<h2>{{ Lang::line('installer::general.step_2.description') }}</h2>
+	<hr>
 	<form id="database-form" class="form-horizontal" method="POST" accept-char="UTF-8">
 	<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
 		<fieldset>

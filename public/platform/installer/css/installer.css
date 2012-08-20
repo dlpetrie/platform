@@ -270,6 +270,11 @@ form .actions {
 		width:400px;
 		margin:0 auto;
 	}
+
+	#installer fieldset {
+		border:none;
+	}
+	
 	#installer form legend {
 		text-align:center;
 	}
