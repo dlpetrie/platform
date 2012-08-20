@@ -2,7 +2,7 @@
 
 <!-- Page Title -->
 @section('title')
-	{{ Lang::line('themes::themes.title') }}
+	{{ Lang::line('themes::general.title') }}
 @endsection
 
 <!-- Queue Styles -->

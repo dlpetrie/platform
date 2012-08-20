@@ -2,7 +2,7 @@
 
 <!-- Page Title -->
 @section('title')
-	{{ Lang::line('themes::themes.title') }}
+	{{ Lang::line('themes::general.title') }}
 @endsection
 
 <!-- Queue Styles -->
@@ -25,8 +25,8 @@
 
 	<header class="row">
 			<div class="span4">
-				<h1>{{ Lang::line('themes::themes.title') }}</h1>
-				<p>{{ Lang::line('themes::themes.description') }}</p>
+				<h1>{{ Lang::line('themes::general.title') }}</h1>
+				<p>{{ Lang::line('themes::general.description') }}</p>
 			</div>
 			<nav class="actions span8 pull-right">
 			</nav>
@@ -41,8 +41,8 @@
 					<img src="{{ Theme::asset('../../'.$active['theme'].'/assets/img/theme-thumbnail.png') }}" title="{{ $active['theme'] }}">
 					<div class="caption">
 						<h5>{{ $active['name'] }}</h5>
-						<p class="version">{{ Lang::line('themes::themes.general.version') }} {{ $active['version'] }}</p>
-						<p class="author">{{ Lang::line('themes::themes.general.author') }}  {{ $active['author'] }}</p>
+						<p class="version">{{ Lang::line('themes::general.version') }} {{ $active['version'] }}</p>
+						<p class="author">{{ Lang::line('themes::general.author') }}  {{ $active['author'] }}</p>
 						<p>{{ $active['description'] }}</p>
 						<a href="{{ URL::to_secure(ADMIN.'/themes/edit/'.$type.'/'.$active['theme']) }}" class="btn" data-theme="{{ $active['theme'] }}" data-type="backend">{{ Lang::line('button.edit') }}</a>
 					</div>
@@ -65,8 +65,8 @@
 					<div class="caption">
 						<h5>{{ $theme['name'] }}</h5>
 						<p>{{ $theme['description'] }}</p>
-						<p>{{ Lang::line('themes::themes.general.version') }} {{ $theme['version'] }}</p>
-						<p>{{ Lang::line('themes::themes.general.author') }}  {{ $theme['author'] }}</p>
+						<p>{{ Lang::line('themes::general.version') }} {{ $theme['version'] }}</p>
+						<p>{{ Lang::line('themes::general.author') }}  {{ $theme['author'] }}</p>
 						<a href="{{ URL::to_secure(ADMIN.'/themes/activate/'.$type.'/'.$theme['theme']) }}" class="btn activate" data-token="{{ Session::token() }}" data-theme="{{ $theme['theme'] }}" data-type="{{ URI::segment(3) }}">{{ Lang::line('button.enable') }}</a>
 					</div>
 				</div>
