@@ -6,4 +6,4 @@ return array(
 	'uninstall' => 'Uninstall',
 	'update'    => 'Update',
 
-)
+);
