@@ -19,6 +19,7 @@
 {{ Theme::queue_asset('jquery-nestedsortable', 'js/jquery/nestedsortable-1.3.4.js', 'jquery') }}
 {{ Theme::queue_asset('jquery-nestysortable', 'js/jquery/nestysortable-1.0.js', 'jquery') }}
 {{ Theme::queue_asset('menussortable', 'menus::js/menussortable-1.0.js', 'jquery')}}
+{{ Theme::queue_asset('validate', 'js/validate.js', 'jquery')}}
 
 <!-- Scripts -->
 @section('scripts')
@@ -64,6 +65,10 @@
 				lastItemId           : {{ $last_item_id }}
 			}
 		});
+
+		//validate forms
+		Validate.setup($("#platform-menu"));
+
 	});
 	</script>
 @endsection
@@ -108,16 +113,15 @@
 								<fieldset>
 
 									<div>
-										{{ Form::text(null, null, array('class' => 'input-block-level', 'id' => 'new-item-name', 'placeholder' => Lang::line('menus::form.item.name'), 'required')) }}
+										<input type="text" name="new_item_name" id="new-item-name" value="" placeholder="{{ Lang::line('menus::form.item.name') }}" required>
 									</div>
 
 									<div>
-										{{ Form::text(null, null, array('class' => 'input-block-level item-slug', 'id' => 'new-item-slug', 'placeholder' => Lang::line('menus::form.item.slug'), 'required')) }}
+										<input type="text" name="new_item_slug" id="new-item-slug" value="" placeholder="{{ Lang::line('menus::form.item.slug') }}" required>
 									</div>
 
 									<div>
-										{{ Form::label('new-item-uri', Lang::line('menus::form.item.uri')) }}
-										{{ Form::text(null, null, array('class' => 'input-block-level', 'id' => 'new-item-uri', 'placeholder' => Lang::line('menus::form.item.uri'), 'required')) }}
+										<input type="text" name="new_item_slug" id="new-item-uri" value="" placeholder="{{ Lang::line('menus::form.item.uri') }}" required>
 									</div>
 
 									<div>

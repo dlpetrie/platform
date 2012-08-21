@@ -329,5 +329,23 @@ form .actions {
 	}
 
 
+/* #A few bootstrap overides
+==================================================*/
+
+.table {
+	background-color:@white;
+}
+
+.btn-primary:hover {
+	color: @white;
+    text-decoration: none;
+    background-color: lighten(@purple, 5%);
+    *background-color: lighten(@purple, 10%); /* Buttons in IE7 don't get borders, so darken on hover */
+    background-position: 0 -40px;
+    // transition is only when going to hover, otherwise the background
+    // behind the gradient (there for IE<=9 fallback) gets mismatched
+    .transition(background-position .08s linear);
+}
+
 
 @import "bootstrap/less/responsive.less";

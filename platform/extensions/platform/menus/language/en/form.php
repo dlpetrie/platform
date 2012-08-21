@@ -7,8 +7,8 @@ return array(
 		'name'        => 'Name',
 		'slug'        => 'Slug',
 		'uri'         => 'Uri',
-		'secure'      => 'Secure (HTTPS)',
-		'target'      => 'Open in a new window.',
+		'secure'      => 'Make Secure (HTTPS)',
+		'target'      => 'Target new window.',
 		'type'        => 'Visibility',
 		'show_always' => 'Show Always',
 

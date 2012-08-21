@@ -20,8 +20,6 @@
 
 @import "bootstrap/less/bootstrap.less";
 
-
-
 /* #Layout
 ================================================== */
 body {background:@bodyBackground;}
@@ -265,6 +263,16 @@ form label {
 	min-width:120px;
 }
 
+form p.title {
+	text-align:center;
+	border-bottom:1px solid @etch;
+	padding:4px;
+}
+form label.check {
+	min-width:0;
+	padding:4px;
+}
+
 form input,
 form textarea,
 form select {
@@ -349,4 +357,5 @@ form .actions {
     // behind the gradient (there for IE<=9 fallback) gets mismatched
     .transition(background-position .08s linear);
 }
+
 @import "bootstrap/less/responsive.less";
