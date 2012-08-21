@@ -140,7 +140,7 @@
 									<!-- Secure HTTPS -->
 									<div>
 										<p class="title">{{ Lang::line('menus::form.item.secure') }}</p>
-										<div class="toggle basic primary" data-enabled="ENABLED" data-disabled="DISABLED" data-toggle="toggle">
+										<div class="toggle basic success" data-enabled="ENABLED" data-disabled="DISABLED" data-toggle="toggle">
 											<input type="checkbox" value="1" name="new_item_secure" id="new-item-secure" class="checkbox" />
 											<label class="check" for="new_item_secure"></label>
 										</div>
@@ -149,7 +149,7 @@
 									<!-- Target -->
 									<div>
 										<p class="title">{{ Lang::line('menus::form.item.target') }}</p>
-										<div class="toggle basic primary" data-enabled="ENABLED" data-disabled="DISABLED" data-toggle="toggle">
+										<div class="toggle basic success" data-enabled="ENABLED" data-disabled="DISABLED" data-toggle="toggle">
 											<input type="checkbox" value="1" name="new_item_target" id="new-item-target" class="checkbox" />
 											<label class="check" for="new_item_target"></label>
 										</div>
