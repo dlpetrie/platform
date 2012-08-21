@@ -24,10 +24,7 @@
 
 	</fieldset>
 
-
-	<p class="errors"></p>
-
-	<p id="reset-feedback" data-wait="{{ Lang::line('users::users.reset.wait') }}" data-redirecting="{{ Lang::line('users::users.reset.redirect') }}"></p>
+	<p class="messages" data-wait="{{ Lang::line('users::users.login.wait') }}" data-redirecting="{{ Lang::line('users::users.login.redirect') }}"></p>
 
 	<hr>
 

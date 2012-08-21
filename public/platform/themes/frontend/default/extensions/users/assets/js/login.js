@@ -1,6 +1,6 @@
 (function($) {
 	var $form          = $('#login-form');
-	var $loginFeedback = $('#login-feedback');
+	var $loginFeedback = $('.messages');
 
 	$form.on('submit', function(e) {
 		e.preventDefault();
