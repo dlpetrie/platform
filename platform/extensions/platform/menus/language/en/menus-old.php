@@ -43,11 +43,6 @@ return array(
 
 	/* Buttons */
 	'button' => array(
-		// 'create'               => 'Create Menu',
-		// 'cancel'               => 'Cancel',
-		// 'delete'               => 'Delete',
-		// 'edit'                 => 'Edit',
-		// 'update'               => 'Save Changes',
 		'add_item'             => 'Add Item',
 		'remove_item'          => 'Remove Item',
 		'remove_item_disabled' => 'Required - Cannot Remove',

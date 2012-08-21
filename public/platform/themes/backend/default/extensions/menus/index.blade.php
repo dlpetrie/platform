@@ -2,7 +2,7 @@
 
 <!-- Page Title -->
 @section('title')
-	{{ Lang::line('menus::menus.title') }}
+	{{ Lang::line('menus::general.title') }}
 @endsection
 
 <!-- Queue Styles -->
@@ -24,8 +24,8 @@
 
 	<header class="row">
 			<div class="span4">
-				<h1>{{ Lang::line('menus::menus.title') }}</h1>
-				<p>{{ Lang::line('menus::menus.tagline') }}</p>
+				<h1>{{ Lang::line('menus::general.title') }}</h1>
+				<p>{{ Lang::line('menus::general.tagline') }}</p>
 			</div>
 			<nav class="actions span8 pull-right">
 				{{ HTML::link_to_secure(ADMIN.'/menus/create', Lang::line('button.create'), array('class' => 'btn btn-large btn-primary')) }}

@@ -145,7 +145,7 @@ class Menus_API_Menus_Controller extends API_Controller
 				'message' => "Menu [$slug] either not a root menu item or doesn't exist.",
 			), API::STATUS_NOT_FOUND);
 		}
- 
+
 		// Posting whole menu
 		if (($children = Input::get('children')) and ! is_array($children))
 		{
@@ -193,7 +193,7 @@ class Menus_API_Menus_Controller extends API_Controller
 			if ( ! $menu->save())
 			{
 				return new Response(array(
-					'message' => Lang::line('menus::menus.update.error')->get(),
+					'message' => Lang::line('menus::messages.update.error')->get(),
 					'errors'  => ($menu->validation()->errors->has()) ? $menu->validation()->errors->all() : array(),
 				), ($menu->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 			}
