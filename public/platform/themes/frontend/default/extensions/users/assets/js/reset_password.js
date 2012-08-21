@@ -1,6 +1,6 @@
 (function($) {
 	var $form          = $('#password-reset-form');
-	var $resetFeedback = $('#reset-feedback');
+	var $resetFeedback = $('.messages');
 
 	$form.on('submit', function(e) {
 		e.preventDefault();
