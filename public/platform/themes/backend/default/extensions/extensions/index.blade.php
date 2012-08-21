@@ -24,7 +24,7 @@
 	<header class="row">
 			<div class="span4">
 				<h1>{{ Lang::line('extensions::general.title') }}</h1>
-				<p>{{ Lang::line('extensions::general.tagline') }}</p>
+				<p>{{ Lang::line('extensions::general.description') }}</p>
 			</div>
 			<nav class="actions span8 pull-right">
 			</nav>

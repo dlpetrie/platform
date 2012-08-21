@@ -2,8 +2,8 @@
 
 return array(
 
-	'title'   => 'Menus Management',
-	'tagline' => 'Manage menus and their items.',
+	'title'       => 'Menus Management',
+	'description' => 'Manage menus and their items.',
 
 	/* Tabs */
 	'tabs' => array(

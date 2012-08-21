@@ -20,7 +20,7 @@
 
 return array(
 
-	'title'        => 'Platform Dashboard',
-	'tagline'  => 'Application Overview',
+	'title'       => 'Platform Dashboard',
+	'description' => 'Application Overview',
 
 );
