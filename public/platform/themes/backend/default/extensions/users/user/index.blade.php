@@ -52,7 +52,7 @@
 				<div class="row">
 					<div class="span10">
 						<div class="table-wrapper">
-							<table id="users-table" class="table table-bordered">
+							<table id="users-table" class="table table-bordered table-striped">
 								<thead>
 									<tr>
 										@foreach ($columns as $key => $col)
