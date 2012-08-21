@@ -82,7 +82,7 @@ return array(
 		'mysql' => array(
 			'driver'   => 'mysql',
 			'host'     => 'localhost',
-			'database' => 'platform',
+			'database' => 'plattest',
 			'username' => 'root',
 			'password' => '',
 			'charset'  => 'utf8',
