@@ -7,6 +7,8 @@
 
 <!-- Queue Styles -->
 {{ Theme::queue_asset('menus', 'menus::css/menus.less', 'style') }}
+{{ Theme::queue_asset('toggle', 'css/bootstrap/less/toggle.less', 'style') }}
+
 
 <!-- Styles -->
 @section ('styles')
@@ -15,6 +17,7 @@
 <!-- Queue Scripts -->
 {{ Theme::queue_asset('jquery-helpers', 'js/jquery/helpers.js', 'jquery') }}
 {{ Theme::queue_asset('bootstrap-tab', 'js/bootstrap/tab.js', 'jquery') }}
+{{ Theme::queue_asset('bootstrap-toggle', 'js/bootstrap/toggle.js', 'jquery') }}
 {{ Theme::queue_asset('jquery-ui', 'js/jquery/ui-1.8.18.min.js', 'jquery') }}
 {{ Theme::queue_asset('jquery-nestedsortable', 'js/jquery/nestedsortable-1.3.4.js', 'jquery') }}
 {{ Theme::queue_asset('jquery-nestysortable', 'js/jquery/nestysortable-1.0.js', 'jquery') }}
@@ -66,8 +69,15 @@
 			}
 		});
 
+		// Toggle Checkboxes.
+		$('.basic').toggle({
+			style: {
+				enabled: 'primary'
+			}
+		});
+
 		//validate forms
-		Validate.setup($("#platform-menu"));
+		//Validate.setup($("#platform-menu"));
 
 	});
 	</script>
@@ -107,49 +117,58 @@
 
 							<div class="well">
 
-								<legend>{{ Lang::line('menus::form.item.legend') }}</legend>
-								<hr>
-
 								<fieldset>
+									<legend>{{ Lang::line('menus::form.item.legend') }}</legend>
+									<hr>
 
+									<!-- Item Name -->
 									<div>
 										<input type="text" name="new_item_name" id="new-item-name" value="" placeholder="{{ Lang::line('menus::form.item.name') }}" required>
 									</div>
 
+									<!-- Slug -->
 									<div>
 										<input type="text" name="new_item_slug" id="new-item-slug" value="" placeholder="{{ Lang::line('menus::form.item.slug') }}" required>
 									</div>
 
+									<!-- URI -->
 									<div>
-										<input type="text" name="new_item_slug" id="new-item-uri" value="" placeholder="{{ Lang::line('menus::form.item.uri') }}" required>
+										<input type="text" name="new_item_slug" id="new-item-uri" value="" placeholder="{{ Lang::line('menus::form.item.uri') }}">
 									</div>
 
+									<!-- Secure HTTPS -->
 									<div>
-										<label class="checkbox">
-											{{ Form::checkbox(null, 1, false, array('id' => 'new-item-secure')) }}
-											{{ Lang::line('menus::form.item.secure') }}
-										</label>
+										<p class="title">{{ Lang::line('menus::form.item.secure') }}</p>
+										<div class="toggle basic primary" data-enabled="ON" data-disabled="OFF" data-toggle="toggle">
+											<input type="checkbox" value="1" name="new_item_secure" id="new-item-secure" class="checkbox" />
+											<label class="check" for="new_item_secure"></label>
+										</div>
 									</div>
 
+									<!-- Target -->
 									<div>
-										<label class="checkbox">
-											{{ Form::checkbox(null, 1, false, array('id' => 'new-item-target')) }}
-											{{ Lang::line('menus::form.item.target') }}
-										</label>
+										<p class="title">{{ Lang::line('menus::form.item.target') }}</p>
+										<div class="toggle basic primary" data-enabled="ON" data-disabled="OFF" data-toggle="toggle">
+											<input type="checkbox" value="1" name="new_item_target" id="new-item-target" class="checkbox" />
+											<label class="check" for="new_item_target"></label>
+										</div>
 									</div>
 
+									<!-- Visability-->
 									<div>
 										{{ Form::label('new-item-type', Lang::line('menus::form.item.type')) }}
 										{{ Form::select(null, array('0' => Lang::line('menus::form.item.show_always'), '1' => Lang::line('menus::form.item.logged_in'), '2' => Lang::line('menus::form.item.logged_out'), '3' => Lang::line('menus::form.item.admin')), '0', array('id' => 'new-item-type')) }}
 									</div>
+
 								</fieldset>
 								<hr>
-
-								<button type="button" class="btn btn-small btn-primary items-add-new">{{ Lang::line('menus::button.add_item') }}</button>
+								<div class="actions">
+									<button type="button" class="btn btn-large btn-primary items-add-new">{{ Lang::line('menus::button.add_item') }}</button>
+								</div>
 
 							</div>
 
-						</div>
+						</div> <!-- /end - platform-new-item -->
 
 						<ol class="platform-menu">
 							@if (isset($menu['children']) and (is_array($menu['children'])))
