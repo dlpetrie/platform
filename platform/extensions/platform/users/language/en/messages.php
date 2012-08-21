@@ -26,7 +26,7 @@ return array(
 	'groups' => array(
 
 		'does_not_exist' => 'Group :id does not exist.',
-		
+
 		'create' => array(
 			'error'   => 'Group was not created, please try again.',
 			'success' => 'Group created successfully.',
@@ -53,7 +53,7 @@ return array(
 		'password_success'         => 'Your password has been reset, please check your email to confirm.',
 		'redirect'                 => 'Redirecting...',
 		'success'                  => 'Succesfully logged in',
-		'wait'                     => 'Pleas wait...',
+		'wait'                     => 'Please wait...',
 	),
 
 );
