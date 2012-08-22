@@ -4,7 +4,8 @@ return array(
 
 	'users' => array(
 
-		'does_not_exist' => 'User :id does not exist.',
+		'does_not_exist' => 'User does not exist.',
+		'id_required'    => 'A User ID is required to update permissions.',
 
 		'create' => array(
 			'error'   => 'User was not created, please try again.',
@@ -25,7 +26,8 @@ return array(
 
 	'groups' => array(
 
-		'does_not_exist' => 'Group :id does not exist.',
+		'does_not_exist' => 'Group does not exist.',
+		'id_required'    => 'A Group ID is required to update permissions.',
 
 		'create' => array(
 			'error'   => 'Group was not created, please try again.',
@@ -45,6 +47,8 @@ return array(
 	),
 
 	'auth' => array(
+		'activate_account'         => ' - Activate Account',
+		'activate_error'           => 'Could not activate user.',
 		'error'                    => 'Check your emails!',
 		'invalid_login'            => 'Invalid user name or password.',
 		'password_confirm_success' => 'Your password reset has confirmed and updated successfully. You may now log in with your new password.',
@@ -55,5 +59,7 @@ return array(
 		'success'                  => 'Succesfully logged in',
 		'wait'                     => 'Please wait...',
 	),
+
+
 
 );

@@ -169,7 +169,7 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 	{
 		if ( ! $id)
 		{
-			Platform::messages()->error('A group Id is required to update permissions.');
+			Platform::messages()->error(Lang::line('users::messages.groups.id_required')->get());
 			return Redirect::to_secure(ADMIN.'/users/groups');
 		}
 
