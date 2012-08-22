@@ -67,7 +67,7 @@ class Menus
 					// We want to automatically filter
 					// what items show (according to Session)
 					// data
-					'filter_type' => 'automatic',
+					'filter_visibility' => 'automatic',
 				));
 			}
 			catch (APIClientException $e)
