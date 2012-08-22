@@ -33,11 +33,11 @@ $(document).ready(function() {
 
 		// Setup the tepo templates.
 		var permissionsPass = Tempo.prepare('permissions-pass', {
-			'var_braces' : '\\[\\[\\]\\]',
+			'var_braces' : '\\[\\%\\%\\]',
 			'tag_braces' : '\\[\\?\\?\\]'
 		});
 		var permissionsFail = Tempo.prepare('permissions-fail', {
-			'var_braces' : '\\[\\[\\]\\]',
+			'var_braces' : '\\[\\%\\%\\]',
 			'tag_braces' : '\\[\\?\\?\\]'
 		});
 
