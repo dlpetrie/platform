@@ -218,11 +218,9 @@ abstract class Model {
 	{
 		$model = new static(array(), true);
 
-		$model->fill($attributes);
+		if (static::$timestamps) $attributes['updated_at'] = new \DateTime;
 
-		if (static::$timestamps) $model->timestamp();
-
-		return $model->query()->where($model->key(), '=', $id)->update($model->attributes);
+		return $model->query()->where($model->key(), '=', $id)->update($attributes);
 	}
 
 	/**
@@ -482,7 +480,7 @@ abstract class Model {
 	 */
 	public function changed($attribute)
 	{
-		return array_get($this->attributes, $attribute) != array_get($this->original, $attribute);
+		return array_get($this->attributes, $attribute) !== array_get($this->original, $attribute);
 	}
 
 	/**

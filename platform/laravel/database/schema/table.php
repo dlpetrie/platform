@@ -113,7 +113,6 @@ class Table {
 	 *
 	 * @param  string|array  $columns
 	 * @param  string        $name
-	 * @return Fluent
 	 */
 	public function foreign($columns, $name = null)
 	{
@@ -143,17 +142,6 @@ class Table {
 		}
 
 		return $this->command($type, compact('name', 'columns'));
-	}
-
-	/**
-	 * Rename the database table.
-	 *
-	 * @param  string  $name
-	 * @return Fluent
-	 */
-	public function rename($name)
-	{
-		return $this->command(__FUNCTION__, compact('name'));
 	}
 
 	/**
@@ -405,7 +393,9 @@ class Table {
 	{
 		$parameters = array_merge(compact('type'), $parameters);
 
-		return $this->commands[] = new Fluent($parameters);
+		$this->commands[] = new Fluent($parameters);
+
+		return end($this->commands);
 	}
 
 	/**
@@ -419,7 +409,9 @@ class Table {
 	{
 		$parameters = array_merge(compact('type'), $parameters);
 
-		return $this->columns[] = new Fluent($parameters);
+		$this->columns[] = new Fluent($parameters);
+
+		return end($this->columns);
 	}
 
 }

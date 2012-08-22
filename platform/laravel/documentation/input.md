@@ -145,10 +145,4 @@ Sometimes you may wish to merge or replace the current input. Here's how:
 
 #### Replacing the entire input array with new data:
 
-	Input::replace(array('doctor' => 'Bones', 'captain' => 'Kirk'));
-
-## Clearing Input
-
-To clear all input data for the current request, you may use the `clear` method:
-
-	Input::clear();
+	Input::merge(array('doctor' => 'Bones', 'captain' => 'Kirk'));
