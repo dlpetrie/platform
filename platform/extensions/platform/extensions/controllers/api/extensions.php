@@ -75,7 +75,7 @@ class Extensions_API_Extensions_Controller extends API_Controller
 				}
 
 				return new Response(array(
-					'message' => 'Invalid extension filter provided.',
+					'message' => Lang::line('extensions::messages.errors.invalid_filter')->get()
 				), API::STATUS_BAD_REQUEST);
 			}
 
@@ -106,7 +106,9 @@ class Extensions_API_Extensions_Controller extends API_Controller
 		if ( ! Platform::extensions_manager()->find_extension_file($slug))
 		{
 			return new Response(array(
-				'message' => "Extension [$slug] doesn't exist.",
+				'message' => Lang::line('extensions::messages.errors.does_not_exist', array(
+					'slug' => $slug
+				))->get(),
 			), API::STATUS_NOT_FOUND);
 		}
 
@@ -173,7 +175,9 @@ class Extensions_API_Extensions_Controller extends API_Controller
 		if ( ! Platform::extensions_manager()->find_extension_file($slug))
 		{
 			return new Response(array(
-				'message' => "Extension [$slug] doesn't exist.",
+				'message' => Lang::line('extensions::messages.errors.does_not_exist', array(
+					'slug' => $slug
+				))->get(),
 			), API::STATUS_NOT_FOUND);
 		}
 
