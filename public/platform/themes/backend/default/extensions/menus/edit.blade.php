@@ -18,7 +18,7 @@
 {{ Theme::queue_asset('bootstrap-tab', 'js/bootstrap/tab.js', 'jquery') }}
 {{ Theme::queue_asset('bootstrap-toggle', 'js/bootstrap/toggle.js', 'jquery') }}
 {{ Theme::queue_asset('jquery-ui', 'js/jquery/ui-1.8.18.min.js', 'jquery') }}
-{{ Theme::queue_asset('jquery-nestedsortable', 'js/jquery/nestedsortable-1.3.4.js', 'jquery') }}
+{{ Theme::queue_asset('jquery-nestedsortable', 'js/jquery/nestedsortable-1.3.5.js', 'jquery') }}
 {{ Theme::queue_asset('jquery-nestysortable', 'js/jquery/nestysortable-1.0.js', 'jquery') }}
 {{ Theme::queue_asset('menussortable', 'menus::js/menussortable-1.0.js', 'jquery') }}
 {{ Theme::queue_asset('validate', 'js/validate.js', 'jquery') }}
@@ -35,6 +35,16 @@
 				disabled: 'danger'
 			}
 		});
+
+		// Menu sortable plugin
+		$('#menus-edit').menuSortable({
+
+			// Array of ALL existing
+			// slugs. Just so we don't
+			// have any clashes
+			persistedSlugs: {{ json_encode($persisted_slugs) }}
+
+		})
 	});
 </script>
 @endsection
@@ -139,9 +149,6 @@
 									@render('menus::edit.child', array('child' => $child))
 								@endforeach
 							</ol>
-
-
-							{{ json_encode(render('menus::edit.child', array('child' => array()))) }}
 
 						</div>
 					</div>

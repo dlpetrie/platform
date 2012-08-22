@@ -59,9 +59,24 @@
 			// Nesty sortable settings
 			nestySortable: {
 
-				// Default nesty sortable settings for this menu
-				sortableSelector : '.platform-menu',
+				// The selector for the sortable list,
+				// used to cache the sortable list property
+				sortableSelector : '.menu-children',
+
+				// Is the form to AJAX submit or tranditional
+				// submit?
 				ajax             : false,
+
+				// Selectors for DOM elements for each active
+				// item.
+				itemSelector              : '.child',
+				itemHandleSelector        : '.child-header',
+				itemToggleDetailsSelector : '.child-toggle-details',
+				itemDetailsSelector       : '.child-details',
+				itemRemoveSelector        : '.child-remove',
+
+				// Invalid field callback - must return true for valid
+				// field or false for invalid field.
 				invalidFieldCallback : function(field, value) {
 					$(field.newSelector).closest('.control-group').addClass('error');
 				}
