@@ -129,7 +129,7 @@ class Platform
 		{
 			$pattern = Blade::matcher('widget');
 
-			return preg_replace($pattern, '<?php echo Platform::widget$2; ?>', $view);
+			return preg_replace($pattern, '<?php echo Platform::widget$1; ?>', $view);
 		});
 
 		// register @plugin with blade

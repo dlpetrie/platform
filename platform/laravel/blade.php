@@ -187,7 +187,7 @@ class Blade {
 	protected static function compile_comments($value)
 	{
 		$value = preg_replace('/\{\{--(.*?)--\}\}/', "<?php // $1 ?>", $value);
-		
+
 		return preg_replace('/\{\{--(.*?)--\}\}/s', "<?php /* ?>$1<?php */ ?>", $value);
 	}
 
@@ -463,7 +463,7 @@ class Blade {
 	 */
 	public static function matcher($function)
 	{
-		return '/@'.$function.'\s*?(\(.+?\))/';
+		return '/@'.$function.'\s*?(\(.+)/';
 	}
 
 	/**
