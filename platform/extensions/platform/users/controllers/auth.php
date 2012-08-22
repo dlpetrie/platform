@@ -291,7 +291,7 @@ class Users_Auth_Controller extends Public_Controller
 				Platform::messages()->error($error);
 			}
 
-			return Redirect::to_secure('resset_password');
+			return Redirect::to_secure('reset_password');
 		}
 	}
 
