@@ -61,7 +61,7 @@ class Settings_API_Settings_Controller extends API_Controller
 		if ( ! $result)
 		{
 			return new Response(array(
-				'message' => 'No found for the given parameters.',
+				'message' => Lang::line('settings::messages.errors.none_found')->get(),
 			), API::STATUS_NOT_FOUND);
 		}
 
@@ -183,7 +183,7 @@ class Settings_API_Settings_Controller extends API_Controller
 		if (count($errors) > 0)
 		{
 			return new Response(array(
-				'message' => 'Errors occured.',
+				'message' => Lang::line('settings::messages.errors.occured')->get(),
 				'errors'  => $errors,
 			), API::STATUS_UNPROCESSABLE_ENTITY);
 		}
@@ -192,7 +192,7 @@ class Settings_API_Settings_Controller extends API_Controller
 		{
 			return new Response(null, API::STATUS_NO_CONTENT);
 		}
-		
+
 		return new Response($updated);
 	}
 

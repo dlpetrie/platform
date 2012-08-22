@@ -64,7 +64,7 @@ class Themes_API_Themes_Controller extends API_Controller
 
 			// Otherwise, 404 the user
 			return new Response(array(
-				'message' => 'No themes.',
+				'message' => Lang::line('themes::messages.no_themes_found')->get(),
 			), API::STATUS_NOT_FOUND);
 		}
 
@@ -80,7 +80,7 @@ class Themes_API_Themes_Controller extends API_Controller
 
 				// None? 404
 				return new Response(array(
-					'message' => 'Theme not found.',
+					'message' => Lang::line('themes::messages.not_found')->get(),
 				), API::STATUS_NOT_FOUND);
 			}
 
@@ -92,7 +92,7 @@ class Themes_API_Themes_Controller extends API_Controller
 
 			// None? 404
 			return new Response(array(
-				'message' => 'Themes not found.',
+				'message' => Lang::line('themes::messages.no_themes_found')->get(),
 			), API::STATUS_NOT_FOUND);
 		}
 	}
@@ -115,7 +115,7 @@ class Themes_API_Themes_Controller extends API_Controller
 		if ( ! $theme = Theme::fetch($type, $name))
 		{
 			return new Response(array(
-				'message' => 'Theme not found.',
+				'message' => Lang::line('themes::messages.not_found')->get(),
 			), API::STATUS_NOT_FOUND);
 		}
 
@@ -154,7 +154,7 @@ class Themes_API_Themes_Controller extends API_Controller
 		if ( ! $theme_info = Theme::fetch($type, $name))
 		{
 			return new Response(array(
-				'message' => 'Theme not found.',
+				'message' => Lang::line('themes::messages.not_found')->get(),
 			), API::STATUS_NOT_FOUND);
 		}
 
@@ -202,7 +202,7 @@ class Themes_API_Themes_Controller extends API_Controller
 		{
 			return array(
 				'status'  => false,
-				'message' => 'Type and Theme are required'
+				'message' => Lang::line('themes::messages.errors.theme_and_type_required')->get(),
 			);
 		}
 
@@ -210,7 +210,7 @@ class Themes_API_Themes_Controller extends API_Controller
 		{
 			return array(
 				'status'  => false,
-				'message' => 'Options must be null or an array'
+				'message' => Lang::line('themes::messages.errors.invalid_options')->get(),
 			);
 		}
 
@@ -247,13 +247,13 @@ class Themes_API_Themes_Controller extends API_Controller
 		{
 			return array(
 				'status'  => true,
-				'message' => 'Theme updated',
+				'message' => Lang::line('themes::messages.success.update')->get(),
 			);
 		}
 
 		return array(
 			'status'  => false,
-			'message' => 'Theme not updated'
+			'message' => Lang::line('themes.messages.errors.update')->get(),
 		);
 	}
 

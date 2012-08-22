@@ -110,21 +110,23 @@ class Installer_Index_Controller extends Base_Controller
 	public function get_step_2()
 	{
 		// Initialize data array
-		$data = array(
+		$credentials = array(
 			'driver'   => null,
 			'host'     => null,
 			'username' => null,
 			'database' => null,
 		);
 
-		// check for session data
-		$credentials = Installer::get_step_data(2, array());
-		foreach ($credentials as $values => $value)
+		// Check for session data
+		$credentials = array_merge($credentials, Installer::get_step_data(2, function()
 		{
-			$data[$values] = $value;
-		}
+			// Look for existing config data
+			$connections = Config::get('database.connections', array());
+			$connection = reset($connections);
+			return (is_array($connection)) ? $connection : array();
+		}));
 
-		return View::make('installer::step_2')->with('drivers', Installer::database_drivers())->with('credentials', $data);
+		return View::make('installer::step_2')->with('drivers', Installer::database_drivers())->with('credentials', $credentials);
 	}
 
 	/**

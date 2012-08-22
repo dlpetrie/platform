@@ -38,8 +38,8 @@
 				<label for="driver">{{ Lang::line('installer::form.database.driver') }}</label>
 				<select name="driver" id="driver" required>
 					<option value="">{{ Lang::line('installer::form.database.driver') }}</option>
-					@foreach ($drivers as $value => $name)
-						<option value="{{ $value }}">{{ $name }}</option>
+					@foreach ($drivers as $driver => $label)
+						<option value="{{ $driver }}" {{ ($driver == $credentials['driver']) ? 'selected' : null}}>{{ $label }}</option>
 					@endforeach
 				</select>
 				<span class="help">{{ Lang::line('installer::form.database.driver_help') }}</span>
