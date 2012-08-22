@@ -2,6 +2,11 @@
 
 return array(
 
+	'root' => array(
+		'name' => 'Name',
+		'slug' => 'Slug',
+	),
+
 	// Common
 	'child' => array(
 		'name'   => 'Name',

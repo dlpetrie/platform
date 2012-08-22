@@ -18,11 +18,11 @@
 			childControlGroupSelector: '.control-group',
 
 			// Slug input selector
-			slugInputSelector:   '.child-slug',
-			uriInputSelector:    '.child-uri',
-			secureInputSelector: '.child-secure',
-			visibilityInputSelector:   '.child-visibility',
-			targetInputSelector: '.child-target',
+			slugInputSelector:       '.child-slug',
+			uriInputSelector:        '.child-uri',
+			secureInputSelector:     '.child-secure',
+			visibilityInputSelector: '.child-visibility',
+			targetInputSelector:     '.child-target',
 
 			// Name
 			rootNameSelector: '#menu-name',
@@ -67,6 +67,17 @@
 				// submit?
 				ajax             : false,
 
+				// Selectors relating to items, but aren't
+				// located inside each item in the DOM
+				itemAddButtonSelector        : '.children-add-new',
+
+				// This is the selector for the new item's template.
+				// This container should be hidden at all times as we
+				// clone the HTML inside of this, apply the template and
+				// then attach that to the end of the list.
+				itemTemplateContainerSelector : '.new-child-template-container',
+				itemTemplateSelector          : '.new-child-template',
+
 				// Selectors for DOM elements for each active
 				// item.
 				itemSelector              : '.child',
@@ -79,7 +90,12 @@
 				// field or false for invalid field.
 				invalidFieldCallback : function(field, value) {
 					$(field.newSelector).closest('.control-group').addClass('error');
-				}
+				},
+
+				// The input name for the items
+				// hierarchy that's posted to
+				// the server.
+				hierarchyInputName: 'children_hierarchy'
 			}
 		},
 

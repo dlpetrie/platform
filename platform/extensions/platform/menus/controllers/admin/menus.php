@@ -284,14 +284,14 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 		// If we have children, call the function again
 		if (isset($child['children']) and is_array($child['children']) and count($child['children']) > 0)
 		{
-			$children = array();
+			$grand_children = array();
 
 			foreach ($child['children'] as $child)
 			{
-				$this->process_child_recursively($child, $children);
+				$this->process_child_recursively($child, $grand_children);
 			}
 
-			$new_child['children'] = $children;
+			$new_child['children'] = $grand_children;
 		}
 
 		$children[] = $new_child;

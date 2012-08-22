@@ -147,7 +147,7 @@ class Menus_API_Menus_Controller extends API_Controller
 		}
 
 		// Posting whole menu
-		if (($children = Input::get('children')) and ! is_array($children))
+		if (($children = Input::get('children')) and is_array($children))
 		{
 			// return new Response(array(
 			// 	'message' => "Invalid children provided for Menu [$slug]. To remove children, pass an empty array through instead.",
