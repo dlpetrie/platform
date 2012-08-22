@@ -318,7 +318,7 @@ class Users_API_Users_Controller extends API_Controller
 				$body = preg_replace(array_keys($replacements), array_values($replacements), $body);
 
 				// Construct the message
-				$message = Swift_Message::newInstance(Platform::get('settings.general.title').'        - Activate Account')
+				$message = Swift_Message::newInstance(Platform::get('settings.general.title').Lang::line('users::messages.auth.activate_account')->get())
 				           ->setFrom(Platform::get('settings.general.email'), Platform::get('settings.general.title'))
 				           ->setTo(Input::get('email'))
 				           ->setBody($body,'text/html');
@@ -371,7 +371,7 @@ class Users_API_Users_Controller extends API_Controller
 			}
 
 			return new Response(array(
-				'message' => 'Could not activate user.',
+				'message' => Lang::line('users::message.auth.activate_error')->get(),
 			), API::STATUS_UNPROCESSABLE_ENTITY);
 		}
 		catch (Exception $e)

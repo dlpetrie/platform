@@ -118,7 +118,9 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 			{
 				foreach ($updated as $setting)
 				{
-					Platform::messages()->success($setting.' has been updated.');
+					Platform::messages()->success(Lang::line('settings::messages.success.update', array(
+						'setting' => $setting,
+					)));
 				}
 			}
 		}

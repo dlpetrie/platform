@@ -22,7 +22,7 @@
 
 	</fieldset>
 
-	<p class="messages" data-wait="{{ Lang::line('users::users.login.wait') }}" data-redirecting="{{ Lang::line('users::users.login.redirect') }}"></p>
+	<p class="messages" data-wait="{{ Lang::line('users::messages.auth.wait') }}" data-redirecting="{{ Lang::line('users::messages.auth.redirect') }}"></p>
 
 	<hr>
 

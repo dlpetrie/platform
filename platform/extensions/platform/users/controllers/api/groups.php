@@ -177,7 +177,7 @@ class Users_API_Groups_Controller extends API_Controller
 			}
 
 			return new Response(array(
-				'message' => "An error occured while deleting the group [$id]",
+				'message' => Lang::line('users::messages.groups.delete.error')->get(),
 				'errors'  => ($group->validation()->errors->has()) ? $group->validation()->errors->all() : array(),
 			), ($group->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 		}

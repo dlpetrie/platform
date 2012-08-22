@@ -183,7 +183,7 @@ class Users_Admin_Users_Controller extends Admin_Controller
 	{
 		if ( ! $id)
 		{
-			Platform::messages()->error('A user Id is required to update permissions.');
+			Platform::messages()->error(Lang::line('users::messages.users.id_required')->get());
 			return Redirect::to_secure(ADMIN.'/users');
 		}
 
