@@ -20,12 +20,12 @@
 	<hr>
 	<div class="permissions" id="permissions-pass">
 		<div data-template>
-			<code class="alert alert-success">[[.]]</code>
+			<code class="alert alert-success">[%.%]</code>
 		</div>
 	</div>
 	<div class="permissions" id="permissions-fail">
 		<div data-template>
-			<code class="alert alert-error">[[.]]</code>
+			<code class="alert alert-error">[%.%]</code>
 		</div>
 	</div>
 	<div class="actions">
