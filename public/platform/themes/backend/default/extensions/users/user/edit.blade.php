@@ -5,7 +5,6 @@
 	{{ Lang::line('users::general.users.update.title') }}
 @endsection
 
-<!-- Queue Styles | e.g Theme::queue_asset('name', 'path_to_css', 'dependency')-->
 
 <!-- Styles -->
 @section ('styles')
