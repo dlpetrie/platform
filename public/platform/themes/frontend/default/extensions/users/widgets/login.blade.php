@@ -1,4 +1,4 @@
-<form id="login-form" method="POST" accept-char="UTF-8">
+<form id="login-form" class="form-horizontal" method="POST" accept-char="UTF-8">
 <input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
 
 	<fieldset>
