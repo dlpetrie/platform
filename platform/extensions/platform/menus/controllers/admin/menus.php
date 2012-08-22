@@ -115,6 +115,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 		{
 			$persisted_slugs[] = array_get($child, 'slug');
 		}
+		sort($persisted_slugs);
 
 		// Return the edit view
 		return Theme::make('menus::edit')
@@ -122,7 +123,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 		            ->with('menu_slug', array_get($menu, 'slug', false))
 		            ->with('last_child_id', $last_child_id)
 		            ->with('root_slug', array_get($menu, 'slug', false))
-		            ->with('persisted_slugs', json_encode($persisted_slugs));
+		            ->with('persisted_slugs', $persisted_slugs);
 	}
 
 	/**
@@ -252,18 +253,18 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 	protected function process_child_recursively($child, &$children)
 	{
 		$new_child = array(
-			'name'       => Input::get('child_fields.'.$child['id'].'.name'),
-			'slug'       => Input::get('child_fields.'.$child['id'].'.slug'),
-			'uri'        => Input::get('child_fields.'.$child['id'].'.uri'),
-			'target'     => Input::get('child_fields.'.$child['id'].'.target', 0),
-			'visibility' => Input::get('child_fields.'.$child['id'].'.visibility', 0),
-			'status'     => Input::get('child_fields.'.$child['id'].'.status', 1),
+			'name'       => Input::get('children.'.$child['id'].'.name'),
+			'slug'       => Input::get('children.'.$child['id'].'.slug'),
+			'uri'        => Input::get('children.'.$child['id'].'.uri'),
+			'target'     => Input::get('children.'.$child['id'].'.target', 0),
+			'visibility' => Input::get('children.'.$child['id'].'.visibility', 0),
+			'status'     => Input::get('children.'.$child['id'].'.status', 1),
 		);
 
 		// Determine if we're a new child or not. If we're
 		// new, we don't attach an ID. Nesty will handle the
 		// rest.
-		if ( ! Input::get('child_fields.'.$child['id'].'.is_new'))
+		if ( ! Input::get('children.'.$child['id'].'.is_new'))
 		{
 			$new_child['id'] = $child['id'];
 		}
@@ -277,7 +278,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 		// Relative URL, look in the POST data
 		else
 		{
-			$new_child['secure'] = Input::get('child_fields.'.$child['id'].'.secure', 0);
+			$new_child['secure'] = Input::get('children.'.$child['id'].'.secure', 0);
 		}
 
 		// If we have children, call the function again

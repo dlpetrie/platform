@@ -30,6 +30,16 @@ class Menu extends Nesty
 {
 
 	/**
+	 * Possible menu target possibiities
+	 *
+	 * @constant
+	 */
+	const TARGET_SELF   = 0;
+	const TARGET_BLANK  = 1;
+	const TARGET_PARENT = 2;
+	const TARGET_TOP    = 3;
+
+	/**
 	 * Possible menu child visibilities
 	 *
 	 * @constant
@@ -114,6 +124,13 @@ class Menu extends Nesty
 		return $menus;
 	}
 
+	/**
+	 * Finds a root menu item.
+	 *
+	 * @param   string  $slug
+	 * @param   array   $columns
+	 * @return  Menu    $menu
+	 */
 	public static function find_root($slug, $columns = array('id', 'extension', 'name', 'slug', 'user_editable', '_lft_', '_rgt_', '_menu_id_', 'status'), $events = array('before', 'after'))
 	{
 		// Translate property names
@@ -473,7 +490,12 @@ SQL;
 	{
 		if ($result)
 		{
-			$result->status = (bool) $result->status;
+			if (isset($result->secure))
+			{
+				$result->secure = (bool) $result->secure;
+			}
+			$result->user_editable = (bool) $result->user_editable;
+			$result->status        = (bool) $result->status;
 		}
 
 		return $result;
@@ -509,8 +531,12 @@ SQL;
 	{
 		foreach ($results as $result)
 		{
-			$result->status        = (bool) $result->status;
+			if (isset($result->secure))
+			{
+				$result->secure = (bool) $result->secure;
+			}
 			$result->user_editable = (bool) $result->user_editable;
+			$result->status        = (bool) $result->status;
 		}
 
 		return $results;

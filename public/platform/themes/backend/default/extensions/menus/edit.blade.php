@@ -63,14 +63,14 @@
 			</ul>
 
 			<div class="tab-content">
-				<div class="tab-pane {{ ($menu_slug) ? 'active' : null }}">
+				<div id="menus-edit-children" class="tab-pane {{ ($menu_slug) ? 'active' : null }}">
 					
 					<div class="row-fluid">
 						<div class="span3" id="menu-new-child">
 							
-							<div class="well well-small form-horizontal">
+							<div class="well well-small">
 								<fieldset>
-									<legend>{{ Lang::line('menus::form.child.legend') }}</legend>
+									<legend>{{ Lang::line('menus::form.create.child.legend') }}</legend>
 
 									<!-- Item Name -->
 									<div class="control-group">
@@ -87,6 +87,7 @@
 										<input type="text" name="new_child_slug" id="new-child-uri" class="input-block-level" value="" placeholder="{{ Lang::line('menus::form.child.uri') }}">
 									</div>
 
+									<!-- Secure -->
 									<div class="control-group">
 										<label>
 											{{ Lang::line('menus::form.child.secure') }}
@@ -97,6 +98,18 @@
 										</div>
 									</div>
 
+									<!-- Target -->
+									<div class="control-group">
+										<label>{{ Lang::line('menus::form.child.target.title') }}</label>
+										<select class="input-block-level">
+											<option value="{{ Platform\Menus\Menu::TARGET_SELF }}" selected>{{ Lang::line('menus::form.child.target.self') }}</option>
+											<option value="{{ Platform\Menus\Menu::TARGET_BLANK }}">{{ Lang::line('menus::form.child.target.blank') }}</option>
+											<option value="{{ Platform\Menus\Menu::TARGET_PARENT }}">{{ Lang::line('menus::form.child.target.parent') }}</option>
+											<option value="{{ Platform\Menus\Menu::TARGET_TOP }}">{{ Lang::line('menus::form.child.target.top') }}</option>
+										</select>
+									</div>
+
+									<!-- Visibility -->
 									<div class="control-group">
 										<label for="new-child-visibility">{{ Lang::line('menus::form.child.visibility.title') }}</label>
 										<select class="input-block-level">
@@ -107,18 +120,35 @@
 										</select>
 									</div>
 
+									<div class="form-actions">
+										<button type="button" class="btn btn-primary children-add-new">
+											{{ Lang::line('menus::button.add_child') }}
+										</button>
+									</div>
+
 								</fieldset>
 							</div>
 
 						</div>
+						<!-- /end - menu-new-child -->
+
 						<div class="span9">
-							sdf
+
+							<ol class="menu-children">
+								@foreach ($menu['children'] as $child)
+									@render('menus::edit.child', array('child' => $child))
+								@endforeach
+							</ol>
+
+
+							{{ json_encode(render('menus::edit.child', array('child' => array()))) }}
+
 						</div>
 					</div>
 
 				</div>
-				<div class="tab-pane {{ ( ! $menu_slug) ? 'active' : null }}">
-					Asdf
+				<div id="menus-edit-root" class="tab-pane {{ ( ! $menu_slug) ? 'active' : null }}">
+					
 				</div>
 			</div>
 

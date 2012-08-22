@@ -102,14 +102,14 @@
 
 		<div class="tabbable">
 			<ul class="nav nav-tabs">
-				<li class="{{ ($menu_slug) ? 'active' : null }}"><a href="#menus-edit-childs" data-toggle="tab">{{ Lang::line('menus::general.tabs.childs') }}</a></li>
+				<li class="{{ ($menu_slug) ? 'active' : null }}"><a href="#menus-edit-children" data-toggle="tab">{{ Lang::line('menus::general.tabs.children') }}</a></li>
 				<li class="{{ ( ! $menu_slug) ? 'active' : null }}"><a href="#menus-edit-menu-options" data-toggle="tab">{{ Lang::line('menus::general.tabs.options') }}</a></li>
 			</ul>
 			<div class="tab-content">
-				<div class="tab-pane {{ ($menu_slug) ? 'active' : null }}" id="menus-edit-childs">
+				<div class="tab-pane {{ ($menu_slug) ? 'active' : null }}" id="menus-edit-children">
 
 					<div class="clearfix">
-						<a class="pull-right btn childs-toggle-all">{{ Lang::line('menus::button.toggle_childs_details') }} <i class="icon-edit"></i></a>
+						<a class="pull-right btn children-toggle-all">{{ Lang::line('menus::button.toggle_children_details') }} <i class="icon-edit"></i></a>
 					</div>
 
 					<div class="clearfix">
@@ -164,7 +164,7 @@
 								</fieldset>
 								<hr>
 								<div class="actions">
-									<button type="button" class="btn btn-large btn-primary childs-add-new">{{ Lang::line('menus::button.add_child') }}</button>
+									<button type="button" class="btn btn-large btn-primary children-add-new">{{ Lang::line('menus::button.add_child') }}</button>
 								</div>
 
 							</div>

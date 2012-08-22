@@ -2,13 +2,20 @@
 
 return array(
 
+	// Common
 	'child' => array(
-		'legend'      => 'New Child',
-		'name'        => 'Name',
-		'slug'        => 'Slug',
-		'uri'         => 'Uri',
-		'secure'      => 'Make Secure (HTTPS)',
-		'target'      => 'Target new window.',
+		'name'   => 'Name',
+		'slug'   => 'Slug',
+		'uri'    => 'Uri',
+		'secure' => 'Make Secure (HTTPS)',
+
+		'target' => array(
+			'title'  => 'Target',
+			'self'   => 'Same Window',
+			'blank'  => 'New Window',
+			'parent' => 'Parent Frame',
+			'top'    => 'Top Frame (Main Document)',
+		),
 
 		'visibility' => array(
 			'title'      => 'Visibility',
@@ -18,9 +25,25 @@ return array(
 			'admin'      => 'Admin Only',
 		),
 
-		'yes'         => 'Yes',
-		'no'          => 'No',
-		'status'      => 'Enabled',
+		'yes'    => 'Yes',
+		'no'     => 'No',
+		'status' => 'Enabled',
+	),
+
+	// Create specific
+	'create' => array(
+
+		'child' => array(
+			'legend' => 'New Child',
+		),
+	),
+
+	// Update specific
+	'update' => array(
+
+		'child' => array(
+			'legend' => 'Edit Child',
+		),
 	),
 
 );

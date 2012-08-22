@@ -4,7 +4,7 @@
 	 * MenuSortable object.
 	 *
 	 * @todo Add more validation support for
-	 *       new childs...
+	 *       new children...
 	 */
 	var MenuSortable = {
 
@@ -14,14 +14,14 @@
 			// New child selectors
 			newChildContainerSelector: '#menu-new-child',
 
-			// Control group for childs
+			// Control group for children
 			childControlGroupSelector: '.control-group',
 
 			// Slug input selector
 			slugInputSelector:   '.child-slug',
 			uriInputSelector:    '.child-uri',
 			secureInputSelector: '.child-secure',
-			typeInputSelector:   '.child-type',
+			visibilityInputSelector:   '.child-visibility',
 			targetInputSelector: '.child-target',
 
 			// Name
@@ -32,7 +32,7 @@
 
 			// What should be appended
 			// to the root slug when namespacing
-			// child childs? Should match default
+			// child children? Should match default
 			// slug separator for your application
 			rootSlugAppend: '-',
 
@@ -40,12 +40,12 @@
 			rootSlugSelector: '#menu-slug',
 
 			// New child selectors
-			newChildNameSelector:   '#new-child-name',
-			newChildSlugSelector:   '#new-child-slug',
-			newChildUriSelector:    '#new-child-uri',
-			newChildSecureSelector: '#new-child-secure',
-			newChildTypeSelector:   '#new-child-type',
-			newChildTargetSelector: '#new-child-target',
+			newChildNameSelector:       '#new-child-name',
+			newChildSlugSelector:       '#new-child-slug',
+			newChildUriSelector:        '#new-child-uri',
+			newChildSecureSelector:     '#new-child-secure',
+			newChildVisibilitySelector: '#new-child-visibility',
+			newChildTargetSelector:     '#new-child-target',
 
 			// Child selectors
 			childSelector: '.child',
@@ -78,11 +78,6 @@
 
 			$.extend(true, self.settings, settings);
 
-			// Check for root slug
-			if ( ! self.settings.rootSlug) {
-				// $.error('A root menu slug is required by $.menuSortable');
-			}
-
 			// Check for nesty sortable
 			if ( ! $().nestySortable) {
 				$.error('$.menuSortable requires $.nestySortable');
@@ -96,13 +91,13 @@
 			// Setup Nesty sortable
 			elem.nestySortable(self.settings.nestySortable);
 
-			self.validateNewChilds()
+			self.validateNewChildren()
 			    .validateSlugs()
 			    .helpNewName()
 			    .helpSecureUris();
 		},
 
-		validateNewChilds: function() {
+		validateNewChildren: function() {
 			var self = this;
 
 			// Reverse the error on validation
@@ -151,7 +146,7 @@
 					self.settings.rootSlug = $(this).val();
 					var newStart           = $(this).val()+self.settings.rootSlugAppend;
 
-					// Change all existing childs
+					// Change all existing children
 					$.each(self.elem.find(self.settings.slugInputSelector), function() {
 
 						// No slug at all, empty...
@@ -225,7 +220,7 @@
 		helpSecureUris: function() {
 			var self = this;
 
-			// New childs
+			// New children
 			$(self.settings.newChildUriSelector).on('focus keyup change', function(e) {
 
 				// Full URL, disable the chekcbox
@@ -241,7 +236,7 @@
 				}
 			});
 
-			// Existing childs
+			// Existing children
 			$('body').on('focus keyup change', self.elem.selector+' '+self.settings.uriInputSelector, function() {
 
 				var $secure = $(this).closest(self.settings.childSelector).find(self.settings.secureInputSelector);
@@ -295,11 +290,11 @@
 
 // 	/*
 // 	|-------------------------------------
-// 	| Secure menu childs
+// 	| Secure menu children
 // 	|-------------------------------------
 // 	|
 // 	| Allows for easy setup of the secure
-// 	| menu childs.
+// 	| menu children.
 // 	*/
 // 	$('body').on('focus keyup change', '.menu-child-uri', function(e) {
 
