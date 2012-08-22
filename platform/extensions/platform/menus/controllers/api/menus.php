@@ -227,17 +227,17 @@ class Menus_API_Menus_Controller extends API_Controller
 		$method = (Input::get('enabled', false)) ? 'enabled_children' : 'children';
 		$children = $menu->$method(Input::get('limit', false));
 
-		// If the person wants to filter by the type
-		if (($filter_type = Input::get('filter_type')) !== null)
+		// If the person wants to filter by the visibility
+		if (($filter_visibility = Input::get('filter_visibility')) !== null)
 		{
 			// If they're asking for a particular filter
-			// type. The range() matches the constants
+			// visibility. The range() matches the constants
 			// found in Platform\Menus\Menu. Alernatively,
 			// a string 'automatic' can be passed through in
-			// which case we'll use Session data to filter types.
-			if ((is_numeric($filter_type) and in_array((int) $filter_type, range(0, 3))) or $filter_type === 'automatic')
+			// which case we'll use Session data to filter visibilitys.
+			if ((is_numeric($filter_visibility) and in_array((int) $filter_visibility, range(0, 3))) or $filter_visibility === 'automatic')
 			{
-				$this->filter_children_recursively($children, $filter_type);
+				$this->filter_children_recursively($children, $filter_visibility);
 			}
 		}
 
@@ -299,17 +299,17 @@ class Menus_API_Menus_Controller extends API_Controller
 				unset($menu->children);
 			}
 
-			// If the person wants to filter by the type
-			if (($filter_type = Input::get('filter_type')) !== null)
+			// If the person wants to filter by the visibility
+			if (($filter_visibility = Input::get('filter_visibility')) !== null)
 			{
 				// If they're asking for a particular filter
-				// type. The range() matches the constants
+				// visibility. The range() matches the constants
 				// found in Platform\Menus\Menu. Alernatively,
 				// a string 'automatic' can be passed through in
-				// which case we'll use Session data to filter types.
-				if ((is_numeric($filter_type) and in_array((int) $filter_type, range(0, 3))) or $filter_type === 'automatic')
+				// which case we'll use Session data to filter visibilitys.
+				if ((is_numeric($filter_visibility) and in_array((int) $filter_visibility, range(0, 3))) or $filter_visibility === 'automatic')
 				{
-					$this->filter_children_recursively($children, $filter_type);
+					$this->filter_children_recursively($children, $filter_visibility);
 				}
 			}
 
@@ -437,21 +437,21 @@ class Menus_API_Menus_Controller extends API_Controller
 	 * Recursively filters menu items.
 	 *
 	 * @param   array   $children
-	 * @param   string  $type
+	 * @param   string  $visibility
 	 * @return  void
 	 */
-	protected function filter_children_recursively(array &$children, $type)
+	protected function filter_children_recursively(array &$children, $visibility)
 	{
 		foreach ($children as $index => &$child)
 		{
-			if ($type == 'automatic')
+			if ($visibility == 'automatic')
 			{
 				// Do a switch based on the menu item
-				// type
-				switch ($child->type)
+				// visibility
+				switch ($child->visibility)
 				{
 					// Remove from anyone who's not logged in
-					case Menu::TYPE_LOGGED_IN:
+					case Menu::VISIBILITY_LOGGED_IN:
 						if ( ! Sentry::check())
 						{
 							array_splice($children, $index, 1);
@@ -459,7 +459,7 @@ class Menus_API_Menus_Controller extends API_Controller
 						break;
 
 					// Remove from anyone who's logged in
-					case Menu::TYPE_LOGGED_OUT:
+					case Menu::VISIBILITY_LOGGED_OUT:
 						if (Sentry::check())
 						{
 							array_splice($children, $index, 1);
@@ -467,7 +467,7 @@ class Menus_API_Menus_Controller extends API_Controller
 						break;
 
 					// Remove from anyone who's not admin
-					case Menu::TYPE_ADMIN:
+					case Menu::VISIBILITY_ADMIN:
 						if (Sentry::check() and Sentry::user()->has_access(array('is_admin', 'superuser')))
 						{
 							$child['uri'] = ADMIN.'/'.$child['uri'];
@@ -480,11 +480,11 @@ class Menus_API_Menus_Controller extends API_Controller
 				}
 			}
 
-			// Do a switch based on the filter type requested
-			elseif (in_array($type, range(0, 3)))
+			// Do a switch based on the filter visibility requested
+			elseif (in_array($visibility, range(0, 3)))
 			{
-				// Check the type matches the requested typ
-				if ($child->type != $type)
+				// Check the visibility matches the requested typ
+				if ($child->visibility != $visibility)
 				{
 					array_splice($children, $index, 1);
 				}
@@ -493,7 +493,7 @@ class Menus_API_Menus_Controller extends API_Controller
 			// Recursive baby!
 			if (isset($child->children) and is_array($child->children) and count($child->children) > 0)
 			{
-				$this->filter_children_recursively($child->children, $type);
+				$this->filter_children_recursively($child->children, $visibility);
 			}
 		}
 	}

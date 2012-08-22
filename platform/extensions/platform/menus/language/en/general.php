@@ -3,12 +3,12 @@
 return array(
 
 	'title'       => 'Menus Management',
-	'description' => 'Manage menus and their items.',
+	'description' => 'Manage menus and their children.',
 
 	/* Tabs */
 	'tabs' => array(
-		'items'   => 'Items',
-		'options' => 'Menu Options',
+		'children' => 'Children',
+		'root'     => 'Menu Options',
 	),
 
 	/* Create User */

@@ -30,14 +30,14 @@ class Menu extends Nesty
 {
 
 	/**
-	 * Possible menu item types
+	 * Possible menu child visibilities
 	 *
 	 * @constant
 	 */
-	const TYPE_ALWAYS     = 0;
-	const TYPE_LOGGED_IN  = 1;
-	const TYPE_LOGGED_OUT = 2;
-	const TYPE_ADMIN      = 3;
+	const VISIBILITY_ALWAYS     = 0;
+	const VISIBILITY_LOGGED_IN  = 1;
+	const VISIBILITY_LOGGED_OUT = 2;
+	const VISIBILITY_ADMIN      = 3;
 
 	/**
 	 * The name of the table associated with the model.
@@ -89,7 +89,7 @@ class Menu extends Nesty
 	);
 
 	/**
-	 * Returns an array of root menu items.
+	 * Returns an array of root menu children.
 	 *
 	 * @return  array
 	 */
@@ -349,55 +349,55 @@ SQL;
 
 	/**
 	 * Creates or updates a Nesty tree structure based on
-	 * the hierarchical array of items passed through. 
+	 * the hierarchical array of children passed through. 
 	 *
 	 * A callback may be provided for each Nesty object just
 	 * before it's persisted to the database. Returning false
 	 * from the closure means no changes are made.
 	 *
 	 * @param  int      $id
-	 * @param  array    $items
+	 * @param  array    $children
 	 * @param  Closure  $before_root_persist
 	 * @param  Closure  $before_persist
 	 * @throws NestyException
 	 * @return Nesty
 	 */
-	public static function from_hierarchy_array($id, array $items, Closure $before_root_persist = null, Closure $before_persist = null)
+	public static function from_hierarchy_array($id, array $children, Closure $before_root_persist = null, Closure $before_persist = null)
 	{
 		// Default the closure...
 		if ($before_persist === null)
 		{
-			$before_persist = function($item) use ($id)
+			$before_persist = function($child) use ($id)
 			{
-				if ( ! $item->is_new() and ! $item->user_editable)
+				if ( ! $child->is_new() and ! $child->user_editable)
 				{
-					$duplicate = clone $item;
+					$duplicate = clone $child;
 					$duplicate->reload();
 
 					// Reset relevent values
-					$item->name   = $duplicate->name;
-					$item->slug   = $duplicate->slug;
-					$item->uri    = $duplicate->uri;
-					$item->secure = $duplicate->secure;
+					$child->name   = $duplicate->name;
+					$child->slug   = $duplicate->slug;
+					$child->uri    = $duplicate->uri;
+					$child->secure = $duplicate->secure;
 				}
-				elseif ($item->is_new())
+				elseif ($child->is_new())
 				{
-					$item->user_editable = 1;
+					$child->user_editable = 1;
 				}
 
-				// Any user editable items, we'll
+				// Any user editable children, we'll
 				// check their slug starts with the root
-				// item's slug
-				if ($item->user_editable and $root = static::find_root($id) and starts_with($item->slug, $root->slug))
+				// child's slug
+				if ($child->user_editable and $root = static::find_root($id) and starts_with($child->slug, $root->slug))
 				{
-					$item->slug = $root->slug.'-'.$item->slug;
+					$child->slug = $root->slug.'-'.$child->slug;
 				}
 
-				return $item;
+				return $child;
 			};
 		}
 
-		return parent::from_hierarchy_array($id, $items, $before_root_persist, $before_persist);
+		return parent::from_hierarchy_array($id, $children, $before_root_persist, $before_persist);
 	}
 
 	/**
@@ -417,7 +417,7 @@ SQL;
 			{
 				extract(static::$_active);
 
-				// Find the menu item
+				// Find the menu child
 				$active = static::find(function($query) use($property, $value)
 				{
 					return $query->where($property, '=', $value);
