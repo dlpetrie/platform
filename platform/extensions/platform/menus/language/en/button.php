@@ -2,9 +2,9 @@
 
 return array(
 
-	'add_item'             => 'Add Item',
-	'remove_item'          => 'Remove Item',
-	'remove_item_disabled' => 'Required - Cannot Remove',
-	'toggle_items_details' => 'Toggle All',
+	'add_child'             => 'Add Child',
+	'remove_child'          => 'Remove Child',
+	'remove_child_disabled' => 'Uneditable Child',
+	'toggle_childs_details' => 'Toggle All',
 
 );

@@ -4,51 +4,51 @@
 	 * MenuSortable object.
 	 *
 	 * @todo Add more validation support for
-	 *       new items...
+	 *       new children...
 	 */
 	var MenuSortable = {
 
 		// Settings for this instance
 		settings: {
 
-			// New item selectors
-			newItemContainerSelector: '.platform-new-item',
+			// New child selectors
+			newChildContainerSelector: '#menu-new-child',
 
-			// Control group for items
-			itemControlGroupSelector: '.control-group',
+			// Control group for children
+			childControlGroupSelector: '.control-group',
 
 			// Slug input selector
-			slugInputSelector:   '.item-slug',
-			uriInputSelector:    '.item-uri',
-			secureInputSelector: '.item-secure',
-			typeInputSelector:   '.item-type',
-			targetInputSelector: '.item-target',
+			slugInputSelector:       '.child-slug',
+			uriInputSelector:        '.child-uri',
+			secureInputSelector:     '.child-secure',
+			visibilityInputSelector: '.child-visibility',
+			targetInputSelector:     '.child-target',
 
 			// Name
 			rootNameSelector: '#menu-name',
 
-			// Root menu item slug
+			// Root menu child slug
 			rootSlug: null,
 
 			// What should be appended
 			// to the root slug when namespacing
-			// child items? Should match default
+			// child children? Should match default
 			// slug separator for your application
 			rootSlugAppend: '-',
 
 			// Root selector
 			rootSlugSelector: '#menu-slug',
 
-			// New item selectors
-			newItemNameSelector:   '#new-item-name',
-			newItemSlugSelector:   '#new-item-slug',
-			newItemUriSelector:    '#new-item-uri',
-			newItemSecureSelector: '#new-item-secure',
-			newItemTypeSelector:   '#new-item-type',
-			newItemTargetSelector: '#new-item-target',
+			// New child selectors
+			newChildNameSelector:       '#new-child-name',
+			newChildSlugSelector:       '#new-child-slug',
+			newChildUriSelector:        '#new-child-uri',
+			newChildSecureSelector:     '#new-child-secure',
+			newChildVisibilitySelector: '#new-child-visibility',
+			newChildTargetSelector:     '#new-child-target',
 
-			// Item selectors
-			itemSelector: '.item',
+			// Child selectors
+			childSelector: '.child',
 
 			// An array of slugs persisted to the
 			// database already. We use to make sure
@@ -59,12 +59,43 @@
 			// Nesty sortable settings
 			nestySortable: {
 
-				// Default nesty sortable settings for this menu
-				sortableSelector : '.platform-menu',
+				// The selector for the sortable list,
+				// used to cache the sortable list property
+				sortableSelector : '.menu-children',
+
+				// Is the form to AJAX submit or tranditional
+				// submit?
 				ajax             : false,
+
+				// Selectors relating to items, but aren't
+				// located inside each item in the DOM
+				itemAddButtonSelector        : '.children-add-new',
+
+				// This is the selector for the new item's template.
+				// This container should be hidden at all times as we
+				// clone the HTML inside of this, apply the template and
+				// then attach that to the end of the list.
+				itemTemplateContainerSelector : '.new-child-template-container',
+				itemTemplateSelector          : '.new-child-template',
+
+				// Selectors for DOM elements for each active
+				// item.
+				itemSelector              : '.child',
+				itemHandleSelector        : '.child-header',
+				itemToggleDetailsSelector : '.child-toggle-details',
+				itemDetailsSelector       : '.child-details',
+				itemRemoveSelector        : '.child-remove',
+
+				// Invalid field callback - must return true for valid
+				// field or false for invalid field.
 				invalidFieldCallback : function(field, value) {
 					$(field.newSelector).closest('.control-group').addClass('error');
-				}
+				},
+
+				// The input name for the items
+				// hierarchy that's posted to
+				// the server.
+				hierarchyInputName: 'children_hierarchy'
 			}
 		},
 
@@ -77,11 +108,6 @@
 			self.elem = elem;
 
 			$.extend(true, self.settings, settings);
-
-			// Check for root slug
-			if ( ! self.settings.rootSlug) {
-				// $.error('A root menu slug is required by $.menuSortable');
-			}
 
 			// Check for nesty sortable
 			if ( ! $().nestySortable) {
@@ -96,20 +122,20 @@
 			// Setup Nesty sortable
 			elem.nestySortable(self.settings.nestySortable);
 
-			self.validateNewItems()
+			self.validateNewChildren()
 			    .validateSlugs()
 			    .helpNewName()
 			    .helpSecureUris();
 		},
 
-		validateNewItems: function() {
+		validateNewChildren: function() {
 			var self = this;
 
 			// Reverse the error on validation
-			$(self.settings.newItemContainerSelector).find('input, textarea, select').on('focus keyup change', function(e) {
+			$(self.settings.newChildContainerSelector).find('input, textarea, select').on('focus keyup change', function(e) {
 
 				if ($(this).is(':valid')) {
-					$(this).closest(self.settings.itemControlGroupSelector).removeClass('error');
+					$(this).closest(self.settings.childControlGroupSelector).removeClass('error');
 				}
 			});
 
@@ -151,7 +177,7 @@
 					self.settings.rootSlug = $(this).val();
 					var newStart           = $(this).val()+self.settings.rootSlugAppend;
 
-					// Change all existing items
+					// Change all existing children
 					$.each(self.elem.find(self.settings.slugInputSelector), function() {
 
 						// No slug at all, empty...
@@ -190,18 +216,18 @@
 
 				// Check our value against array
 				if ($.inArray($(this).val(), takenSlugs) > -1) {
-					$(this).closest(self.settings.itemControlGroupSelector).addClass('error');
+					$(this).closest(self.settings.childControlGroupSelector).addClass('error');
 				}
 
 				$(this).on('focus', function(e) {
 					e.stopPropagation();
-					$(this).closest(self.settings.itemControlGroupSelector).removeClass('error');
+					$(this).closest(self.settings.childControlGroupSelector).removeClass('error');
 				});
 
 				console.log(takenSlugs);
 			});
 
-			// Trigger a change on the root item which
+			// Trigger a change on the root child which
 			// populates our cached root slug
 			$(self.settings.rootSlugSelector).trigger('change');
 
@@ -212,11 +238,11 @@
 			var self = this;
 
 			// Autofill the slug based on the name
-			$(self.settings.newItemNameSelector).on('focus keyup change', function() {
-				$(self.settings.newItemSlugSelector).val(self.settings.rootSlug+self.settings.rootSlugAppend+$(this).slugify()).trigger('change').trigger('blur');
+			$(self.settings.newChildNameSelector).on('focus keyup change', function() {
+				$(self.settings.newChildSlugSelector).val(self.settings.rootSlug+self.settings.rootSlugAppend+$(this).slugify()).trigger('change').trigger('blur');
 
 				// And the URI
-				$(self.settings.newItemUriSelector).val($(this).slugify('/')).trigger('change');
+				$(self.settings.newChildUriSelector).val($(this).slugify('/')).trigger('change');
 			});
 
 			return this;
@@ -225,26 +251,26 @@
 		helpSecureUris: function() {
 			var self = this;
 
-			// New items
-			$(self.settings.newItemUriSelector).on('focus keyup change', function(e) {
+			// New children
+			$(self.settings.newChildUriSelector).on('focus keyup change', function(e) {
 
 				// Full URL, disable the chekcbox
 				if (self.isFullUrl($(this).val())) {
-					$(self.settings.newItemSecureSelector).attr('disabled', 'disabled');
-					$(self.settings.newItemSecureSelector)[self.isSecureUrl($(this).val()) ? 'attr' : 'removeAttr']('checked', 'checked');
+					$(self.settings.newChildSecureSelector).attr('disabled', 'disabled');
+					$(self.settings.newChildSecureSelector)[self.isSecureUrl($(this).val()) ? 'attr' : 'removeAttr']('checked', 'checked');
 				}
 
 				// Relative, give option
 				else {
 
-					$(self.settings.newItemSecureSelector).removeAttr('disabled');
+					$(self.settings.newChildSecureSelector).removeAttr('disabled');
 				}
 			});
 
-			// Existing items
+			// Existing children
 			$('body').on('focus keyup change', self.elem.selector+' '+self.settings.uriInputSelector, function() {
 
-				var $secure = $(this).closest(self.settings.itemSelector).find(self.settings.secureInputSelector);
+				var $secure = $(this).closest(self.settings.childSelector).find(self.settings.secureInputSelector);
 
 				// Full URL
 				if (self.isFullUrl($(this).val())) {
@@ -295,13 +321,13 @@
 
 // 	/*
 // 	|-------------------------------------
-// 	| Secure menu items
+// 	| Secure menu children
 // 	|-------------------------------------
 // 	|
 // 	| Allows for easy setup of the secure
-// 	| menu items.
+// 	| menu children.
 // 	*/
-// 	$('body').on('focus keyup change', '.menu-item-uri', function(e) {
+// 	$('body').on('focus keyup change', '.menu-child-uri', function(e) {
 
 
 // 	});

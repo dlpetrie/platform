@@ -10,29 +10,29 @@
 	color: @errorText;
 }
 
-// Add item
-.platform-new-item {
-	width:300px;
-	float:left;
-}
+// // Add child
+// .platform-new-child {
+// 	width:300px;
+// 	float:left;
+// }
 
-.platform-new-item hr,
-.platform-new-item legend {
-	margin:4px 0;
-	padding:0;
-	text-align:center;
-}
+// .platform-new-child hr,
+// .platform-new-child legend {
+// 	margin:4px 0;
+// 	padding:0;
+// 	text-align:center;
+// }
 
-.platform-new-item .btn {
-	text-align:center;
-	width:220px;
-	margin:0 auto;
-	display:block;
-}
+// .platform-new-child .btn {
+// 	text-align:center;
+// 	width:220px;
+// 	margin:0 auto;
+// 	display:block;
+// }
 
 // Menu itself
-.platform-menu,
-.platform-menu ol {
+.menu-children,
+.menu-children ol {
 	margin: 0;
 	padding: 0;
 
@@ -40,8 +40,8 @@
 	list-style-image: none;
 }
 
-.platform-menu {
-margin-left:320px;
+.menu-children {
+
 	// All children lists
 	ol {
 		margin-left: 20px;
@@ -51,19 +51,28 @@ margin-left:320px;
 		margin: 5px 0;
 	}
 
-	.item {
+	// Capture the absolute first list item
+	&> li:first-child {
+		margin-top: 0;
+	}
+
+	&> li:last-child {
+		margin-bottom: 0;
+	}
+
+	.child {
 		border: 1px solid #dfdfdf;
 		-webkit-border-radius: 3px;
 		   -moz-border-radius: 3px;
 		        border-radius: 3px;
 	}
 
-	.item-header,
-	.item-details {
+	.child-header,
+	.child-details {
 		padding: 6px 8px;
 	}
 
-	.item-header {
+	.child-header {
 		position: relative;
 		border: 1px solid #fff;
 		background-color: #f3f3f3;
@@ -84,7 +93,7 @@ margin-left:320px;
 		cursor: move;
 	}
 
-	.item-toggle-details {
+	.child-toggle-details {
 		position: absolute;
 		top: 0;
 		right: 0;
@@ -105,7 +114,7 @@ margin-left:320px;
 		}
 	}
 
-	.item-details {
+	.child-details {
 		display: none;
 		-webkit-border-radius: 0 0 3px 3px;
 		   -moz-border-radius: 0 0 3px 3px;
@@ -113,6 +122,10 @@ margin-left:320px;
 		border-top: 1px solid #dfdfdf;
 
 		background-color: #f9f9f9;
+
+		.form-actions {
+			margin-bottom: 0;
+		}
 
 		&.show {
 			display: block;

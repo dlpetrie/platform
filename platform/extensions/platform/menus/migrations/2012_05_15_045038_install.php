@@ -41,7 +41,7 @@ class Menus_Install
 			$table->string('slug')->unique();
 			$table->string('uri');
 			$table->boolean('target');
-			$table->boolean('type');
+			$table->integer('visibility');
 			$table->boolean('secure');
 			$table->boolean('user_editable');
 			$table->integer('lft');
@@ -89,7 +89,7 @@ class Menus_Install
 			'extension'     => '',
 			'slug'          => 'main-home',
 			'uri'           => '',
-			'type'			=> 0,
+			'visibility'    => 0,
 			'user_editable' => 1,
 			'status'        => 1,
 		));
@@ -102,7 +102,7 @@ class Menus_Install
 			'extension'     => '',
 			'slug'          => 'main-login',
 			'uri'           => 'login',
-			'type'			=> 2,
+			'visibility'    => 2,
 			'user_editable' => 1,
 			'status'        => 1,
 		));
@@ -115,7 +115,7 @@ class Menus_Install
 			'extension'     => '',
 			'slug'          => 'main-logout',
 			'uri'           => 'logout',
-			'type'			=> 1,
+			'visibility'    => 1,
 			'user_editable' => 1,
 			'status'        => 1,
 		));
@@ -128,7 +128,7 @@ class Menus_Install
 			'extension'     => '',
 			'slug'          => 'main-register',
 			'uri'           => 'register',
-			'type'			=> 2,
+			'visibility'    => 2,
 			'user_editable' => 1,
 			'status'        => 1,
 		));
@@ -141,7 +141,7 @@ class Menus_Install
 			'extension'     => '',
 			'slug'          => 'main-admin-dashboard',
 			'uri'           => 'dashboard',
-			'type'			=> 3,
+			'visibility'    => 3,
 			'user_editable' => 1,
 			'status'        => 1,
 		));

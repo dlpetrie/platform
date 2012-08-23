@@ -3,21 +3,21 @@
 return array(
 
 	'title'       => 'Menus Management',
-	'description' => 'Manage menus and their items.',
+	'description' => 'Manage menus and their children.',
 
 	/* Tabs */
 	'tabs' => array(
-		'items'   => 'Items',
-		'options' => 'Menu Options',
+		'children' => 'Children',
+		'root'     => 'Menu Options',
 	),
 
-	/* Create User */
+	/* Create Menu */
 	'create' => array(
 		'title'          => 'Create User',
 		'description'    => 'Please supply the following information.',
 	),
 
-	/* Update User */
+	/* Update Menu */
 	'update' => array(
 		'title'          => 'Update Menu',
 		'description'    => 'Please update the following information.',
