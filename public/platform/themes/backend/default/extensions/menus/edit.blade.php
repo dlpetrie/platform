@@ -7,7 +7,6 @@
 
 <!-- Queue Styles -->
 {{ Theme::queue_asset('menus', 'menus::css/menus.less', 'style') }}
-{{ Theme::queue_asset('toggle', 'css/bootstrap/less/toggle.less', 'style') }}
 
 <!-- Styles -->
 @section ('styles')
@@ -31,15 +30,15 @@
 function dump(arr,level) {
 	var dumped_text = "";
 	if(!level) level = 0;
-	
+
 	//The padding given at the beginning of the line.
 	var level_padding = "";
 	for(var j=0;j<level+1;j++) level_padding += "    ";
-	
-	if(typeof(arr) == 'object') { //Array/Hashes/Objects 
+
+	if(typeof(arr) == 'object') { //Array/Hashes/Objects
 		for(var item in arr) {
 			var value = arr[item];
-			
+
 			if(typeof(value) == 'object') { //If it is an array,
 				dumped_text += level_padding + "'" + item + "' ...\n";
 				dumped_text += dump(value,level+1);
@@ -139,10 +138,10 @@ function dump(arr,level) {
 
 				<div class="tab-content">
 					<div id="menus-edit-children" class="tab-pane {{ ($menu_slug) ? 'active' : null }}">
-						
+
 						<div class="row-fluid">
 							<div class="span3" id="menu-new-child">
-								
+
 								<div class="well well-small">
 									<fieldset>
 										<legend>{{ Lang::line('menus::form.create.child.legend') }}</legend>
@@ -230,9 +229,9 @@ function dump(arr,level) {
 					<div id="menus-edit-root" class="tab-pane {{ ( ! $menu_slug) ? 'active' : null }}">
 
 						<br>
-						
+
 						<fieldset class="form-horizontal">
-							
+
 							<div class="control-group">
 								<label class="control-label" for="menu-name">
 									{{ Lang::line('menus::form.root.name') }}
