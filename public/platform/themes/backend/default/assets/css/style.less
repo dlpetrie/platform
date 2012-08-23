@@ -162,14 +162,20 @@ hr {
 	}
 
 	#page .navigation ul > li > ul > li {
-		padding:6px 0 6px 14px;
-		border-top:1px solid @white;
-		border-bottom:4px solid @etch;
+		background-color:#eee;
+		padding:8px 8px 8px 16px;
+		margin-top: 3px;
+		margin-bottom: 3px;
+		border:1px solid @etch;
+		.border-radius(5px);
 	}
 
-	#page .navigation ul > li > ul > li.active {
 
+	#page .navigation ul > li > ul > li.active,
+	#page .navigation ul > li > ul > li.active:hover {
+	  background-color:@white;
 	}
+
 
 	#page .navigation ul > li.active > ul {
 		display: block;
