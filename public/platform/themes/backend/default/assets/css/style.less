@@ -158,7 +158,17 @@ hr {
 	#page .navigation ul > li > ul {
 		display: none;
 		list-style: none;
-		margin:10px 0 0 10px;
+		margin:10px 0 0 4px;
+	}
+
+	#page .navigation ul > li > ul > li {
+		padding:6px 0 6px 14px;
+		border-top:1px solid @white;
+		border-bottom:4px solid @etch;
+	}
+
+	#page .navigation ul > li > ul > li.active {
+
 	}
 
 	#page .navigation ul > li.active > ul {
@@ -234,43 +244,18 @@ hr {
 
 /* #Forms
 ================================================== */
-/*
-form {
-	text-align: left;
-}
-
-form fieldset {
-	border:none;
-	padding:10px;
-}
-
 form legend {
 	border-bottom:none;
-	padding:10px;
-	margin:0;
 }
 
-form fieldset div {
-	padding:4px;
-	vertical-align: middle;
+form .help-block {
+	font-style: italic;
 }
-
-form label {
-	display: inline-block;
-	width: auto;
-	padding:8px;
-	text-align: right;
-	min-width:120px;
-}
-
-form p.title {
-	text-align:center;
-	border-bottom:1px solid @etch;
-	padding:4px;
-}
-form label.check {
-	min-width:0;
-	padding:4px;
+form hr {
+	margin: 10px 0;
+	border: 0;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #fff;
 }
 
 form input,
@@ -278,42 +263,28 @@ form textarea,
 form select {
 	min-height: 28px;
 	padding:4px;
-	background:@white url(../img/ico-alerts.png) -32px 4px no-repeat;
+	background:url(../img/ico-alerts.png) -32px 2px no-repeat;
 	outline: none;
 }
 
 
-form input::-webkit-input-placeholder,
-form input:-moz-placeholder {
-	color: #A6A6A6;
-}
-
-form .help
-{
-	font-size: 12px;
-	padding: 3px;
-	width: 150px;
-	outline: 0;
-	font-style: italic;
-}
-
-form input:required.valid + .help,
-form input.valid:focus + .help,
-form input:checked + .help,
-form select:required.valid + .help,
-form select.valid:focus + .help {
+form input:required.valid + .help-block,
+form input.valid:focus + .help-block,
+form input:checked + .help-block,
+form select:required.valid + .help-block,
+form select.valid:focus + .help-block {
 	color: #A6AD3C;
 }
 
-form input:required.required + .help,
-form input:required.error + .help,
-form input.required:focus + .help
-form select:required.required + .help,
-form select.required:focus + .help {
+form input:required.required + .help-block,
+form input:required.error + .help-block,
+form input.required:focus + .help-block
+form select:required.required + .help-block,
+form select.required:focus + .help-block {
 	color: #8A211D;
 }
 
-*/
+
 /* Enhanced error styling */
 form input.error
 {
@@ -322,21 +293,11 @@ form input.error
 }
 form input.required
 {
-	background-position: right -32px;
+	background-position: right -30px;
 }
 form input.valid
 {
 	background-position: right 2px;
-}
-
-form input.error::-webkit-input-placeholder,
-form inputerror :-moz-placeholder {
-	color: #fff;
-}
-
-form .actions {
-	padding:10px 0;
-	margin:0 auto;
 }
 
 
