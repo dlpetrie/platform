@@ -210,9 +210,11 @@ function dump(arr,level) {
 							<div class="span9">
 
 								<ol class="menu-children">
-									@foreach ($menu['children'] as $child)
-										@render('menus::edit.child', array('child' => $child))
-									@endforeach
+									@if (isset($menu['children']))
+										@foreach ($menu['children'] as $child)
+											@render('menus::edit.child', array('child' => $child))
+										@endforeach
+									@endif
 								</ol>
 
 								<div class="new-child-template-container hide">
@@ -236,7 +238,7 @@ function dump(arr,level) {
 									{{ Lang::line('menus::form.root.name') }}
 								</label>
 								<div class="controls">
-									<input type="text" name="name" id="menu-name" value="{{ array_get($menu, 'name') }}" {{ ( ! array_get($menu, 'user_editable')) ? 'disabled' : null}}>
+									<input type="text" name="name" id="menu-name" value="{{ array_get($menu, 'name') }}" {{ (array_key_exists('user_editable', $menu) and ( ! array_get($menu, 'user_editable'))) ? 'disabled' : 'required'}}>
 								</div>
 							</div>
 
@@ -245,7 +247,7 @@ function dump(arr,level) {
 									{{ Lang::line('menus::form.root.slug') }}
 								</label>
 								<div class="controls">
-									<input type="text" slug="slug" id="menu-slug" value="{{ array_get($menu, 'slug') }}" {{ ( ! array_get($menu, 'user_editable')) ? 'disabled' : null}}>
+									<input type="text" name="slug" id="menu-slug" value="{{ array_get($menu, 'slug') }}"  {{ (array_key_exists('user_editable', $menu) and ( ! array_get($menu, 'user_editable'))) ? 'disabled' : 'required'}}>
 								</div>
 							</div>
 
