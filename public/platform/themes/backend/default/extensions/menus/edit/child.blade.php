@@ -15,10 +15,10 @@
 			<fieldset>
 				<legend>{{ Lang::line('menus::form.update.child.legend') }}</legend>
 
-				<input type="hidden" name="children[{{ array_get($child, 'id', '[%id%]') }}][id]">
-
-				@if ( ! array_get($child, 'id'))
-					<input type="hidden" name="children[[%id%]][is_new}" value="1">
+				@if (array_get($child, 'id'))
+					<input type="hidden" name="children[{{ array_get($child, 'id', '[%id%]') }}][id]">
+				@else
+					<input type="hidden" name="children[[%id%]][is_new]" value="1">
 				@endif
 
 				<!-- Name -->
@@ -68,7 +68,7 @@
 				<div class="control-group">
 					<label class="control-label" for="menu-children-{{ array_get($child, 'id', '[%id%]') }}-target">{{ Lang::line('menus::form.child.target.title') }}</label>
 					<div class="controls">
-						<select name="children[{{ array_get($child, 'id', '[%id%]') }}][target]" id="menu-children-{{ array_get($child, 'id', '[%id%]') }}-target" class="child-target" {{ ( ! array_key_exists('target', $child)) ? '[%control.target%]' : null}}>
+						<select name="children[{{ array_get($child, 'id', '[%id%]') }}][target]" id="menu-children-{{ array_get($child, 'id', '[%id%]') }}-target" class="child-target" {{ ( ! array_key_exists('target', $child)) ? '[%control.target%]' : null }}>
 							<option value="{{ Platform\Menus\Menu::TARGET_SELF }}" {{ (array_get($child, 'target') == Platform\Menus\Menu::TARGET_SELF) ? 'selected' : null }}>{{ Lang::line('menus::form.child.target.self') }}</option>
 							<option value="{{ Platform\Menus\Menu::TARGET_BLANK }}" {{ (array_get($child, 'target') == Platform\Menus\Menu::TARGET_BLANK) ? 'selected' : null }}>{{ Lang::line('menus::form.child.target.blank') }}</option>
 							<option value="{{ Platform\Menus\Menu::TARGET_PARENT }}" {{ (array_get($child, 'target') == Platform\Menus\Menu::TARGET_PARENT) ? 'selected' : null }}>{{ Lang::line('menus::form.child.target.parent') }}</option>
@@ -81,7 +81,7 @@
 				<div class="control-group">
 					<label class="control-label" for="menu-children-{{ array_get($child, 'id', '[%id%]') }}-visibility">{{ Lang::line('menus::form.child.visibility.title') }}</label>
 					<div class="controls">
-						<select name="children[{{ array_get($child, 'id', '[%id%]') }}][visibility]" id="menu-children-{{ array_get($child, 'id', '[%id%]') }}-visibility" class="child-visibility" {{ ( ! array_key_exists('visibility', $child)) ? '[%control.target%]' : null}}>
+						<select name="children[{{ array_get($child, 'id', '[%id%]') }}][visibility]" id="menu-children-{{ array_get($child, 'id', '[%id%]') }}-visibility" class="child-visibility" {{ ( ! array_key_exists('visibility', $child)) ? '[%control.visibility%]' : null }}>
 							<option value="{{ Platform\Menus\Menu::VISIBILITY_ALWAYS }}" {{ (array_get($child, 'visibility') == Platform\Menus\Menu::VISIBILITY_ALWAYS) ? 'selected' : null }}>{{ Lang::line('menus::form.child.visibility.always') }}</option>
 							<option value="{{ Platform\Menus\Menu::VISIBILITY_LOGGED_IN }}" {{ (array_get($child, 'visibility') == Platform\Menus\Menu::VISIBILITY_LOGGED_IN) ? 'selected' : null }}>{{ Lang::line('menus::form.child.visibility.logged_in') }}</option>
 							<option value="{{ Platform\Menus\Menu::VISIBILITY_LOGGED_OUT }}" {{ (array_get($child, 'visibility') == Platform\Menus\Menu::VISIBILITY_LOGGED_OUT) ? 'selected' : null }}>{{ Lang::line('menus::form.child.visibility.logged_out') }}</option>
@@ -102,7 +102,7 @@
 	</div>
 	<!-- /end - child -->
 
-	@if (isset($child['children']) and is_array($child['children']))
+	@if (isset($child['children']) and is_array($child['children']) and count($child['children']) > 0)
 		<ol>
 			@foreach ($child['children'] as $grand_child)
 				@render('menus::edit.child', array('child' => $grand_child))

@@ -23,7 +23,7 @@
 			 * An array of fields for the Nesty sortable.
 			 *
 			 * <code>
-			 *		{ name : 'my_field', newSelector : '.new-item-my-field', required : false }
+			 *		[{ name : 'my_field', newSelector : '.new-item-my-field' }]
 			 * </code>
 			 *
 			 * @var array
@@ -177,9 +177,8 @@
 				// Data for templat
 				var data = {
 					id      : itemId,
-					control : {
-
-					}
+					raw     : {},
+					control : {}
 				};
 
 				// Loop through the defined fields, and replace
@@ -222,6 +221,8 @@
 						data.control[field.name] = $formElement.val();
 						rawValue   = $formElement.val();
 					}
+
+					data.raw[field.name] = $formElement.val();
 				}
 
 				if (valid !== true) {
@@ -240,7 +241,17 @@
 				}).render(data);
 
 				// Append
-				$template.children('[data-template]').appendTo(self.sortable());
+				var $templateContents = $template.children('[data-template]');
+				$templateContents.appendTo(self.sortable());
+
+				// Update values if possible
+				$templateContents.find('select').each(function() {
+					var value;
+					if (value = $(this).attr('data-value')) {
+						$(this).val(value);
+						$(this).removeAttr('data-value');
+					}
+				});
 
 				// Delete the DOM element
 				$template.remove();
@@ -331,6 +342,13 @@
 			// Catch form submission.
 			self.elem.submit(function(e) {
 
+				// Remove the template from the DOM
+				// so it's not submitted, we'll re-insert
+				// after submit
+				var $template = self.elem.find(self.settings.itemTemplateSelector);
+				$templateClone = $template.clone();
+				$template.remove();
+
 				// AJAX form submission
 				if (self.settings.ajax === true) {
 					e.preventDefault();
@@ -357,6 +375,11 @@
 							alert(jqXHR.status + ' ' + errorThrown);
 						}
 					});
+
+					// If we're using AJAX, put the template back in the DOM.
+					// Traditional form submission doesn't need it again as
+					// we're leaving the page.
+					$templateClone.appendTo(self.settings.itemTemplateContainerSelector);
 
 					return false;
 				}
