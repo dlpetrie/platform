@@ -37,7 +37,9 @@
 	<table class="table table-bordered">
 		<thead>
 			<tr>
-				<th>Menu</th>
+				<th>{{ Lang::line('menus::table.name') }}</th>
+				<th>{{ Lang::line('menus::table.slug') }}</th>
+				<th>{{ Lang::line('menus::table.children_count') }}</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -48,11 +50,19 @@
 						{{ $menu['name'] }}
 					</td>
 					<td>
-						{{ HTML::link_to_secure(ADMIN.'/menus/edit/'.$menu['slug'], 'Edit', array('class' => 'btn')) }}
+						{{ $menu['slug'] }}
+					</td>
+					<td>
+						{{ Lang::line('menus::table.children', array('count' => $menu[Platform\Menus\Menu::nesty_col('right')] / 2 - 1)) }}
+					</td>
+					<td class="span2">
+						<div class="btn-group">
+							{{ HTML::link_to_secure(ADMIN.'/menus/edit/'.$menu['slug'], 'Edit', array('class' => 'btn btn-mini')) }}
 
-						@if ($menu['user_editable'])
-							{{ HTML::link_to_secure(ADMIN.'/menus/delete/'.$menu['slug'], 'Delete', array('class' => 'btn btn-danger', 'onclick' => 'return confirm(\'Are you sure you want to delete this menu? This cannot be undone.\');')) }}
-						@endif
+							@if ($menu['user_editable'])
+								{{ HTML::link_to_secure(ADMIN.'/menus/delete/'.$menu['slug'], 'Delete', array('class' => 'btn btn-mini btn-danger', 'onclick' => 'return confirm(\'Are you sure you want to delete this menu? This cannot be undone.\');')) }}
+							@endif
+						</div>
 					</td>
 				</tr>
 			@empty
