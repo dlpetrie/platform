@@ -3,7 +3,7 @@
 
 
 	@foreach ($extension_rules as $category)
-		<fieldset class="toggle">
+		<fieldset>
 			<legend>{{ $category['title'] }}</legend>
 			@foreach($category['permissions'] as $permission)
 
