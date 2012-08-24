@@ -27,7 +27,7 @@ Platform is an application base, a bootstrap for Laravel. The fundamentals + a f
 Getting Started
 -----------
 
-Clone the repo and be sure to include submodules, `git clone --recursive git://github.com/cartalyst/platform.git`, or [download the latest release](https://github.com/cartalyst).
+Clone the repo and be sure to include submodules, `git clone --recursive git://github.com/cartalyst/platform.git`, or [download the latest release](https://github.com/cartalyst/platform/downloads).
 
 For older versions of Git:
 
