@@ -11,7 +11,7 @@ return array(
 	),
 
 	'errors' => array(
-		'invalid_options'         => 'Options must be null or an array'
+		'invalid_options'         => 'Options must be null or an array',
 		'theme_and_type_required' => 'Theme and Type are required',
 		'update'                  => 'Theme was not updated.',
 	),
