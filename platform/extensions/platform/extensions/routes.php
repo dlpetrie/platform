@@ -18,4 +18,16 @@
  * @link       http://cartalyst.com
  */
 
+/**
+ * Route /api/extensions/:extension
+ *
+ *	<code>
+ *		/api/extensions/users => extensions::extensions.api@index(users)
+ *	</code>
+ */
+Route::any(API.'/extensions/(:any)', function($slug = null)
+{
+	return Controller::call('extensions::api.extensions@index', array($slug));
+});
+
 Route::controller(Controller::detect('extensions'));

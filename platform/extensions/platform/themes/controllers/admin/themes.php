@@ -60,11 +60,12 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
 	/**
 	 * Edit Themes with associated options
 	 *
+	 * @param   string  $type
+	 * @param   string  $name
 	 * @return  View
 	 */
-	public function get_edit($type, $theme)
+	public function get_edit($type, $name)
 	{
-
 		// Set menu active states
 		if ($type == 'frontend')
 		{
@@ -75,21 +76,29 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
 			$this->active_menu('admin-backend');
 		}
 
-		// get theme.info data
-		$theme_info = API::get('themes', array(
+		$data = array(
 			'type' => $type,
-			'name' => $theme,
-		));
+			'name' => $name,
+		);
 
-		// get custom theme options
-		$options = API::get('themes/options', array(
-			'type'  => $type,
-			'theme' => $theme
-		));
+		// Get theme data
+		try
+		{
+			// Merge the default theme info with the custom options
+			$data['theme'] = API::get('themes/'.$type.'/'.$name);
+			$options       = API::get('themes/'.$type.'/'.$name.'/options');
+			$options       = array_get($options, 'options');
+			$data['theme']['options'] = array_replace_recursive(array_get($data, 'theme.options'), $options);
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
 
-		$data['theme'] = $theme_info['themes'][$type];
-
-		$data['theme'] = $options['options'] + $data['theme'];
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+		}
 
 		return Theme::make('themes::edit', $data);
 	}
@@ -97,129 +106,145 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
 	/**
 	 * Processes post data for theme options
 	 *
-	 * @param   string  theme type - frotend/backend
-	 * @return  array   result array
+	 * @param   string  $type
+	 * @param   string  $name
+	 * @return  Redirect
 	 */
-	protected function post_edit($type, $theme)
+	public function post_edit($type, $name)
 	{
+		$data = array(
 
-		$result = API::post('themes/update', array(
-			'id'      => Input::get('id'),
-			'type'    => $type,
-			'theme'   => $theme,
-			'options' => Input::get('options'),
-			'status'  => Input::get('status', 1)
-		));
+			// Currently, status is never passed
+			// through by the input
+			'status'  => Input::get('status', 1),
+			'options' => Input::get('options', array()),
+		);
 
-		if ($result['status'])
+		try
 		{
-			Platform::messages()->success($result['message']);
-
-			return Redirect::to_secure(ADMIN.'/themes/edit/'.$type.'/'.$theme);
+			API::put('themes/'.$type.'/'.$name.'/options', $data);
 		}
-		else
+		catch (APIClientException $e)
 		{
-			echo Platform::messages()->error($result['message']);
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
 
+		return Redirect::to_secure(ADMIN.'/themes/edit/'.$type.'/'.$name);
 	}
 
 
 	/**
 	 * Activates a theme
 	 *
-	 * @param   string  theme type - frotend/backend
-	 * @return  array   result array
+	 * @param   string  $type
+	 * @return  array   $theme
 	 */
 	protected function post_activate($type, $theme)
 	{
-
-		$result = API::post('settings', array(
-			'settings' => array(
-				'values' => array(
-					'extension' => 'themes',
-					'type'      => 'theme',
-					'name'      => Input::get('type'),
-					'value'     => Input::get('theme'),
-				),
-
-				// validation
-				'validation' => array(
-					'name'  => 'required',
-					'value' => 'required',
-				),
-
-				// labels
-				'labels' => array(
-					'name' => 'Theme'
-				),
-			),
-		));
-
-		if ($result['status'])
+		try
 		{
-			Platform::messages()->success($result['updated']);
+			API::post('settings', array(
+				'settings' => array(
+					'values' => array(
+						'extension' => 'themes',
+						'type'      => 'theme',
+						'name'      => Input::get('type'),
+						'value'     => Input::get('theme'),
+					),
 
-			$data = $this->theme_data('backend');
+					// validation
+					'validation' => array(
+						'name'  => 'required',
+						'value' => 'required',
+					),
 
-			return Redirect::to_secure(ADMIN.'/themes/'.$type);
+					// labels
+					'labels' => array(
+						'name' => 'Theme'
+					),
+				),
+			));
 		}
-		else
+		catch (APIClientException $e)
 		{
-			echo Platform::messages()->error($result['errors']);
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
 
-
+		return Redirect::to_secure(ADMIN.'/themes/'.$type);
 	}
-
 
 	/**
 	 * Gets all theme data necessary for views
 	 *
-	 * @param   string  theme type - frotend/backend
-	 * @return  array   theme data
+	 * @param   string  $type
+	 * @return  array   $data
 	 */
 	protected function theme_data($type)
 	{
-		// retrieve all themes of type requested
-		$themes = API::get('themes', array(
-			'type' => $type
-		));
-
-		$themes = $themes['themes'][$type];
-
-		// get active theme
-		$active = API::get('settings', array(
-			'where'     => array(
-				array('extension', '=', 'themes'),
-				array('type', '=', 'theme'),
-				array('name', '=', $type)
-			),
-		));
-
-		$active = $active['settings'][0];
-
-		// get active theme info and remove from array
-		if ( array_key_exists($active['value'], $themes))
+		try
 		{
-			$data['exists'] = true;
-
-			// set active and remove theme from array
-			$data['active'] = $themes[$active['value']];
-			unset($themes[$active['value']]);
-
-			// set all other themes to inactive
-			$data['inactive'] = $themes;
+			$themes = API::get('themes/'.$type);
 		}
-		else
+		catch (APIClientException $e)
 		{
-			$data['exists'] = false;
+			Platform::messages()->error($e->getMessage());
 
-			// theme doesn't exist so we'll just give a name
-			$data['active']['name'] = $active['value'];
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 
-			// set all themes to inactive
-			$data['inactive'] = $themes['themes'];
+			$themes = array();
+		}
+
+		$active = Platform::get('themes.theme.'.$type, 'default');
+
+		// Set some fallback data
+		$data = array(
+
+			// The type of theme
+			'type' => $type,
+
+			// If we have an existing active theme
+			'exists' => false,
+
+			// Mimmick the data we
+			// get back from the API
+			// so the view exists.
+			'active' => array(
+				'name' => Str::title($active),
+			),
+
+			// Inactive themes is everything
+			// else. We'll override this soon
+			'inactive' => $themes,
+		);
+
+		// Loop through themes
+		foreach ($themes as $index => $theme)
+		{
+			// If it's the active theme
+			if ($theme['theme'] === $active)
+			{
+				// We have an active theme
+				$data['exists'] = true;
+
+				// Set it in the data array
+				$data['active'] = $theme;
+
+				// Remove the inactive one
+				array_forget($data, 'inactive.'.$index);
+			}
 		}
 
 		return $data;

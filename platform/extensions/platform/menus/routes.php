@@ -18,4 +18,44 @@
  * @link       http://cartalyst.com
  */
 
+// All reserved API routes should be put here.
+// Menu children cannot match these routes.
+$reserved = array('active', 'active_path');
+
+/**
+ * Route flat menu children.
+ */
+Route::any(array(API.'/menus/((?!'.implode('|', $reserved).').*)/children/flat', API.'/menus/flat'), function($slug = false)
+{
+	return Controller::call('menus::api.menus@flat', array($slug));
+});
+
+/**
+ * Route /api/menus/:children
+ *
+ *	<code>
+ *		/api/menus/admin/children => menus::menus.api@children(admin)
+ *	</code>
+ */
+Route::any(API.'/menus/((?!'.implode('|', $reserved).').*)/children', function($slug = null)
+{
+	return Controller::call('menus::api.menus@children', array($slug));
+});
+
+/**
+ * Route /api/menus/:menu
+ *
+ *	<code>
+ *		/api/menus/admin => menus::menus.api@index(admin)
+ *	</code>
+ */
+Route::any(API.'/menus/((?!'.implode('|', $reserved).').*)', function($slug = null)
+{
+	return Controller::call('menus::api.menus@index', array($slug));
+});
+
+// Unset the $reserved variable
+// from the global namespace
+unset($reserved);
+
 Route::controller(Controller::detect('menus'));

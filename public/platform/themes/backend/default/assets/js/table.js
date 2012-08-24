@@ -464,11 +464,11 @@ if (platform == undefined)
 			'attributes' : 'class="btn active"', // string
 		},
 		'removeFilter' : {
-			'text' : 'remove',
+			'text' : 'Remove',
 			'attributes' : 'class="active"',
 		},
 		'refresh' : {
-			'text' : 'refresh',
+			'text' : 'Refresh',
 			'attributes' : 'class="btn"',
 		}
 	};

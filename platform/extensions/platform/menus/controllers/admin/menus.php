@@ -33,8 +33,24 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 
 	public function get_index()
 	{
+		try
+		{
+			$menus = API::get('menus');
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+
+			return Redirect::to(ADMIN);
+		}
+
 		return Theme::make('menus::index')
-		            ->with('menus', API::get('menus'));
+		            ->with('menus', $menus);
 	}
 
 	public function get_create()
@@ -42,38 +58,93 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 		return $this->get_edit();
 	}
 
-	public function get_edit($id = false)
+	/**
+	 * Returns the edit / create view for
+	 * a menu.
+	 *
+	 * @param   string  $slug
+	 * @return  Response
+	 */
+	public function get_edit($slug = false)
 	{
-		// Get menu from API
-		$result = API::get('menus/menu', array(
-			'id' => $id,
-		));
-		$menu   = $result['menu'];
+		// If we are editing a menu
+		if ($slug != false)
+		{
+			try
+			{
+				$menu = API::get('menus/'.$slug, array(
+					'children' => true,
+				));
+			}
+			catch (APIClientException $e)
+			{
+				Platform::messages()->error($e->getMessage());
 
-		// Get last item ID
-		$result       = API::get('menus/last_item_id');
-		$last_item_id = $result['last_item_id'];
+				foreach ($e->errors() as $error)
+				{
+					Platform::messages()->error($error);
+				}
 
-		// Get
-		$result = API::get('menus/slugs', array(
-			'not_id' => isset($menu['id']) ? $menu['id'] : false,
-		));
-		$persisted_slugs  = $result['slugs'];
+				return Redirect::to_secure(ADMIN.'/menus');
+			}
+		}
+		else
+		{
+			// Fallback array
+			$menu = array();
+		}
 
+		// Get all children
+		try
+		{
+			$all_children = API::get('menus/flat');
+		}
+		catch (APIClientException $e)
+		{
+			$all_children = array();
+		}
+
+		// Get the last child's ID
+		$last_child_id = array_get(end($all_children), 'id', 0);
+
+		// Get array of persisted menu slugs. It's used
+		// by javascript to validate unique slugs on
+		// client end in addition to server end.
+		$persisted_slugs = array();
+		foreach ($all_children as $child)
+		{
+			$persisted_slugs[] = array_get($child, 'slug');
+		}
+		sort($persisted_slugs);
+
+		// Return the edit view
 		return Theme::make('menus::edit')
 		            ->with('menu', $menu)
-		            ->with('menu_id', (isset($menu['id'])) ? $menu['id'] : false)
-		            ->with('item_template', json_encode(Theme::make('menus::edit/item_template')->render()))
-		            ->with('last_item_id', $last_item_id)
-		            ->with('root_slug', isset($menu['slug']) ? $menu['slug'] : null)
-		            ->with('persisted_slugs', json_encode($persisted_slugs));
+		            ->with('menu_slug', array_get($menu, 'slug', false))
+		            ->with('last_child_id', $last_child_id)
+		            ->with('root_slug', array_get($menu, 'slug', false))
+		            ->with('persisted_slugs', $persisted_slugs);
 	}
 
-	public function post_edit($id = false)
+	/**
+	 * Processed creating a menu.
+	 *
+	 * @return  Response
+	 */
+	public function post_create()
 	{
-		$items = array();
+		return $this->post_edit();
+	}
 
-		$input_hierarchy = Input::get('items_hierarchy');
+	/**
+	 * Processes editing a menu.
+	 *
+	 * @param   string  $slug
+	 * @return  mixed
+	 */
+	public function post_edit($slug = false)
+	{
+		$input_hierarchy = Input::get('children_hierarchy');
 
 		// JSON string on non-AJAX form
 		if (is_string($input_hierarchy))
@@ -81,99 +152,149 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 			$input_hierarchy = json_decode($input_hierarchy, true);
 		}
 
-		foreach ($input_hierarchy as $item)
+		// Check for input hierarchy
+		if ( ! $input_hierarchy or ! is_array($input_hierarchy))
 		{
-			$this->process_item_recursively($item, $items);
+			if (Request::ajax())
+			{
+				return new Response(array(
+					'message' => 'No children hierarchy was provided.'
+				), API::STATUS_BAD_REQUEST);
+			}
+
+			Platform::messages()->error('No children hierarchy was provided.');
+
+			return Redirect::to_secure(ADMIN.'/menus'.(($slug) ? '/edit/'.$slug : null));
 		}
 
-		$result = API::post('menus/menu', array(
-			'id'    => $id,
-			'name'  => Input::get('name'),
-			'slug'  => Input::get('slug'),
-			'items' => $items,
-		));
+		// Prepare our children
+		$children = array();
 
-		// Ajax form
-		if (Request::ajax())
+		foreach ($input_hierarchy as $child)
 		{
-			// The menu is usually a property of the
-			// API response, don't need to transport
-			// all of this data...
-			array_forget($result, 'menu');
-
-			return new Response(json_encode($result));
+			$this->process_child_recursively($child, $children);
 		}
 
-		// Traditional form submission
-		if ( ! $result['status'])
+		// Prepare data for the API
+		$data = array();
+
+		if ($name = Input::get('name'))
 		{
-			Cartalyst::messages()->error($result['message']);
+			$data['name'] = $name;
+		}
+		if ($_slug = Input::get('slug'))
+		{
+			$data['slug'] = $_slug;
+		}
+		if (count($children) > 0)
+		{
+			$data['children'] = $children;
 		}
 
-		return Redirect::to_secure(ADMIN.'/menus/edit/'.array_get($result, 'menu.id'));
+		try
+		{
+			// If we're updating a menu
+			if ($slug != false)
+			{
+				API::put('menus/'.$slug, $data);
+			}
+			else
+			{
+				API::post('menus', $data);
+			}
+		}
+		catch (APIClientException $e)
+		{
+			if (Request::ajax())
+			{
+				return new Response(array(
+					'message' => $e->getMessage(),
+				), $e->getCode());
+			}
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+
+			return Redirect::to_secure(ADMIN.'/menus'.(($slug) ? '/edit/'.$slug : null));
+		}
+
+		return Redirect::to_secure(ADMIN.'/menus');
 	}
 
-	public function get_delete($id)
+	public function get_delete($slug)
 	{
-		$result = API::post('menus/delete', array(
-			'id' => $id,
-		));
+		try
+		{
+			API::delete('menus/'.$slug);
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+		}
 
 		return Redirect::to_secure(ADMIN.'/menus');
 	}
 
 	/**
-	 * Recursively processes an item and it's children
+	 * Recursively processes an child and it's children
 	 * based on POST data.
 	 *
-	 * @param   array  $item
-	 * @param   array  $items
+	 * @param   array  $child
+	 * @param   array  $children
 	 */
-	protected function process_item_recursively($item, &$items)
+	protected function process_child_recursively($child, &$children)
 	{
-		$new_item = array(
-			'name'   => Input::get('item_fields.'.$item['id'].'.name'),
-			'slug'   => Input::get('item_fields.'.$item['id'].'.slug'),
-			'uri'    => Input::get('item_fields.'.$item['id'].'.uri'),
-			'target' => Input::get('item_fields.'.$item['id'].'.target', 0),
-			'type'   => Input::get('item_fields.'.$item['id'].'.type', 0),
-			'status' => Input::get('item_fields.'.$item['id'].'.status', 1),
+		$new_child = array(
+			'name'       => Input::get('children.'.$child['id'].'.name'),
+			'slug'       => Input::get('children.'.$child['id'].'.slug'),
+			'uri'        => Input::get('children.'.$child['id'].'.uri'),
+			'target'     => Input::get('children.'.$child['id'].'.target', 0),
+			'visibility' => Input::get('children.'.$child['id'].'.visibility', 0),
+			'status'     => Input::get('children.'.$child['id'].'.status', 1),
 		);
 
-		// Determine if we're a new item or not. If we're
+		// Determine if we're a new child or not. If we're
 		// new, we don't attach an ID. Nesty will handle the
 		// rest.
-		if ( ! Input::get('item_fields.'.$item['id'].'.is_new'))
+		if ( ! Input::get('children.'.$child['id'].'.is_new'))
 		{
-			$new_item['id'] = $item['id'];
+			$new_child['id'] = $child['id'];
 		}
 
 		// Now, look for secure URLs
-		if (URL::valid($new_item['uri']))
+		if (URL::valid($new_child['uri']))
 		{
-			$new_item['secure'] = (int) starts_with($new_item['uri'], 'https://');
+			$new_child['secure'] = (int) starts_with($new_child['uri'], 'https://');
 		}
 
 		// Relative URL, look in the POST data
 		else
 		{
-			$new_item['secure'] = Input::get('item_fields.'.$item['id'].'.secure', 0);
+			$new_child['secure'] = Input::get('children.'.$child['id'].'.secure', 0);
 		}
 
 		// If we have children, call the function again
-		if (isset($item['children']) and is_array($item['children']) and count($item['children']) > 0)
+		if (isset($child['children']) and is_array($child['children']) and count($child['children']) > 0)
 		{
-			$children = array();
+			$grand_children = array();
 
-			foreach ($item['children'] as $child)
+			foreach ($child['children'] as $child)
 			{
-				$this->process_item_recursively($child, $children);
+				$this->process_child_recursively($child, $grand_children);
 			}
 
-			$new_item['children'] = $children;
+			$new_child['children'] = $grand_children;
 		}
 
-		$items[] = $new_item;
+		$children[] = $new_child;
 	}
 
 }

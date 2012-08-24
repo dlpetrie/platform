@@ -21,6 +21,10 @@
 class Admin_Controller extends Authorized_Controller
 {
 
+	/**
+	 * Called when the class object is
+	 * initialized
+	 */
 	public function __construct()
 	{
 		$this->filter('before', 'admin_auth')->except($this->whitelist);
@@ -34,23 +38,22 @@ class Admin_Controller extends Authorized_Controller
 	 */
 	public function before()
 	{
-		if ( Config::get('application.ssl') and ! Request::secure())
+		if (Config::get('application.ssl') and ! Request::secure())
 		{
 			//return Redirect::to_secure(URI::current())->send();
 		}
 
-		// now check to make sure they have bundle specific permissions
+		// Now check to make sure they have bundle specific permissions
 		if ( ! Sentry::user()->has_access())
 		{
 			Platform::messages()->error('Insufficient Permissions');
-			Redirect::to(ADMIN.'/dashboard')->send();
-			exit;
+			return Redirect::to(ADMIN.'/dashboard');
 		}
 
 		// Set the active theme based on the database contents,
 		// falling back to the theme config.
-		Theme::active('backend/'.Platform::get('themes.theme.backend'));
-		Theme::fallback('backend/default');
+		Theme::active('backend'.DS.Platform::get('themes.theme.backend'));
+		Theme::fallback('backend'.DS.'default');
 	}
 
 }

@@ -21,6 +21,7 @@
 namespace Platform\Settings\Widgets;
 
 use API;
+use APIClientException;
 use Theme;
 
 class Settings
@@ -28,21 +29,19 @@ class Settings
 
 	public function general()
 	{
-		// get extension settings from db
-		$settings = API::get('settings', array(
-			'where' => array(
-				array('extension', '=', 'settings')
-			),
-			'organize' => true
-		));
-
-		if ($settings['status'])
+		try
 		{
-			$data['settings'] = $settings['settings'];
+			// Get extension settings from db
+			$data['settings'] = API::get('settings', array(
+				'where' => array(
+					array('extension', '=', 'settings')
+				),
+				'organize' => true
+			));
 		}
-		else
+		catch (APIClientException $e)
 		{
-			$data['message'] = $settings['message'];
+			$data['message'] = $e->getMessage();
 		}
 
 		return Theme::make('settings::widgets.form.general', $data);

@@ -21,8 +21,12 @@
 namespace Platform\Users\Widgets;
 
 use API;
+use APINotFoundException;
 use Lang;
+use Platform;
+use Redirect;
 use Sentry;
+use Str;
 use Theme;
 
 class Admin_User_Form
@@ -58,25 +62,20 @@ class Admin_User_Form
 	 */
 	public function edit($id)
 	{
-		// get user being edited
-		$user = API::get('users', array(
-			'where' => array('users.id', '=', $id)
-		));
-
-		if ($user['status'])
+		try
 		{
-			$data['user'] = $user['users'][0];
+			$data['user'] = API::get('users/'.$id);
 		}
-		else
+		catch (APINotFoundException $e)
 		{
-			// user doesn't exist, redirect
-			return Redirect::to('admin/users');
+			Platform::messages()->error($e->getMessage());
+			return Redirect::to(ADMIN.'/users');
 		}
 
 		// set status options
 		$data['status_options'] = array(
-			1 => __('users.enabled'),
-			0 => __('users.disabled'),
+			1 => Lang::line('general.enabled')->get(),
+			0 => Lang::line('general.disabled')->get(),
 		);
 
 		// get and set group options
@@ -108,11 +107,11 @@ class Admin_User_Form
 		{
 			foreach ($rules as $rule)
 			{
-				// reformat to grab language file
+				// Reformat to grab language file
 				$lang = str_replace($bundle.'::', '', $rule);
 				$lang = str_replace('@', '.', $lang);
 
-				// find the title language path
+				// fFnd the title language path
 				$title = '';
 				$title_path = explode('.', $lang);
 				for ($i = 0; $i < count($title_path) - 1; $i++)
@@ -120,15 +119,15 @@ class Admin_User_Form
 					$title .= $title_path[$i].'.';
 				}
 
-				// set vars
+				// Set vars
 				$title = Lang::line($bundle.'::permissions.'.$title.'_title_')->get();
 				$lang  = $bundle.'::permissions.'.$lang;
-				$slug  = \Str::slug($title, '_');
+				$slug  = Str::slug($title, '_');
 
 				$extension_rules[$slug]['title'] = $title;
 				$extension_rules[$slug]['permissions'][] = array(
 					'value'	=> Lang::line($lang)->get(),
-					'slug'  => \Str::slug($rule, '_'),
+					'slug'  => Str::slug($rule, '_'),
 					'has'   => (array_key_exists($rule, $current_permissions) and $current_permissions[$rule] == 1) ? 1 : '',
 				);
 			}

@@ -58,5 +58,7 @@
 	<!-- Body Scripts -->
 	{{ Asset::scripts() }}
 
+	@yield('scripts')
+
 </body>
 </html>

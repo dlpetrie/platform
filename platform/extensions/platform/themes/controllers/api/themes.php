@@ -18,62 +18,181 @@
  * @link       http://cartalyst.com
  */
 
+use Theme\Theme as BundleTheme;
 use Platform\Themes\Theme;
 
 class Themes_API_Themes_Controller extends API_Controller
 {
 
-	public function get_index()
+	/**
+	 * Returns either all themes in all types, all
+	 * themes of a particular type, or a particular theme.
+	 *
+	 *	<code>
+	 *		$all_themes_all_types = API::get('themes');
+	 *		$all_backend          = API::get('themes/backend');
+	 *		$all_frontend         = API::get('themes/frontend');
+	 *      $default_backend      = API::get('themes/backend/default');
+	 *	</code>
+	 *
+	 * @param   string  $type
+	 * @param   string  $name
+	 * @return  Response
+	 */
+	public function get_index($type = false, $name = false)
 	{
-		$type = Input::get('type', array('frontend', 'backend'));
-		$name = Input::get('name');
-
-		if ( ! is_array($type))
+		// Fetching all themes
+		if ($type == false)
 		{
-			$type = array($type);
+			// Array of themes we'll retrieve
+			$themes = array();
+
+			// Loop through and add themes
+			foreach (Theme::types() as $type)
+			{
+				if ($theme = Theme::fetch($type, $name))
+				{
+					$themes[$type] = $theme;
+				}
+			}
+
+			// If we have got some themes, give them back
+			if (count($themes) > 0)
+			{
+				return new Response($themes);
+			}
+
+			// Otherwise, 404 the user
+			return new Response(array(
+				'message' => Lang::line('themes::messages.no_themes_found')->get(),
+			), API::STATUS_NOT_FOUND);
 		}
 
-		$themes = array();
-
-		if (in_array('frontend', $type))
+		else
 		{
-			$themes['frontend'] = Theme::fetch('frontend', $name);
-		}
+			// Are we returning one theme only?
+			if ($name != false)
+			{
+				if ($theme = Theme::fetch($type, $name) and is_array($theme))
+				{
+					return new Response($theme);
+				}
 
-		if (in_array('backend', $type))
-		{
-			$themes['backend'] = Theme::fetch('backend', $name);
-		}
+				// None? 404
+				return new Response(array(
+					'message' => Lang::line('themes::messages.not_found')->get(),
+				), API::STATUS_NOT_FOUND);
+			}
 
-		return array(
-			'status' => true,
-			'themes' => $themes
-		);
+			// If we have an array of themes for the given type
+			if ($themes = Theme::fetch($type) and is_array($themes))
+			{
+				return new Response($themes);
+			}
+
+			// None? 404
+			return new Response(array(
+				'message' => Lang::line('themes::messages.no_themes_found')->get(),
+			), API::STATUS_NOT_FOUND);
+		}
 	}
 
-	public function get_options()
+	/**
+	 * Returns an array of theme options for
+	 * the given theme.
+	 *
+	 *	<code>
+	 *		$options = API::get('themes/frontend/default/options');
+	 *	</code>
+	 *
+	 * @param   string  $type
+	 * @param   string  $name
+	 * @return  Response
+	 */
+	public function get_options($type, $name)
 	{
-		$type  = Input::get('type');
-		$theme = Input::get('theme');
-
-		if ( ! isset($type) or ! isset($theme))
+		// Make sure there is theme info
+		if ( ! $theme = Theme::fetch($type, $name))
 		{
-			return array(
-				'status'  => false,
-				'message' => 'Type and Theme are required.'
-			);
+			return new Response(array(
+				'message' => Lang::line('themes::messages.not_found')->get(),
+			), API::STATUS_NOT_FOUND);
 		}
 
-		$theme_options = Theme::find(function($query) use ($type, $theme)
+		$theme_options = Theme::find(function($query) use ($type, $name)
 		{
 			return $query->where('type', '=', $type)
-			             ->where('theme', '=', $theme);
+			             ->where('theme', '=', $name);
 		});
-		
-		return array(
-			'status'  => true,
-			'options' => ( ! empty($theme_options)) ? $theme_options : array(),
-		);
+
+		if ($theme_options === null)
+		{
+			$theme_options = new Theme(array(
+				'type'    => $type,
+				'theme'   => $name,
+				'options' => array(),
+			));
+		}
+
+		// Return the options
+		return new Response($theme_options);
+	}
+
+	/**
+	 * Updates theme options for a given theme.
+	 *
+	 *	<code>
+	 *		API::put('themes/backend/default/options', $options);
+	 *	</code>
+	 *
+	 * @param   string  $type
+	 * @param   string  $name
+	 * @return  Response
+	 */
+	public function put_options($type, $name)
+	{
+		if ( ! $theme_info = Theme::fetch($type, $name))
+		{
+			return new Response(array(
+				'message' => Lang::line('themes::messages.not_found')->get(),
+			), API::STATUS_NOT_FOUND);
+		}
+
+		// Flag we'll use later for the
+		// API status
+		$exists = true;
+
+		// Find a theme option entity
+		$theme  = Theme::find(function($query) use ($type, $name)
+		{
+			return $query->where('type', '=', $type)
+			             ->where('theme', '=', $name);
+		});
+
+		// Create if non-existent
+		if ($theme === null)
+		{
+			$exists       = false;
+			$theme        = new Theme();
+			$theme->type  = $type;
+			$theme->theme = $name;
+		}
+
+		// Merge the default options with the posted ones
+		$theme->options = array_replace_recursive(array_get($theme_info, 'options'), Input::get('options'));
+		$theme->status  = Input::get('status');
+
+		if ($theme->save())
+		{
+			return new Response($theme, ($exists === true) ? API::STATUS_OK : API::STATUS_CREATED);
+		}
+		else
+		{
+			return new Response(array(
+					'message' => 'Updated theme.',
+					'errors'  => ($theme->validation()->errors->has()) ? $user->validation()->errors->all() : array(),
+					), ($theme->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
+		}
 	}
 
 	public function post_update()
@@ -83,7 +202,7 @@ class Themes_API_Themes_Controller extends API_Controller
 		{
 			return array(
 				'status'  => false,
-				'message' => 'Type and Theme are required'
+				'message' => Lang::line('themes::messages.errors.theme_and_type_required')->get(),
 			);
 		}
 
@@ -91,7 +210,7 @@ class Themes_API_Themes_Controller extends API_Controller
 		{
 			return array(
 				'status'  => false,
-				'message' => 'Options must be null or an array'
+				'message' => Lang::line('themes::messages.errors.invalid_options')->get(),
 			);
 		}
 
@@ -128,13 +247,13 @@ class Themes_API_Themes_Controller extends API_Controller
 		{
 			return array(
 				'status'  => true,
-				'message' => 'Theme updated',
+				'message' => Lang::line('themes::messages.success.update')->get(),
 			);
 		}
 
 		return array(
 			'status'  => false,
-			'message' => 'Theme not updated'
+			'message' => Lang::line('themes.messages.errors.update')->get(),
 		);
 	}
 

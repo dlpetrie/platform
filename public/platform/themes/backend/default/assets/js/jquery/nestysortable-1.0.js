@@ -23,7 +23,7 @@
 			 * An array of fields for the Nesty sortable.
 			 *
 			 * <code>
-			 *		{ name : 'my_field', newSelector : '.new-item-my-field', required : false }
+			 *		[{ name : 'my_field', newSelector : '.new-item-my-field' }]
 			 * </code>
 			 *
 			 * @var array
@@ -37,6 +37,13 @@
 
 			// JSON encoded string for new item template
 			itemTemplate: '',
+
+			// This is the selector for the new item's template.
+			// This container should be hidden at all times as we
+			// clone the HTML inside of this, apply the template and
+			// then attach that to the end of the list.
+			itemTemplateContainerSelector : '.items-new-template-container',
+			itemTemplateSelector          : '.items-new-template',
 
 			// The ID of the last item added. Used so we fill
 			// new templates with an ID that won't clash with existing
@@ -54,6 +61,11 @@
 			// Invalid field callback - must return true for valid
 			// field or false for invalid field.
 			invalidFieldCallback : function(field, value) {},
+
+			// The input name for the items
+			// hierarchy that's posted to
+			// the server.
+			hierarchyInputName: 'items_hierarchy',
 
 			// Misc
 			maxLevels     : 0,
@@ -85,6 +97,10 @@
 			// Check for NestedSortable
 			if ( ! $().nestedSortable) {
 				$.error('$.nestySortable requires $.nestedSortable');
+			}
+
+			if ( ! window.Tempo) {
+				$.error('$.nestySortable required TempoJS');
 			}
 
 			// Initialise NestedSortable
@@ -150,10 +166,20 @@
 				var itemTemplate = self.settings.itemTemplate;
 
 				// Select Fields
-				var selectFields = {}
+				var selectFields = {};
 
 				// Flag for valid itemTemplate
 				var valid = true;
+
+				var itemId               = self.settings.lastItemId + 1;
+				self.settings.lastItemId = itemId;
+
+				// Data for templat
+				var data = {
+					id      : itemId,
+					raw     : {},
+					control : {}
+				};
 
 				// Loop through the defined fields, and replace
 				// the template variables with the value of each
@@ -164,61 +190,71 @@
 					var field        = self.settings.fields[i],
 					    $formElement = $(field.newSelector);
 
-					// Checkboxes have a boolean attribute
-					if ($formElement.is(':checkbox')) {						
-						fieldValue = $formElement.attr('checked') ? 'checked="checked"' : '';
-						rawValue   = $formElement.attr('checked') ? $formElement.attr('value') : 0;
-					}
-					else if ($formElement.is('select')) {
-						fieldValue = $formElement.val();
-						rawValue   = $formElement.val();
-
-						selectFields[field.name] = rawValue;
-					}
-					else {
-						fieldValue = 'value="'+$formElement.val()+'"';
-						rawValue   = $formElement.val();
+					// Skip non-existent DOM elements
+					if ( ! $formElement.length) {
+						continue;
 					}
 
 					// Validate form element
 					if ($formElement.is(':invalid')) {
-						result = self.settings.invalidFieldCallback(field, rawValue);
-
-						if (typeof result !== 'undefiend' && valid === true) {
+						result = self.settings.invalidFieldCallback(field, $formElement.val());
+ 
+						if (typeof result !== 'indefined' && valid === true) {
 							valid = Boolean(result);
 						}
-
+ 
 						continue;
 					}
 
-					// Replace all field values. These change depending on the input type
-					var fieldRegex = new RegExp('\{\{field\.'+field.name+'\}\}', 'gi'),
-					    rawRegex   = new RegExp('\{\{raw\.'+field.name+'\}\}', 'gi');
+					// Checkboxes have a boolean attribute,
+					// We add 'checked="checked"' to it.
+					if ($formElement.is(':checkbox')) {
+						data.control[field.name] = ($formElement.attr('checked')) ? 'checked="checked"' : '';
+					}
 
-					// Replace all values
-					itemTemplate = itemTemplate.replace(fieldRegex, fieldValue);
-					itemTemplate = itemTemplate.replace(rawRegex, rawValue);
+					// Selects have a 'data-selected' attribute
+					// on the select element itself
+					else if ($formElement.is('select')) {
+						data.control[field.name] = 'data-value="' + $formElement.val() + '"';
+					}
+					else {
+						data.control[field.name] = $formElement.val();
+						rawValue   = $formElement.val();
+					}
+
+					data.raw[field.name] = $formElement.val();
 				}
 
 				if (valid !== true) {
 					return false;
 				}
 
-				// Lastly, add the ID
-				var itemId               = self.settings.lastItemId + 1;
-				itemTemplate             = itemTemplate.replace(/\{\{id\}\}/gi, itemId);
-				self.settings.lastItemId = itemId;
-				itemTemplate             = $(itemTemplate);
+				// Get the template
+				var $template = $(self.settings.itemTemplateSelector).clone();
+				$template.appendTo(self.settings.itemTemplateContainerSelector);
+				$template.attr('id', self.settings.itemTemplateSelector+'-'+self.randomString());
 
-				if (Object.keys(selectFields).length)
-				{
-					$.each(selectFields, function(idx, val) {
-						itemTemplate.find('[id$="-'+idx+'"]').val(val);
-					});
-				}
+				// Parse with TempoJS
+				Tempo.prepare($template.attr('id'), {
+					'var_braces' : '\\[\\%\\%\\]',
+					'tag_braces' : '\\[\\?\\?\\]'
+				}).render(data);
 
-				// Append to DOM
-				self.sortable().append(itemTemplate);
+				// Append
+				var $templateContents = $template.children('[data-template]');
+				$templateContents.appendTo(self.sortable());
+
+				// Update values if possible
+				$templateContents.find('select').each(function() {
+					var value;
+					if (value = $(this).attr('data-value')) {
+						$(this).val(value);
+						$(this).removeAttr('data-value');
+					}
+				});
+
+				// Delete the DOM element
+				$template.remove();
 
 				// Wipe fields
 				for (i in self.settings.fields) {
@@ -306,12 +342,20 @@
 			// Catch form submission.
 			self.elem.submit(function(e) {
 
+				// Remove the template from the DOM
+				// so it's not submitted, we'll re-insert
+				// after submit
+				var $template = self.elem.find(self.settings.itemTemplateSelector);
+				$templateClone = $template.clone();
+				$template.remove();
+
 				// AJAX form submission
 				if (self.settings.ajax === true) {
 					e.preventDefault();
 
-					var postData = $.extend($(this).find('input').serializeObject(), {
-						'items_hierarchy': self.sortable().nestedSortable('toHierarchy', {
+					var inputName = self.settings.hierarchyInputName,
+					     postData = $.extend($(this).find('input').serializeObject(), {
+						inputName : self.sortable().nestedSortable('toHierarchy', {
 							attribute: 'data-item'
 						})
 					});
@@ -332,6 +376,11 @@
 						}
 					});
 
+					// If we're using AJAX, put the template back in the DOM.
+					// Traditional form submission doesn't need it again as
+					// we're leaving the page.
+					$templateClone.appendTo(self.settings.itemTemplateContainerSelector);
+
 					return false;
 				}
 
@@ -341,10 +390,21 @@
 				});
 
 				// Append input to the form. It's values are JSON encoded..
-				self.elem.append('<input type="hidden" name="items_hierarchy" value=\'' + JSON.stringify(postData) + '\'>');
+				self.elem.append('<input type="hidden" name="' + self.settings.hierarchyInputName + '" value=\'' + JSON.stringify(postData) + '\'>');
 
 				return true;
 			});
+		},
+
+		randomString: function() {
+			var chars = 'abcdefghiklmnopqrstuvwxyz';
+			var string_length = 8;
+			var randomstring = '';
+			for (var i=0; i<string_length; i++) {
+				var rnum = Math.floor(Math.random() * chars.length);
+				randomstring += chars.substring(rnum,rnum+1);
+			}
+			return randomstring
 		}
 	}
 

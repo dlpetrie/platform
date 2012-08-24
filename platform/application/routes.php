@@ -50,62 +50,89 @@
 |
 */
 
-Route::any(ADMIN.'/(:any?)/(:any?)/(:any?)(/.*)?', function($bundle = 'dashboard', $controller = null, $action = null, $params = null) {
+Route::any(ADMIN.'/(:any?)/(:any?)/(:any?)(/.*)?', function($bundle = 'dashboard', $controller = null, $action = null, $params = null)
+{
 
 	if ( ! Bundle::exists($bundle))
 	{
 		return Response::error('404');
 	}
 
-	// check if the controller exists
+	// Check if the controller exists
 	if (Controller::resolve($bundle, 'admin.'.$controller))
 	{
-		$action = ($action) ?: 'index';
-		$controller = $bundle.'::admin.'.$controller.'@'.$action;
-		$params = explode('/', substr($params, 1));
+		$controller = $bundle.'::admin.'.$controller.'@'.(($action) ?: 'index');
+		$params     = explode('/', substr($params, 1));
 	}
+
+	// If it doesn't, default to to bundle name as a controller
 	else
 	{
-		// if it doesn't, default to to bundle name as a controller
-		$params = $action.$params;
-		$action = ($controller) ?: 'index';
-		$controller = $bundle.'::admin.'.$bundle.'@'.$action;
-		$params = explode('/', $params);
+		$controller = $bundle.'::admin.'.$bundle.'@'.(($controller) ?: 'index');
+		$params     = explode('/', $action.$params);
 	}
 
 	return Controller::call($controller, $params);
 });
 
+/**
+ * Route /api/extension/:id
+ *
+ *	<code>
+ *		/api/users/1 => users::api.users@index(1)
+ *	</code>
+ */
+Route::any(API.'/(:any)/(:num)', function($bundle = DEFAULT_BUNDLE, $id = null, $params = null)
+{
+	return Controller::call($bundle.'::api.'.$bundle.'@index', array($id));
+});
+
+/**
+ * Route /api/extension/controller/:id
+ *
+ *	<code>
+ *		/api/users/groups/1 => users::api.users.groups@index(1)
+ *	</code>
+ */
+Route::any(API.'/(:any)/(:any)/(:num)', function($bundle = DEFAULT_BUNDLE, $controller = null, $id = null, $params = null)
+{
+	return Controller::call($bundle.'::api.'.$controller.'@index', array($id));
+});
 
 // Re-route api controllers
-Route::any('api/(:any?)/(:any?)/(:any?)(/.*)?', function($bundle = 'dashboard', $controller = null, $action = null, $params = null) {
-
+Route::any(array(API.'/(:any?)/(:any?)/(:any?)(/.*)?', API.'/(:any?)/(:any?)(/.*)?', API.'/(:any?)(/.*)?'), function($bundle = 'dashboard', $controller = null, $action = null, $params = null)
+{
 	if ( ! Bundle::exists($bundle))
 	{
-		return Response::error('404');
+		$bundle = DEFAULT_BUNDLE;
 	}
 
-	// check if the controller exists
-	if (Controller::resolve($bundle, 'api.'.$controller))
+	// Check if the controller exists
+	if (Controller::resolve($bundle, $_controller = 'api.'.$controller))
 	{
-		$action = ($action) ?: 'index';
-		$controller = $bundle.'::api.'.$controller.'@'.$action;
-		$params = explode('/', substr($params, 1));
+		$controller = $bundle.'::'.$_controller.'@'.(($action) ?: 'index');
+		$params     = explode('/', substr($params, 1));
 	}
+
+	// If it doesn't, default to to bundle name as a controller
+	elseif (Controller::resolve($bundle, $_controller = 'api.'.$bundle))
+	{
+		$controller = $bundle.'::'.$_controller.'@'.(($controller) ?: 'index');
+		$params     = explode('/', $action.$params);
+	}
+
+	// Fallback to API controller
 	else
 	{
-		// if it doesn't, default to to bundle name as a controller
-		$params = $action.$params;
-		$action = ($controller) ?: 'index';
-		$controller = $bundle.'::api.'.$bundle.'@'.$action;
-		$params = explode('/', $params);
+		$controller = 'api@no_route';
+		$params     = array();
 	}
 
 	return Controller::call($controller, $params);
 });
 
 // Now detect controllers
-// Route::controller(Controller::detect());
+Route::controller(Controller::detect());
 
 /*
 |--------------------------------------------------------------------------
@@ -172,17 +199,25 @@ Route::filter('after', function($response)
 
 Route::filter('csrf', function()
 {
-	if (Request::forged()) return Response::error('500');
+	// if (Request::forged())
+	// {
+	// 	return Response::error('500');
+	// }
 
-	// remove the token from the input now
+	// Remove the token from the input now
 	Request::foundation()->request->remove(Session::csrf_token);
 });
 
+// Filter all auth
 Route::filter('auth', function()
 {
-	if ( ! Sentry::check()) return Redirect::to('login');
+	if ( ! Sentry::check())
+	{
+		return Redirect::to('login');
+	}
 });
 
+// Filter all admin auth
 Route::filter('admin_auth', function()
 {
 	if ( ! Sentry::check() or ! Sentry::user()->has_access('is_admin') )

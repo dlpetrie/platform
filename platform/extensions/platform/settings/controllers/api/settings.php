@@ -23,6 +23,16 @@ use Platform\Settings\Model\Setting;
 class Settings_API_Settings_Controller extends API_Controller
 {
 
+	/**
+	 * Gets a group of settings by the
+	 * given parameters
+	 *
+	 *	<code>
+	 *		API::get('settings', $conditions);
+	 *	</code>
+	 *
+	 * @return  Response
+	 */
 	public function get_index()
 	{
 		$where    = Input::get('where');
@@ -50,27 +60,25 @@ class Settings_API_Settings_Controller extends API_Controller
 		// if there was no result
 		if ( ! $result)
 		{
-			return array(
-				'status'  => false,
-				'message' => 'No settings found.'
-			);
+			return new Response(array(
+				'message' => Lang::line('settings::messages.errors.none_found')->get(),
+			), API::STATUS_NOT_FOUND);
 		}
 
 		if ($organize)
 		{
 			$settings = array();
+
 			foreach ($result as $setting)
 			{
 				$settings[$setting['type']][$setting['name']] = $setting;
 			}
 
 			$result = $settings;
+			unset($settings);
 		}
 
-		return array(
-			'status'    => true,
-			'settings'  => $result
-		);
+		return new Response($result);
 	}
 
 	public function post_index()
@@ -155,28 +163,37 @@ class Settings_API_Settings_Controller extends API_Controller
 				// now save the setting
 				if ($setting_model->save())
 				{
-					$updated[] = ucfirst($setting_model->name).' setting has been updated.';
+					$updated[] = ucfirst($setting_model->name);
 				}
 				else
 				{
 					// get errors
-					foreach($setting_model->validation()->errors->all() as $error)
+					foreach ($setting_model->validation()->errors->all() as $error)
 					{
 						$errors[] = $error;
 					}
 				}
 			}
-			catch (\Exception $e)
+			catch (Exception $e)
 			{
 				$errors[] = $e->getMessage();
 			}
 		}
-		
-		return array(
-			'status'  => true,
-			'updated' => $updated,
-			'errors'  => $errors
-		);
+
+		if (count($errors) > 0)
+		{
+			return new Response(array(
+				'message' => Lang::line('settings::messages.errors.occured')->get(),
+				'errors'  => $errors,
+			), API::STATUS_UNPROCESSABLE_ENTITY);
+		}
+
+		if (count($updated) === 0)
+		{
+			return new Response(null, API::STATUS_NO_CONTENT);
+		}
+
+		return new Response($updated);
 	}
 
 }

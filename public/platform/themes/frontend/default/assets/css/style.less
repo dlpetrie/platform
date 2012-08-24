@@ -81,7 +81,7 @@ hr {
 	}
 
 	#base > header .container {
-			padding:40px 20px;
+			padding:10px;
 			text-align:center;
 			margin:0 auto;
 		}
@@ -145,7 +145,7 @@ hr {
 
 	#page .content {
 		padding:20px 40px;
-		background:transparent url(../img/bg-etch-mobile.png) center top no-repeat;
+
 	}
 
 
@@ -169,6 +169,64 @@ hr {
 		font-style: italic;
 		line-height:10px;
 	}
+
+/* #Forms
+================================================== */
+form legend {
+	border-bottom:none;
+}
+
+form .help-block {
+	font-style: italic;
+}
+form hr {
+	margin: 10px 0;
+	border: 0;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #fff;
+}
+
+form input,
+form textarea,
+form select {
+	min-height: 28px;
+	padding:4px;
+	background:url(../img/ico-alerts.png) -32px 2px no-repeat;
+	outline: none;
+}
+
+
+form input:required.valid + .help-block,
+form input.valid:focus + .help-block,
+form input:checked + .help-block,
+form select:required.valid + .help-block,
+form select.valid:focus + .help-block {
+	color: #A6AD3C;
+}
+
+form input:required.required + .help-block,
+form input:required.error + .help-block,
+form input.required:focus + .help-block
+form select:required.required + .help-block,
+form select.required:focus + .help-block {
+	color: #8A211D;
+}
+
+
+/* Enhanced error styling */
+form input.error
+{
+	background-position: right -62px;
+
+}
+form input.required
+{
+	background-position: right -30px;
+}
+form input.valid
+{
+	background-position: right 2px;
+}
 
 
 /* #Home
@@ -230,5 +288,25 @@ hr {
 		letter-spacing: normal;
 		line-height: 1.3em;
 	}
+
+
+/* #A few bootstrap overides
+==================================================*/
+
+.table {
+	background-color:@white;
+}
+
+.btn-primary:hover {
+	color: @white;
+    text-decoration: none;
+    background-color: lighten(@purple, 5%);
+    *background-color: lighten(@purple, 10%); /* Buttons in IE7 don't get borders, so darken on hover */
+    background-position: 0 -40px;
+    // transition is only when going to hover, otherwise the background
+    // behind the gradient (there for IE<=9 fallback) gets mismatched
+    .transition(background-position .08s linear);
+}
+
 
 @import "bootstrap/less/responsive.less";

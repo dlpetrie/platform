@@ -8,8 +8,10 @@
 		<td class="span1">{{ $row['status'] }}</td>
 		<td class="span2">{{ date('g:ia - m.d.y', $row['created_at']) }}</td>
 		<td class="span2">
-			<a class="btn" href="{{ URL::to_secure(ADMIN.'/users/edit/'.$row['id']) }}">edit</a>
-			<a class="btn btn-danger" href="{{ URL::to_secure(ADMIN.'/users/delete/'.$row['id']) }}">delete</a>
+			<div class="btn-group">
+			<a class="btn btn-mini" href="{{ URL::to_secure(ADMIN.'/users/edit/'.$row['id']) }}">{{ Lang::line('button.edit') }}</a>
+			<a class="btn btn-mini btn-danger" href="{{ URL::to_secure(ADMIN.'/users/delete/'.$row['id']) }}">{{ Lang::line('button.delete') }}</a>
+			</div>
 		</td>
 	</tr>
 @endforeach

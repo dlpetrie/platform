@@ -66,6 +66,103 @@ hr {
 /*pre{border:4px solid #ddd;}
 pre code{display:block;padding:8px;background:#fbfbfb;border:1px solid #fff;}*/
 
+/* #Forms
+================================================== */
+
+form {
+	text-align: left;
+}
+
+form fieldset {
+	border:1px solid #ccc;
+	padding:10px;
+}
+
+form legend {
+	border-bottom:none;
+	padding:10px;
+	margin:0;
+}
+
+form fieldset div {
+	padding:4px;
+	vertical-align: middle;
+}
+
+form label {
+	display: inline-block;
+	width: auto;
+	padding:8px;
+	text-align: right;
+	min-width:120px;
+}
+
+form input,
+form textarea,
+form select {
+	min-height: 28px;
+	padding:4px;
+	background:url(../img/ico-alerts.png) -32px 4px no-repeat;
+	outline: none;
+}
+
+
+form input::-webkit-input-placeholder,
+form input:-moz-placeholder {
+	color: #A6A6A6;
+}
+
+form .help
+{
+	font-size: 12px;
+	padding: 3px;
+	width: 150px;
+	outline: 0;
+	font-style: italic;
+}
+
+form input:required.valid + .help,
+form input.valid:focus + .help,
+form input:checked + .help,
+form select:required.valid + .help,
+form select.valid:focus + .help {
+	color: #A6AD3C;
+}
+
+form input:required.required + .help,
+form input:required.error + .help,
+form input.required:focus + .help
+form select:required.required + .help,
+form select.required:focus + .help {
+	color: #8A211D;
+}
+
+
+/* Enhanced error styling */
+form input.error
+{
+	background-position: right -62px;
+
+}
+form input.required
+{
+	background-position: right -32px;
+}
+form input.valid
+{
+	background-position: right 2px;
+}
+
+form input.error::-webkit-input-placeholder,
+form inputerror :-moz-placeholder {
+	color: #fff;
+}
+
+form .actions {
+	padding:10px 0;
+	margin:0 auto;
+}
+
 /* #Installer
 ================================================== */
 
@@ -126,15 +223,6 @@ pre code{display:block;padding:8px;background:#fbfbfb;border:1px solid #fff;}*/
 		margin:0 auto;
 	}
 
-	.messages {
-
-	}
-	#installer .breadcrumbs .messages {
-		width:240px;
-		height:50px;
-		margin:8px auto;
-		margin-bottom:0;
-	}
 	#installer .breadcrumbs .active {
 		background: #fff;
 		padding:14px 10px;
@@ -142,28 +230,33 @@ pre code{display:block;padding:8px;background:#fbfbfb;border:1px solid #fff;}*/
 
 
 	#installer .content {
-		background: #f7f7f7;
+		background: #fbfbfb;
 		border:1px solid #fff;
 		margin:0;
-		padding:20px;
+		/*padding:20px;*/
 		text-align: center;
 	}
 
 	#installer .content .contain {
-		background:#fbfbfb;
-		border:1px solid #ddd;
-		padding:20px;
+		/*background:#fbfbfb;*/
+		/*border:1px solid #ddd;*/
+		/*padding:20px;*/
+		max-width:960px;
+		margin:0 auto;
 	}
 
 	#installer .content h2 {
 		font-family: Helvetica, Arial, sans-serif;
-		font-size: 32px;
+		font-size: 26px;
 		font-style: normal;
 		font-weight: bold;
 		text-transform: normal;
 		letter-spacing: -2px;
 		line-height: 1.2em;
 		color:#666;
+		margin-bottom:15px;
+		width:90%;
+		margin:0 auto;
 	}
 
 	#installer .content code {
@@ -171,22 +264,31 @@ pre code{display:block;padding:8px;background:#fbfbfb;border:1px solid #fff;}*/
 		padding:10px;
 	}
 
-	#installer fieldset {
-		width:290px;
+	/* Forms - overides form.css*/
+
+	#installer form {
+		width:400px;
 		margin:0 auto;
 	}
 
-	#installer legend {
-		border-bottom:none;
+	#installer fieldset {
+		border:none;
 	}
-
-	#installer input,
-	#installer select {
-		height:30px;
+	
+	#installer form legend {
+		text-align:center;
 	}
-
-	#installer .actions {
+	#installer form .help {
+		display:block;
+		margin-left:140px;
+		min-width:220px;
+	}
+	#installer form .actions {
+		text-align:center;
 		padding:20px 0;
-		border:1px solid #ddd;
-		background:#f7f7f7;
+	}
+
+	#installer form .messages {
+		margin:8px auto;
+		margin-bottom:0;
 	}

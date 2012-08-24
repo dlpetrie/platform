@@ -20,9 +20,16 @@
 
 class Public_Controller extends Base_Controller
 {
+
+	/**
+	 * This function is called before the action is executed.
+	 *
+	 * @return  void
+	 */
 	public function before()
 	{
-		Theme::active('frontend/'.Platform::get('themes.theme.frontend'));
-		Theme::fallback('frontend/default');
+		Theme::active('frontend'.DS.Platform::get('themes.theme.frontend'));
+		Theme::fallback('frontend'.DS.'default');
 	}
+
 }

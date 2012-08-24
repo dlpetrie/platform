@@ -1,22 +1,30 @@
-{{ Form::open(ADMIN.'/users/groups/permissions/'.$id) }}
+<form action="{{ URL::to_secure(ADMIN.'/users/groups/permissions/'.$id) }}" id="permissions-form" class="form-horizontal" method="POST" accept-char="UTF-8">
+	<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
 
-	{{ Form::token() }}
 
-	<div class="well">
-	@foreach($extension_rules as $category)
-		<fieldset>
+	@foreach ($extension_rules as $category)
+		<fieldset class="toggle">
 			<legend>{{ $category['title'] }}</legend>
 			@foreach($category['permissions'] as $permission)
+
 				<div>
-					<label for="{{ $permission['value'] }}" class="checkbox">
-						<input type="checkbox" id="{{ $permission['slug'] }}" name="{{ $permission['slug'] }}" {{ ($permission['has']) ? 'checked="checked"' : '' }}> {{ $permission['value'] }}
-					</label>
+					<input type="checkbox" id="{{ $permission['slug'] }}" name="{{ $permission['slug'] }}" {{ ($permission['has']) ? 'checked="checked"' : '' }}>
+					{{ $permission['value'] }}
 				</div>
+
 			@endforeach
 		</fieldset>
+		<hr>
 	@endforeach
+
+	<p class="messages"></p>
+
+	<hr>
+
+	<div class="actions">
+		<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users/groups') }}">{{ Lang::line('button.cancel') }}</a>
+		<button class="btn btn-large btn-primary" type="submit">{{ Lang::line('button.update') }}</button>
 	</div>
 
-	<button class="btn btn-large" type="submit">{{ Lang::line('users::groups.button.update') }}</button>
-	<a class="btn btn-large" href="{{ URL::to_secure(ADMIN.'/users/groups') }}">{{ Lang::line('users::groups.button.cancel') }}</a>
-{{ Form::close() }}
+
+</form>

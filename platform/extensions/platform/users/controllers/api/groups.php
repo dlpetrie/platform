@@ -23,7 +23,19 @@ use Platform\Users\Group;
 class Users_API_Groups_Controller extends API_Controller
 {
 
-	public function get_index()
+	/**
+	 * Returns an array of groups by the
+	 * given filters or a single group
+	 *
+	 *	<code>
+	 *		$groups = API::get('users/groups');
+	 *		$group  = API::get('users/groups/:id');
+	 *	</code>
+	 *
+	 * @param   int  $id
+	 * @return  Response
+	 */
+	public function get_index($id = false)
 	{
 		$config = Input::get() + array(
 			'select'   => array('id', 'name'),
@@ -33,152 +45,162 @@ class Users_API_Groups_Controller extends API_Controller
 			'skip'     => 0,
 		);
 
+		// No ID? Return all groups
+		if ($id == false)
+		{
+			$groups = Group::find_custom($config['select'], $config['where'], $config['order_by'], $config['take'], $config['skip']);
+
+			return new Response($groups);
+		}
+
+		$config['take']  = 1;
+		$config['where'] = array('id', '=', $id);
+
 		$groups = Group::find_custom($config['select'], $config['where'], $config['order_by'], $config['take'], $config['skip']);
 
-		if ($groups)
+		if (empty($groups))
 		{
-			return array(
-				'status' => true,
-				'groups'  => $groups
-			);
+			return new Response(Lang::line('users::messages.groups.does_not_exist')->get(), API::STATUS_NOT_FOUND);
 		}
 
-		return array(
-			'status'  => false,
-			'message' => Lang::line('users::groups.errors.no_groups_exist')->get()
-		);
+		$group = $groups[0];
+		return new Response($group);
 	}
 
-	public function post_create()
+	/**
+	 * Creates a group
+	 *
+	 *	<code>
+	 *		API::post('users/groups', $data);
+	 *	</code>
+	 *
+	 * @return  Response
+	 */
+	public function post_index()
 	{
-		// set user data
+		// Create a group
 		$group = new Group(Input::get());
 
-		// save user
+		// Save group
 		try
 		{
+			// Save the group
 			if ($group->save())
 			{
-				return array(
-					'status'  => true,
-					'message' => Lang::line('users::groups.create.success')->get()
-				);
+				return new Response($group, API::STATUS_CREATED);
 			}
 			else
 			{
-				return array(
-					'status'  => false,
-					'message' => ($group->validation()->errors->has()) ? $group->validation()->errors->all() : Lang::line('users::groups.create.error')->get()
-				);
+				return new Response(array(
+					'message' => Lang::line('users::messages.create.error')->get(),
+					'errors'  => ($group->validation()->errors->has()) ? $group->validation()->errors->all() : array(),
+					), ($group->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 			}
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage()
-			);
+			return new Response(array(
+				'message' => $e->getMessage(),
+			), API::STATUS_BAD_REQUEST);
 		}
 	}
 
-	public function post_update()
+	/**
+	 * Updates a given group by the
+	 * provided ID
+	 *
+	 *	<code>
+	 *		API::put('users/groups/:id', $data);
+	 *	</code>
+	 *
+	 * @param   int  $id
+	 * @return  Response
+	 */
+	public function put_index($id)
 	{
-		// set user data
-		$group_data = Input::get();
+		// Update a group
+		$group = new Group(array_merge(array(
+			'id' => $id,
+		), Input::get()));
 
-		$group = new Group($group_data);
-
-		// save user
+		// Save group
 		try
 		{
+			// Save the group
 			if ($group->save())
 			{
-				return array(
-					'status'  => true,
-					'message' => Lang::line('users::groups.update.success')->get()
-				);
+				return new Response($group);
 			}
 			else
 			{
-				return array(
-					'status'  => false,
-					'message' => ($group->validation()->errors->has()) ? $group->validation()->errors->all() : Lang::line('users::groups.update.error')->get()
-				);
+				return new Response(array(
+					'message' => Lang::line('groups::messages.groups.update.error')->get(),
+					'errors'  => ($group->validation()->errors->has()) ? $group->validation()->errors->all() : array(),
+				), ($group->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 			}
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage()
-			);
+			return new Response(array(
+				'message' => $e->getMessage(),
+			), API::STATUS_BAD_REQUEST);
 		}
 	}
 
-	public function post_delete()
+	/**
+	 * Deletes a group by the
+	 * given ID
+	 *
+	 *	<code>
+	 *		API::delete('usrs/groups/:id');
+	 *	</code>
+	 *
+	 * @param   int  $id
+	 * @return  Response
+	 */
+	public function delete_index($id)
 	{
-		// check if id is set
-		if ( ! Input::get('id'))
+		$group = Group::find($id);
+
+		if ($group === null)
 		{
-			return array(
-				'status'  => false,
-				'message' => Lang::line('users::groups.general.id_required')->get(),
-	 		);
+			return new Response(array(
+				'message' => Lang::line('groups::groups.general.does_not_exist')->get()
+			), API::STATUS_NOT_FOUND);
 		}
 
-		// set user
 		try
 		{
-			$group = Group::find((int) Input::get('id'));
-
-			// throw http not found if user does not exist
-			if ( ! $group)
-			{
-				// log event only if admin is editing
-				// if (Sentry::check() and Sentry::user()->has_access())
-				// {
-				// 	$lang = array(
-				// 		'id'   => $group['id'],
-				// 		'user' => $group['metadata']['first_name'].' '.$group['metadata']['last_name']
-				// 	);
-				// 	Logger::add(Logger::DELETE, 'users', Lang::line('users.log_delete', $lang));
-				// }
-
-				return array(
-					'status'  => false,
-					'message' => Lang::line('users::groups.general.not_found')->get()
-				);
-			}
-
-			// save user data
 			if ($group->delete())
 			{
-				return array(
-					'status'  => true,
-					'message' => Lang::line('users::groups.delete.success')->get(),
-				);
+				return new Response(null, API::STATUS_NO_CONTENT);
 			}
 
-			return array(
-				'status'  => false,
-				'message' => 'User was not deleted'
-			);
+			return new Response(array(
+				'message' => Lang::line('users::messages.groups.delete.error')->get(),
+				'errors'  => ($group->validation()->errors->has()) ? $group->validation()->errors->all() : array(),
+			), ($group->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage()
-			);
+			return new Response(array(
+				'message' => $e->getMessage(),
+			), API::STATUS_BAD_REQUEST);
 		}
 	}
 
+	/**
+	 * Returns fields required for a
+	 * Platform.table
+	 *
+	 * @return  Response
+	 */
 	public function get_datatable()
 	{
 		$defaults = array(
 			'select'    => array(
-				'groups.id'     => Lang::line('users::groups.general.id')->get(),
-				'name'          => Lang::line('users::groups.general.name')->get(),
+				'groups.id'     => Lang::line('users::table.groups.id')->get(),
+				'name'          => Lang::line('users::table.groups.name')->get(),
 			),
 			'alias'     => array(
 				'groups.id' => 'id',
@@ -214,13 +236,13 @@ class Users_API_Groups_Controller extends API_Controller
 
 		$items = ($items) ?: array();
 
-		return array(
+		return new Response(array(
 			'columns'        => $defaults['select'],
 			'rows'           => $items,
 			'count'          => $count_total,
 			'count_filtered' => $count_filtered,
 			'paging'         => $paging,
-		);
+		));
 	}
 
 }

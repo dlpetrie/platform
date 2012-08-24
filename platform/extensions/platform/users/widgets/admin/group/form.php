@@ -45,19 +45,14 @@ class Admin_Group_Form
 	 */
 	public function edit($id)
 	{
-		// get user being edited
-		$group = API::get('users/groups', array(
-			'where' => array('id', '=', $id)
-		));
-
-		if ($group['status'])
+		try
 		{
-			$data['group'] = $group['groups'][0];
+			$data['group'] = API::get('users/groups/'.$id);
 		}
-		else
+		catch (APINotFoundException $e)
 		{
-			// group doesn't exist, redirect
-			return Redirect::to('admin/users/groups');
+			Platform::messages()->error($e->getMessage());
+			return Redirect::to(ADMIN.'/users');
 		}
 
 		return Theme::make('users::widgets.group.form.edit', $data);
@@ -77,6 +72,7 @@ class Admin_Group_Form
 		$current_permissions = ($current_permissions) ?: array();
 
 		$extension_rules = array();
+
 		foreach ($bundle_rules as $bundle => $rules)
 		{
 			foreach ($rules as $rule)
@@ -108,8 +104,8 @@ class Admin_Group_Form
 		}
 
 		$data = array(
-			'id'                  => $id,
-			'extension_rules'     => $extension_rules
+			'id'              => $id,
+			'extension_rules' => $extension_rules
 		);
 
 		return Theme::make('users::widgets.group.form.permissions', $data);

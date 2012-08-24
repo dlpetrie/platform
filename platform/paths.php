@@ -23,22 +23,23 @@
 
 $environments = array(
 
-	'local' => array('http://localhost*', '*.dev'),
+	'local' => array('http://local*', 'http://localhost*', '*.dev'),
 
 );
 
 /*
 |--------------------------------------------------------------------------
-| Set the Admin route
+| Set the Admin and API routes.
 |--------------------------------------------------------------------------
 |
-| We set the admin route here so extensions.php files have access to
-| the constant.  If we set it in routes, they do not have access to it
-| since they would load before the define is set
+| We set these routes here so extensions.php files have access to
+| these constants. If we set them in routes, extensions do not have access
+| to them since they would load before the define is set
 |
 */
 
 define('ADMIN', 'admin');
+define('API', 'api');
 
 // --------------------------------------------------------------
 // The path to the application directory.
@@ -74,6 +75,11 @@ $paths['public'] = '../public';
 // The path to the extensions directory.
 // --------------------------------------------------------------
 $paths['extensions'] = 'extensions';
+
+// --------------------------------------------------------------
+// The path to the licenses directory.
+// --------------------------------------------------------------
+$paths['licenses'] = __DIR__.'/licenses';
 
 // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 // END OF USER CONFIGURATION. HERE BE DRAGONS!

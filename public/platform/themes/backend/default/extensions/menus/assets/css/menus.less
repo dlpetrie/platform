@@ -10,15 +10,29 @@
 	color: @errorText;
 }
 
-// Add item
-.platform-new-item {
-	float: left;
-	width: 30%;
-}
+// // Add child
+// .platform-new-child {
+// 	width:300px;
+// 	float:left;
+// }
+
+// .platform-new-child hr,
+// .platform-new-child legend {
+// 	margin:4px 0;
+// 	padding:0;
+// 	text-align:center;
+// }
+
+// .platform-new-child .btn {
+// 	text-align:center;
+// 	width:220px;
+// 	margin:0 auto;
+// 	display:block;
+// }
 
 // Menu itself
-.platform-menu,
-.platform-menu ol {
+.menu-children,
+.menu-children ol {
 	margin: 0;
 	padding: 0;
 
@@ -26,8 +40,7 @@
 	list-style-image: none;
 }
 
-.platform-menu {
-	margin-left: 32%;
+.menu-children {
 
 	// All children lists
 	ol {
@@ -38,19 +51,28 @@
 		margin: 5px 0;
 	}
 
-	.item {
+	// Capture the absolute first list item
+	&> li:first-child {
+		margin-top: 0;
+	}
+
+	&> li:last-child {
+		margin-bottom: 0;
+	}
+
+	.child {
 		border: 1px solid #dfdfdf;
 		-webkit-border-radius: 3px;
 		   -moz-border-radius: 3px;
 		        border-radius: 3px;
 	}
 
-	.item-header,
-	.item-details {
+	.child-header,
+	.child-details {
 		padding: 6px 8px;
 	}
 
-	.item-header {
+	.child-header {
 		position: relative;
 		border: 1px solid #fff;
 		background-color: #f3f3f3;
@@ -71,7 +93,7 @@
 		cursor: move;
 	}
 
-	.item-toggle-details {
+	.child-toggle-details {
 		position: absolute;
 		top: 0;
 		right: 0;
@@ -92,7 +114,7 @@
 		}
 	}
 
-	.item-details {
+	.child-details {
 		display: none;
 		-webkit-border-radius: 0 0 3px 3px;
 		   -moz-border-radius: 0 0 3px 3px;
@@ -101,20 +123,12 @@
 
 		background-color: #f9f9f9;
 
+		.form-actions {
+			margin-bottom: 0;
+		}
+
 		&.show {
 			display: block;
 		}
-	}
-}
-
-@media (max-width: 767px) {
-
-	.platform-new-item {
-		float: none;
-		width: auto;
-	}
-
-	.platform-menu {
-		margin-left: 0;
 	}
 }

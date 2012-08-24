@@ -2,7 +2,7 @@
 
 <!-- Page Title -->
 @section('title')
-	{{ Lang::line('settings::settings.title') }}
+	{{ Lang::line('settings::general.title') }}
 @endsection
 
 <!-- Queue Styles | e.g Theme::queue_asset('name', 'path_to_css', 'dependency')-->
@@ -24,8 +24,8 @@
 
 	<header class="row">
 			<div class="span4">
-				<h1>{{ Lang::line('settings::settings.title') }}</h1>
-				<p>{{ Lang::line('settings::settings.description') }}</p>
+				<h1>{{ Lang::line('settings::general.title') }}</h1>
+				<p>{{ Lang::line('settings::general.description') }}</p>
 			</div>
 			<nav class="actions span8 pull-right">
 			</nav>

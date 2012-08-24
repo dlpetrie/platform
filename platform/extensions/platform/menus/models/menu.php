@@ -30,6 +30,26 @@ class Menu extends Nesty
 {
 
 	/**
+	 * Possible menu target possibiities
+	 *
+	 * @constant
+	 */
+	const TARGET_SELF   = 0;
+	const TARGET_BLANK  = 1;
+	const TARGET_PARENT = 2;
+	const TARGET_TOP    = 3;
+
+	/**
+	 * Possible menu child visibilities
+	 *
+	 * @constant
+	 */
+	const VISIBILITY_ALWAYS     = 0;
+	const VISIBILITY_LOGGED_IN  = 1;
+	const VISIBILITY_LOGGED_OUT = 2;
+	const VISIBILITY_ADMIN      = 3;
+
+	/**
 	 * The name of the table associated with the model.
 	 *
 	 * @var string
@@ -69,16 +89,94 @@ class Menu extends Nesty
 	);
 
 	/**
-	 * Returns an array of root menu items.
+	 * Validation rules for model attributes.
+	 *
+	 * @var array
+	 */
+	protected static $_rules = array(
+		'name' => 'required',
+		'slug' => 'required|unique:menus,slug',
+	);
+
+	/**
+	 * Returns an array of root menu children.
 	 *
 	 * @return  array
 	 */
-	public static function menus()
+	public static function menus($condition = null)
 	{
-		return static::all(function($query)
+		$menus = static::all(function($query) use ($condition)
 		{
-			return $query->where(Menu::nesty_col('left'), '=', 1);
-		});
+			// Modify the query
+			$query->where(Menu::nesty_col('left'), '=', 1);
+
+			if (is_callable($condition) and ! is_string($condition))
+			{
+				$query = $condition($query);
+			}
+
+			return $query;
+		}, array(
+			'id', 'extension', 'name', 'slug', 'user_editable',
+			'lft', 'rgt', 'menu_id', 'status',
+		));
+
+		return $menus;
+	}
+
+	/**
+	 * Finds a root menu item.
+	 *
+	 * @param   string  $slug
+	 * @param   array   $columns
+	 * @return  Menu    $menu
+	 */
+	public static function find_root($slug, $columns = array('id', 'extension', 'name', 'slug', 'user_editable', '_lft_', '_rgt_', '_menu_id_', 'status'), $events = array('before', 'after'))
+	{
+		// Translate property names
+		if (($key = array_search('_lft_', $columns)) !== false)
+		{
+			$columns[$key] = static::nesty_col('left');
+		}
+		if (($key = array_search('_rgt_', $columns)) !== false)
+		{
+			$columns[$key] = static::nesty_col('right');
+		}
+		if (($key = array_search('_menu_id_', $columns)) !== false)
+		{
+			$columns[$key] = static::nesty_col('tree');
+		}
+		
+		$menu = static::find(function($query) use ($slug)
+		{
+			return $query->where('slug', '=', $slug)
+			             ->or_where('id', '=', $slug)
+			             ->where(Menu::nesty_col('left'), '=', 1);
+		}, $columns, $events);
+
+		return $menu;
+	}
+
+	/**
+	 * Find a model by either it's primary key
+	 * or a condition that modifies the query object.
+	 *
+	 * @param   string  $condition
+	 * @param   array   $columns
+	 * @return  Crud
+	 */
+	public static function find($condition = 'first', $columns = array('*'), $events = array('before', 'after'))
+	{
+		// Find by slug
+		if (is_string($condition) and ! is_numeric($condition) and ! in_array($condition, array('first', 'last')))
+		{
+			return parent::find(function($query) use ($condition)
+			{
+				return $query->where('slug', '=', $condition);
+			}, $columns, $events);
+		}
+
+		return parent::find($condition, $columns, $events);
 	}
 
 	/**
@@ -268,47 +366,55 @@ SQL;
 
 	/**
 	 * Creates or updates a Nesty tree structure based on
-	 * the hierarchical array of items passed through. 
+	 * the hierarchical array of children passed through. 
 	 *
 	 * A callback may be provided for each Nesty object just
 	 * before it's persisted to the database. Returning false
 	 * from the closure means no changes are made.
 	 *
 	 * @param  int      $id
-	 * @param  array    $items
+	 * @param  array    $children
 	 * @param  Closure  $before_root_persist
 	 * @param  Closure  $before_persist
 	 * @throws NestyException
 	 * @return Nesty
 	 */
-	public static function from_hierarchy_array($id, array $items, Closure $before_root_persist = null, Closure $before_persist = null)
+	public static function from_hierarchy_array($id, array $children, Closure $before_root_persist = null, Closure $before_persist = null)
 	{
 		// Default the closure...
 		if ($before_persist === null)
 		{
-			$before_persist = function($item)
+			$before_persist = function($child) use ($id)
 			{
-				if ( ! $item->is_new() and ! $item->user_editable)
+				if ( ! $child->is_new() and ! $child->user_editable)
 				{
-					$duplicate = clone $item;
+					$duplicate = clone $child;
 					$duplicate->reload();
 
 					// Reset relevent values
-					$item->name   = $duplicate->name;
-					$item->slug   = $duplicate->slug;
-					$item->uri    = $duplicate->uri;
-					$item->secure = $duplicate->secure;
+					$child->name   = $duplicate->name;
+					$child->slug   = $duplicate->slug;
+					$child->uri    = $duplicate->uri;
+					$child->secure = $duplicate->secure;
 				}
-				elseif ($item->is_new())
+				elseif ($child->is_new())
 				{
-					$item->user_editable = 1;
+					$child->user_editable = 1;
 				}
 
-				return $item;
+				// Any user editable children, we'll
+				// check their slug starts with the root
+				// child's slug
+				if ($child->user_editable and $root = static::find_root($id) and starts_with($child->slug, $root->slug))
+				{
+					$child->slug = $root->slug.'-'.$child->slug;
+				}
+
+				return $child;
 			};
 		}
 
-		return parent::from_hierarchy_array($id, $items, $before_root_persist, $before_persist);
+		return parent::from_hierarchy_array($id, $children, $before_root_persist, $before_persist);
 	}
 
 	/**
@@ -328,7 +434,7 @@ SQL;
 			{
 				extract(static::$_active);
 
-				// Find the menu item
+				// Find the menu child
 				$active = static::find(function($query) use($property, $value)
 				{
 					return $query->where($property, '=', $value);
@@ -370,6 +476,70 @@ SQL;
 	public static function active_path()
 	{
 		return static::$_active_path;
+	}
+
+	/**
+	 * Gets call after the find() query is exectuted to modify the result
+	 * Must return a proper result
+	 *
+	 * @param   Query  $query
+	 * @param   array  $columns
+	 * @return  array
+	 */
+	protected function after_find($result)
+	{
+		if ($result)
+		{
+			if (isset($result->secure))
+			{
+				$result->secure = (bool) $result->secure;
+			}
+			$result->user_editable = (bool) $result->user_editable;
+			$result->status        = (bool) $result->status;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Gets called before the validation is ran.
+	 *
+	 * @param   array  $data
+	 * @param   array  $rults
+	 * @return  array
+	 */
+	protected function before_validation($data, $rules)
+	{
+		// If we have an ID, exclude it from
+		// the slug validation
+		if (isset($this->id) and $id = $this->id)
+		{
+			$rules['slug'] .= ','.$this->id;	
+		}
+
+		return array($data, $rules);
+	}
+
+	/**
+	 * Gets called after the all() query is exectuted to modify the result
+	 * Must return a proper result
+	 *
+	 * @param   array  $results
+	 * @return  array  $results
+	 */
+	protected static function after_all($results)
+	{
+		foreach ($results as $result)
+		{
+			if (isset($result->secure))
+			{
+				$result->secure = (bool) $result->secure;
+			}
+			$result->user_editable = (bool) $result->user_editable;
+			$result->status        = (bool) $result->status;
+		}
+
+		return $results;
 	}
 
 }

@@ -33,7 +33,14 @@ class User extends Crud
 	 *
 	 * @var string
 	 */
-	public static $key = 'users.id';
+	protected static $_key = 'id';
+
+	/**
+	 * Indicates if the model has update and creation timestamps.
+	 *
+	 * @var bool
+	 */
+	protected static $_timestamps = true;
 
 	/**
 	 * @var  array  $rules  Validation rules for model attributes
@@ -60,7 +67,7 @@ class User extends Crud
 	 */
 	public function save($events = array('before', 'after'))
 	{
-		// first check if we want timestamps as this will append to attributes
+		// First check if we want timestamps as this will append to attributes
 		if (static::$_timestamps)
 		{
 			$this->timestamp();
@@ -80,13 +87,14 @@ class User extends Crud
 			}
 		}
 
-		// see if creation is a registration
+		// See if creation is a registration
 		$register = (isset($attributes['register'])) ? $attributes['register'] : false;
 
-		// prep attribute values after validation is done
+		// Prep attribute values after validation is done
 		$attributes = $this->prep_attributes($attributes);
 
 		$groups = array();
+
 		if (array_key_exists('groups', $attributes))
 		{
 			if ( ! empty($attributes['groups']))
@@ -152,7 +160,7 @@ class User extends Crud
 				}
 
 				$result = Sentry::user((int) $key)->update($attributes) === true;
-				
+
 				if (in_array('after', $events))
 				{
 					$result = $this->after_update($result);
@@ -189,7 +197,7 @@ class User extends Crud
 
 					if (in_array('after', $events))
 					{
-						$result['id'] = $this->after_insert($result);	
+						$result['id'] = $this->after_insert($result);
 					}
 
 					$user_id = (int) $result['id'];
@@ -346,17 +354,27 @@ class User extends Crud
 	 * Gets call after the find() query is exectuted to modify the result
 	 * Must return a proper result
 	 *
-	 * @return  object  Model object result
+	 * @param   Query  $query
+	 * @param   array  $columns
+	 * @return  array
 	 */
 	protected function after_find($result)
 	{
-		$result->metadata = array();
-		foreach ($result as $key => $val)
+		if ($result)
 		{
-			if ( ! in_array($key, static::$_fields))
+			$result->metadata = array();
+
+			foreach ($result as $key => $val)
 			{
-				$result->metadata[$key] = $val;
-				unset($result->{$key});
+				if ( ! in_array($key, static::$_fields))
+				{
+					$result->metadata[$key] = $val;
+					unset($result->{$key});
+				}
+				elseif (in_array($key, array('status', 'activated')))
+				{
+					$result->$key = (bool) $val;
+				}
 			}
 		}
 
@@ -419,14 +437,15 @@ class User extends Crud
 	}
 
 	/**
-	 * Gets call after the all() query is exectuted to modify the result
+	 * Gets called after the all() query is exectuted to modify the result
 	 * Must return a proper result
 	 *
-	 * @return  object  Model object result
+	 * @param   array  $results
+	 * @return  array  $results
 	 */
-	protected static function after_all($result)
+	protected static function after_all($results)
 	{
-		foreach ($result as &$user)
+		foreach ($results as &$user)
 		{
 			$user->metadata = array();
 			foreach ($user as $key => $val)
@@ -436,10 +455,14 @@ class User extends Crud
 					$user->metadata[$key] = $val;
 					unset($user->{$key});
 				}
+				elseif (in_array($key, array('status', 'activated')))
+				{
+					$user->$key = (bool) $val;
+				}
 			}
 		}
 
-		return $result;
+		return $results;
 	}
 
 	/**

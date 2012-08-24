@@ -2,7 +2,7 @@
 
 <!-- Page Title -->
 @section('title')
-	{{ Lang::line('users::groups.update.title') }}
+	{{ Lang::line('users::general.groups.update.title') }}
 @endsection
 
 <!-- Queue Styles | e.g Theme::queue_asset('name', 'path_to_css', 'dependency')-->
@@ -24,8 +24,8 @@
 
 	<header class="head row">
 		<div class="span4">
-			<h1>{{ Lang::line('users::groups.update.title') }}</h1>
-			<p>{{ Lang::line('users::groups.update.description') }}</p>
+			<h1>{{ Lang::line('users::general.groups.update.title') }}</h1>
+			<p>{{ Lang::line('users::general.groups.update.description') }}</p>
 		</div>
 	</header>
 
@@ -33,8 +33,8 @@
 
 	<div class="tabbable">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="#general" data-toggle="tab">General</a></li>
-			<li><a href="#permissions" data-toggle="tab">Permissions</a></li>
+			<li class="active"><a href="#general" data-toggle="tab">{{ Lang::line('users::general.tabs.general') }}</a></li>
+			<li><a href="#permissions" data-toggle="tab">{{ Lang::line('users::general.tabs.permissions') }}</a></li>
 		</ul>
 		<div class="tab-content">
 		    <div class="tab-pane active" id="general">

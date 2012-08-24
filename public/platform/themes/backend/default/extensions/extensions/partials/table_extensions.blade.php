@@ -1,33 +1,37 @@
-@foreach ($installed as $row)
+@foreach ($installed as $extension)
 	<tr>
-		<td>{{ $row['id'] }}</td>
-		<td>{{ $row['name'] }}</td>
-		<td>{{ $row['slug'] }}</td>
-		<td>{{ $row['author'] }}</td>
-		<td>{{ $row['description'] }}</td>
-		<td>{{ $row['version'] }}</td>
+		<td>{{ array_get($extension, 'info.name') }}</td>
+		<td>{{ array_get($extension, 'info.slug') }}</td>
+		<td>{{ array_get($extension, 'info.author') }}</td>
+		<td>{{ array_get($extension, 'info.description') }}</td>
+		<td>{{ array_get($extension, 'info.version') }}</td>
 		<td>
-			{{ $row['is_core'] ? Lang::line('extensions::extensions.bool.yes') : Lang::line('extensions::extensions.bool.no') }}
+			{{ array_get($extension, 'info.is_core') ? Lang::line('extensions::general.bool.yes') : Lang::line('extensions::general.bool.no') }}
 		</td>
 		<td>
-			{{ $row['enabled'] ? Lang::line('extensions::extensions.bool.yes') : Lang::line('extensions::extensions.bool.no') }}
+			{{ array_get($extension, 'info.enabled') ? Lang::line('extensions::general.bool.yes') : Lang::line('extensions::general.bool.no') }}
 		</td>
 		<td>
-			@if ( ! $row['is_core'])
+			{{ array_get($extension, 'info.has_update') ? Lang::line('extensions::general.bool.yes') : Lang::line('extensions::general.bool.no') }}
+		</td>
+		<td>
+			@if ( ! array_get($extension, 'info.is_core'))
 
-				@if ($row['enabled'])
-					<a class="btn" href="{{ URL::to_secure(ADMIN.'/extensions/disable/'.$row['id']) }}" onclick="return confirm('Are you sure you want to disable the \'{{ e($row['name']) }}\' extension? All of its data will stay safe in your database, however it won\'t be available to use while disabled.');">disable</a>
-				@else
-					<a class="btn" href="{{ URL::to_secure(ADMIN.'/extensions/enable/'.$row['id']) }}" onclick="return confirm('Are you sure you want to enable the \'{{ e($row['name']) }}\' extension?');">enable</a>
-				@endif
+				<div class="btn-group">
+					@if (array_get($extension, 'info.has_update'))
+						<a class="btn btn-info" href="{{ URL::to_secure(ADMIN.'/extensions/update/'.array_get($extension, 'info.slug')) }}" onclick="return confirm('Are you sure you want to update the \'{{ e(array_get($extension, 'info.name')) }}\' extension?');">{{ Lang::line('extensions::button.update') }}</a>
+					@endif
 
-				@if ($row['update'])
-					<a class="btn" href="{{ URL::to_secure(ADMIN.'/extensions/update/'.$row['id']) }}" onclick="return confirm('Are you sure you want to update the \'{{ e($row['name']) }}\' extension?');">update</a>
-				@endif
+					@if (array_get($extension, 'info.enabled'))
+						<a class="btn" href="{{ URL::to_secure(ADMIN.'/extensions/disable/'.array_get($extension, 'info.slug')) }}" onclick="return confirm('Are you sure you want to disable the \'{{ e(array_get($extension, 'info.name')) }}\' extension? All of its data will stay safe in your database, however it won\'t be available to use while disabled.');">{{ Lang::line('button.disable') }}</a>
+					@else
+						<a class="btn" href="{{ URL::to_secure(ADMIN.'/extensions/enable/'.array_get($extension, 'info.slug')) }}" onclick="return confirm('Are you sure you want to enable the \'{{ e(array_get($extension, 'info.name')) }}\' extension?');">{{ Lang::line('button.enable') }}</a>
+					@endif
 
-				| <a class="btn btn-danger" href="{{ URL::to_secure(ADMIN.'/extensions/uninstall/'.$row['id']) }}" onclick="return confirm('Are you sure you want to uninstall the \'{{ e($row['name']) }}\' extension? All traces, including database info will be removed permanently. There is no undo action for this.');">uninstall</a>
+					<a class="btn btn-danger" href="{{ URL::to_secure(ADMIN.'/extensions/uninstall/'.array_get($extension, 'info.slug')) }}" onclick="return confirm('Are you sure you want to uninstall the \'{{ e(array_get($extension, 'info.name')) }}\' extension? All traces, including database info will be removed permanently. There is no undo action for this.');">{{ Lang::line('extensions::button.uninstall') }}</a>
+				</div>
 
-				
+
 
 			@else
 				Required

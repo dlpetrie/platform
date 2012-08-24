@@ -21,38 +21,45 @@
 namespace Platform\Themes\Widgets;
 
 use API;
-use Theme;
+use APIClientException;
 use Request;
+use Theme;
+use URI;
 
 class Options
 {
 
 	public function css()
 	{
-		// set type
-		$theme_type = (strpos(\URI::segment(1), ADMIN) === false) ? 'frontend' : 'backend';
+		$active_parts = explode(DS, ltrim(rtrim(Theme::active(), DS), DS));
+		$type         = $active_parts[0];
+		$name         = $active_parts[1];
 
-		// get active theme
-		$active = API::get('settings', array(
-			'where' => array(
-				array('extension', '=', 'themes'),
-				array('type', '=', 'theme'),
-				array('name', '=', $theme_type),
-			),
-		));
+		// Get active custom theme options
+		try
+		{
+			$options = API::get('themes/'.$type.'/'.$name.'/options');
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
 
-		$active = $active['settings'][0];
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 
-		// get active custom theme options
-		$active_custom = API::get('themes/options', array(
-			'type'  => $theme_type,
-			'theme' => $active['value']
-		));
-		
-		$status = (isset($active_custom['options']['status'])) ? $active_custom['options']['status'] : 0;
-		
+			// Options fallback
+			$options = array();
+		}
+
+		// Get the active status from the database. The admin
+		// compiles the theme_options.css file. We need to know
+		// if it's actually active before including the file (done
+		// in the view).
+		$status = array_get($options, 'status', false);
+
 		return Theme::make('themes::widgets.theme_options_css')
-		            ->with('css_file', Theme::active_path().str_finish(Theme::assets_directory(), DS).'css'.DS.'theme_options.css')
 		            ->with('status', $status);
 	}
 

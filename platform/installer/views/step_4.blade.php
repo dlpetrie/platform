@@ -1,32 +1,34 @@
 @layout('installer::template')
 
 @section('navigation')
-	<h1>Administration</h1>
-	<p class="step">An account to rule them all</p>
+	<h1>{{ Lang::line('installer::general.step_4.title') }}</h1>
+	<p class="step">{{ Lang::line('installer::general.step_4.tagline') }}</p>
 	<div class="breadcrumbs">
 		<ul class="nav">
-			<li><span>Step 1:</span> Prepare installation</li>
-			<li><span>Step 2:</span> Database Credentials</li>
-			<li><span>Step 3:</span> Administration</li>
-			<li class="active">
-				<span>Step 4:</span> Complete
-			</li>
+			<ul class="nav">
+			<li><span>{{ Lang::line('installer::general.step_1.step') }}</span> {{ Lang::line('installer::general.step_1.step_description') }}</li>
+			<li><span>{{ Lang::line('installer::general.step_2.step') }}</span> {{ Lang::line('installer::general.step_2.step_description') }}</li>
+			<li><span>{{ Lang::line('installer::general.step_3.step') }}</span> {{ Lang::line('installer::general.step_3.step_description') }}</li>
+			<li class="active"><span>{{ Lang::line('installer::general.step_4.step') }}</span> {{ Lang::line('installer::general.step_4.step_description') }}</li>
 		</ul>
 	</div>
 @endsection
 
 @section('content')
-<div class="grid contain">
+<div class="contain">
 
-		<h2>Installation Complete</h2>
+	<h2>{{ Lang::line('installer::general.step_4.description') }}</h2>
+	<p class="lead">{{ Lang::line('installer::general.step_4.licence') }}</p>
+	<hr>
+	<div class="well">
+		<pre style="word-break: break-word;">{{ $license }}</pre>
+	</div>
 
-		<p class="lead">Congratulations - you've installed Platform! <strong>But wait! Not so fast</strong>, we highly recommend you delete the following folders now that you have completed the installation process.</p>
-		<pre><code>platform/installer/*</code></pre>
-		<pre><code>public/installer/*</code></pre>
-		<div class="actions">
-			<p><a href="{{ url(ADMIN) }}" class="btn btn-large">Login to Admin</a> <a href="{{ URL::base() }}" class="btn btn-large">Or visit the Home Page</a></p>
-		</div>
+	<div class="actions">
+		<p>
+			<a href="{{ URL::base() }}" class="btn btn-large">I Agree, Continue to the Home Page</a>
+		</p>
+	</div>
 
 </div>
-
 @endsection

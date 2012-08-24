@@ -2,7 +2,7 @@
 
 <!-- Page Title -->
 @section('title')
-	{{ Lang::line('users::groups.general.title') }}
+	{{ Lang::line('users::general.groups.title') }}
 @endsection
 
 <!-- Queue Styles -->
@@ -26,8 +26,8 @@
 
 	<header class="head row">
 		<div class="span6">
-			<h1>{{ Lang::line('users::groups.general.title') }}</h1>
-			<p>{{ Lang::line('users::groups.general.description') }}</p>
+			<h1>{{ Lang::line('users::general.groups.title') }}</h1>
+			<p>{{ Lang::line('users::general.groups.description') }}</p>
 		</div>
 	</header>
 
@@ -37,7 +37,7 @@
 		<div class="actions clearfix">
 			<div id="table-filters" class="form-inline pull-left"></div>
 			<div class="pull-right">
-				<a class="btn btn-large btn-primary" href="{{ URL::to_secure(ADMIN.'/users/groups/create') }}">{{ Lang::line('users::groups.button.create') }}</a>
+				<a class="btn btn-large btn-primary" href="{{ URL::to_secure(ADMIN.'/users/groups/create') }}">{{ Lang::line('button.create') }}</a>
 			</div>
 		</div>
 

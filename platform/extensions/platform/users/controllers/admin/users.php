@@ -21,9 +21,14 @@
 class Users_Admin_Users_Controller extends Admin_Controller
 {
 	/**
-	 * Whitelisted Auth Routes
+	 * Whitelisted auth routes.
+	 *
+	 * @var  array
 	 */
-	protected $whitelist = array('login', 'logout', 'reset_password', 'reset_password_confirm');
+	protected $whitelist = array(
+		'login', 'logout', 'reset_password',
+		'reset_password_confirm',
+	);
 
 	/**
 	 * This function is called before the action is executed.
@@ -82,33 +87,7 @@ class Users_Admin_Users_Controller extends Admin_Controller
 	 */
 	public function post_create()
 	{
-		$user = array(
-			'email'                 => Input::get('email'),
-			'password'              => Input::get('password'),
-			'password_confirmation' => Input::get('password_confirmation'),
-			'groups'                => Input::get('groups'),
-			'metadata'              => array(
-				'first_name' => Input::get('first_name'),
-				'last_name'  => Input::get('last_name'),
-			)
-		);
-
-		// create the user
-		$create_user = API::post('users/create', $user);
-
-		if ($create_user['status'])
-		{
-			// user was created - set success and redirect back to admin/users
-			Platform::messages()->success($create_user['message']);
-			return Redirect::to_secure(ADMIN.'/users');
-		}
-		else
-		{
-			// there was an error creating the user - set errors
-			Platform::messages()->error($create_user['message']);
-
-			return Redirect::to_secure(ADMIN.'/users/create')->with_input();
-		}
+		return $this->post_edit();
 	}
 
 	/**
@@ -129,17 +108,10 @@ class Users_Admin_Users_Controller extends Admin_Controller
 	 *
 	 * @return  Redirect
 	 */
-	public function post_edit($id)
+	public function post_edit($id = false)
 	{
-		if ( ! $id)
-		{
-			Platform::messages()->error('A user Id is required to update a user.');
-			return Redirect::to_secure(ADMIN.'/users');
-		}
-
-		// initialize data array
+		// Initialize data array
 		$data = array(
-			'id'                    => $id,
 			'email'                 => Input::get('email'),
 			'password'              => Input::get('password'),
 			'password_confirmation' => Input::get('password_confirmation'),
@@ -150,21 +122,30 @@ class Users_Admin_Users_Controller extends Admin_Controller
 			)
 		);
 
-		// update user
-		$update_user = API::post('users/update', $data);
+		try
+		{
+			if ($id)
+			{
+				$user = API::put('users/'.$id, $data);
+			}
+			else
+			{
+				$user = API::post('users', $data);
+			}
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
 
-		if ($update_user['status'])
-		{
-			// user was updated - set success and redirect back to admin/users
-			Platform::messages()->success($update_user['message']);
-			return Redirect::to_secure(ADMIN.'/users');
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+
+			return Redirect::to_secure(ADMIN.'/users/'.(($id) ? 'edit/'.$id : 'create'))->with_input();
 		}
-		else
-		{
-			// there was an error updating the user - set errors
-			Platform::messages()->error($update_user['message']);
-			return Redirect::to_secure(ADMIN.'/users/edit/'.$id)->with_input();
-		}
+
+		return Redirect::to_secure(ADMIN.'/users');
 	}
 
 	/**
@@ -175,21 +156,22 @@ class Users_Admin_Users_Controller extends Admin_Controller
 	 */
 	public function get_delete($id)
 	{
-		// delete the user
-		$delete_user = API::post('users/delete', array('id' => $id));
+		try
+		{
+			// Delete the user
+			$delete_user = API::delete('users/'.$id);
+		}
+		catch (APIClientException $e)
+		{
+			Platform::messages()->error($e->getMessage());
 
-		if ($delete_user['status'])
-		{
-			// user was edited - set success and redirect back to admin/users
-			Platform::messages()->success($delete_user['message']);
-			return Redirect::to_secure(ADMIN.'/users');
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
 		}
-		else
-		{
-			// there was an error editing the user - set errors
-			Platform::messages()->error($delete_user['message']);
-			return Redirect::to_secure(ADMIN.'/users');
-		}
+
+		return Redirect::to_secure(ADMIN.'/users');
 	}
 
 	/**
@@ -201,17 +183,17 @@ class Users_Admin_Users_Controller extends Admin_Controller
 	{
 		if ( ! $id)
 		{
-			Platform::messages()->error('A user Id is required to update permissions.');
+			Platform::messages()->error(Lang::line('users::messages.users.id_required')->get());
 			return Redirect::to_secure(ADMIN.'/users');
 		}
 
-		$permissions = Input::get();
-		$rules = Sentry\Sentry_Rules::fetch_rules();
-
+		$permissions        = Input::get();
+		$rules              = Sentry\Sentry_Rules::fetch_rules();
 		$update_permissions = array();
+
 		foreach ($rules as $rule)
 		{
-			$slug = \Str::slug($rule, '_');
+			$slug = Str::slug($rule, '_');
 
 			if (array_key_exists($slug, $permissions))
 			{
@@ -223,25 +205,27 @@ class Users_Admin_Users_Controller extends Admin_Controller
 			}
 		}
 
-		// initialize data array
+		// Initialize data array
 		$data = array(
-			'id'          => $id,
-			'permissions' => $update_permissions
+			'permissions' => $update_permissions,
 		);
 
-		// update user
-		$update_user = API::post('users/update', $data);
-
-		if ($update_user['status'])
+		try
 		{
-			// user was updated - set success and redirect back to admin users
-			Platform::messages()->success($update_user['message']);
+			// Update user
+			$update_user = API::put('users/'.$id, $data);
+
 			return Redirect::to_secure(ADMIN.'/users');
 		}
-		else
+		catch (APIClientException $e)
 		{
-			// there was an error updating the user - set errors
-			Platform::messages()->error($update_user['message']);
+			Platform::messages()->error($e->getMessage());
+
+			foreach ($e->errors() as $error)
+			{
+				Platform::messages()->error($error);
+			}
+
 			return Redirect::to_secure(ADMIN.'/users/edit/'.$id)->with_input();
 		}
 	}

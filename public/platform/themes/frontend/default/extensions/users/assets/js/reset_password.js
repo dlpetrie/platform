@@ -1,10 +1,11 @@
 (function($) {
-	var $form = $('#password-reset-form');
-	var $errors = $('.errors');
+	var $form          = $('#password-reset-form');
+	var $resetFeedback = $('.messages');
+
 	$form.on('submit', function(e) {
 		e.preventDefault();
 
-		$errors.html('Please Wait...');
+		$resetFeedback.html('Please Wait...');
 		$.ajax({
 			type:     'POST',
 			url:      $form.prop('action'),
@@ -12,14 +13,29 @@
 			data:     $form.serialize(),
 
 			success: function(data) {
-				if(data.status)
-				{
+				$resetFeedback.removeClass('alert-info alert-danger')
+				              .addClass('alert-success')
+				              .html(data.message);
+
+				// Move on
+				if (typeof data.redirect !== 'undefined') {
 					window.location.href = data.redirect;
 				}
-				else
-				{
-					$errors.html(data.message);
+				else {
+					window.location.reload();
 				}
+
+				// Put the redirect message for slow net
+				// connections
+				setTimeout(function() {
+					$resetFeedback.html($resetFeedback.data('redirecting'));
+				}, 1000);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				var response = $.parseJSON(jqXHR.responseText);
+				$resetFeedback.removeClass('alert-info alert-success')
+				              .addClass('alert-danger')
+				              .html(response.message);
 			}
 		});
 

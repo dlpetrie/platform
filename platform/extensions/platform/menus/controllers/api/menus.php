@@ -24,191 +24,331 @@ class Menus_API_Menus_Controller extends API_Controller
 {
 
 	/**
-	 * Get a list of menus
+	 * Returns an array of menus or a given
+	 * menu, should the slug be provided.
 	 *
-	 * @return array
+	 *	<code>
+	 *		$menus = API::get('menus');
+	 *		$admin = API::get('menus/admin');
+	 *	</code>
+	 *
+	 * @param   string  $slug
+	 * @return  array
 	 */
-	public function get_index()
+	public function get_index($slug = false)
 	{
-		return Menu::menus();
-		return ($id = Input::get('id')) ? Menu::find($id) : Menu::menus();
-	}
-
-	/**
-	 * Gets a menu by the provided id
-	 */
-	public function get_menu()
-	{
-		$menu = Menu::find(Input::get('id'));
-
-		if ($menu)
+		// All menus
+		if ($slug == false)
 		{
-			$menu->children();
+			// Get menus
+			$menus = Menu::menus();
+
+			foreach ($menus as $menu)
+			{
+				// Adding children?
+				if (Input::get('children'))
+				{
+					$menu->children();
+				}
+				else
+				{
+					unset($menu->children);
+				}
+			}
+
+			return new Response($menus);
+		}
+
+		if (($menu = Menu::find_root($slug)) === null)
+		{
+			return new Response(array(
+				'message' => "Menu [$slug] either not a root menu item or doesn't exist.",
+			), API::STATUS_NOT_FOUND);
+		}
+
+		// Adding children?
+		if (Input::get('children'))
+		{
+			$menu->children(Input::get('limit', false));
 		}
 		else
 		{
-			$menu = new Menu();
+			unset($menu->children);
 		}
 
-		return array(
-			'status' => true,
-			'menu'   => $menu,
-		);
+		return new Response($menu);
 	}
 
 	/**
-	 * Gets the last item ID from the table (used by JS)
+	 * Creates a menu with the given properties.
+	 *
+	 *	<code>
+	 *		$menu = API::post('menus', $data);
+	 *	</code>
+	 *
+	 * @return  Response
 	 */
-	public function get_last_item_id()
+	public function post_index()
 	{
-		return array(
-			'status'       => true,
-			'last_item_id' => (($last_item = Menu::find('last')) === null) ? 0 : $last_item->id,
-		);
-	}
+		// Check for valid data
+		if (($children = Input::get('children')) === null or ! is_array($children) or count($children) === 0)
+		{
+			return new Response(array(
+				'message' => "Invalid children provided to create Menu [$slug]. ",
+			), API::STATUS_UNPROCESSABLE_ENTITY);
+		}
 
-	/**
-	 * Saves a menu
-	 */
-	public function post_menu()
-	{
+		$name = Input::get('name');
+		$slug = Input::get('slug');
+
 		try
 		{
-			$id   = Input::get('id');
-			$name = Input::get('name');
-			$slug = Input::get('slug');
-
-			$menu = Menu::from_hierarchy_array($id, Input::get('items'), function($root_item) use ($id, $name, $slug)
+			$menu = Menu::from_hierarchy_array(false, $children, function($root_item) use ($name, $slug)
 			{
-				if ($name and ( ! $id or $root_item->user_editable))
-				{
-					$root_item->name = $name;
-				}
+				// Add values
+				$root_item->name = $name;
+				$root_item->slug = $slug;
 
-				if ($slug and ( ! $id or $root_item->user_editable))
-				{
-					$root_item->slug = $slug;
-				}
-
-				if ( ! $id)
-				{
-					$root_item->user_editable = 1;
-				}
+				// All new created items are user editable
+				$root_item->user_editable = 1;
 
 				return $root_item;
 			});
-
-			$menu->children();
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			echo $e->getMessage();
-			exit;
-			return array(
-				'status'  => true,
+			return new Response(array(
 				'message' => $e->getMessage(),
-			);
+			), API::STATUS_UNPROCESSABLE_ENTITY);
 		}
 
-		return array(
-			'status' => true,
-			'menu'   => $menu,
-		);
+		return new Response($menu);
 	}
 
 	/**
-	 * Returns the children of a menu with the
-	 * given item ID.
+	 * Updates a menu with the given properties.
 	 *
 	 *	<code>
-	 *		API::get('menus/children', array(
-	 *			'id'    => 5,
-	 *			'depth' => 2,
-	 *		));
+	 *		$menu = API::put('menus/admin', $data);
 	 *	</code>
 	 *
-	 * @return  array
+	 * @param   string  $slug
+	 * @return  Response
 	 */
-	public function get_children()
+	public function put_index($slug)
 	{
-		if ($id = Input::get('id'))
+		// Find the children belonging to either a root item
+		// or a child item
+		if (($menu = Menu::find_root($slug)) === null and ($menu = Menu::find($slug)) === null)
 		{
-			$parent = Menu::find(Input::get('id'));
+			return new Response(array(
+				'message' => "Menu [$slug] either not a root menu item or doesn't exist.",
+			), API::STATUS_NOT_FOUND);
 		}
-		elseif ($slug = Input::get('slug'))
+
+		// Posting whole menu
+		if (($children = Input::get('children')) and is_array($children))
 		{
-			$parent = Menu::find(function($query) use ($slug)
+			// return new Response(array(
+			// 	'message' => "Invalid children provided for Menu [$slug]. To remove children, pass an empty array through instead.",
+			// ), API::STATUS_UNPROCESSABLE_ENTITY);
+
+			$name = Input::get('name', $menu['name']);
+			$slug = Input::get('slug', $slug);
+
+			try
 			{
-				return $query->where('slug', '=', $slug);
-			});
-		}
-		else
-		{
-			return array(
-				'status'  => false,
-				'message' => 'Either a parent ID or slug is required to retrieve it\'s children.',
-			);
-		}
+				$menu = Menu::from_hierarchy_array($menu['id'], $children, function($root_item) use ($name, $slug)
+				{
+					if ($name and ($root_item->user_editable))
+					{
+						$root_item->name = $name;
+					}
 
-		// Invalid ID bafor parent
-		// Nesty
-		if ($parent === null)
-		{
-			return array(
-				'status'  => false,
-				'message' => "The parent Nesty model ID [$id] is invalid",
-			);
-		}
+					if ($slug and ($root_item->user_editable))
+					{
+						$root_item->slug = $slug;
+					}
 
-		if ( ! $children = $parent->enabled_children(Input::get('depth', 0)))
-		{
-			return array(
-				'status'  => false,
-				'message' => 'There are no children for the given menu.',
-			);
-		}
+					return $root_item;
+				});
 
-		// filter out children items based on type
-		$menu_children = array();
-		foreach($children as $child)
-		{
-			switch ($child['type'])
+				// Load in children
+				$menu->children();
+			}
+			catch (Exception $e)
 			{
-				case 0: // always show
-					$menu_children[] = $child;
-				break;
-				case 1: // show if logged in
-					if (Sentry::check())
-					{
-						$menu_children[] = $child;
-					}
-				break;
-				case 2: // show if logged out
-					if ( ! Sentry::check())
-					{
-						$menu_children[] = $child;
-					}
-				break;
-				case 3: // show if admin
-					if (Sentry::check() and Sentry::user()->has_access(array('is_admin', 'superuser')))
-					{
-						$child['uri'] = ADMIN.'/'.$child['uri'];
-						$menu_children[] = $child;
-					}
-				break;
+				return new Response(array(
+					'message' => $e->getMessage(),
+				), API::STATUS_UNPROCESSABLE_ENTITY);
 			}
 		}
 
-		return array(
-			'status'   => true,
-			'children' => $menu_children,
-		);
+		// Updating single entity
+		else
+		{
+			$menu->fill(Input::get());
+
+			// Save the menu
+			if ( ! $menu->save())
+			{
+				return new Response(array(
+					'message' => Lang::line('menus::messages.update.error')->get(),
+					'errors'  => ($menu->validation()->errors->has()) ? $menu->validation()->errors->all() : array(),
+				), ($menu->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
+			}
+		}
+
+		return new Response($menu);
+	}
+
+	/**
+	 * Returns a (recursive) array of menu
+	 * children for a given menu slug.
+	 *
+	 *	<code>
+	 *		$admin_children = API::get('menus/admin/children');
+	 *	</code>
+	 *
+	 * @param   string  $slug
+	 * @return  Response
+	 */
+	public function get_children($slug)
+	{
+		// Find the children belonging to either a root item
+		// or a child item
+		if (($menu = Menu::find_root($slug)) === null and ($menu = Menu::find($slug)) === null)
+		{
+			return new Response(array(
+				'message' => "Menu [$slug] either not a root menu item or doesn't exist.",
+			), API::STATUS_NOT_FOUND);
+		}
+
+		$method = (Input::get('enabled', false)) ? 'enabled_children' : 'children';
+		$children = $menu->$method(Input::get('limit', false));
+
+		// If the person wants to filter by the visibility
+		if (($filter_visibility = Input::get('filter_visibility')) !== null)
+		{
+			// If they're asking for a particular filter
+			// visibility. The range() matches the constants
+			// found in Platform\Menus\Menu. Alernatively,
+			// a string 'automatic' can be passed through in
+			// which case we'll use Session data to filter visibilitys.
+			if ((is_numeric($filter_visibility) and in_array((int) $filter_visibility, range(0, 3))) or $filter_visibility === 'automatic')
+			{
+				$this->filter_children_recursively($children, $filter_visibility);
+			}
+		}
+
+		return new Response($children);
+	}
+
+	/**
+	 * Returns a flat array of menu children.
+	 *
+	 *	<code>
+	 *		$all_menu_children_flat = API::get('menus/flat');
+	 *		$admin_children_flat    = API::get('menus/admin/children/flat');
+	 *	</code>
+	 *
+	 * @param   string  $slug
+	 * @return  Response
+	 */
+	public function get_flat($slug = false)
+	{
+		if ($slug == false)
+		{
+			// Condition to pass to query
+			$condition = null;
+
+			if (($extension = Input::get('extension')) !== null)
+			{
+				try
+				{
+					API::get('extensions/'.$extension);
+				}
+				catch (APIClientException $e)
+				{
+					return new Response(array(
+						'message' => $e->getMessage(),
+					), $e->getCode());
+				}
+
+				$menus = Menu::all(function($query) use ($extension)
+				{
+					return $query->where('extension', '=', $extension);
+				});
+			}
+			elseif (($where = Input::get('where')) !== null and is_array($where) and count($where) === 3)
+			{
+				$menus = Menu::all(function($query) use ($where)
+				{
+					$query->where($where[0], $where[1], $where[2]);
+				});
+			}
+			else
+			{
+				$menus = Menu::all();
+			}
+
+			// Unset the children array as it's
+			// irrelevent with flat children
+			foreach ($menus as $menu)
+			{
+				unset($menu->children);
+			}
+
+			// If the person wants to filter by the visibility
+			if (($filter_visibility = Input::get('filter_visibility')) !== null)
+			{
+				// If they're asking for a particular filter
+				// visibility. The range() matches the constants
+				// found in Platform\Menus\Menu. Alernatively,
+				// a string 'automatic' can be passed through in
+				// which case we'll use Session data to filter visibilitys.
+				if ((is_numeric($filter_visibility) and in_array((int) $filter_visibility, range(0, 3))) or $filter_visibility === 'automatic')
+				{
+					$this->filter_children_recursively($children, $filter_visibility);
+				}
+			}
+
+			return new Response($menus);
+		}
+
+		// Find the children belonging to either a root item
+		// or a child item
+		if (($menu = Menu::find_root($slug)) === null and ($menu = Menu::find($slug)) === null)
+		{
+			return new Response(array(
+				'message' => "Menu [$slug] either not a root menu item or doesn't exist.",
+			), API::STATUS_NOT_FOUND);
+		}
+
+		// Find all children that are between the menu's properties
+		$children = Menu::all(function($query) use ($menu)
+		{
+			return $query->where(Menu::nesty_col('left'), 'BETWEEN', DB::raw('\''.($menu->{Menu::nesty_col('left')} + 1).'\' AND \''.$menu->{Menu::nestY_col('right')}.'\''));
+		});
+
+		foreach ($children as $item)
+		{
+			unset($item->children);
+		}
+
+		return new Response($children);
 	}
 
 	/**
 	 * Sets the active menu in the Menu instance.
 	 *
-	 * @return  array
+	 *	<code>
+	 *		API::post('menus/active', array(
+	 *			'slug' => 'admin',
+	 *		));
+	 *	</code>
+	 *
+	 * @return  Response
 	 */
 	public function post_active()
 	{
@@ -216,262 +356,146 @@ class Menus_API_Menus_Controller extends API_Controller
 
 		if (Menu::active($active) === false)
 		{
-			return array(
-				'status'  => false,
-				'message' => "The active menu [$active] doesn't exist.",
-			);
+			return new Response(array(
+				'message' =>  "The active menu [$active] doesn't exist.",
+			), API::STATUS_NOT_FOUND);
 		}
 
-		return array('status' => true);
+		return new Response(null, API::STATUS_NO_CONTENT);
 	}
 
 	/**
 	 * Gets the active menu in the Menu instance.
 	 *
-	 * @return  array
+	 *	<code>
+	 *		$active_menu_object = API::get('menus/active');
+	 *	</code>
+	 *
+	 * @return  Response
 	 */
 	public function get_active()
 	{
 		if ( ! $active = Menu::active())
 		{
-			return array(
-				'status'  => false,
-				'message' => 'There is no active menu defined.',
-			);
+			return new Response(array(
+				'message' => 'No active menu set.',
+			), API::STATUS_NOT_FOUND);
 		}
 
-		return array(
-			'status'      => true,
-			'active'      => $active,
-			'active_path' => Menu::active_path(), // Always returns something if Menu::active() does
-		);
+		return new Response($active);
 	}
 
 	/**
-	 * Enables menus with given filters.
+	 * Returns the active menu path. This is an array
+	 * of IDs.
 	 *
-	 * @return  array
+	 *	<code>
+	 *		$active_paths = API::get('menu/active_path');
+	 *	</code>
+	 *
+	 * @return  Response
 	 */
-	public function post_enable()
+	public function get_active_path()
 	{
-		// Enabling an ID
-		if ($id = Input::get('id'))
+		if ( ! $active = Menu::active())
 		{
-			$menu = Menu::find($id);
-
-			if ($menu !== null)
-			{
-				$menu->status = 1;
-				$menu->save();
-
-				return array('status' => true);
-			}
+			return new Response(array(
+				'message' => 'No active menu set.',
+			), API::STATUS_NOT_FOUND);
 		}
 
-		// Enabling by slug
-		elseif ($slug = Input::get('slug'))
+		return new Response(Menu::active_path());
+	}
+
+	/**
+	 * Deletes a menu.
+	 *
+	 *	<code>
+	 *		API::delete('menus/admin');
+	 *	</code>
+	 *
+	 * @param   string  $slug
+	 * @return  Response
+	 */
+	public function delete_index($slug)
+	{
+		// Validate the menu is a root item
+		if (($menu = Menu::find_root($slug)) === null)
 		{
-			$menu = Menu::find(function($query) use ($slug)
-			{
-				return $query->where('slug', '=', $slug);
-			});
-
-			if ($menu !== null)
-			{
-				$menu->status = 1;
-				$menu->save();
-
-				return array('status' => true);
-			}
+			return new Response(array(
+				'message' => "Menu [$slug] either not a root menu item or doesn't exist.",
+			), API::STATUS_NOT_FOUND);
 		}
 
-		// Enabling by extension
-		if ($extension = Input::get('extension'))
-		{
-			$menus = Menu::all(function($query) use ($extension)
-			{
-				return $query->where('extension', '=', $extension);
-			});
+		// Delete
+		$menu->delete();
 
-			if ( ! empty($menus))
+		return new Response(null, API::STATUS_NO_CONTENT);
+	}
+
+	/**
+	 * Recursively filters menu items.
+	 *
+	 * @param   array   $children
+	 * @param   string  $visibility
+	 * @return  void
+	 */
+	protected function filter_children_recursively(array &$children, $visibility)
+	{
+		foreach ($children as $index => &$child)
+		{
+			if ($visibility == 'automatic')
 			{
-				foreach ($menus as $menu)
+				// Do a switch based on the menu item
+				// visibility
+				switch ($child->visibility)
 				{
-					$menu->status = 1;
-					$menu->save();
+					// Remove from anyone who's not logged in
+					case Menu::VISIBILITY_LOGGED_IN:
+						if ( ! Sentry::check())
+						{
+							array_splice($children, $index, 1);
+						}
+						break;
+
+					// Remove from anyone who's logged in
+					case Menu::VISIBILITY_LOGGED_OUT:
+						if (Sentry::check())
+						{
+							array_splice($children, $index, 1);
+						}
+						break;
+
+					// Remove from anyone who's not admin
+					case Menu::VISIBILITY_ADMIN:
+						if (Sentry::check() and Sentry::user()->has_access(array('is_admin', 'superuser')))
+						{
+							$child['uri'] = ADMIN.'/'.$child['uri'];
+						}
+						else
+						{
+							array_splice($children, $index, 1);
+						}
+						break;
 				}
-
-				return array('status'  => true);
 			}
-		}
 
-		// Failure
-		return array(
-			'status'  => false,
-			'message' => 'Could\'t find menu to enable.',
-		);
-	}
-
-	/**
-	 * Disables menus with given filters.
-	 *
-	 * @return  array
-	 */
-	public function post_disable()
-	{
-		// Disabling an ID
-		if ($id = Input::get('id'))
-		{
-			$menu = Menu::find($id);
-
-			if ($menu !== null)
+			// Do a switch based on the filter visibility requested
+			elseif (in_array($visibility, range(0, 3)))
 			{
-				$menu->status = 0;
-				$menu->save();
-
-				return array('status' => true);
-			}
-		}
-
-		// Disabling by slug
-		elseif ($slug = Input::get('slug'))
-		{
-			$menu = Menu::find(function($query) use ($slug)
-			{
-				return $query->where('slug', '=', $slug);
-			});
-
-			if ($menu !== null)
-			{
-				$menu->status = 0;
-				$menu->save();
-
-				return array('status' => true);
-			}
-		}
-
-		// Disabling by extension
-		if ($extension = Input::get('extension'))
-		{
-			$menus = Menu::all(function($query) use ($extension)
-			{
-				return $query->where('extension', '=', $extension);
-			});
-
-			if ( ! empty($menus))
-			{
-				foreach ($menus as $menu)
+				// Check the visibility matches the requested typ
+				if ($child->visibility != $visibility)
 				{
-					$menu->status = 0;
-					$menu->save();
+					array_splice($children, $index, 1);
 				}
-
-				return array('status'  => true);
 			}
-		}
 
-		// Failure
-		return array(
-			'status'  => false,
-			'message' => 'Could\'t find menu to disable.',
-		);
-	}
-
-	/**
-	 * Deletes a menu. Must be a root item.
-	 *
-	 * @return  array
-	 */
-	public function post_delete()
-	{
-		if ( ! $id = Input::get('id'))
-		{
-			return array(
-				'status'  => false,
-				'message' => 'A Menu ID must be provided.',
-			);
-		}
-
-		$menu = Menu::find($id);
-
-		if ($menu === null)
-		{
-			return array(
-				'status'  => false,
-				'message' => 'Couldn\'t find menu to delete.',
-			);
-		}
-
-		if ( ! $menu->is_root())
-		{
-			return array(
-				'status'  => false,
-				'message' => 'Provided menu to delete wasn\'t a root node.',
-			);
-		}
-
-		if ( ! $menu->user_editable)
-		{
-			return array(
-				'status'  => false,
-				'message' => 'Menu is not user editable. Cannot be deleted.',
-			);
-		}
-
-		try
-		{
-			$result = $menu->delete_with_children();
-
-			return array(
-				'status'  => true,
-				'result'  => $result,
-			);
-		}
-		catch (Exception $e)
-		{
-			return array(
-				'status'  => false,
-				'message' => $e->getMessage(),
-			);
-		}
-	}
-
-	/**
-	 * Returns an array of menu slugs.
-	 *
-	 * @return  array
-	 */
-	public function get_slugs()
-	{
-		// Get an array of slugs
-		$slugs = array();
-
-		// The ID of the menu to not include
-		// when fetching slugs. This is used
-		// in the menu scaffolding
-		$not_id = Input::get('not_id', false);
-
-		// Get items
-		$items = Menu::all(function($query) use ($not_id)
-		{
-			if ($not_id !== false)
+			// Recursive baby!
+			if (isset($child->children) and is_array($child->children) and count($child->children) > 0)
 			{
-				$query->where(Menu::nesty_col('tree'), '!=', $not_id);
+				$this->filter_children_recursively($child->children, $visibility);
 			}
-
-			return $query;
-		}, array('slug'));
-
-		foreach ($items as $item)
-		{
-			$slugs[] = $item->slug;
 		}
-
-		// We can't really go wrong, can we?
-		return array(
-			'status' => true,
-			'slugs'  => $slugs,
-		);
 	}
 
 }

@@ -22,7 +22,6 @@ return array(
 
 	'info' => array(
 		'name'        => 'Pages',
-		'slug'        => 'pages',
 		'author'      => 'Cartalyst LLC',
 		'description' => 'An extension to manage pages until a CMS is completed.',
 		'version'     => '1.0',
@@ -53,7 +52,7 @@ return array(
 			if ( ! Bundle::exists($page))
 			{
 				$page = ($page == 'home') ? 'index' : $page;
-				$params = explode('/', $params);
+				$params = explode('/', substr($params, 1));
 
 				return Controller::call('pages::pages@'.$page, $params);
 			}

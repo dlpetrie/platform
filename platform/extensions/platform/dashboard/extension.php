@@ -22,7 +22,6 @@ return array(
 
 	'info' => array(
 		'name'        => 'Dashboard',
-		'slug'        => 'dashboard',
 		'author'      => 'Cartalyst LLC',
 		'description' => 'The main admin screen. The center of your website\'s adminstration.',
 		'version'     => '1.0',

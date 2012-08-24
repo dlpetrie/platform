@@ -32,10 +32,6 @@ class Installer_Index_Controller extends Base_Controller
 	{
 		parent::before();
 
-		// Always make the system prepared for an install, as
-		// we never know which step we're landing on.
-		// Installer::prepare();
-
 		// Setup CSS
 		Asset::add('bootstrap', 'platform/installer/css/bootstrap.min.css');
 		Asset::add('installer', 'platform/installer/css/installer.css');
@@ -44,56 +40,100 @@ class Installer_Index_Controller extends Base_Controller
 		Asset::add('jquery', 'platform/installer/js/jquery.js');
 		Asset::add('url', 'platform/installer/js/url.js');
 		Asset::add('bootstrap', 'platform/installer/js/bootstrap.js', array('jquery'));
+		Asset::add('validation', 'platform/installer/js/validate.js', array('jquery'));
+		Asset::add('tempo', 'platform/installer/js/tempo.js', array('jquery'));
 		Asset::add('installer', 'platform/installer/js/installer.js', array('jquery'));
 
+		// If we're already installed
 		if (Platform::is_installed() and URI::segment(2) !== 'step_4')
 		{
 			Redirect::to('installer/step_4')->send();
 			exit;
 		}
+
+		// If we're not prepared for installation
+		if ( ! Installer::is_prepared() and ! in_array(URI::segment(2, 'step_1'), array('step_1', 'permissions')))
+		{
+			Redirect::to('installer')->send();
+			exit;
+		}
 	}
 
+	/**
+	 * Alias for step 1.
+	 *
+	 * @return  View
+	 */
 	public function get_index()
 	{
-		Session::flush();
+		return $this->get_step_1();
+	}
 
+	/**
+	 * Returns the first step of the installation process.
+	 *
+	 * This step is a pre-installation checklist to make sure
+	 * the system is prepared to be installed.
+	 *
+	 * @return  View
+	 */
+	public function get_step_1()
+	{
+		// Prepare our database
+		Installer::prepare();
+
+		// Get an array of permissions
 		$data['permissions'] = Installer::permissions();
-
-		$data['enabled'] = '';
-
-		foreach ($data['permissions'] as $perm => $val)
-		{
-			if ( ! $val) $data['enabled'] = 'disabled';
-		}
 
 		return View::make('installer::step_1', $data);
 	}
 
+	/**
+	 * Not used just now. Developers may
+	 * attach a license agreement or other form
+	 * data to get_step_1() and process it here
+	 *
+	 * @return  Redirect
+	 */
 	public function post_step_1()
 	{
 		return Redirect::to('installer/step_2');
 	}
 
+	/**
+	 * Returns the second step of the installation process.
+	 *
+	 * This step is we check the database.
+	 *
+	 * @return  View
+	 */
 	public function get_step_2()
 	{
-		// initialize data array
-		$data = array(
+		// Initialize data array
+		$credentials = array(
 			'driver'   => null,
 			'host'     => null,
 			'username' => null,
 			'database' => null,
 		);
 
-		// check for session data
-		$credentials = Installer::get_step_data(2, array());
-		foreach ($credentials as $values => $value)
+		// Check for session data
+		$credentials = array_merge($credentials, Installer::get_step_data(2, function()
 		{
-			$data[$values] = $value;
-		}
+			// Look for existing config data
+			$connections = Config::get('database.connections', array());
+			$connection = reset($connections);
+			return (is_array($connection)) ? $connection : array();
+		}));
 
-		return View::make('installer::step_2')->with('drivers', Installer::database_drivers())->with('credentials', $data);
+		return View::make('installer::step_2')->with('drivers', Installer::database_drivers())->with('credentials', $credentials);
 	}
 
+	/**
+	 * Stores the database credentials to the session.
+	 *
+	 * @return  Redirect
+	 */
 	public function post_step_2()
 	{
 		Installer::remember_step_data(2, Input::get());
@@ -101,11 +141,23 @@ class Installer_Index_Controller extends Base_Controller
 		return Redirect::to('installer/step_3');
 	}
 
+	/**
+	 * Returns the third step of the installation process.
+	 *
+	 * This step is where we put admin credentials in.
+	 *
+	 * @return  View
+	 */
 	public function get_step_3()
 	{
 		return View::make('installer::step_3');
 	}
 
+	/**
+	 * Stores the admin credentials to the session
+	 *
+	 * @return  Redirect
+	 */
 	public function post_step_3()
 	{
 		Installer::remember_step_data(3, Input::get());
@@ -113,6 +165,11 @@ class Installer_Index_Controller extends Base_Controller
 		return Redirect::to('installer/install');
 	}
 
+	/**
+	 * Actually does the install process.
+	 *
+	 * @return  Redirect
+	 */
 	public function get_install()
 	{
 		// 1. Create the database config file
@@ -160,9 +217,11 @@ class Installer_Index_Controller extends Base_Controller
 		// 4. Install extensions
 		Installer::install_extensions();
 
-		$create_user = API::post('users/create', $user);
-
-		if ( ! $create_user['status'])
+		try
+		{
+			$create_user = API::post('users', $user);
+		}
+		catch (APIClientException $e)
 		{
 			return Redirect::to('installer/step_3');
 		}
@@ -170,22 +229,34 @@ class Installer_Index_Controller extends Base_Controller
 		return Redirect::to('installer/step_4');
 	}
 
+	/**
+	 * The completion step
+	 *
+	 * @return  View
+	 */
 	public function get_step_4()
 	{
 		Session::forget('installer');
 
 		return View::make('installer::step_4')
-		           ->with('key', Config::get('application.key'));
+		           ->with('license', Platform::license());
 	}
 
 	/**
-	 * Confirm Writable files
+	 * Returns a JSON encoded array of filesystem
+	 * permissions.
+	 *
+	 * @return  Response
 	 */
-	public function post_confirm_writable()
+	public function get_permissions()
 	{
-		return json_encode(Installer::permissions());
-	}
+		if ( ! Request::ajax())
+		{
+			return $this->get_index();
+		}
 
+		return new Response(json_encode(Installer::permissions()));
+	}
 
 	/**
 	 * Confirm database - Step 1
@@ -220,14 +291,12 @@ class Installer_Index_Controller extends Base_Controller
 			if ($e->getCode() !== 0)
 			{
 				return new Response(json_encode(array(
-					'error'   => true,
 					'message' => $e->getMessage(),
-				)));
+				)), API::STATUS_BAD_REQUEST);
 			}
 		}
 
 		return json_encode(array(
-			'error'   => false,
 			'message' => 'Successfully connected to the database',
 		));
 	}
