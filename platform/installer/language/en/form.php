@@ -37,7 +37,7 @@ return array(
 	),
 
 	'user' => array(
-		'legend'                => 'Database Credentials',
+		'legend'                => 'Administration',
 		'first_name'            => 'First Name',
 		'first_name_help'       => 'First name of admin.',
 		'last_name'             => 'Last Name',
