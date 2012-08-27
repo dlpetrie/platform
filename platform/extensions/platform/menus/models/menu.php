@@ -11,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0
+ * @version    1.0.1
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -146,7 +146,7 @@ class Menu extends Nesty
 		{
 			$columns[$key] = static::nesty_col('tree');
 		}
-		
+
 		$menu = static::find(function($query) use ($slug)
 		{
 			return $query->where('slug', '=', $slug)
@@ -366,7 +366,7 @@ SQL;
 
 	/**
 	 * Creates or updates a Nesty tree structure based on
-	 * the hierarchical array of children passed through. 
+	 * the hierarchical array of children passed through.
 	 *
 	 * A callback may be provided for each Nesty object just
 	 * before it's persisted to the database. Returning false
@@ -514,7 +514,7 @@ SQL;
 		// the slug validation
 		if (isset($this->id) and $id = $this->id)
 		{
-			$rules['slug'] .= ','.$this->id;	
+			$rules['slug'] .= ','.$this->id;
 		}
 
 		return array($data, $rules);
