@@ -6,6 +6,10 @@
   * README Updates
   * Adding in CHANGELOG.MD
 
+**Installer:**
+
+  * Fixed a language file inconsistancy
+
 **Menus:**
 
   * Adding nullable to the uri column in menus to fix an issue some people are having with installation.
