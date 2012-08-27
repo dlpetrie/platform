@@ -11,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0
+ * @version    1.0.1
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -91,11 +91,11 @@ class Group extends Crud
 			{
 				if (in_array('before', $events))
 				{
-					list($query, $attributes) = $this->before_update(null, $attributes);				
+					list($query, $attributes) = $this->before_update(null, $attributes);
 				}
 
 				$result = Sentry::group((int) $key)->update($attributes) === true;
-				
+
 				if (in_array('after', $events))
 				{
 					$result = $this->after_update($result);
@@ -130,7 +130,7 @@ class Group extends Crud
 
 				if (in_array('after', $events))
 				{
-					$result = $this->after_insert($result);	
+					$result = $this->after_insert($result);
 				}
 
 				$attributes['id'] = (int) $result;
