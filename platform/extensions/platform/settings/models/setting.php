@@ -42,4 +42,20 @@ class Setting extends Crud
 		// static::$_messages = $messages;
 	}
 
+	/**
+	 * Called right after validation before inserting/updating to the database
+	 *
+	 * @param   array  $attributes
+	 * @return  array
+	 */
+	protected function prep_attributes($attributes)
+	{
+		foreach ($attributes as &$attribute);
+		{
+			$attribute = \HTML::entities($attribute);
+		}
+
+		return $attributes;
+	}
+
 }

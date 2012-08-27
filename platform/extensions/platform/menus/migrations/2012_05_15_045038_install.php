@@ -39,7 +39,7 @@ class Menus_Install
 			$table->string('extension')->nullable();
 			$table->string('name');
 			$table->string('slug')->unique();
-			$table->string('uri');
+			$table->string('uri')->nullable();
 			$table->boolean('target');
 			$table->integer('visibility');
 			$table->boolean('secure');

@@ -311,15 +311,15 @@ class Users_API_Users_Controller extends API_Controller
 
 				// Replacements
 				$replacements = array(
-					'/{{SITE_TITLE}}/'      => Platform::get('settings.general.title'),
+					'/{{SITE_TITLE}}/'      => Platform::get('settings.site.title'),
 					'/{{ACTIVATION_LINK}}/' => URL::to_secure('activate/'.$hash),
 				);
 
 				$body = preg_replace(array_keys($replacements), array_values($replacements), $body);
 
 				// Construct the message
-				$message = Swift_Message::newInstance(Platform::get('settings.general.title').Lang::line('users::messages.auth.activate_account')->get())
-				           ->setFrom(Platform::get('settings.general.email'), Platform::get('settings.general.title'))
+				$message = Swift_Message::newInstance(Platform::get('settings.site.title').Lang::line('users::messages.auth.activate_account')->get())
+				           ->setFrom(Platform::get('settings.site.email'), Platform::get('settings.site.title'))
 				           ->setTo(Input::get('email'))
 				           ->setBody($body,'text/html');
 
@@ -468,7 +468,7 @@ class Users_API_Users_Controller extends API_Controller
 
 				// Replacements
 				$replacements = array(
-					'/{{SITE_TITLE}}/' => Platform::get('settings.general.title'),
+					'/{{SITE_TITLE}}/' => Platform::get('settings.site.title'),
 					'/{{RESET_LINK}}/' => $link,
 				);
 
