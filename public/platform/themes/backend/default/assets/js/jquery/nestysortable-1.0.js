@@ -339,6 +339,26 @@
 		observeSaving: function() {
 			var self = this;
 
+			// Catch submit button
+			self.elem.find(':submit').on('click', function(e) {
+
+				// Loop through the defined fields and remove
+				// validation on them.
+				for (i in self.settings.fields) {
+
+					// Get some variables
+					var field        = self.settings.fields[i],
+					    $formElement = $(field.newSelector);
+
+					$formElement.val('');
+
+					if ($formElement.attr('required')) {
+						$formElement.attr('data-required', 'required')
+						            .removeAttr('required');
+					}
+				}
+			});
+
 			// Catch form submission.
 			self.elem.submit(function(e) {
 
@@ -349,29 +369,44 @@
 				$templateClone = $template.clone();
 				$template.remove();
 
+				// If we have fancy button plugin
+				if ($().button) {
+					var $submitButton = self.elem.find(':submit');
+				}
+
 				// AJAX form submission
 				if (self.settings.ajax === true) {
 					e.preventDefault();
 
-					var inputName = self.settings.hierarchyInputName,
-					     postData = $.extend($(this).find('input').serializeObject(), {
-						inputName : self.sortable().nestedSortable('toHierarchy', {
-							attribute: 'data-item'
-						})
+					var inputName = self.settings.hierarchyInputName
+					       params = {};
+					params[inputName] = self.sortable().nestedSortable('toHierarchy', {
+						attribute: 'data-item'
 					});
+					var postData = $.extend($(this).find('input').serializeObject(), params);
 
 					// AJAX call to save menu
 					$.ajax({
-						url      : $(this).attr('action'),
-						type     : 'POST',
-						dataType : 'json',
-						data     : postData,
-						success  : function(data, textStatus, jqXHR) {
-							if (data.status) {
-								
+						url        : $(this).attr('action'),
+						type       : 'POST',
+						data       : postData,
+						beforeSend : function(jqXHR, settings) {
+							if ($().button) {
+								$submitButton.button('loading');
 							}
 						},
-						error    : function(jqXHR, textStatus, errorThrown) {
+						success    : function(data, textStatus, jqXHR) {
+							if ($().button) {
+								$submitButton.button('complete');
+
+								setTimeout(function() {
+									$submitButton.button('reset');
+								}, 300);
+							}
+						},
+						error      : function(jqXHR, textStatus, errorThrown) {
+							var response = $.parseJSON(jqXHR.responseText);
+
 							alert(jqXHR.status + ' ' + errorThrown);
 						}
 					});
@@ -381,7 +416,27 @@
 					// we're leaving the page.
 					$templateClone.appendTo(self.settings.itemTemplateContainerSelector);
 
+					// Loop through the defined fields and re-add
+					// validation back in
+					for (i in self.settings.fields) {
+
+						// Get some variables
+						var field        = self.settings.fields[i],
+						    $formElement = $(field.newSelector);
+
+						$formElement.val('');
+
+						if ($formElement.attr('data-required')) {
+							$formElement.attr('required', 'required')
+							            .removeAttr('data-required');
+						}
+					}
+
 					return false;
+				}
+
+				if ($().button) {
+					$submitButton.button('loading');
 				}
 
 				// Traditional form submission

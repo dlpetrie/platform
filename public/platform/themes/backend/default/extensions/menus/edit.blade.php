@@ -16,6 +16,7 @@
 {{ Theme::queue_asset('jquery-helpers', 'js/jquery/helpers.js', 'jquery') }}
 {{ Theme::queue_asset('bootstrap-tab', 'js/bootstrap/tab.js', 'jquery') }}
 {{ Theme::queue_asset('bootstrap-toggle', 'js/bootstrap/toggle.js', 'jquery') }}
+{{ Theme::queue_asset('bootstrap-button', 'js/bootstrap/button.js', 'jquery') }}
 {{ Theme::queue_asset('jquery-ui', 'js/jquery/ui-1.8.18.min.js', 'jquery') }}
 {{ Theme::queue_asset('jquery-nestedsortable', 'js/jquery/nestedsortable-1.3.5.js', 'jquery') }}
 {{ Theme::queue_asset('tempo', 'js/tempo-1.8.min.js') }}
@@ -259,7 +260,7 @@ function dump(arr,level) {
 			<!-- /end - tabbable -->
 
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary btn-save-menu">
+				<button type="submit" class="btn btn-primary btn-save-menu" data-loading-text="{{ Lang::line('button.loading') }}" data-complete-text="{{ Lang::line('button.saved') }}">
 					{{ Lang::line('button.'.(($menu_slug) ? 'update' : 'create')) }}
 				</button>
 

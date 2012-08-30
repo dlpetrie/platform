@@ -13,5 +13,10 @@ return array(
 	'reset_password' => 'Reset',
 	'update'         => 'Save Changes',
 	'view'           => 'View',
+	'loading'        => 'Loading...',
+	'complete'       => 'Complete',
+	'saved'          => 'Saved',
+	'deleted'        => 'Deleted',
+	'updated'        => 'Updated',
 
 );

@@ -124,7 +124,7 @@
 
 			self.validateNewChildren()
 			    .validateSlugs()
-			    .helpNewName()
+			    .helpNewItems()
 			    .helpSecureUris();
 		},
 
@@ -234,12 +234,13 @@
 			return this;
 		},
 
-		helpNewName: function() {
+		helpNewItems: function() {
 			var self = this;
 
 			// Autofill the slug based on the name
 			$(self.settings.newChildNameSelector).on('focus keyup change', function() {
-				$(self.settings.newChildSlugSelector).val(self.settings.rootSlug+self.settings.rootSlugAppend+$(this).slugify()).trigger('change').trigger('blur');
+
+				$(self.settings.newChildSlugSelector).val(((self.settings.rootSlug) ? self.settings.rootSlug+self.settings.rootSlugAppend : '')+$(this).slugify()).trigger('change').trigger('blur');
 
 				// And the URI
 				$(self.settings.newChildUriSelector).val($(this).slugify('/')).trigger('change');

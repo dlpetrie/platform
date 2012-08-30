@@ -158,11 +158,18 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 			if (Request::ajax())
 			{
 				return new Response(array(
-					'message' => 'No children hierarchy was provided.'
+					'message' => Lang::line('menus::messages.update.no_chidren'),
 				), API::STATUS_BAD_REQUEST);
 			}
 
 			Platform::messages()->error('No children hierarchy was provided.');
+
+			if (Request::ajax())
+			{
+				return new Response(array(
+					'message' => Lang::line('menus::messages.update.no_chidren'),
+				), API::STATUS_BAD_REQUEST);
+			}
 
 			return Redirect::to_secure(ADMIN.'/menus'.(($slug) ? '/edit/'.$slug : null));
 		}
@@ -211,6 +218,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 					'message' => $e->getMessage(),
 				), $e->getCode());
 			}
+
 			Platform::messages()->error($e->getMessage());
 
 			foreach ($e->errors() as $error)
@@ -219,6 +227,12 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 			}
 
 			return Redirect::to_secure(ADMIN.'/menus'.(($slug) ? '/edit/'.$slug : null));
+		}
+
+
+		if (Request::ajax())
+		{
+			return new Response(null, API::STATUS_NO_CONTENT);
 		}
 
 		return Redirect::to_secure(ADMIN.'/menus');
