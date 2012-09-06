@@ -197,7 +197,7 @@ class User extends Crud
 
 					if (in_array('after', $events))
 					{
-						$result['id'] = $this->after_insert($result);
+						$result = $this->after_insert($result);
 					}
 
 					$user_id = (int) $result['id'];
