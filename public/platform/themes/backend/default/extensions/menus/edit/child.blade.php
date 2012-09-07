@@ -45,14 +45,6 @@
 						'[%control.uri%]'); ?>" {{ (array_key_exists('uri', $child) and ( ! array_get($child, 'user_editable') or URL::valid(array_get($child, 'uri')))) ? 'disabled' : 'required' }}>
 					</div>
 				</div>
-
-				<!-- CSS Class -->
-				<div class="control-group">
-					<label class="control-label" for="menu-children-{{ array_get($child, 'id', '[%id%]') }}-class">{{ Lang::line('menus::form.child.class') }}</label>
-					<div class="controls">
-						<input type="text" name="children[{{ array_get($child, 'id', '[%id%]') }}][class]" id="menu-children-{{ array_get($child, 'id', '[%id%]') }}-class" class="child-class" value="<?php echo array_get($child, 'class', '[%control.class%]'); ?>">
-					</div>
-				</div>
 				
 				<!-- Secure -->
 				<div class="control-group">
@@ -72,6 +64,19 @@
 					</div>
 				</div>
 
+				<!-- Visibility -->
+				<div class="control-group">
+					<label class="control-label" for="menu-children-{{ array_get($child, 'id', '[%id%]') }}-visibility">{{ Lang::line('menus::form.child.visibility.title') }}</label>
+					<div class="controls">
+						<select name="children[{{ array_get($child, 'id', '[%id%]') }}][visibility]" id="menu-children-{{ array_get($child, 'id', '[%id%]') }}-visibility" class="child-visibility" {{ ( ! array_key_exists('visibility', $child)) ? '[%control.visibility%]' : null }} {{ (array_key_exists('user_editable', $child) and ( ! array_get($child, 'user_editable'))) ? 'disabled' : 'required' }}>
+							<option value="{{ Platform\Menus\Menu::VISIBILITY_ALWAYS }}" {{ (array_get($child, 'visibility') == Platform\Menus\Menu::VISIBILITY_ALWAYS) ? 'selected' : null }}>{{ Lang::line('menus::form.child.visibility.always') }}</option>
+							<option value="{{ Platform\Menus\Menu::VISIBILITY_LOGGED_IN }}" {{ (array_get($child, 'visibility') == Platform\Menus\Menu::VISIBILITY_LOGGED_IN) ? 'selected' : null }}>{{ Lang::line('menus::form.child.visibility.logged_in') }}</option>
+							<option value="{{ Platform\Menus\Menu::VISIBILITY_LOGGED_OUT }}" {{ (array_get($child, 'visibility') == Platform\Menus\Menu::VISIBILITY_LOGGED_OUT) ? 'selected' : null }}>{{ Lang::line('menus::form.child.visibility.logged_out') }}</option>
+							<option value="{{ Platform\Menus\Menu::VISIBILITY_ADMIN }}" {{ (array_get($child, 'visibility') == Platform\Menus\Menu::VISIBILITY_ADMIN) ? 'selected' : null }}>{{ Lang::line('menus::form.child.visibility.admin') }}</option>
+						</select>
+					</div>
+				</div>
+
 				<!-- Target -->
 				<div class="control-group">
 					<label class="control-label" for="menu-children-{{ array_get($child, 'id', '[%id%]') }}-target">{{ Lang::line('menus::form.child.target.title') }}</label>
@@ -85,16 +90,11 @@
 					</div>
 				</div>
 
-				<!-- Visibility -->
+				<!-- CSS Class -->
 				<div class="control-group">
-					<label class="control-label" for="menu-children-{{ array_get($child, 'id', '[%id%]') }}-visibility">{{ Lang::line('menus::form.child.visibility.title') }}</label>
+					<label class="control-label" for="menu-children-{{ array_get($child, 'id', '[%id%]') }}-class">{{ Lang::line('menus::form.child.class') }}</label>
 					<div class="controls">
-						<select name="children[{{ array_get($child, 'id', '[%id%]') }}][visibility]" id="menu-children-{{ array_get($child, 'id', '[%id%]') }}-visibility" class="child-visibility" {{ ( ! array_key_exists('visibility', $child)) ? '[%control.visibility%]' : null }}>
-							<option value="{{ Platform\Menus\Menu::VISIBILITY_ALWAYS }}" {{ (array_get($child, 'visibility') == Platform\Menus\Menu::VISIBILITY_ALWAYS) ? 'selected' : null }}>{{ Lang::line('menus::form.child.visibility.always') }}</option>
-							<option value="{{ Platform\Menus\Menu::VISIBILITY_LOGGED_IN }}" {{ (array_get($child, 'visibility') == Platform\Menus\Menu::VISIBILITY_LOGGED_IN) ? 'selected' : null }}>{{ Lang::line('menus::form.child.visibility.logged_in') }}</option>
-							<option value="{{ Platform\Menus\Menu::VISIBILITY_LOGGED_OUT }}" {{ (array_get($child, 'visibility') == Platform\Menus\Menu::VISIBILITY_LOGGED_OUT) ? 'selected' : null }}>{{ Lang::line('menus::form.child.visibility.logged_out') }}</option>
-							<option value="{{ Platform\Menus\Menu::VISIBILITY_ADMIN }}" {{ (array_get($child, 'visibility') == Platform\Menus\Menu::VISIBILITY_ADMIN) ? 'selected' : null }}>{{ Lang::line('menus::form.child.visibility.admin') }}</option>
-						</select>
+						<input type="text" name="children[{{ array_get($child, 'id', '[%id%]') }}][class]" id="menu-children-{{ array_get($child, 'id', '[%id%]') }}-class" class="child-class" value="<?php echo array_get($child, 'class', '[%control.class%]'); ?>">
 					</div>
 				</div>
 

@@ -274,7 +274,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 			'name'       => Input::get('children.'.$child['id'].'.name'),
 			'slug'       => Input::get('children.'.$child['id'].'.slug'),
 			'uri'        => Input::get('children.'.$child['id'].'.uri'),
-			'class'		 => Input::get('children.'.$child['id'].'.class'),
+			'class'      => Input::get('children.'.$child['id'].'.class'),
 			'target'     => Input::get('children.'.$child['id'].'.target', 0),
 			'visibility' => Input::get('children.'.$child['id'].'.visibility', 0),
 			'status'     => Input::get('children.'.$child['id'].'.status', 1),

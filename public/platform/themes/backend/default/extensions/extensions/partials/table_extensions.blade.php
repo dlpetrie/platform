@@ -34,7 +34,17 @@
 
 
 			@else
-				Required
+
+				<div class="btn-group">
+
+					@if (array_get($extension, 'info.has_update'))
+						<a class="btn btn-info" href="{{ URL::to_secure(ADMIN.'/extensions/update/'.array_get($extension, 'info.slug')) }}" onclick="return confirm('Are you sure you want to update the \'{{ e(array_get($extension, 'info.name')) }}\' extension?');">{{ Lang::line('extensions::button.update') }}</a>
+					@endif
+
+					<a class="btn disabled">{{ Lang::line('extensions::button.required') }}</a>
+
+				</div>
+
 			@endif
 		</td>
 	</tr>

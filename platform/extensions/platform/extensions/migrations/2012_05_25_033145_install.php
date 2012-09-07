@@ -48,7 +48,6 @@ class Extensions_Install
 			'uri'           => 'extensions',
 			'user_editable' => 0,
 			'status'        => 1,
-			'class'			=> 'icon-leaf'
 		));
 
 		$extensions->last_child_of($system);

@@ -118,7 +118,7 @@ class Menu extends Nesty
 			return $query;
 		}, array(
 			'id', 'extension', 'name', 'slug', 'user_editable',
-			'lft', 'rgt', 'menu_id', 'status','class',
+			'lft', 'rgt', 'menu_id', 'status',
 		));
 
 		return $menus;
@@ -348,7 +348,7 @@ SQL;
 					'slug'          => $slug,
 					'user_editable' => 0,
 					'status'        => 1,
-					'class'			=> ''
+					'class'			=> '',
 				));
 
 				if ($callback = array_shift($parameters) and $callback instanceof Closure)
@@ -393,11 +393,11 @@ SQL;
 					$duplicate->reload();
 
 					// Reset relevent values
-					$child->name   = $duplicate->name;
-					$child->slug   = $duplicate->slug;
-					$child->uri    = $duplicate->uri;
-					$child->secure = $duplicate->secure;
-					$child->class  = $duplicate->class;
+					$child->name       = $duplicate->name;
+					$child->slug       = $duplicate->slug;
+					$child->uri        = $duplicate->uri;
+					$child->secure     = $duplicate->secure;
+					$child->visibility = $duplicate->visibility;
 				}
 				elseif ($child->is_new())
 				{
