@@ -47,6 +47,7 @@ class Menus_Install
 			$table->integer('lft');
 			$table->integer('rgt');
 			$table->integer('menu_id');
+			$table->string('class');
 			$table->boolean('status');
 		});
 
@@ -64,6 +65,7 @@ class Menus_Install
 			'uri'           => 'settings',
 			'user_editable' => 0,
 			'status'        => 1,
+			'class' 	=> 'icon-cog',
 		));
 
 		$system->last_child_of($admin);
@@ -76,6 +78,7 @@ class Menus_Install
 			'uri'           => 'menus',
 			'user_editable' => 0,
 			'status'        => 1,
+			'class'		=> 'icon-th-list',
 		));
 
 		$menus->last_child_of($system);
@@ -92,6 +95,7 @@ class Menus_Install
 			'visibility'    => 0,
 			'user_editable' => 1,
 			'status'        => 1,
+			'class'		=> 'icon-home',
 		));
 
 		$home->last_child_of($main);
@@ -105,6 +109,7 @@ class Menus_Install
 			'visibility'    => 2,
 			'user_editable' => 1,
 			'status'        => 1,
+			'class'		=> 'icon-off',
 		));
 
 		$login->last_child_of($main);
@@ -118,6 +123,7 @@ class Menus_Install
 			'visibility'    => 1,
 			'user_editable' => 1,
 			'status'        => 1,
+			'class'		=> 'icon-off',
 		));
 
 		$logout->last_child_of($main);
@@ -131,6 +137,7 @@ class Menus_Install
 			'visibility'    => 2,
 			'user_editable' => 1,
 			'status'        => 1,
+			'class'		=> 'icon-fire',
 		));
 
 		$register->last_child_of($main);
@@ -144,6 +151,7 @@ class Menus_Install
 			'visibility'    => 3,
 			'user_editable' => 1,
 			'status'        => 1,
+			'class'		=> 'icon-th-large',
 		));
 
 		$register->last_child_of($main);

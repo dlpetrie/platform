@@ -114,7 +114,9 @@ class Menus
 		            ->with('items', $items)
 		            ->with('active_path', $active_path)
 		            ->with('class', $class)
-		            ->with('before_uri', $before_uri);
+		            ->with('before_uri', $before_uri)
+		            ->with('start', $start)
+		            ->with('child_depth', $children_depth);
 	}
 
 }

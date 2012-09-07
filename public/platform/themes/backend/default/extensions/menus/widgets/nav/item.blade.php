@@ -1,10 +1,19 @@
 <li class="{{ in_array($item['id'], $active_path) ? 'active' : null }}">
 
 	@if (URL::valid($item['uri']))
-		{{ HTML::link($item['uri'], $item['name'], array('target' => '')) }}
+		<a href="{{ $item['uri'] }}"}}
 	@else
-		{{ HTML::link((($before_uri) ? $before_uri.'/' : null).$item['uri'], $item['name'], ($item['target'] == 0 ? array('target' => '_self') : array('target' => '_blank')), $item['secure']) }}
+		<a href="{{ URL::to(($before_uri ? $before_uri.'/' : null).$item['uri'], $item['secure']) }}" target="{{ ($item['target'] == 0) ? '_self' : '_blank' }}">
 	@endif
+
+		@if ($item['class'])
+			<i class="{{ $item['class'] }}"></i>
+		@endif
+		<span>
+			{{ $item['name'] }}
+		</span>
+
+	</a>
 
 	@if ($item['children'])
 		<ul>

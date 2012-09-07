@@ -24,7 +24,7 @@ return array(
 		'name'        => 'Themes',
 		'author'      => 'Cartalyst LLC',
 		'description' => 'Manages your website themes.',
-		'version'     => '1.0',
+		'version'     => '1.1',
 		'is_core'     => true,
 	),
 
