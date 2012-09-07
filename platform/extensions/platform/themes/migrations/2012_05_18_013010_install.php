@@ -59,6 +59,7 @@ class Themes_Install
 			'uri'           => 'themes',
 			'user_editable' => 0,
 			'status'        => 1,
+			'class'			=> 'icon-eye-open'
 		));
 
 		$themes->last_child_of($system);
@@ -71,6 +72,7 @@ class Themes_Install
 			'uri'           => 'themes/frontend',
 			'user_editable' => 0,
 			'status'        => 1,
+			'class'			=> 'icon-eye-open'
 		));
 
 		$frontend->last_child_of($themes);
@@ -83,6 +85,7 @@ class Themes_Install
 			'uri'           => 'themes/backend',
 			'user_editable' => 0,
 			'status'        => 1,
+			'class'			=> 'icon-eye-open'
 		));
 
 		$backend->last_child_of($themes);

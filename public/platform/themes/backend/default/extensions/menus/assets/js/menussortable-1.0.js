@@ -20,6 +20,7 @@
 			// Slug input selector
 			slugInputSelector:       '.child-slug',
 			uriInputSelector:        '.child-uri',
+			classInputSelector:      '.child-class',
 			secureInputSelector:     '.child-secure',
 			visibilityInputSelector: '.child-visibility',
 			targetInputSelector:     '.child-target',
@@ -43,6 +44,7 @@
 			newChildNameSelector:       '#new-child-name',
 			newChildSlugSelector:       '#new-child-slug',
 			newChildUriSelector:        '#new-child-uri',
+			newChildClassSelector:      '#new-child-class',
 			newChildSecureSelector:     '#new-child-secure',
 			newChildVisibilitySelector: '#new-child-visibility',
 			newChildTargetSelector:     '#new-child-target',

@@ -45,6 +45,7 @@ class Dashboard_Install
 			'uri'           => 'dashboard',
 			'user_editable' => 0,
 			'status'        => 1,
+			'class'			=> 'icon-th'
 		));
 
 		$dashboard->first_child_of($menu);

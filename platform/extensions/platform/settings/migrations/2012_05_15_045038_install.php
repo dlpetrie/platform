@@ -59,6 +59,7 @@ class Settings_Install
 			'uri'           => 'settings',
 			'user_editable' => 0,
 			'status'        => 1,
+			'class'			=> 'icon-cog'
 		));
 
 		$settings->last_child_of($system);

@@ -13,7 +13,7 @@ return array(
 		'slug'   => 'Slug',
 		'uri'    => 'Uri',
 		'secure' => 'Make Secure (HTTPS)',
-
+		'class'  => 'CSS class',
 		'target' => array(
 			'title'  => 'Target',
 			'self'   => 'Same Window',

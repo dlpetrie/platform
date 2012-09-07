@@ -118,7 +118,7 @@ class Menu extends Nesty
 			return $query;
 		}, array(
 			'id', 'extension', 'name', 'slug', 'user_editable',
-			'lft', 'rgt', 'menu_id', 'status',
+			'lft', 'rgt', 'menu_id', 'status','class',
 		));
 
 		return $menus;
@@ -131,7 +131,7 @@ class Menu extends Nesty
 	 * @param   array   $columns
 	 * @return  Menu    $menu
 	 */
-	public static function find_root($slug, $columns = array('id', 'extension', 'name', 'slug', 'user_editable', '_lft_', '_rgt_', '_menu_id_', 'status'), $events = array('before', 'after'))
+	public static function find_root($slug, $columns = array('id', 'extension', 'name', 'slug', 'user_editable', '_lft_', '_rgt_', '_menu_id_', 'status', 'class'), $events = array('before', 'after'))
 	{
 		// Translate property names
 		if (($key = array_search('_lft_', $columns)) !== false)
@@ -348,6 +348,7 @@ SQL;
 					'slug'          => $slug,
 					'user_editable' => 0,
 					'status'        => 1,
+					'class'			=> ''
 				));
 
 				if ($callback = array_shift($parameters) and $callback instanceof Closure)
@@ -396,6 +397,7 @@ SQL;
 					$child->slug   = $duplicate->slug;
 					$child->uri    = $duplicate->uri;
 					$child->secure = $duplicate->secure;
+					$child->class  = $duplicate->class;
 				}
 				elseif ($child->is_new())
 				{

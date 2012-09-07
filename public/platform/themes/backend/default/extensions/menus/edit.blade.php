@@ -90,6 +90,10 @@ function dump(arr,level) {
 						inputType   : 'text'*/
 					},
 					{
+						name 		: 'class',
+						newSelector	: '#new-child-class'
+					},
+					{
 						name        : 'secure',
 						newSelector : '#new-child-secure'/*,
 						inputType   : 'checkbox'*/
@@ -160,6 +164,11 @@ function dump(arr,level) {
 										<!-- URI -->
 										<div class="control-group">
 											<input type="text" id="new-child-uri" class="input-block-level" value="" placeholder="{{ Lang::line('menus::form.child.uri') }}">
+										</div>
+										
+										<!-- CSS class -->
+										<div class="control-group">
+											<input type="text" id="new-child-class" class="input-block-level" value="" placeholder="{{ Lang::line('menus::form.child.class') }}">
 										</div>
 
 										<!-- Secure -->

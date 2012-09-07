@@ -46,6 +46,14 @@
 					</div>
 				</div>
 
+				<!-- CSS Class -->
+				<div class="control-group">
+					<label class="control-label" for="menu-children-{{ array_get($child, 'id', '[%id%]') }}-class">{{ Lang::line('menus::form.child.class') }}</label>
+					<div class="controls">
+						<input type="text" name="children[{{ array_get($child, 'id', '[%id%]') }}][class]" id="menu-children-{{ array_get($child, 'id', '[%id%]') }}-class" class="child-class" value="<?php echo array_get($child, 'class', '[%control.class%]'); ?>">
+					</div>
+				</div>
+				
 				<!-- Secure -->
 				<div class="control-group">
 					<label class="control-label" for="menu-children-{{ array_get($child, 'id', '[%id%]') }}-secure">{{ Lang::line('menus::form.child.secure') }}</label>

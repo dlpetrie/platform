@@ -68,6 +68,7 @@ class Users_Install
 			'uri'           => 'users',
 			'user_editable' => 0,
 			'status'        => 1,
+			'class'			=> 'icon-user'
 		));
 
 		// Find the system menu
@@ -93,6 +94,7 @@ class Users_Install
 			'uri'           => 'users',
 			'user_editable' => 0,
 			'status'        => 1,
+			'class'			=> 'icon-user'
 		));
 
 		$users_list->last_child_of($users);
@@ -105,6 +107,7 @@ class Users_Install
 			'uri'           => 'users/groups',
 			'user_editable' => 0,
 			'status'        => 1,
+			'class'			=> 'icon-user'
 		));
 
 		$groups->last_child_of($users);
