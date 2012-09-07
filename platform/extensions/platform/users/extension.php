@@ -24,7 +24,7 @@ return array(
 		'name'        => 'Users',
 		'author'      => 'Cartalyst LLC',
 		'description' => 'Manages your website users, groups and roles.',
-		'version'     => '1.0',
+		'version'     => '1.1',
 		'is_core'     => true,
 	),
 

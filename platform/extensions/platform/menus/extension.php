@@ -24,7 +24,7 @@ return array(
 		'name'        => 'Menus',
 		'author'      => 'Cartalyst LLC',
 		'description' => 'Manages all menus throughout the website admin.',
-		'version'     => '1.0',
+		'version'     => '1.1',
 		'is_core'     => true,
 	),
 

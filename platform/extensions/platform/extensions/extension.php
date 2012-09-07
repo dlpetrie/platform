@@ -24,7 +24,7 @@ return array(
 		'name'        => 'Extensions',
 		'author'      => 'Cartalyst LLC',
 		'description' => 'An extension to manage them all.',
-		'version'     => '1.0',
+		'version'     => '1.1',
 		'is_core'     => true,
 	),
 
