@@ -331,7 +331,7 @@ class Users_API_Users_Controller extends API_Controller
 			else
 			{
 				return new Response(array(
-					'message' => Lang::line('user::messages.users.create.error')->get(),
+					'message' => Lang::line('users::messages.users.create.error')->get(),
 					'errors'  => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : array(),
 				), ($user->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
 
