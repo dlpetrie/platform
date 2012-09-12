@@ -348,7 +348,6 @@ SQL;
 					'slug'          => $slug,
 					'user_editable' => 0,
 					'status'        => 1,
-					'class'			=> '',
 				));
 
 				if ($callback = array_shift($parameters) and $callback instanceof Closure)
