@@ -411,7 +411,7 @@ class User extends Crud
 		}
 
 		// if just updating permissions, remove rules
-		if (isset($data['id']) and isset($data['permissions']))
+		if (isset($data['id']) and isset($data['permissions']) and count($data) == 3)
 		{
 			$rules = array();
 		}
