@@ -197,7 +197,7 @@ class User extends Crud
 
 					if (in_array('after', $events))
 					{
-						$result['id'] = $this->after_insert($result);
+						$result = $this->after_insert($result);
 					}
 
 					$user_id = (int) $result['id'];
@@ -411,7 +411,7 @@ class User extends Crud
 		}
 
 		// if just updating permissions, remove rules
-		if (isset($data['id']) and isset($data['permissions']) and count($data) == 2)
+		if (isset($data['id']) and isset($data['permissions']) and count($data) == 3)
 		{
 			$rules = array();
 		}

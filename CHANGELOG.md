@@ -1,3 +1,15 @@
+1.0.2 Changelog
+----------
+
+**Installer:**
+
+  * Fixed a few bugs with the installer that were causing errors.
+
+**Users:**
+
+  * Fixed a bug causing user permissions to not be updated from a validation error being thrown incorrectly.
+  * Fixed a bug causing the suspension feature on login that prevented it from working.
+
 1.0.1 Changelog
 ----------
 

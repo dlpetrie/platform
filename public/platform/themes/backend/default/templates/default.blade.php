@@ -29,7 +29,7 @@
 
 	<!-- Queue Styles -->
 	{{ Theme::queue_asset('style', 'css/style.less') }}
-
+ 	{{ Theme::asset('css/font-awesome.css') }}
 	<!-- Release Styles -->
 	{{ Theme::release_assets('styles') }}
 
@@ -76,7 +76,7 @@
 
 		<div id="page" class="rows expand">
 			<div id="inside" class="grid wrapper">
-				<div class="navigation column">
+				<div class="navigation column left-nav">
 					@widget('platform.menus::menus.nav', 1, 2, 'nav nav-stacked nav-pills', ADMIN)
 				</div>
 

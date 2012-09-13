@@ -131,7 +131,7 @@ class Menu extends Nesty
 	 * @param   array   $columns
 	 * @return  Menu    $menu
 	 */
-	public static function find_root($slug, $columns = array('id', 'extension', 'name', 'slug', 'user_editable', '_lft_', '_rgt_', '_menu_id_', 'status'), $events = array('before', 'after'))
+	public static function find_root($slug, $columns = array('id', 'extension', 'name', 'slug', 'user_editable', '_lft_', '_rgt_', '_menu_id_', 'status', 'class'), $events = array('before', 'after'))
 	{
 		// Translate property names
 		if (($key = array_search('_lft_', $columns)) !== false)
@@ -392,10 +392,11 @@ SQL;
 					$duplicate->reload();
 
 					// Reset relevent values
-					$child->name   = $duplicate->name;
-					$child->slug   = $duplicate->slug;
-					$child->uri    = $duplicate->uri;
-					$child->secure = $duplicate->secure;
+					$child->name       = $duplicate->name;
+					$child->slug       = $duplicate->slug;
+					$child->uri        = $duplicate->uri;
+					$child->secure     = $duplicate->secure;
+					$child->visibility = $duplicate->visibility;
 				}
 				elseif ($child->is_new())
 				{
@@ -405,7 +406,7 @@ SQL;
 				// Any user editable children, we'll
 				// check their slug starts with the root
 				// child's slug
-				if ($child->user_editable and $root = static::find_root($id) and starts_with($child->slug, $root->slug))
+				if ($child->user_editable and $root = Menu::find_root($id) and starts_with($child->slug, $root->slug))
 				{
 					$child->slug = $root->slug.'-'.$child->slug;
 				}

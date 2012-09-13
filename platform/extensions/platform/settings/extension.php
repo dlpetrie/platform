@@ -24,7 +24,7 @@ return array(
 		'name'        => 'Settings',
 		'author'      => 'Cartalyst LLC',
 		'description' => 'Manages your website settings.',
-		'version'     => '1.0',
+		'version'     => '1.1',
 		'is_core'     => true,
 	),
 

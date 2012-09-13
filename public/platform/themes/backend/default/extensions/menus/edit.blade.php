@@ -16,6 +16,7 @@
 {{ Theme::queue_asset('jquery-helpers', 'js/jquery/helpers.js', 'jquery') }}
 {{ Theme::queue_asset('bootstrap-tab', 'js/bootstrap/tab.js', 'jquery') }}
 {{ Theme::queue_asset('bootstrap-toggle', 'js/bootstrap/toggle.js', 'jquery') }}
+{{ Theme::queue_asset('bootstrap-button', 'js/bootstrap/button.js', 'jquery') }}
 {{ Theme::queue_asset('jquery-ui', 'js/jquery/ui-1.8.18.min.js', 'jquery') }}
 {{ Theme::queue_asset('jquery-nestedsortable', 'js/jquery/nestedsortable-1.3.5.js', 'jquery') }}
 {{ Theme::queue_asset('tempo', 'js/tempo-1.8.min.js') }}
@@ -75,33 +76,31 @@ function dump(arr,level) {
 				fields           : [
 					{
 						name        : 'name',
-						newSelector : '#new-child-name'/*,
-						inputType   : 'text'*/
+						newSelector : '#new-child-name'
 					},
 					{
 						name        : 'slug',
-						newSelector : '#new-child-slug'/*,
-						inputType   : 'text'*/
+						newSelector : '#new-child-slug'
 					},
 					{
 						name        : 'uri',
-						newSelector : '#new-child-uri'/*,
-						inputType   : 'text'*/
+						newSelector : '#new-child-uri'
 					},
 					{
 						name        : 'secure',
-						newSelector : '#new-child-secure'/*,
-						inputType   : 'checkbox'*/
-					},
-					{
-						name        : 'target',
-						newSelector : '#new-child-target'/*,
-						inputType   : 'select'*/
+						newSelector : '#new-child-secure'
 					},
 					{
 						name        : 'visibility',
-						newSelector : '#new-child-visibility'/*,
-						inputType   : 'select'*/
+						newSelector : '#new-child-visibility'
+					},
+					{
+						name        : 'target',
+						newSelector : '#new-child-target'
+					},
+					{
+						name 		: 'class',
+						newSelector	: '#new-child-class'
 					}
 				],
 				lastItemId           : {{ $last_child_id }}
@@ -172,6 +171,17 @@ function dump(arr,level) {
 											</div>
 										</div>
 
+										<!-- Visibility -->
+										<div class="control-group">
+											<label for="new-child-visibility">{{ Lang::line('menus::form.child.visibility.title') }}</label>
+											<select id="new-child-visibility" class="input-block-level">
+												<option value="{{ Platform\Menus\Menu::VISIBILITY_ALWAYS }}" selected>{{ Lang::line('menus::form.child.visibility.always') }}</option>
+												<option value="{{ Platform\Menus\Menu::VISIBILITY_LOGGED_IN }}">{{ Lang::line('menus::form.child.visibility.logged_in') }}</option>
+												<option value="{{ Platform\Menus\Menu::VISIBILITY_LOGGED_OUT }}">{{ Lang::line('menus::form.child.visibility.logged_out') }}</option>
+												<option value="{{ Platform\Menus\Menu::VISIBILITY_ADMIN }}">{{ Lang::line('menus::form.child.visibility.admin') }}</option>
+											</select>
+										</div>
+
 										<!-- Target -->
 										<div class="control-group">
 											<label>{{ Lang::line('menus::form.child.target.title') }}</label>
@@ -183,15 +193,10 @@ function dump(arr,level) {
 											</select>
 										</div>
 
-										<!-- Visibility -->
+										<!-- CSS class -->
 										<div class="control-group">
-											<label for="new-child-visibility">{{ Lang::line('menus::form.child.visibility.title') }}</label>
-											<select id="new-child-visibility" class="input-block-level">
-												<option value="{{ Platform\Menus\Menu::VISIBILITY_ALWAYS }}" selected>{{ Lang::line('menus::form.child.visibility.always') }}</option>
-												<option value="{{ Platform\Menus\Menu::VISIBILITY_LOGGED_IN }}">{{ Lang::line('menus::form.child.visibility.logged_in') }}</option>
-												<option value="{{ Platform\Menus\Menu::VISIBILITY_LOGGED_OUT }}">{{ Lang::line('menus::form.child.visibility.logged_out') }}</option>
-												<option value="{{ Platform\Menus\Menu::VISIBILITY_ADMIN }}">{{ Lang::line('menus::form.child.visibility.admin') }}</option>
-											</select>
+											<label for="new-child-class">{{ Lang::line('menus::form.child.class') }}</label>
+											<input type="text" id="new-child-class" class="input-block-level" value="" placeholder="{{ Lang::line('menus::form.child.class') }}">
 										</div>
 
 										<div class="form-actions">
@@ -259,7 +264,7 @@ function dump(arr,level) {
 			<!-- /end - tabbable -->
 
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary btn-save-menu">
+				<button type="submit" class="btn btn-primary btn-save-menu" data-loading-text="{{ Lang::line('button.loading') }}" data-complete-text="{{ Lang::line('button.saved') }}">
 					{{ Lang::line('button.'.(($menu_slug) ? 'update' : 'create')) }}
 				</button>
 
