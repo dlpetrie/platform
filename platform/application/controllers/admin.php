@@ -46,8 +46,8 @@ class Admin_Controller extends Authorized_Controller
 		// Now check to make sure they have bundle specific permissions
 		if ( ! Sentry::user()->has_access())
 		{
-			Platform::messages()->error('Insufficient Permissions');
-			return Redirect::to(ADMIN.'/dashboard');
+			return Redirect::to(ADMIN.'/insufficient_permissions')->send();
+			exit;
 		}
 
 		// Set the active theme based on the database contents,

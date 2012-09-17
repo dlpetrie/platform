@@ -230,4 +230,10 @@ class Users_Admin_Users_Controller extends Admin_Controller
 		}
 	}
 
+	public function get_insufficient_permissions()
+	{
+		$this->active_menu('');
+		return Theme::make('users::insufficient_permissions');
+	}
+
 }

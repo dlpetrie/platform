@@ -60,6 +60,7 @@ return array(
 		'wait'                     => 'Please wait...',
 	),
 
+	'insufficient_permissions' => 'Insufficient Permissions',
 
 
 );

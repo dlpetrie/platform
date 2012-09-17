@@ -52,6 +52,8 @@ return array(
 	},
 
 	'global_routes' => function() {
+		Route::any(ADMIN.'/insufficient_permissions', 'users::admin.users@insufficient_permissions');
+
 		Route::any('register', 'users::auth@register');
 		Route::any('activate/(:any)/(:any)', 'users::auth@activate');
 		Route::any('login', 'users::auth@login');
