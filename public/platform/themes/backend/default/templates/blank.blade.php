@@ -48,7 +48,7 @@
 <body>
 
 <!-- Queue Scripts -->
-{{ Theme::queue_asset('jquery', 'js/jquery-1.7.2.min.js') }}
+{{ Theme::queue_asset('jquery', 'js/jquery-1.8.1.min.js') }}
 {{ Theme::queue_asset('admin', 'js/admin.js') }}
 {{ Theme::queue_asset('url', 'js/url.js') }}
 

@@ -1,6 +1,6 @@
 <form id="login-form" class="form-horizontal" method="POST" accept-char="UTF-8">
 <input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
-
+<input type="hidden" name="redirect" value="{{ Input::old('redirect', Session::get('login_redirect')) }}">
 	<fieldset>
 		<legend>{{ Lang::line('users::form.auth.login.legend') }}</legend>
 		<p class="summary">{{ Lang::line('users::form.auth.login.summary') }}</p>

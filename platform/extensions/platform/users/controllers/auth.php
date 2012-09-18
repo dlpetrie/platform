@@ -124,16 +124,19 @@ class Users_Auth_Controller extends Public_Controller
 				'password' => Input::get('password'),
 			));
 
-			// If we're admin
-			if (array_get($result, 'is_admin'))
+			$redirect = Input::get('redirect');
+
+			if ($redirect)
 			{
-				if ( ! Request::ajax())
+				// check if redirect is to the admin
+				if (ADMIN == current(explode('/', $redirect)))
 				{
-					return Redirect::to_secure(ADMIN);
-				}
-				else
-				{
-					$response['redirect'] = URL::to_secure(ADMIN);
+					if ( ! Request::ajax())
+					{
+						return Redirect::to_secure($redirect);
+					}
+
+					$response['redirect'] = URL::to_secure($redirect);
 				}
 			}
 			else

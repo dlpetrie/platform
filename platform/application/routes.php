@@ -213,6 +213,9 @@ Route::filter('auth', function()
 {
 	if ( ! Sentry::check())
 	{
+		// store current uri in session
+		Session::flash('login_redirect', URI::current());
+
 		return Redirect::to('login');
 	}
 });
@@ -222,6 +225,9 @@ Route::filter('admin_auth', function()
 {
 	if ( ! Sentry::check() or ! Sentry::user()->has_access('is_admin') )
 	{
+		// store current uri in session
+		Session::flash('login_redirect', URI::current());
+
 		return Redirect::to('login');
 	}
 });

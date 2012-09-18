@@ -40,7 +40,7 @@ class Admin_Controller extends Authorized_Controller
 	{
 		if (Config::get('application.ssl') and ! Request::secure())
 		{
-			//return Redirect::to_secure(URI::current())->send();
+			return Redirect::to_secure(URI::current())->send();
 		}
 
 		// Now check to make sure they have bundle specific permissions
