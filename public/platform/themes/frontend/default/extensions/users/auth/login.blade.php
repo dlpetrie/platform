@@ -14,6 +14,7 @@
 
 <!-- Queue Scripts -->
 {{ Theme::queue_asset('validate', 'js/validate.js', 'jquery') }}
+{{ Theme::queue_asset('platform_url', 'js/url.js', 'jquery') }}
 {{ Theme::queue_asset('login', 'users::js/login.js', 'jquery') }}
 
 <!-- Scripts -->

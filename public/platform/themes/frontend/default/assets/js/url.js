@@ -22,7 +22,7 @@ if (platform == undefined)
 				path = ''
 			}
 
-			return this.urls.base + '/' + path;
+			return this.urls.base + path;
 		}
 
 	};
