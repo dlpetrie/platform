@@ -12,8 +12,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="description" content="@get.settings.site.tagline">
 	<meta name="author" content="Cartalyst LLC">
-	<meta name="base_url" content="{{ url() }}">
-	<meta name="admin_url" content="{{ URL::to_secure(ADMIN) }}">
+	<meta name="base_url" content="{{ Platform::url() }}">
+	<meta name="admin_url" content="{{ Platform::url(ADMIN) }}">
 
 	<!-- Page Title -->
 	<title>

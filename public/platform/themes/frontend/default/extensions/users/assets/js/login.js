@@ -11,7 +11,7 @@
 
 		$.ajax({
 			type:     'POST',
-			url:      $form.prop('action'),
+			url:      'login',
 			dataType: 'json',
 			data:     $form.serialize(),
 

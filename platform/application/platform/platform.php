@@ -477,4 +477,13 @@ class Platform
 		return File::get(path('licenses').DS.$file, $default);
 	}
 
+	public static function url($path = null)
+	{
+		$url_home = URL::home();
+
+		$parse = parse_url($url_home);
+
+		return $parse['path'].$path;
+	}
+
 }
