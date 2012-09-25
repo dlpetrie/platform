@@ -33,8 +33,8 @@
 	<hr>
 
     <div id="table">
-    	<div class="row">
-			<div class="span12">
+    	<div class="row-fluid">
+			<div>
 				<div class="table-wrapper">
 					<table id="installed-extension-table" class="table table-bordered">
 						<thead>
@@ -63,7 +63,7 @@
 
 	<div id="table">
     	<div class="row">
-			<div class="span12">
+			<div>
 				<div class="table-wrapper">
 			    	<table id="uninstalled-extension-table" class="table table-bordered">
 						<thead>

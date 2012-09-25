@@ -81,7 +81,7 @@
 				</div>
 
 				<div class="content column expand">
-					<div class="container">
+					<div class="container-fluid">
 						@widget('platform.application::messages.all')
 						@yield('content')
 					</div>
