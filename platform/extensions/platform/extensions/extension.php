@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,40 +19,52 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * Return the extension data.
+ * --------------------------------------------------------------------------
+ */
 return array(
+    /*
+     * -----------------------------------------
+     * Extension information.
+     * -----------------------------------------
+     */
+    'info' => array(
+        'name'        => 'Extensions',
+        'author'      => 'Cartalyst LLC',
+        'description' => 'An extension to manage them all.',
+        'version'     => '1.1',
+        'is_core'     => true
+    ),
 
-	'info' => array(
-		'name'        => 'Extensions',
-		'author'      => 'Cartalyst LLC',
-		'description' => 'An extension to manage them all.',
-		'version'     => '1.1',
-		'is_core'     => true,
-	),
 
-	'dependencies' => array(
-		'menus',
-	),
+    /*
+     * -----------------------------------------
+     * Extension dependencies.
+     * -----------------------------------------
+     */
+    'dependencies' => array(
+        'menus'
+    ),
 
-	'bundles' => array(
-		'handles'  => 'extension',
-		'location' => 'path: '.__DIR__,
-	),
 
-	'listeners' => function() {
-
-	},
-
-	'global_routes' => function() {
-
-	},
-
-	'rules' => array(
-		'extensions::admin.extensions@index',
-		'extensions::admin.extensions@install',
-		'extensions::admin.extensions@uninstall',
-		'extensions::admin.extensions@enable',
-		'extensions::admin.extensions@disable',
-		'extensions::admin.extensions@update',
-	),
-
+    /*
+     * -----------------------------------------
+     * Rules
+     * -----------------------------------------
+     */
+    'rules' => array(
+        'extensions::admin.extensions@index',
+        'extensions::admin.extensions@view',
+        'extensions::admin.extensions@install',
+        'extensions::admin.extensions@uninstall',
+        'extensions::admin.extensions@enable',
+        'extensions::admin.extensions@disable',
+        'extensions::admin.extensions@update'
+    )
 );
+
+/* End of file extension.php */
+/* Location: ./platform/extensions/platform/extensions/extension.php */

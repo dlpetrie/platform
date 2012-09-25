@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,45 +19,60 @@
  * @link       http://cartalyst.com
  */
 
-return array(
 
+/*
+ * --------------------------------------------------------------------------
+ * Return the extension data.
+ * --------------------------------------------------------------------------
+ */
+return array(
+	/*
+     * -----------------------------------------
+	 * Extension information.
+     * -----------------------------------------
+	 */
 	'info' => array(
 		'name'        => 'Themes',
 		'author'      => 'Cartalyst LLC',
 		'description' => 'Manages your website themes.',
 		'version'     => '1.1',
-		'is_core'     => true,
+		'is_core'     => true
 	),
 
+    /*
+     * -----------------------------------------
+     * Extension dependencies.
+     * -----------------------------------------
+     */
 	'dependencies' => array(
 		'menus',
-		'settings',
+		'settings'
 	),
 
-	'bundles' => array(
-		'handles'  => 'themes',
-		'location' => 'path: '.__DIR__,
-	),
 
+    /*
+     * -----------------------------------------
+     * Events
+     * -----------------------------------------
+     */
 	'events' => array(
 		'theme.create',
 		'theme.update',
-		'theme.delete',
+		'theme.delete'
 	),
 
-	'listeners' => function() {
 
-	},
-
-	'global_routes' => function() {
-
-	},
-
+    /*
+     * -----------------------------------------
+     * Rules
+     * -----------------------------------------
+     */
 	'rules' => array(
 		'themes::admin.themes@frontend',
 		'themes::admin.themes@backend',
 		'themes::admin.themes@edit',
-		'themes::admin.themes@activate',
-	),
-
+		'themes::admin.themes@activate'
+	)
 );
+/* End of file extension.php */
+/* Location: ./platform/extensions/platform/themes/extension.php */

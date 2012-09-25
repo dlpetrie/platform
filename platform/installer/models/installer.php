@@ -208,7 +208,7 @@ class Installer
 	 */
 	public static function install_extensions()
 	{
-		Platform::extensions_manager()->prepare_db_for_extensions();
+		Platform::extensions_manager()->prepare();
 
 		/**
 		 * @todo remove when my pull request gets accepted

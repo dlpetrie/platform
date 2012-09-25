@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,8 +19,18 @@
  * @link       http://cartalyst.com
  */
 
-return array(
 
+/*
+ * --------------------------------------------------------------------------
+ * Return the extension data.
+ * --------------------------------------------------------------------------
+ */
+return array(
+	/*
+     * -----------------------------------------
+	 * Extension information.
+     * -----------------------------------------
+	 */
 	'info' => array(
 		'name'        => 'Pages',
 		'author'      => 'Cartalyst LLC',
@@ -28,22 +39,13 @@ return array(
 		'is_core'     => true,
 	),
 
-	'dependencies' => array(
 
-	),
-
-	'bundles' => array(
-		'handles'  => 'pages',
-		'auto'     => true,
-		'location' => 'path: '.__DIR__,
-	),
-
-	'listeners' => function() {
-
-	},
-
-	'global_routes' => function() {
-
+    /*
+     * -----------------------------------------
+     * Extension routes.
+     * -----------------------------------------
+     */
+	'routes' => function(){
 		Route::any('/', 'pages::pages@index');
 
 		Route::any('(:any)(/.*)?', function($page = 'index', $params = null) {
@@ -57,10 +59,8 @@ return array(
 				return Controller::call('pages::pages@'.$page, $params);
 			}
 		});
-	},
-
-	'rules' => array(
-
-	),
-
+	}
 );
+
+/* End of file extension.php */
+/* Location: ./platform/extensions/platform/pages/extension.php */

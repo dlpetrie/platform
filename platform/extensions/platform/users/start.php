@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,8 +19,17 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * Register some namespaces.
+ * --------------------------------------------------------------------------
+ */
 Autoloader::namespaces(array(
-	'Platform\\Users\\Widgets' => __DIR__.DS.'widgets',
-	'Platform\\Users\\Plugins' => __DIR__.DS.'plugins',
-	'Platform\\Users'          => __DIR__.DS.'models',
+	'Platform\\Users\\Widgets' => __DIR__ . DS . 'widgets',
+	'Platform\\Users\\Plugins' => __DIR__ . DS . 'plugins',
+	'Platform\\Users'          => __DIR__ . DS . 'models'
 ));
+
+/* End of file start.php */
+/* Location: ./platform/extensions/platform/users/start.php */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,7 +19,6 @@
  * @link       http://cartalyst.com
  */
 
-use Menus\Menu;
 
 /**
  * Extension class.
@@ -28,40 +28,45 @@ use Menus\Menu;
 class Extension extends Crud
 {
 
-	/**
-	 * The name of the table associated with the model.
-	 *
-	 * @var string
-	 */
-	protected static $_table = 'extensions';
+    /**
+     * The name of the table associated with the model.
+     *
+     * @access    protected
+     * @var       string
+     */
+    protected static $_table = 'extensions';
 
-	/**
-	 * Indicates if the model has update and creation timestamps.
-	 *
-	 * @var bool
-	 */
-	protected static $_timestamps = false;
+    /**
+     * Indicates if the model has update and creation timestamps.
+     *
+     * @access    protected
+     * @var       boolean
+     */
+    protected static $_timestamps = false;
 
-	/**
-	 * Find a model by either it's primary key
-	 * or a condition that modifies the query object.
-	 *
-	 * @param   string  $condition
-	 * @param   array   $columns
-	 * @return  Crud
-	 */
-	public static function find($condition = 'first', $columns = array('*'), $events = array('before', 'after'))
-	{
-		// Find by slug
-		if (is_string($condition) and ! is_numeric($condition) and ! in_array($condition, array('first', 'last')))
-		{
-			return parent::find(function($query) use ($condition)
-			{
-				return $query->where('slug', '=', $condition);
-			}, $columns, $events);
-		}
 
-		return parent::find($condition, $columns, $events);
-	}
+    /**
+     * Find a model by either it's primary key
+     * or a condition that modifies the query object.
+     *
+     * @param   string  $condition
+     * @param   array   $columns
+     * @return  Crud
+     */
+    public static function find($condition = 'first', $columns = array('*'), $events = array('before', 'after'))
+    {
+        // Find by slug
+        if (is_string($condition) and ! is_numeric($condition) and ! in_array($condition, array('first', 'last')))
+        {
+            return parent::find(function($query) use ($condition)
+            {
+                return $query->where('slug', '=', $condition);
+            }, $columns, $events);
+        }
 
+        return parent::find($condition, $columns, $events);
+    }
 }
+
+/* End of file extension.php */
+/* Location: ./platform/application/models/extension.php */

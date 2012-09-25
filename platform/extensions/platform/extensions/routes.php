@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,6 +19,7 @@
  * @link       http://cartalyst.com
  */
 
+
 /**
  * Route /api/extensions/:extension
  *
@@ -25,9 +27,7 @@
  *		/api/extensions/users => extensions::extensions.api@index(users)
  *	</code>
  */
-Route::any(API.'/extensions/(:any)', function($slug = null)
-{
-	return Controller::call('extensions::api.extensions@index', array($slug));
-});
+Route::any(API . '/extensions/(:any)', 'extensions::api.extensions@index');
 
-Route::controller(Controller::detect('extensions'));
+/* End of file routes.php */
+/* Location: ./platform/extensions/platform/extensions/routes.php */

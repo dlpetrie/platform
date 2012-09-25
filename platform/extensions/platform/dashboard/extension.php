@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,25 +19,38 @@
  * @link       http://cartalyst.com
  */
 
-return array(
 
+/*
+ * --------------------------------------------------------------------------
+ * Return the extension data.
+ * --------------------------------------------------------------------------
+ */
+return array(
+	/*
+     * -----------------------------------------
+	 * Extension information.
+     * -----------------------------------------
+	 */
 	'info' => array(
 		'name'        => 'Dashboard',
 		'author'      => 'Cartalyst LLC',
 		'description' => 'The main admin screen. The center of your website\'s adminstration.',
 		'version'     => '1.1',
-		'is_core'     => true,
+		'is_core'     => true
 	),
 
+
+    /*
+     * -----------------------------------------
+     * Extension dependencies.
+     * -----------------------------------------
+     */
 	'dependencies' => array(
 		'menus',
 		'users',
-		'settings',
-	),
-
-	'bundles' => array(
-		'handles'  => 'dashboard',
-		'location' => 'path: '.__DIR__,
-	),
-
+		'settings'
+	)
 );
+
+/* End of file extension.php */
+/* Location: ./platform/extensions/platform/dashboard/extension.php */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,36 +19,51 @@
  * @link       http://cartalyst.com
  */
 
-return array(
 
+/*
+ * --------------------------------------------------------------------------
+ * Return the extension data.
+ * --------------------------------------------------------------------------
+ */
+return array(
+	/*
+     * -----------------------------------------
+	 * Extension information.
+     * -----------------------------------------
+	 */
 	'info' => array(
 		'name'        => 'Menus',
 		'author'      => 'Cartalyst LLC',
 		'description' => 'Manages all menus throughout the website admin.',
 		'version'     => '1.1',
-		'is_core'     => true,
+		'is_core'     => true
 	),
 
-	'bundles' => array(
-		'handles'  => 'menus',
-		'location' => 'path: '.__DIR__,
-	),
 
+    /*
+     * -----------------------------------------
+     * Events
+     * -----------------------------------------
+     */
 	'events' => array(
 		'menu.create',
 		'menu.update',
-		'menu.delete',
+		'menu.delete'
 	),
 
-	'listeners' => function() {
 
-	},
-
+    /*
+     * -----------------------------------------
+     * Rules
+     * -----------------------------------------
+     */
 	'rules' => array(
 		'menus::admin.menus@index',
 		'menus::admin.menus@create',
 		'menus::admin.menus@edit',
-		'menus::admin.menus@delete',
-	),
-
+		'menus::admin.menus@delete'
+	)
 );
+
+/* End of file extension.php */
+/* Location: ./platform/extensions/platform/menus/extension.php */

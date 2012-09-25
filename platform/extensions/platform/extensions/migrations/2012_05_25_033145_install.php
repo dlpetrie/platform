@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,49 +19,77 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
 use Platform\Menus\Menu;
 
+
+/**
+ * --------------------------------------------------------------------------
+ * Install Class
+ * --------------------------------------------------------------------------
+ * 
+ * Extensions installation.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ */
 class Extensions_Install
 {
-
-	/**
-	 * Make changes to the database.
-	 *
-	 * @return void
-	 */
+    /**
+     * --------------------------------------------------------------------------
+     * Function: up()
+     * --------------------------------------------------------------------------
+     *
+     * Make changes to the database.
+     *
+     * @access   public
+     * @return   void
+     */
 	public function up()
 	{
-
-		/* # Create Menu Items
-		================================================== */
-
-		// Find the system menu
-		$system = Menu::find(function($query)
-		{
-			return $query->where('slug', '=', 'admin-system');
-		});
-
-		// Create extensions link
-		$extensions = new Menu(array(
-			'name'          => 'Extensions',
-			'extension'     => 'extensions',
-			'slug'          => 'admin-extensions',
-			'uri'           => 'extensions',
-			'user_editable' => 0,
-			'status'        => 1,
-		));
-
-		$extensions->last_child_of($system);
+        /*
+         * --------------------------------------------------------------------------
+         * # 1) Create the menus.
+         * --------------------------------------------------------------------------
+         */
+        // Admin > System > Extensions
+        //
+        $system = Menu::find('admin-system');
+        $extensions = new Menu(array(
+            'name'          => 'Extensions',
+            'extension'     => 'extensions',
+            'slug'          => 'admin-extensions',
+            'uri'           => 'extensions',
+            'user_editable' => 0,
+            'status'        => 1
+        ));
+        $extensions->last_child_of( $system );
 	}
 
-	/**
-	 * Revert the changes to the database.
-	 *
-	 * @return void
-	 */
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: down()
+     * --------------------------------------------------------------------------
+     *
+     * Revert the changes to the database.
+     *
+     * @access   public
+     * @return   void
+     */
 	public function down()
 	{
 
 	}
-
 }
+
+/* End of file 2012_05_25_033145_install.php */
+/* Location: ./platform/extensions/platform/extensions/migrations/2012_05_25_033145_install.php */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,26 +19,54 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
 use Platform\Menus\Menu;
 
+
+/**
+ * --------------------------------------------------------------------------
+ * Add Class to Menus Class
+ * --------------------------------------------------------------------------
+ * 
+ * Adds a class to menu items.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ */
 class Extensions_Add_Class_To_Menus
 {
-
-	/**
-	 * Make changes to the database.
-	 *
-	 * @return void
-	 */
+    /**
+     * --------------------------------------------------------------------------
+     * Function: up()
+     * --------------------------------------------------------------------------
+     *
+     * Make changes to the database.
+     *
+     * @access   public
+     * @return   void
+     */
 	public function up()
 	{
-		/* # Update Menu Items
-		================================================== */
-
-		// Get hte admin menu
+        /*
+         * --------------------------------------------------------------------------
+         * # 1) Update the menu items.
+         * --------------------------------------------------------------------------
+         */
+		// Get the admin menu.
+		//
 		$admin      = Menu::admin_menu();
 		$admin_tree = $admin->{Menu::nesty_col('tree')};
 
-		// Update groups list link
+		// Update groups list link.
+		//
 		$extensions = Menu::find(function($query) use ($admin_tree)
 		{
 			return $query->where('slug', '=', 'admin-extensions')
@@ -51,11 +80,17 @@ class Extensions_Add_Class_To_Menus
 		}
 	}
 
-	/**
-	 * Revert the changes to the database.
-	 *
-	 * @return void
-	 */
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: down()
+     * --------------------------------------------------------------------------
+     *
+     * Revert the changes to the database.
+     *
+     * @access   public
+     * @return   void
+     */
 	public function down()
 	{
 		// Get hte admin menu
@@ -75,5 +110,7 @@ class Extensions_Add_Class_To_Menus
 			$extensions->save();
 		}
 	}
-
 }
+
+/* End of file 2012_09_08_105000_add_class_to_menus.php */
+/* Location: ./platform/extensions/platform/extensions/migrations/2012_09_08_105000_add_class_to_menus.php */
