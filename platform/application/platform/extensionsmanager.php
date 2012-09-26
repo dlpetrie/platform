@@ -171,32 +171,34 @@ class ExtensionsManager
 
         // Register this extension routes.
         //
-        if ( array_key_exists('routes', $extension) )
+        if ( $routes = array_get($extension, 'routes') )
         {
             // Check if we've been given a closure.
-
-            if ( ! $extension['routes'] instanceof Closure )
+            //
+            if ( ! $routes instanceof Closure )
             {
                 throw new Exception('"routes" must be a function / closure in [' . $slug . ']');
             }
 
-            $extension['routes']();
+            // Register it.
+            //
+            $routes();
         }
 
         // Register this extension listeners.
         //
-        if ( array_key_exists('listeners', $extension) )
+        if ( $listeners = array_get($extension, 'listeners') )
         {
             // Check if we've been given a closure.
             //
-            if ( ! $extension['listeners'] instanceof Closure )
+            if ( ! $listeners instanceof Closure )
             {
                 throw new Exception('"listeners" must be a function / closure in [' . $slug . ']');
             }
 
             // Register it.
             //
-            $extension['listeners']();
+            $listeners();
         }
 
         // The extension has been started.
@@ -240,7 +242,7 @@ class ExtensionsManager
             //
             $slug = $extension['info']['slug'];
 
-             // Check if this extension is installed.
+            // Check if this extension is installed.
             //
             if ( $info = array_get( $this->installed, $slug ) )
             {
@@ -268,7 +270,7 @@ class ExtensionsManager
                     $extension['info']['can_enable'] = $this->can_enable( $slug );
                 }
 
-                // Sort it.
+                // Sort the info array.
                 //
                 ksort( $extension['info'] );
 
@@ -283,7 +285,7 @@ class ExtensionsManager
                 //
                 $extension['info']['can_install'] = $this->can_install( $slug );
 
-                // Sort it.
+                // Sort the info array.
                 //
                 ksort( $extension['info'] );
 
@@ -425,37 +427,6 @@ class ExtensionsManager
         return $this->enabled = $this->installed(function($query){
             return $query->where('enabled', '=', '1');
         });
-/*
-        // Initiate an empty array.
-        //
-        $extensions = array();
-
-        // Spin through the enabled extensions.
-        //
-        foreach ( Extension::where_enabled(1)->get() as $extension )
-        {
-            // Extension slug.
-            //
-            $slug = $extension->slug;
-
-            // Extension information.
-            //
-            $extensions[ $slug ] = array_replace_recursive( $this->extensions[ $slug ], array(
-                'slug'    => $slug,
-                'version' => $extension->version,
-                //'is_core' => (bool) $extension->is_core,
-                'enabled' => (bool) $extension->enabled
-            ) );
-        }
-
-        // Sort the extensions.
-        //
-        ksort( $extensions );
-
-        // Store and return the extensions.
-        //
-        return $this->enabled = $extensions;
-*/
     }
 
 
@@ -483,37 +454,6 @@ class ExtensionsManager
         return $this->disabled = $this->installed(function($query){
             return $query->where('enabled', '=', '1');
         });
-/*
-        // Initiate an empty array.
-        //
-        $extensions = array();
-
-        // Spin through the disabled extensions.
-        //
-        foreach ( Extension::where_enabled(0)->get() as $extension )
-        {
-            // Extension slug.
-            //
-            $slug = $extension->slug;
-
-            // Extension information.
-            //
-            $extensions[ $slug ] = array_replace_recursive( $this->extensions[ $slug ], array(
-                'slug'    => $slug,
-                'version' => $extension->version,
-                'is_core' => (bool) $extension->is_core,
-                'enabled' => (bool) $extension->enabled
-            ) );
-        }
-
-        // Sort the extensions.
-        //
-        ksort( $extensions );
-
-        // Store and return the extensions.
-        //
-        return $this->disabled = $extensions;
-*/
     }
 
 

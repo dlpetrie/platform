@@ -28,7 +28,7 @@
                         <tr>
                             <th class="span2">{{ Lang::line('extensions::table.name') }}</th>
                             <th class="span1">{{ Lang::line('extensions::table.version') }}</th>
-                            <th class="span1">{{ Lang::line('extensions::table.actions') }}</th>
+                            <th class="span2">{{ Lang::line('extensions::table.actions') }}</th>
                             <th class="span4">{{ Lang::line('extensions::table.description') }}</th>
                         </tr>
                     <thead>
@@ -43,6 +43,20 @@
                                         <a class="btn" href="{{ URL::to(ADMIN . '/extensions/uninstall/' . array_get($extension, 'info.slug') ) }}">{{ Lang::line('extensions::button.uninstall')->get() }}</a>
                                     @else
                                         <a class="btn disabled">{{ Lang::line('extensions::button.uninstall')->get() }}</a>
+                                    @endif
+
+                                    @if ( Platform::extensions_manager()->is_enabled( array_get($extension, 'info.slug') ) )
+                                        @if ( Platform::extensions_manager()->can_disable( array_get($extension, 'info.slug') ) )
+                                            <a class="btn" href="{{ URL::to(ADMIN . '/extensions/disable/' . array_get($extension, 'info.slug') ) }}">{{ Lang::line('extensions::button.disable')->get() }}</a>
+                                        @else
+                                            <a class="btn disabled">{{ Lang::line('extensions::button.disable')->get() }}</a>
+                                        @endif
+                                    @else
+                                        @if ( Platform::extensions_manager()->can_enable( array_get($extension, 'info.slug') ) )
+                                            <a class="btn" href="{{ URL::to(ADMIN . '/extensions/enable/' . array_get($extension, 'info.slug') ) }}">{{ Lang::line('extensions::button.enable')->get() }}</a>
+                                        @else
+                                            <a class="btn disabled">{{ Lang::line('extensions::button.enable')->get() }}</a>
+                                        @endif
                                     @endif
                                 @else
                                     @if ( Platform::extensions_manager()->can_install( array_get($extension, 'info.slug') ) )
