@@ -212,13 +212,5 @@ Bundle::start('crud');
 | installer extension and execute it
 |
 */
-
-if ( ! Platform::is_installed())
-{
-	Platform::start_installer();
-}
-else
-{
-	Platform::start();
-}
+Platform::start();
 

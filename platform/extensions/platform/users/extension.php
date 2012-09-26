@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,40 +19,59 @@
  * @link       http://cartalyst.com
  */
 
-return array(
 
+/*
+ * --------------------------------------------------------------------------
+ * Return the extension data.
+ * --------------------------------------------------------------------------
+ */
+return array(
+	/*
+     * -----------------------------------------
+	 * Extension information.
+     * -----------------------------------------
+	 */
 	'info' => array(
 		'name'        => 'Users',
 		'author'      => 'Cartalyst LLC',
 		'description' => 'Manages your website users, groups and roles.',
 		'version'     => '1.1',
-		'is_core'     => true,
+		'is_core'     => true
 	),
 
+
+    /*
+     * -----------------------------------------
+     * Extension dependencies.
+     * -----------------------------------------
+     */
 	'dependencies' => array(
 		'menus',
-		'settings',
+		'settings'
 	),
 
-	'bundles' => array(
-		'handles'  => 'users',
-		'location' => 'path: '.__DIR__,
-	),
 
+    /*
+     * -----------------------------------------
+     * Events
+     * -----------------------------------------
+     */
 	'events' => array(
 		'user.create',
 		'user.update',
 		'user.delete',
 		'group.create',
 		'group.update',
-		'group.delete',
+		'group.delete'
 	),
 
-	'listeners' => function() {
 
-	},
-
-	'global_routes' => function() {
+    /*
+     * -----------------------------------------
+     * Extension routes.
+     * -----------------------------------------
+     */
+	'routes' => function() {
 		Route::any(ADMIN.'/insufficient_permissions', 'users::admin.users@insufficient_permissions');
 
 		Route::any('register', 'users::auth@register');
@@ -62,6 +82,12 @@ return array(
 		Route::any('reset_password_confirm/(:any)/(:any)', 'users::auth@reset_password_confirm');
 	},
 
+
+    /*
+     * -----------------------------------------
+     * Rules
+     * -----------------------------------------
+     */
 	'rules' => array(
 		'users::admin.users@index',
 		'users::admin.users@create',
@@ -70,7 +96,9 @@ return array(
 		'users::admin.groups@index',
 		'users::admin.groups@create',
 		'users::admin.groups@edit',
-		'users::admin.groups@delete',
-	),
-
+		'users::admin.groups@delete'
+	)
 );
+
+/* End of file extension.php */
+/* Location: ./platform/extensions/platform/users/extension.php */

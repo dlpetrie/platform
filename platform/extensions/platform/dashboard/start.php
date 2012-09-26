@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,6 +19,15 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * Register some namespaces.
+ * --------------------------------------------------------------------------
+ */
 Autoloader::namespaces(array(
-	'Dashboard' => Bundle::path('dashboard').'models',
+	'Dashboard' => __DIR__ . DS . 'models'
 ));
+
+/* End of file start.php */
+/* Location: ./platform/extensions/platform/dashboard/start.php */

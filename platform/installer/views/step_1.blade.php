@@ -1,5 +1,9 @@
 @layout('installer::template')
 
+@section('title')
+{{ Lang::line('installer::general.title')->get() }} | {{ Lang::line('installer::general.step_1.title')->get() }}
+@endsection
+
 @section('navigation')
 	<h1>{{ Lang::line('installer::general.step_1.title') }}</h1>
 	<p class="step">{{ Lang::line('installer::general.step_1.tagline') }}</p>
