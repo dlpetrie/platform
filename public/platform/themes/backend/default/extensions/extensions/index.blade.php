@@ -146,8 +146,8 @@
                         <tr>
                             <th class="span2">{{ Lang::line('extensions::table.name') }}</th>
                             <th class="span1">{{ Lang::line('extensions::table.version') }}</th>
-                            <th class="span1">{{ Lang::line('extensions::table.actions') }}</th>
-                            <th class="span4">{{ Lang::line('extensions::table.description') }}</th>
+                            <th class="span6">{{ Lang::line('extensions::table.description') }}</th>
+                            <th class="span2">{{ Lang::line('extensions::table.actions') }}</th>
                         </tr>
                     <thead>
                     <tbody>
@@ -155,12 +155,35 @@
                         <tr>
                             <td><a href="{{ URL::to(ADMIN . '/extensions/view/' . array_get($extension, 'info.slug') ) }}">{{ array_get($extension, 'info.name') }}</a></td>
                             <td>{{ array_get($extension, 'info.version') }}</td>
+                             <td>
+                                {{ array_get($extension, 'info.description') }}
+                                @if ( ! Platform::extensions_manager()->is_installed( array_get($extension, 'info.slug') ) and ! Platform::extensions_manager()->can_install( array_get($extension, 'info.slug') ) )
+                                    <span class="pull-right label label-warning">{{ Lang::line('general.required')->get() }}: {{ implode(', ', Platform::extensions_manager()->required_extensions( array_get($extension, 'info.slug') ) ) }}</span>
+                                @endif
+                                @if ( Platform::extensions_manager()->has_update( array_get($extension, 'info.slug') ) )
+                                    <span class="pull-right label label-info">{{ Lang::line('extensions::table.has_updates')->get() }}</span>
+                                @endif
+                            </td>
                             <td>
                                 @if ( Platform::extensions_manager()->is_installed( array_get($extension, 'info.slug') ) )
                                     @if ( Platform::extensions_manager()->can_uninstall( array_get($extension, 'info.slug') ) )
                                         <a class="btn" href="{{ URL::to(ADMIN . '/extensions/uninstall/' . array_get($extension, 'info.slug') ) }}">{{ Lang::line('extensions::button.uninstall')->get() }}</a>
                                     @else
                                         <a class="btn disabled">{{ Lang::line('extensions::button.uninstall')->get() }}</a>
+                                    @endif
+
+                                    @if ( Platform::extensions_manager()->is_enabled( array_get($extension, 'info.slug') ) )
+                                        @if ( Platform::extensions_manager()->can_disable( array_get($extension, 'info.slug') ) )
+                                            <a class="btn" href="{{ URL::to(ADMIN . '/extensions/disable/' . array_get($extension, 'info.slug') ) }}">{{ Lang::line('extensions::button.disable')->get() }}</a>
+                                        @else
+                                            <a class="btn disabled">{{ Lang::line('extensions::button.disable')->get() }}</a>
+                                        @endif
+                                    @else
+                                        @if ( Platform::extensions_manager()->can_enable( array_get($extension, 'info.slug') ) )
+                                            <a class="btn" href="{{ URL::to(ADMIN . '/extensions/enable/' . array_get($extension, 'info.slug') ) }}">{{ Lang::line('extensions::button.enable')->get() }}</a>
+                                        @else
+                                            <a class="btn disabled">{{ Lang::line('extensions::button.enable')->get() }}</a>
+                                        @endif
                                     @endif
                                 @else
                                     @if ( Platform::extensions_manager()->can_install( array_get($extension, 'info.slug') ) )
@@ -170,15 +193,7 @@
                                     @endif
                                 @endif
                             </td>
-                            <td>
-                                {{ array_get($extension, 'info.description') }}
-                                @if ( ! Platform::extensions_manager()->is_installed( array_get($extension, 'info.slug') ) and ! Platform::extensions_manager()->can_install( array_get($extension, 'info.slug') ) )
-                                    <span class="pull-right label label-warning">{{ Lang::line('general.required')->get() }}: {{ implode(', ', Platform::extensions_manager()->required_extensions( array_get($extension, 'info.slug') ) ) }}</span>
-                                @endif
-                                @if ( Platform::extensions_manager()->has_update( array_get($extension, 'info.slug') ) )
-                                    <span class="pull-right label label-info">{{ Lang::line('extensions::table.has_updates')->get() }}</span>
-                                @endif
-                            </td>
+
                         </tr>
                         @endforeach
                     </tbody>
@@ -187,5 +202,9 @@
         </div>
     </div>
 </section>
+<<<<<<< HEAD
 @endsection
 >>>>>>> refs/heads/feature/installation-dependencies-refactor
+=======
+@endsection
+>>>>>>> refs/heads/feature/extensions-refactor

@@ -1,3 +1,19 @@
+1.0.3 Changelog
+----------
+
+**General:**
+
+  * Moved the Platform::is_installed() from application/start.php to application/platform/platform.php
+  * Cleaned a bit the application/platform/platform.php
+
+**Extensions Manager:**
+
+  * Refactored the extensions manager
+
+**Installer:**
+
+  * Added a new dependencies manager for the installer
+
 1.0.2 Changelog
 ----------
 
