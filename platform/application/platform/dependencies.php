@@ -86,7 +86,7 @@ class Dependencies
      * Function: _sort()
      * --------------------------------------------------------------------------
      *
-     * This sorts the modules dependencies.
+     * This sorts the extensions dependencies.
      *
      * @access   private
      * @return   array
