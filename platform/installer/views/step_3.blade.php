@@ -1,5 +1,9 @@
 @layout('installer::template')
 
+@section('title')
+{{ Lang::line('installer::general.title')->get() }} | {{ Lang::line('installer::general.step_3.title')->get() }}
+@endsection
+
 @section('scripts')
 <script>
 	$(document).ready(function() {

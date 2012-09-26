@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,10 +19,21 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * Return the language lines.
+ * --------------------------------------------------------------------------
+ */
 return array(
-
-	/* General */
-	'previous' => 'Back',
-	'next'     => 'Continue',
-
+    /*
+     * -----------------------------------------
+     * General.
+     * -----------------------------------------
+     */
+    'previous' => 'Back',
+    'next'     => 'Continue'
 );
+
+/* End of file button.php */
+/* Location: ./platform/installer/language/en/button.php */

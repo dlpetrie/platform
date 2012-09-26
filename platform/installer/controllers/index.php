@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,339 +19,439 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
 use Installer\Installer;
 
+
+/**
+ * --------------------------------------------------------------------------
+ * Installer Class
+ * --------------------------------------------------------------------------
+ * 
+ * The Platform Installer.
+ *
+ * @package    Platform
+ * @author     Ben Corlett
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.1
+ */
 class Installer_Index_Controller extends Base_Controller
 {
 
-	/**
-	 * This function is called before the action is executed.
-	 *
-	 * @return void
-	 */
-	public function before()
-	{
-		parent::before();
+    /**
+     * This function is called before the action is executed.
+     *
+     * @return void
+     */
+    public function before()
+    {
+        // Call the parent.
+        //
+        parent::before();
 
-		// Setup CSS
-		Asset::add('bootstrap', 'platform/installer/css/bootstrap.min.css');
-		Asset::add('installer', 'platform/installer/css/installer.css');
+        // Setup CSS.
+        //
+        Asset::add('bootstrap', 'platform/installer/css/bootstrap.min.css');
+        Asset::add('installer', 'platform/installer/css/installer.css');
 
-		// Setup JS
-		Asset::add('jquery', 'platform/installer/js/jquery.js');
-		Asset::add('url', 'platform/installer/js/url.js');
-		Asset::add('bootstrap', 'platform/installer/js/bootstrap.js', array('jquery'));
-		Asset::add('validation', 'platform/installer/js/validate.js', array('jquery'));
-		Asset::add('tempo', 'platform/installer/js/tempo.js', array('jquery'));
-		Asset::add('installer', 'platform/installer/js/installer.js', array('jquery'));
+        // Setup JS.
+        //
+        Asset::add('jquery', 'platform/installer/js/jquery.js');
+        Asset::add('url', 'platform/installer/js/url.js');
+        Asset::add('bootstrap', 'platform/installer/js/bootstrap.js', array('jquery'));
+        Asset::add('validation', 'platform/installer/js/validate.js', array('jquery'));
+        Asset::add('tempo', 'platform/installer/js/tempo.js', array('jquery'));
+        Asset::add('installer', 'platform/installer/js/installer.js', array('jquery'));
 
-		// If we're already installed
-		if (Platform::is_installed() and URI::segment(2) !== 'step_4')
-		{
-			Redirect::to('installer/step_4')->send();
-			exit;
-		}
+        // Check if Platform is already installed.
+        //
+        if (Platform::is_installed() and URI::segment(2) !== 'step_4')
+        {
+            Redirect::to('installer/step_4')->send();
+            exit;
+        }
 
-		// If we're not prepared for installation
-		if ( ! Installer::is_prepared() and ! in_array(URI::segment(2, 'step_1'), array('step_1', 'permissions')))
-		{
-			Redirect::to('installer')->send();
-			exit;
-		}
-	}
+        // If we're not prepared for installation.
+        //
+        if ( ! Installer::is_prepared() and ! in_array(URI::segment(2, 'step_1'), array('step_1', 'permissions')))
+        {
+            Redirect::to('installer')->send();
+            exit;
+        }
+    }
 
-	/**
-	 * Alias for step 1.
-	 *
-	 * @return  View
-	 */
-	public function get_index()
-	{
-		return $this->get_step_1();
-	}
 
-	/**
-	 * Returns the first step of the installation process.
-	 *
-	 * This step is a pre-installation checklist to make sure
-	 * the system is prepared to be installed.
-	 *
-	 * @return  View
-	 */
-	public function get_step_1()
-	{
-		// Prepare our database
-		Installer::prepare();
+    /**
+     * --------------------------------------------------------------------------
+     * Function: get_index()
+     * --------------------------------------------------------------------------
+     *
+     * An alias for the step 1.
+     *
+     * @access   public
+     * @return   void
+     */
+    public function get_index()
+    {
+        return $this->get_step_1();
+    }
 
-		// Get an array of permissions
-		$data['permissions'] = Installer::permissions();
 
-		return View::make('installer::step_1', $data);
-	}
+    /**
+     * --------------------------------------------------------------------------
+     * Function: get_step_1()
+     * --------------------------------------------------------------------------
+     *
+     * This step is a pre-installtion checklist to make sure the system is
+     * prepare to be installed.
+     *
+     * @access   public
+     * @return   View
+     */
+    public function get_step_1()
+    {
+        // Prepare our database.
+        //
+        Installer::prepare();
 
-	/**
-	 * Not used just now. Developers may
-	 * attach a license agreement or other form
-	 * data to get_step_1() and process it here
-	 *
-	 * @return  Redirect
-	 */
-	public function post_step_1()
-	{
-		return Redirect::to('installer/step_2');
-	}
+        // Show the page.
+        //
+        return View::make('installer::step_1')->with('permissions', Installer::permissions());
+    }
 
-	/**
-	 * Returns the second step of the installation process.
-	 *
-	 * This step is we check the database.
-	 *
-	 * @return  View
-	 */
-	public function get_step_2()
-	{
-		// Initialize data array
-		$credentials = array(
-			'driver'   => null,
-			'host'     => null,
-			'username' => null,
-			'database' => null,
-		);
 
-		// Check for session data
-		$credentials = array_merge($credentials, Installer::get_step_data(2, function()
-		{
-			// Look for existing config data
-			$connections = Config::get('database.connections', array());
-			$connection = reset($connections);
-			return (is_array($connection)) ? $connection : array();
-		}));
+    /**
+     * --------------------------------------------------------------------------
+     * Function: post_step_1()
+     * --------------------------------------------------------------------------
+     *
+     * Not used just now. Developers may attach a license agreement or other form
+     * data to get_step_1() and process it here.
+     *
+     * @access   public
+     * @return   Redirect
+     */
+    public function post_step_1()
+    {
+        // Continue to step 2.
+        //
+        return Redirect::to('installer/step_2');
+    }
 
-		return View::make('installer::step_2')->with('drivers', Installer::database_drivers())->with('credentials', $credentials);
-	}
 
-	/**
-	 * Stores the database credentials to the session.
-	 *
-	 * @return  Redirect
-	 */
-	public function post_step_2()
-	{
-		Installer::remember_step_data(2, Input::get());
+    /**
+     * --------------------------------------------------------------------------
+     * Function: get_step_2()
+     * --------------------------------------------------------------------------
+     *
+     * This step is to get the database credentials and check if have a sucessful
+     * database connection.
+     *
+     * @access   public
+     * @return   View
+     */
+    public function get_step_2()
+    {
+        // Initiate the data array.
+        //
+        $credentials = array(
+            'driver'   => null,
+            'host'     => null,
+            'username' => null,
+            'database' => null
+        );
 
-		return Redirect::to('installer/step_3');
-	}
+        // Check for session data.
+        //
+        $credentials = array_merge($credentials, Installer::get_step_data(2, function()
+        {
+            // Look for existing config data.
+            //
+            $connections = Config::get('database.connections', array());
+            $connection = reset($connections);
+            return ( is_array($connection) ? $connection : array() );
+        }));
 
-	/**
-	 * Returns the third step of the installation process.
-	 *
-	 * This step is where we put admin credentials in.
-	 *
-	 * @return  View
-	 */
-	public function get_step_3()
-	{
-		return View::make('installer::step_3');
-	}
+        // Show the page.
+        //
+        return View::make('installer::step_2')->with('drivers', Installer::database_drivers())->with('credentials', $credentials);
+    }
 
-	/**
-	 * Stores the admin credentials to the session
-	 *
-	 * @return  Redirect
-	 */
-	public function post_step_3()
-	{
-		Installer::remember_step_data(3, Input::get());
 
-		return Redirect::to('installer/install');
-	}
+    /**
+     * --------------------------------------------------------------------------
+     * Function: post_step_2()
+     * --------------------------------------------------------------------------
+     *
+     * Stores the database credentials to the session.
+     *
+     * @access   public
+     * @return   Redirect
+     */
+    public function post_step_2()
+    {
+        // Save the data.
+        //
+        Installer::remember_step_data(2, Input::get());
 
-	/**
-	 * Actually does the install process.
-	 *
-	 * @return  Redirect
-	 */
-	public function get_install()
-	{
-		// 1. Create the database config file
-		Installer::create_database_config(Installer::get_step_data(2, function() {
-			Redirect::to('installer/step_2')->send();
-			exit;
-		}));
+        // Continue to step 3.
+        //
+        return Redirect::to('installer/step_3');
+    }
 
-		// update config for this request instance
-		$step2_data = Installer::get_step_data(2);
-		Config::set('database.connections.'.$step2_data['driver'], array(
-				'driver'   => $step2_data['driver'],
-				'host'     => $step2_data['host'],
-				'database' => $step2_data['database'],
-				'username' => $step2_data['username'],
-				'password' => $step2_data['password'],
-				'charset'  => 'utf8',
-				'prefix'   => '',
-		));
 
-		// 2. Create user
-		$user = Installer::get_step_data(3, function() {
-			Redirect::to('installer/step_3')->send();
-			exit;
-		});
+    /**
+     * --------------------------------------------------------------------------
+     * Function: get_step_3()
+     * --------------------------------------------------------------------------
+     *
+     * Get the administrator credentials.
+     *
+     * @access   public
+     * @return   View
+     */
+    public function get_step_3()
+    {
+        // Show the page.
+        //
+        return View::make('installer::step_3');
+    }
 
-		// override user with input format
-		$user = array(
-			'email'                 => $user['email'],
-			'password'              => $user['password'],
-			'password_confirmation' => $user['password_confirmation'],
-			'groups'                => array('admin', 'users'),
-			'metadata'              => array(
-				'first_name' => $user['first_name'],
-				'last_name'  => $user['last_name'],
-			),
-			'permissions' => array(
-				Config::get('sentry::sentry.permissions.superuser') => 1,
-			),
-		);
 
-		// 3. Create a random key
-		Installer::generate_key();
+    /**
+     * --------------------------------------------------------------------------
+     * Function: post_step_3()
+     * --------------------------------------------------------------------------
+     *
+     * Stores the admin credentials to the session.
+     *
+     * @method   post
+     * @access   public
+     * @return   Redirect
+     */
+    public function post_step_3()
+    {
+        // Save the data.
+        //
+        Installer::remember_step_data(3, Input::get());
 
-		// 4. Install extensions
-		Installer::install_extensions();
+        // Now install Platform !
+        //
+        return Redirect::to('installer/install');
+    }
 
-		try
-		{
-			$create_user = API::post('users', $user);
-		}
-		catch (APIClientException $e)
-		{
-			return Redirect::to('installer/step_3');
-		}
 
-		return Redirect::to('installer/step_4');
-	}
+    /**
+     * --------------------------------------------------------------------------
+     * Function: get_install()
+     * --------------------------------------------------------------------------
+     *
+     * Actually does the install process.
+     *
+     * @access   public
+     * @return   void
+     */
+    public function get_install()
+    {
+        // 1. Create the database config file
+        Installer::create_database_config(Installer::get_step_data(2, function() {
+            Redirect::to('installer/step_2')->send();
+            exit;
+        }));
 
-	/**
-	 * The completion step
-	 *
-	 * @return  View
-	 */
-	public function get_step_4()
-	{
-		Session::forget('installer');
+        // update config for this request instance
+        $step2_data = Installer::get_step_data(2);
+        Config::set('database.connections.'.$step2_data['driver'], array(
+                'driver'   => $step2_data['driver'],
+                'host'     => $step2_data['host'],
+                'database' => $step2_data['database'],
+                'username' => $step2_data['username'],
+                'password' => $step2_data['password'],
+                'charset'  => 'utf8',
+                'prefix'   => '',
+        ));
 
-		return View::make('installer::step_4')
-		           ->with('license', Platform::license());
-	}
+        // 2. Create user
+        $user = Installer::get_step_data(3, function() {
+            Redirect::to('installer/step_3')->send();
+            exit;
+        });
 
-	/**
-	 * Returns a JSON encoded array of filesystem
-	 * permissions.
-	 *
-	 * @return  Response
-	 */
-	public function get_permissions()
-	{
-		if ( ! Request::ajax())
-		{
-			return $this->get_index();
-		}
+        // override user with input format
+        $user = array(
+            'email'                 => $user['email'],
+            'password'              => $user['password'],
+            'password_confirmation' => $user['password_confirmation'],
+            'groups'                => array('admin', 'users'),
+            'metadata'              => array(
+                'first_name' => $user['first_name'],
+                'last_name'  => $user['last_name'],
+            ),
+            'permissions' => array(
+                Config::get('sentry::sentry.permissions.superuser') => 1,
+            ),
+        );
 
-		return new Response(json_encode(Installer::permissions()));
-	}
+        // 3. Create a random key
+        Installer::generate_key();
 
-	/**
-	 * Confirm database - Step 1
-	 *
-	 * @return  Response
-	 */
-	public function post_confirm_db()
-	{
-		if ( ! Request::ajax())
-		{
-			return Event::fire('404');
-		}
+        // 4. Install extensions
+        Installer::install_extensions();
 
-		try
-		{
-			Installer::check_database_connection(array(
-				'driver'   => Input::get('driver'),
-				'host'     => Input::get('host'),
-				'database' => Input::get('database'),
-				'username' => Input::get('username'),
-				'password' => Input::get('password'),
-			));
-		}
-		catch (Exception $e)
-		{
-			// Error 1146 is actually good, because it
-			// means we connected fine, just couldn't
-			// get the contents of the random table above.
-			// For some reason this exception has a code of "0"
-			// whereas all of the other exceptions match the
-			// database errors. Life goes on.
-			if ($e->getCode() !== 0)
-			{
-				return new Response(json_encode(array(
-					'message' => $e->getMessage(),
-				)), API::STATUS_BAD_REQUEST);
-			}
-		}
+        try
+        {
+            $create_user = API::post('users', $user);
+        }
+        catch (APIClientException $e)
+        {
+            return Redirect::to('installer/step_3');
+        }
 
-		return json_encode(array(
-			'message' => 'Successfully connected to the database',
-		));
-	}
+        return Redirect::to('installer/step_4');
+    }
 
-	public function post_confirm_user()
-	{
-		if ( ! Request::ajax())
-		{
-			return Event::fire('404');
-		}
 
-		$user = array(
-			'email'                 => Input::get('email'),
-			'password'              => Input::get('password'),
-			'password_confirmation' => Input::get('password_confirmation'),
-			'metadata'              => array(
-				'first_name' => Input::get('first_name'),
-				'last_name'  => Input::get('last_name'),
-			),
-		);
+    /**
+     * --------------------------------------------------------------------------
+     * Function: get_step_4()
+     * --------------------------------------------------------------------------
+     *
+     * The completion step.
+     *
+     * @access   public
+     * @return   View
+     */
+    public function get_step_4()
+    {
+        // 
+        //
+        Session::forget('installer');
 
-		$rules = array(
-			'metadata.first_name'   => 'required',
-			'metadata.last_name'    => 'required',
-			'email'                 => 'required|email',
-			'password_confirmation' => 'same:password',
-		);
+        // Show the page.
+        //
+        return View::make('installer::step_4')->with('license', Platform::license());
+    }
 
-		$validation = Validator::make($user, $rules);
 
-		if ($validation->fails())
-		{
-		    return json_encode(array(
-		    	'error'   => true,
-		    	'message' => $validation->errors->all(':message'),
-		    ));
-		}
+    /**
+     * Returns a JSON encoded array of filesystem
+     * permissions.
+     *
+     * @return  Response
+     */
+    public function get_permissions()
+    {
+        if ( ! Request::ajax())
+        {
+            return $this->get_index();
+        }
 
-		return json_encode(array(
-			'error'   => false,
-			'message' => array('Successfully validated user'),
-		));
-	}
+        return new Response(json_encode(Installer::permissions()));
+    }
 
-	/**
-	 * Catch-all method for requests that can't be matched.
-	 *
-	 * @param  string    $method
-	 * @param  array     $parameters
-	 * @return Response
-	 */
-	public function __call($method, $parameters)
-	{
-		return $this->get_index();
-	}
+    /**
+     * Confirm database - Step 1
+     *
+     * @return  Response
+     */
+    public function post_confirm_db()
+    {
+        if ( ! Request::ajax())
+        {
+            return Event::fire('404');
+        }
+
+        try
+        {
+            Installer::check_database_connection(array(
+                'driver'   => Input::get('driver'),
+                'host'     => Input::get('host'),
+                'database' => Input::get('database'),
+                'username' => Input::get('username'),
+                'password' => Input::get('password'),
+            ));
+        }
+        catch (Exception $e)
+        {
+            // Error 1146 is actually good, because it
+            // means we connected fine, just couldn't
+            // get the contents of the random table above.
+            // For some reason this exception has a code of "0"
+            // whereas all of the other exceptions match the
+            // database errors. Life goes on.
+            if ($e->getCode() !== 0)
+            {
+                return new Response(json_encode(array(
+                    'message' => $e->getMessage(),
+                )), API::STATUS_BAD_REQUEST);
+            }
+        }
+
+        return json_encode(array(
+            'message' => 'Successfully connected to the database',
+        ));
+    }
+
+    public function post_confirm_user()
+    {
+        if ( ! Request::ajax())
+        {
+            return Event::fire('404');
+        }
+
+        $user = array(
+            'email'                 => Input::get('email'),
+            'password'              => Input::get('password'),
+            'password_confirmation' => Input::get('password_confirmation'),
+            'metadata'              => array(
+                'first_name' => Input::get('first_name'),
+                'last_name'  => Input::get('last_name'),
+            ),
+        );
+
+        $rules = array(
+            'metadata.first_name'   => 'required',
+            'metadata.last_name'    => 'required',
+            'email'                 => 'required|email',
+            'password_confirmation' => 'same:password',
+        );
+
+        $validation = Validator::make($user, $rules);
+
+        if ($validation->fails())
+        {
+            return json_encode(array(
+                'error'   => true,
+                'message' => $validation->errors->all(':message'),
+            ));
+        }
+
+        return json_encode(array(
+            'error'   => false,
+            'message' => array('Successfully validated user'),
+        ));
+    }
+
+    /**
+     * Catch-all method for requests that can't be matched.
+     *
+     * @param  string    $method
+     * @param  array     $parameters
+     * @return Response
+     */
+    public function __call($method, $parameters)
+    {
+        return $this->get_index();
+    }
 
 }
+
+/* End of file installer.php */
+/* Location: ./platform/installer/controllers/installer.php */

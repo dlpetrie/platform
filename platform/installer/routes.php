@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,8 +19,16 @@
  * @link       http://cartalyst.com
  */
 
-// Remove /index/ out of installer routes.
+
+/*
+ * --------------------------------------------------------------------------
+ * Remove /index/ out of the installer routes.
+ * --------------------------------------------------------------------------
+ */
 Route::any('installer/(:any?)', function($action = 'index')
 {
-	return Controller::call('installer::index@'.$action);
+    return Controller::call('installer::index@'.$action);
 });
+
+/* End of file routes.php */
+/* Location: ./platform/installer/routes.php */
