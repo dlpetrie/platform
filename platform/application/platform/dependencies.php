@@ -25,7 +25,7 @@
  * Dependencies Class
  * --------------------------------------------------------------------------
  * 
- * Sort the modules dependencies.
+ * Sort the extensions dependencies.
  *
  * @package    Platform
  * @author     Cartalyst LLC
