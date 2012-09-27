@@ -47,11 +47,11 @@ class Users_Install
 
 		// Create the sentry groups
 		Sentry::group()->create(array(
-			'name' => 'admin',
+			'name' => 'admin', 'permissions' => ''
 		));
 
 		Sentry::group()->create(array(
-			'name' => 'users',
+			'name' => 'users', 'permissions' => ''
 		));
 
 		/* # Create Menu Items
