@@ -1,4 +1,5 @@
-<?php
+<?php namespace Platform\Settings\Model;
+
 /**
  * Part of the Platform application.
  *
@@ -18,7 +19,7 @@
  * @link       http://cartalyst.com
  */
 
-namespace Platform\Settings\Model;
+
 
 use Crud;
 

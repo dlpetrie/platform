@@ -22,7 +22,7 @@
 @section('content')
 <section id="settings">
 
-	<header class="row">
+	<header class="row-fluid">
 			<div class="span4">
 				<h1>{{ Lang::line('settings::general.title') }}</h1>
 				<p>{{ Lang::line('settings::general.description') }}</p>
@@ -31,23 +31,22 @@
 			</nav>
 	</header>
 
-	<hr>
+	<hr />
 
 	<div class="tabbable">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="#general" data-toggle="tab">General</a></li>
-			<li><a href="#extra" data-toggle="tab">Extra</a></li>
+			@foreach ( $settings as $extension => $data )
+			<li{{ ( $extension === 'settings' ? ' class="active"' : '' ) }}><a href="#x{{ $extension }}" data-toggle="tab">{{ $extension }}</a></li>
+			@endforeach
 		</ul>
 		<div class="tab-content">
-		    <div class="tab-pane active" id="general">
-		    	@widget('platform.settings::settings.general')
+			@foreach ( $settings as $extension => $data )
+		    <div class="tab-pane{{ ( $extension === 'settings' ? ' active' : '' ) }}" id="x{{ $extension }}">
+		    	@widget('platform.' . $extension . '::settings.index', $data)
 		    </div>
-		    <div class="tab-pane" id="extra">
-		    	Add extra settings here
-		    </div>
+		    @endforeach
 	  	</div>
 	</div>
-
 </section>
 
 @endsection

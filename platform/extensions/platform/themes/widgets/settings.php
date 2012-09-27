@@ -1,5 +1,4 @@
-<?php namespace Platform\Settings\Widgets;
-
+<?php
 /**
  * Part of the Platform application.
  *
@@ -19,18 +18,16 @@
  * @link       http://cartalyst.com
  */
 
+namespace Platform\Themes\Widgets;
 
 
-use API;
-use APIClientException;
-use Theme;
+use Theme\Theme;
 
 class Settings
 {
-
 	public function index( $settings = null )
 	{
-		return Theme::make('settings::widgets.form.general')->with('settings', $settings);
+		return Theme::make('themes::widgets.teste')->with('settings', $settings);
 	}
 
 }

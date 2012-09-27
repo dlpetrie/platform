@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,48 +19,113 @@
  * @link       http://cartalyst.com
  */
 
-use Platform\Menus\Menu;
 
+use Platform\Menus\Menu;
+use Platform\Settings\Model\Setting;
+
+
+/**
+ * --------------------------------------------------------------------------
+ * Settings > Admin Class
+ * --------------------------------------------------------------------------
+ * 
+ * Settings to manage your website settings.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.1
+ */
 class Settings_Admin_Settings_Controller extends Admin_Controller
 {
+
 	protected $validation = array(
 		// general settings
 		'general' => array(
-			'site:name' => 'required',
+			'site:name'  => 'required',
 			'site:email' => 'required|email'
 		)
 	);
 
-	/**
-	 * This function is called before the action is executed.
-	 *
-	 * @return void
-	 */
-	public function before()
-	{
-		parent::before();
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: __construct()
+     * --------------------------------------------------------------------------
+     *
+     * Initializer.
+     *
+     * @access   public
+     * @return   void
+     */
+    public function __construct()
+    {
+        // Call parent.
+        //
+        parent::__construct();
+    }
+
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: before()
+     * --------------------------------------------------------------------------
+     *
+     * This function is called before the action is executed.
+     *
+     * @access   public
+     * @return   void
+     */
+    public function before()
+    {
+        // Call parent.
+        //
+        parent::before();
+
+        // Set the active menu.
+        //
 		$this->active_menu('admin-settings');
 	}
 
-	/**
-	 * Alias for general
-	 *
-	 * @return View
-	 */
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: get_index()
+     * --------------------------------------------------------------------------
+     *
+     * The main page of the settings extension.
+     *
+     * @access   public
+     * @return   View
+     */
 	public function get_index()
 	{
-		return $this->get_general();
+		// Get all the settings from the database.
+		//
+		foreach ( API::get('settings', array('organize' => true)) as $setting )
+		{
+			// Populate the extension name of each setting.
+			//
+			foreach ( $setting as $data )
+			{
+				$settings[ $data['extension'] ][ $data['type'] ][ $data['name'] ] = $data['value'];
+			}
+		}
+
+		// Show the page.
+		//
+		return Theme::make('settings::index')->with('settings', $settings);
 	}
 
-	/**
-	 * General Site Settings
-	 *
-	 * @return View
-	 */
-	public function get_general()
-	{
-		return Theme::make('settings::index');
-	}
+
+
+
+
+
+
+
 
 	public function post_general()
 	{
