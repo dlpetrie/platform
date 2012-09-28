@@ -201,60 +201,53 @@ class Settings_API_Settings_Controller extends API_Controller
                 $setting_model->value     = $setting['value'];
             }
 
-            // Set this setting rules.
+            // Fallback and a rules reseter.
             //
             $rules = array();
+
+            // Set this setting rules.
+            //
             if ( $validation )
             {
-                $rules = array( $setting['name'] => $validation );
+                $rules['value'] = $validation['value'];
+                #$rules[ $setting['name'] ] = $validation['value'];
             }
 
             // Pass the validation rules to the model.
             //
             $setting_model->set_validation($rules);
 
-
-
-/// not validating correctly for the moment.
             try
             {
-                // now save the setting
-                if ($setting_model->save())
+                // Save the setting.
+                //
+                if ( $setting_model->save() )
                 {
                     $updated[] = ucfirst($setting_model->name);
                 }
+
+                // Setting failed the validation
+                //
                 else
                 {
-                    // get errors
-                    foreach ($setting_model->validation()->errors->all() as $error)
+                    // Get the errors.
+                    //
+                    foreach ( $setting_model->validation()->errors->all() as $error )
                     {
-                        echo $errors[] = $error;
+                        $errors[] = $error;
                     }
                 }
             }
-            catch (Exception $e)
+            catch ( Exception $e )
             {
                 $errors[] = $e->getMessage();
             }
-    
         }
 
-        if (count($errors) > 0)
-        {
-            return new Response(array(
-                'message' => Lang::line('settings::messages.errors.occured')->get(),
-                'errors'  => $errors,
-            ), API::STATUS_UNPROCESSABLE_ENTITY);
-        }
-
-        if (count($updated) === 0)
-        {
-            return new Response(null, API::STATUS_NO_CONTENT);
-        }
-
-        return new Response($updated);
+        // 
+        //
+        return new Response( array('updated' => $updated, 'errors' => $errors) );
     }
-
 }
 
 /* End of file settings.php */

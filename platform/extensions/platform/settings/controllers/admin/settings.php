@@ -137,7 +137,7 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 
         // Loop through the submited data.
         //
-        foreach ( Input::get() as $field => $value)
+        foreach ( Input::get() as $field => $value )
         {
             // Extension field shall not pass !
             //
@@ -170,11 +170,11 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
             // Check if this widget has validation rules.
             //
             $widget = 'Platform\\' . ucfirst($extension) . '\\Widgets\\Settings';
-            if ( isset( $widget::$validation ) )
+            if ( isset( $widget::$validation ) and array_key_exists( $name, $widget::$validation ) )
             {
                 // Get the rules.
                 //
-                $validation = array_get($widget::$validation, $name);
+                $validation = array( 'value' => array_get($widget::$validation, $name) );
             }
 
             // Set the values.
@@ -192,11 +192,11 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
         {
             // Make the API request.
             //
-            $updated = API::put('settings', array( 'settings' => $settings ));
+            $request = API::put('settings', array( 'settings' => $settings ));
 
             // If we have fields that were updated with success.
             //
-            if ( is_array($updated) and count($updated) > 0 )
+            if ( $updated = array_get($request, 'updated') )
             {
                 // Loop through each updated setting.
                 //
@@ -207,6 +207,21 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
                     Platform::messages()->success( Lang::line('settings::messages.success.update', array('setting' => $setting)) );
                 }
             }
+
+            // If we have fields that were not updated with success.
+            //
+            if ( $errors = array_get($request, 'errors') )
+            {
+                // Loop through the error messages.
+                //
+                foreach ( $errors as $error )
+                {
+                    // Set the error message.
+                    //
+                    Platform::messages()->error( $error );
+                }
+            }
+
         }
         catch ( APIClientException $e )
         {

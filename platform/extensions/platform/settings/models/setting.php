@@ -58,7 +58,7 @@ class Setting extends Crud
      */
     public function set_validation( $rules = array(), $messages = array() )
     {
-        static::$_rules  = $rules;
+        static::$_rules = $rules;
         #static::$_messages = $messages;
     }
 

@@ -8,19 +8,19 @@
 
 		<div>
 			<label for="site-title">{{ Lang::line('settings::form.title') }}</label>
-			<input type="text" id="title" name="site:title" value="{{ array_get($settings, 'site.title') }}">
+			<input type="text" id="site-title" name="site:title" value="{{ array_get($settings, 'site.title') }}">
 			<span class="help"></span>
 		</div>
 
 		<div>
 			<label for="site-tagline">{{ Lang::line('settings::form.tagline') }}</label>
-			<input type="text" id="tagline" name="site:tagline" value="{{ array_get($settings, 'site.tagline') }}">
+			<input type="text" id="site-tagline" name="site:tagline" value="{{ array_get($settings, 'site.tagline') }}">
 			<span class="help"></span>
 		</div>
 
 		<div>
 			<label for="site-email">{{ Lang::line('settings::form.site_email') }}</label>
-			<input type="text" id="email" name="site:email" value="{{ array_get($settings, 'site.email') }}">
+			<input type="text" id="site-email" name="site:email" value="{{ array_get($settings, 'site.email') }}">
 			<span class="help"></span>
 		</div>
 
