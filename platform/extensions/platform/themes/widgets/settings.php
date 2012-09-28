@@ -27,7 +27,7 @@ class Settings
 {
 	public function index( $settings = null )
 	{
-		return Theme::make('themes::widgets.teste')->with('settings', $settings);
+		return Theme::make('themes::widgets.settings')->with('settings', $settings);
 	}
 
 }

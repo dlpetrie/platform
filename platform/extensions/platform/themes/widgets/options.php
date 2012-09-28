@@ -31,7 +31,6 @@ class Options
 
 	public function css()
 	{
-		return;
 		$active_parts = explode(DS, ltrim(rtrim(Theme::active(), DS), DS));
 		$type         = $active_parts[0];
 		$name         = $active_parts[1];

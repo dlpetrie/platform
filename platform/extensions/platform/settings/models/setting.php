@@ -20,43 +20,70 @@
  */
 
 
-
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
 use Crud;
 
+
 /**
- * Product Model
+ * --------------------------------------------------------------------------
+ * Settings > Setting Model
+ * --------------------------------------------------------------------------
+ * 
+ * The settings model class.
  *
- * @author  Daniel Petrie
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.1
  */
 class Setting extends Crud
 {
+    /**
+     * --------------------------------------------------------------------------
+     * Function: set_validation()
+     * --------------------------------------------------------------------------
+     *
+     * Set validation rules and labels.
+     *
+     * @access   public
+     * @param    array
+     * @param    array
+     * @return   void
+     */
+    public function set_validation( $rules = array(), $messages = array() )
+    {
+        static::$_rules  = $rules;
+        #static::$_messages = $messages;
+    }
 
-	/**
-	 * Set validation rules and labels
-	 *
-	 * @param  array  validation rules
-	 * @param  array  labels
-	 */
-	public function set_validation($rules = array(), $messages = array())
-	{
-		static::$_rules  = $rules;
-		// static::$_messages = $messages;
-	}
 
-	/**
-	 * Called right after validation before inserting/updating to the database
-	 *
-	 * @param   array  $attributes
-	 * @return  array
-	 */
-	protected function prep_attributes($attributes)
-	{
-		foreach ($attributes as &$attribute);
-		{
-			$attribute = \HTML::entities($attribute);
-		}
+    /**
+     * --------------------------------------------------------------------------
+     * Function: prep_attributes()
+     * --------------------------------------------------------------------------
+     *
+     * Called right after validation before inserting/updating to the database.
+     *
+     * @access   public
+     * @param    array
+     * @return   array
+     */
+    protected function prep_attributes( $attributes )
+    {
+        foreach ( $attributes as &$attribute );
+        {
+            $attribute = \HTML::entities($attribute);
+        }
 
-		return $attributes;
-	}
-
+        return $attributes;
+    }
 }
+
+/* End of file setting.php */
+/* Location: ./platform/extensions/platform/settings/models/setting.php */

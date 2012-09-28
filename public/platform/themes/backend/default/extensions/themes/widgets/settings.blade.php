@@ -1,5 +1,7 @@
-<form action="{{ URL::to_secure(ADMIN.'/settings/general') }}" id="general-form" class="form-horizontal" method="POST" accept-char="UTF-8">
+<form action="{{ URL::to_secure(ADMIN.'/settings') }}" id="general-form" class="form-horizontal" method="POST" accept-char="UTF-8">
 	<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
+
+	<input type="hidden" name="extension" value="themes" />
 
 	<fieldset>
 

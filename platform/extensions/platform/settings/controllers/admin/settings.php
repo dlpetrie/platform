@@ -20,6 +20,11 @@
  */
 
 
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
 use Platform\Menus\Menu;
 use Platform\Settings\Model\Setting;
 
@@ -40,16 +45,6 @@ use Platform\Settings\Model\Setting;
  */
 class Settings_Admin_Settings_Controller extends Admin_Controller
 {
-
-	protected $validation = array(
-		// general settings
-		'general' => array(
-			'site:name'  => 'required',
-			'site:email' => 'required|email'
-		)
-	);
-
-
     /**
      * --------------------------------------------------------------------------
      * Function: __construct()
@@ -86,8 +81,8 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 
         // Set the active menu.
         //
-		$this->active_menu('admin-settings');
-	}
+        $this->active_menu('admin-settings');
+    }
 
 
     /**
@@ -100,107 +95,138 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
      * @access   public
      * @return   View
      */
-	public function get_index()
-	{
-		// Get all the settings from the database.
-		//
-		foreach ( API::get('settings', array('organize' => true)) as $setting )
-		{
-			// Populate the extension name of each setting.
-			//
-			foreach ( $setting as $data )
-			{
-				$settings[ $data['extension'] ][ $data['type'] ][ $data['name'] ] = $data['value'];
-			}
-		}
+    public function get_index()
+    {
+        // Initiate an empty array.
+        //
+        $settings = array();
 
-		// Show the page.
-		//
-		return Theme::make('settings::index')->with('settings', $settings);
-	}
+        // Get all the settings from the database.
+        //
+        foreach ( API::get('settings', array('organize' => true)) as $setting )
+        {
+            // Populate the extension name of each setting.
+            //
+            foreach ( $setting as $data )
+            {
+                $settings[ $data['extension'] ][ $data['type'] ][ $data['name'] ] = $data['value'];
+            }
+        }
 
-
-
-
-
-
+        // Show the page.
+        //
+        return Theme::make('settings::index')->with('settings', $settings);
+    }
 
 
+    /**
+     * --------------------------------------------------------------------------
+     * Function: post_index()
+     * --------------------------------------------------------------------------
+     *
+     * Form processing.
+     *
+     * @access   public
+     * @return   Redirect
+     */
+    public function post_index()
+    {
+        // Initiate an empty array.
+        //
+        $settings = array();
 
-	public function post_general()
-	{
-		$post = Input::get();
+        // Loop through the submited data.
+        //
+        foreach ( Input::get() as $field => $value)
+        {
+            // Extension field shall not pass !
+            //
+            if ( $field === 'extension' )
+            {
+                continue;
+            }
 
-		$settings = array();
-		foreach ($post as $field => $value)
-		{
-			// Find the type and name for the respective field.
-			// If a field contains a ':', then a type was given
-			if (strpos($field, ':') !== false)
-			{
-				list($type, $name) = explode(':', $field);
-			}
-			else
-			{
-				$type = '';
-				$name = $field;
-			}
+            // Find the type and name for the respective field.
+            // If a field contains a ':', then a type was given
+            //
+            if ( strpos($field, ':') !== false )
+            {
+                list($type, $name) = explode(':', $field);
+            }
+            else
+            {
+                $type = '';
+                $name = $field;
+            }
 
-			// set the values
-			$values = array(
-				'extension' => 'settings',
-				'type'      => $type,
-				'name'      => $name,
-				'value'     => $value,
-			);
+            // Get this extension name.
+            //
+            $extension = Input::get('extension', 'settings');
 
-			// set validation for the field if it exists
-			$validation = null;
-			if (array_key_exists($field, $this->validation['general']))
-			{
-				if (is_array($this->validation['general'][$field]))
-				{
-					$validation = $this->validation['general'][$feild];
-				}
-				else
-				{
-					$validation = array('value' => $this->validation['general'][$field]);
-				}
-			}
+            // Set validation if the field doesn't exist.
+            //
+            $validation = null;
 
-			$settings[] = array(
-				'values'     => $values,
-				'validation' => $validation
-			);
-		}
+            // Check if this widget has validation rules.
+            //
+            $widget = 'Platform\\' . ucfirst($extension) . '\\Widgets\\Settings';
+            if ( isset( $widget::$validation ) )
+            {
+                // Get the rules.
+                //
+                $validation = array_get($widget::$validation, $name);
+            }
 
-		try
-		{
-			$updated = Api::post('settings', array(
-				'settings' => $settings,
-			));
+            // Set the values.
+            //
+            $settings[] = array(
+                'extension'  => $extension,
+                'type'       => $type,
+                'name'       => $name,
+                'value'      => $value,
+                'validation' => $validation
+            );
+        }
 
-			if (is_array($updated) and count($updated) > 0)
-			{
-				foreach ($updated as $setting)
-				{
-					Platform::messages()->success(Lang::line('settings::messages.success.update', array(
-						'setting' => $setting,
-					)));
-				}
-			}
-		}
-		catch (APIClientException $e)
-		{
-			Platform::messages()->error($e->getMessage());
+        try
+        {
+            // Make the API request.
+            //
+            $updated = API::put('settings', array( 'settings' => $settings ));
 
-			foreach ($e->errors() as $error)
-			{
-				Platform::messages()->error($error);
-			}
-		}
+            // If we have fields that were updated with success.
+            //
+            if ( is_array($updated) and count($updated) > 0 )
+            {
+                // Loop through each updated setting.
+                //
+                foreach ( $updated as $setting )
+                {
+                    // Set the success message.
+                    //
+                    Platform::messages()->success( Lang::line('settings::messages.success.update', array('setting' => $setting)) );
+                }
+            }
+        }
+        catch ( APIClientException $e )
+        {
+            // Set the error message.
+            //
+            Platform::messages()->error( $e->getMessage() );
 
-		return Redirect::to_secure(ADMIN.'/settings/general');
-	}
+            // Set the other error messages.
+            //
+            foreach ( $e->errors() as $error )
+            {
+                Platform::messages()->error( $error );
+            }
+        }
 
+        // Redirect back to the settings page.
+        //
+        return Redirect::to_secure(ADMIN . '/settings');
+    }
 }
+
+/* End of file settings.php */
+/* Location: ./platform/extensions/platform/settings/controllers/admin/settings.php */
