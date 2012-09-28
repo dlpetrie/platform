@@ -137,7 +137,7 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 
         // Loop through the submited data.
         //
-        foreach ( Input::get() as $field => $value)
+        foreach ( Input::get() as $field => $value )
         {
             // Extension field shall not pass !
             //
@@ -167,15 +167,10 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
             //
             $validation = null;
 
-            // Check if this widget has validation rules.
+            // Get this widget rules.
             //
             $widget = 'Platform\\' . ucfirst($extension) . '\\Widgets\\Settings';
-            if ( isset( $widget::$validation ) )
-            {
-                // Get the rules.
-                //
-                $validation = array_get($widget::$validation, $name);
-            }
+            $validation = array_get($widget::$validation, $name);
 
             // Set the values.
             //
