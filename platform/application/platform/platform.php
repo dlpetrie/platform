@@ -683,7 +683,7 @@ class Platform
 
         $parse = parse_url($url_home);
 
-        return $parse['path'].$path;
+        return str_finish($parse['path'].$path, '/');
     }
 }
 
