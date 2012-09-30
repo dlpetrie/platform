@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,9 +19,16 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * Return the language lines.
+ * --------------------------------------------------------------------------
+ */
 return array(
-
 	'title'       => 'Platform Dashboard',
-	'description' => 'Application Overview',
-
+	'description' => 'Application Overview'
 );
+
+/* End of file general.php */
+/* Location: ./platform/extensions/platform/dashboard/language/en/general.php */

@@ -20,74 +20,55 @@
  */
 
 
-/*
- * --------------------------------------------------------------------------
- * What we can use in this class.
- * --------------------------------------------------------------------------
- */
-use Platform\Menus\Menu;
-
-
 /**
  * --------------------------------------------------------------------------
- * Install Class
+ * Platform > Core > Redirect Class
  * --------------------------------------------------------------------------
  * 
- * Dashboard installation.
+ * Let's extend Laravel Redirect class.
  *
  * @package    Platform
  * @author     Cartalyst LLC
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
  * @license    BSD License (3-clause)
  * @link       http://cartalyst.com
+ * @version    1.0
  */
-class Dashboard_Install
+class Redirect extends Laravel\Redirect
 {
     /**
      * --------------------------------------------------------------------------
-     * Function: up()
+     * Function: back()
      * --------------------------------------------------------------------------
      *
-     * Make changes to the database.
+     * Create a redirect response to the HTTP referrer.
      *
      * @access   public
-     * @return   void
+     * @param    integer
+     * @return   mixed
      */
-	public function up()
-	{
-        /*
-         * --------------------------------------------------------------------------
-         * # 1) Create the menus.
-         * --------------------------------------------------------------------------
-         */
-		$admin_menu = Menu::admin_menu();
-		$dashboard = new Menu(array(
-			'name'          => 'Dashboard',
-			'extension'     => 'dashboard',
-			'slug'          => 'admin-dashboard',
-			'uri'           => 'dashboard',
-			'user_editable' => 0,
-			'status'        => 1
-		));
-		$dashboard->first_child_of($admin_menu);
-	}
+    public static function back( $status = 302 )
+    {
+        return parent::to_secure( Request::referrer(), $status );
+    }
 
 
     /**
      * --------------------------------------------------------------------------
-     * Function: down()
+     * Function: to_admin()
      * --------------------------------------------------------------------------
      *
-     * Revert the changes to the database.
+     * Create a redirect response to an administration URL.
      *
      * @access   public
-     * @return   void
+     * @param    string
+     * @return   mixed
      */
-	public function down()
-	{
-
-	}
+    public static function to_admin( $url = null )
+    {
+        return parent::to_secure( ADMIN . '/' . $url );
+    }
 }
 
-/* End of file 2012_05_18_004446_install.php */
-/* Location: ./platform/extensions/platform/dashboard/migrations/2012_05_18_004446_install.php */
+/* End of file redirect.php */
+/* Location: ./platform/application/platform/core/redirect.php */

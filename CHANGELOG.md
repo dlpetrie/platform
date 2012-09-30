@@ -5,6 +5,8 @@
 
   * Moved the Platform::is_installed() from application/start.php to application/platform/platform.php
   * Cleaned a bit the application/platform/platform.php
+  * Fixed installer issues on some MySQL versions.
+  * Extended Laravel URL and Redirect core classes.
 
 **Extensions Manager:**
 

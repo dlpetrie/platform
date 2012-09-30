@@ -134,7 +134,7 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
 			}
 		}
 
-		return Redirect::to_secure(ADMIN.'/themes/edit/'.$type.'/'.$name);
+		return Redirect::to_admin('themes/edit/'.$type.'/'.$name);
 	}
 
 
@@ -180,7 +180,7 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
 			}
 		}
 
-		return Redirect::to_secure(ADMIN.'/themes/'.$type);
+		return Redirect::to_admin('themes/'.$type);
 	}
 
 	/**

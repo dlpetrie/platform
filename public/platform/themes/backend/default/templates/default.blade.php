@@ -12,8 +12,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="description" content="@get.settings.site.tagline">
 	<meta name="author" content="Cartalyst LLC">
-	<meta name="base_url" content="{{ Platform::url() }}">
-	<meta name="admin_url" content="{{ Platform::url(ADMIN) }}">
+	<meta name="base_url" content="{{ URL::to() }}">
+	<meta name="admin_url" content="{{ URL::to_admin() }}">
 
 	<!-- Page Title -->
 	<title>
@@ -58,7 +58,7 @@
 
 		<header class="rows">
 			<div class="brand">
-				<a href="{{ URL::to_secure(ADMIN) }}">
+				<a href="{{ URL::to_admin() }}">
 					<img src="{{ Theme::asset('img/brand.png') }}" title="Cartalyst">
 				</a>
 			</div>
@@ -69,7 +69,7 @@
 
 			<div class="wrapper">
 				<div class="navigation">
-					@widget('platform.menus::menus.nav', 'admin', 1, 'nav nav-tabs', ADMIN)
+					@widget('platform.menus::menus.nav', 'admin', 1, 'nav nav-tabs')
 				</div>
 			</div>
 		</header>
@@ -77,7 +77,7 @@
 		<div id="page" class="rows expand">
 			<div id="inside" class="grid wrapper">
 				<div class="navigation column left-nav">
-					@widget('platform.menus::menus.nav', 1, 2, 'nav nav-stacked nav-pills', ADMIN)
+					@widget('platform.menus::menus.nav', 1, 2, 'nav nav-stacked nav-pills')
 				</div>
 
 				<div class="content column expand">
@@ -91,7 +91,7 @@
 		<div id="footer" class="rows">
 			<div class="wrapper clearfix">
 				<div class="brand">
-					<a href="{{ URL::to_secure(ADMIN) }}">
+					<a href="{{ URL::to_admin() }}">
 						<img src="{{ Theme::asset('img/brand-footer.png') }}" title="Cartalyst">
 					</a>
 				</div>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -59,3 +60,6 @@ Route::any(API.'/menus/((?!'.implode('|', $reserved).').*)', function($slug = nu
 unset($reserved);
 
 Route::controller(Controller::detect('menus'));
+
+/* End of file routes.php */
+/* Location: ./platform/extensions/platform/menus/routes.php */

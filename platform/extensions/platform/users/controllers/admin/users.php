@@ -142,10 +142,10 @@ class Users_Admin_Users_Controller extends Admin_Controller
 				Platform::messages()->error($error);
 			}
 
-			return Redirect::to_secure(ADMIN.'/users/'.(($id) ? 'edit/'.$id : 'create'))->with_input();
+			return Redirect::to_admin('users/'.(($id) ? 'edit/'.$id : 'create'))->with_input();
 		}
 
-		return Redirect::to_secure(ADMIN.'/users');
+		return Redirect::to_admin('users');
 	}
 
 	/**
@@ -171,7 +171,7 @@ class Users_Admin_Users_Controller extends Admin_Controller
 			}
 		}
 
-		return Redirect::to_secure(ADMIN.'/users');
+		return Redirect::to_admin('users');
 	}
 
 	/**
@@ -184,7 +184,7 @@ class Users_Admin_Users_Controller extends Admin_Controller
 		if ( ! $id)
 		{
 			Platform::messages()->error(Lang::line('users::messages.users.id_required')->get());
-			return Redirect::to_secure(ADMIN.'/users');
+			return Redirect::to_admin('users');
 		}
 
 		$permissions        = Input::get();
@@ -215,7 +215,7 @@ class Users_Admin_Users_Controller extends Admin_Controller
 			// Update user
 			$update_user = API::put('users/'.$id, $data);
 
-			return Redirect::to_secure(ADMIN.'/users');
+			return Redirect::to_admin('users');
 		}
 		catch (APIClientException $e)
 		{
@@ -226,7 +226,7 @@ class Users_Admin_Users_Controller extends Admin_Controller
 				Platform::messages()->error($error);
 			}
 
-			return Redirect::to_secure(ADMIN.'/users/edit/'.$id)->with_input();
+			return Redirect::to_admin('users/edit/'.$id)->with_input();
 		}
 	}
 

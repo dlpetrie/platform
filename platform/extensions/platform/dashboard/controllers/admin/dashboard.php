@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,25 +19,70 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
 use Platform\Menus\Menu;
 
+
+/**
+ * --------------------------------------------------------------------------
+ * Dashboard > Admin Class
+ * --------------------------------------------------------------------------
+ * 
+ * The admin main page.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.1
+ */
 class Dashboard_Admin_Dashboard_Controller extends Admin_Controller
 {
+    /**
+     * --------------------------------------------------------------------------
+     * Function: before()
+     * --------------------------------------------------------------------------
+     *
+     * This function is called before the action is executed.
+     *
+     * @access   public
+     * @return   void
+     */
+    public function before()
+    {
+        // Call parent.
+        //
+        parent::before();
 
-	/**
-	 * This function is called before the action is executed.
-	 *
-	 * @return void
-	 */
-	public function before()
-	{
-		parent::before();
+        // Set the active menu.
+        //
 		$this->active_menu('admin-dashboard');
 	}
 
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: get_index()
+     * --------------------------------------------------------------------------
+     *
+     * Shows the admin main page.
+     *
+     * @access   public
+     * @return   View
+     */
 	public function get_index()
 	{
+		// Show the page.
+		//
 		return Theme::make('dashboard::index');
 	}
-
 }
+
+/* End of file dashboard.php */
+/* Location: ./platform/extensions/platform/dashboard/controllers/admin/dashboard.php */

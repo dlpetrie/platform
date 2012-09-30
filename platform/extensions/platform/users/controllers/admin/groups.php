@@ -129,10 +129,10 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 				Platform::messages()->error($error);
 			}
 
-			return Redirect::to_secure(ADMIN.'/users/groups/'.(($id) ? 'edit/'.$id : 'create'))->with_input();
+			return Redirect::to_admin('users/groups/'.(($id) ? 'edit/'.$id : 'create'))->with_input();
 		}
 
-		return Redirect::to_secure(ADMIN.'/users/groups');
+		return Redirect::to_admin('users/groups');
 	}
 
 	/**
@@ -157,7 +157,7 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 			}
 		}
 
-		return Redirect::to(ADMIN.'/users/groups');
+		return Redirect::to_admin('users/groups');
 	}
 
 	/**
@@ -170,7 +170,7 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 		if ( ! $id)
 		{
 			Platform::messages()->error(Lang::line('users::messages.groups.id_required')->get());
-			return Redirect::to_secure(ADMIN.'/users/groups');
+			return Redirect::to_admin('users/groups');
 		}
 
 		$permissions = Input::get();
@@ -209,10 +209,10 @@ class Users_Admin_Groups_Controller extends Admin_Controller
 				Platform::messages()->error($error);
 			}
 
-			return Redirect::to_secure(ADMIN.'/users/groups/edit/'.$id)->with_input();
+			return Redirect::to_admin('users/groups/edit/'.$id)->with_input();
 		}
 
-		return Redirect::to_secure(ADMIN.'/users/groups');
+		return Redirect::to_admin('users/groups');
 	}
 
 }

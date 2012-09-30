@@ -461,7 +461,7 @@ class Users_API_Users_Controller extends API_Controller
 				// Get the Swift Mailer instance
 				$mailer = IoC::resolve('mailer');
 
-				$link = URL::to(ADMIN.'/reset_password_confirm/'.$reset['link']);
+				$link = URL::to_admin('reset_password_confirm/'.$reset['link']);
 
 				// Get email
 				$body = File::get(path('public').'platform'.DS.'emails'.DS.'reset_password.html');

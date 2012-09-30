@@ -65,7 +65,7 @@ class Extensions_Add_Class_To_Menus
 		$admin      = Menu::admin_menu();
 		$admin_tree = $admin->{Menu::nesty_col('tree')};
 
-		// Update groups list link.
+		// Update the extensions class.
 		//
 		$extensions = Menu::find(function($query) use ($admin_tree)
 		{
@@ -93,11 +93,13 @@ class Extensions_Add_Class_To_Menus
      */
 	public function down()
 	{
-		// Get hte admin menu
+		// Get the admin menu.
+		//
 		$admin      = Menu::admin_menu();
 		$admin_tree = $admin->{Menu::nesty_col('tree')};
 
-		// Update groups list link
+		// Update groups list class.
+		//
 		$extensions = Menu::find(function($query) use ($admin_tree)
 		{
 			return $query->where('slug', '=', 'admin-extensions')

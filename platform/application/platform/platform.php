@@ -672,19 +672,6 @@ class Platform
         //
         return File::get( path('licenses') . DS . $file);
     }
-
-######
-
-    // Extend the URL class to remove this.
-    //
-    public static function url($path = null)
-    {
-        $url_home = URL::home();
-
-        $parse = parse_url($url_home);
-
-        return str_finish($parse['path'].$path, '/');
-    }
 }
 
 /* End of file platform.php */

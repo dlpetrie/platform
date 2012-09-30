@@ -46,7 +46,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 				Platform::messages()->error($error);
 			}
 
-			return Redirect::to(ADMIN);
+			return Redirect::to_admin();
 		}
 
 		return Theme::make('menus::index')
@@ -85,7 +85,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 					Platform::messages()->error($error);
 				}
 
-				return Redirect::to_secure(ADMIN.'/menus');
+				return Redirect::to_admin('menus');
 			}
 		}
 		else
@@ -171,7 +171,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 				), API::STATUS_BAD_REQUEST);
 			}
 
-			return Redirect::to_secure(ADMIN.'/menus'.(($slug) ? '/edit/'.$slug : null));
+			return Redirect::to_admin('menus'.(($slug) ? '/edit/'.$slug : null));
 		}
 
 		// Prepare our children
@@ -230,7 +230,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 				Platform::messages()->error($error);
 			}
 
-			return Redirect::to_secure(ADMIN.'/menus'.(($slug) ? '/edit/'.$slug : null));
+			return Redirect::to_admin('menus'.(($slug) ? '/edit/'.$slug : null));
 		}
 
 
@@ -239,7 +239,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 			return new Response(null, API::STATUS_NO_CONTENT);
 		}
 
-		return Redirect::to_secure(ADMIN.'/menus');
+		return Redirect::to_admin('menus');
 	}
 
 	public function get_delete($slug)
@@ -258,7 +258,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 			}
 		}
 
-		return Redirect::to_secure(ADMIN.'/menus');
+		return Redirect::to_admin('menus');
 	}
 
 	/**

@@ -3,7 +3,7 @@
 	@if (URL::valid($item['uri']))
 		<a href="{{ $item['uri'] }}"}}
 	@else
-		<a href="{{ URL::to(($before_uri ? $before_uri.'/' : null).$item['uri'], $item['secure']) }}" target="{{ ($item['target'] == 0) ? '_self' : '_blank' }}">
+		<a href="{{ URL::to_admin(($before_uri ? $before_uri.'/' : null).$item['uri'], $item['secure']) }}" target="{{ ($item['target'] == 0) ? '_self' : '_blank' }}">
 	@endif
 
 		@if ($item['class'])

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Platform application.
  *
@@ -18,21 +19,47 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
 use Platform\Menus\Menu;
 
+
+/**
+ * --------------------------------------------------------------------------
+ * Install Class
+ * --------------------------------------------------------------------------
+ * 
+ * Menus installation.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ */
 class Menus_Install
 {
-
-	/**
-	 * Make changes to the database.
-	 *
-	 * @return void
-	 */
+    /**
+     * --------------------------------------------------------------------------
+     * Function: up()
+     * --------------------------------------------------------------------------
+     *
+     * Make changes to the database.
+     *
+     * @access   public
+     * @return   void
+     */
 	public function up()
 	{
-		/* # Create Menu Table
-		================================================== */
-
+        /*
+         * --------------------------------------------------------------------------
+         * # 1) Create the menus table.
+         * --------------------------------------------------------------------------
+         */
 		Schema::create('menus', function($table)
 		{
 			$table->increments('id')->unsigned();
@@ -50,13 +77,18 @@ class Menus_Install
 			$table->boolean('status');
 		});
 
-		/* # Create Menu Items
-		================================================== */
 
-		// Create admin menu
+        /*
+         * --------------------------------------------------------------------------
+         * # 2) Create the menu items.
+         * --------------------------------------------------------------------------
+         */
+		// Create the admin menu.
+		//
 		$admin = Menu::admin_menu();
 
-		// Create system link
+		// Create the system link.
+		//
 		$system = new Menu(array(
 			'name'          => 'System',
 			'extension'     => '',
@@ -65,10 +97,10 @@ class Menus_Install
 			'user_editable' => 0,
 			'status'        => 1,
 		));
-
 		$system->last_child_of($admin);
 
-		// Create menus link
+		// Create the menus link.
+		//
 		$menus = new Menu(array(
 			'name'          => 'Menus',
 			'extension'     => 'menus',
@@ -77,13 +109,14 @@ class Menus_Install
 			'user_editable' => 0,
 			'status'        => 1,
 		));
-
 		$menus->last_child_of($system);
 
-		// Create main menu
+		// Create the main link.
+		//
 		$main = Menu::main_menu();
 
-		// Create home link
+		// Create the home link.
+		//
 		$home = new Menu(array(
 			'name'          => 'Home',
 			'extension'     => '',
@@ -93,10 +126,10 @@ class Menus_Install
 			'user_editable' => 1,
 			'status'        => 1,
 		));
-
 		$home->last_child_of($main);
 
-		// Create login link
+		// Create the login link.
+		//
 		$login = new Menu(array(
 			'name'          => 'Login',
 			'extension'     => '',
@@ -106,10 +139,10 @@ class Menus_Install
 			'user_editable' => 1,
 			'status'        => 1,
 		));
-
 		$login->last_child_of($main);
 
-		// Create logout link
+		// Create the logout link.
+		//
 		$logout = new Menu(array(
 			'name'          => 'Logout',
 			'extension'     => '',
@@ -119,10 +152,10 @@ class Menus_Install
 			'user_editable' => 1,
 			'status'        => 1,
 		));
-
 		$logout->last_child_of($main);
 
-		// Create register link
+		// Create the register link.
+		//
 		$register = new Menu(array(
 			'name'          => 'Register',
 			'extension'     => '',
@@ -132,10 +165,10 @@ class Menus_Install
 			'user_editable' => 1,
 			'status'        => 1,
 		));
-
 		$register->last_child_of($main);
 
-		// Create admin dashboard link
+		// Create the admin dashboard link.
+		//
 		$register = new Menu(array(
 			'name'          => 'Admin Dashboard',
 			'extension'     => '',
@@ -145,20 +178,25 @@ class Menus_Install
 			'user_editable' => 1,
 			'status'        => 1,
 		));
-
 		$register->last_child_of($main);
-
-
 	}
 
-	/**
-	 * Revert the changes to the database.
-	 *
-	 * @return void
-	 */
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: down()
+     * --------------------------------------------------------------------------
+     *
+     * Revert the changes to the database.
+     *
+     * @access   public
+     * @return   void
+     */
 	public function down()
 	{
 		Schema::drop('menus');
 	}
-
 }
+
+/* End of file 2012_05_15_045038_install.php */
+/* Location: ./platform/extensions/platform/menus/migrations/2012_05_15_045038_install.php */

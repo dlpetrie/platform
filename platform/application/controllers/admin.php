@@ -46,7 +46,7 @@ class Admin_Controller extends Authorized_Controller
 		// Now check to make sure they have bundle specific permissions
 		if ( ! Sentry::user()->has_access())
 		{
-			return Redirect::to(ADMIN.'/insufficient_permissions')->send();
+			return Redirect::to_admin('insufficient_permissions')->send();
 			exit;
 		}
 

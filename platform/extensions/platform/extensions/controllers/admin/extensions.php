@@ -109,7 +109,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
             // Redirect to the admin dashboard.
             //
-            return Redirect::to_secure(ADMIN);
+            return Redirect::to_admin();
         }
 
         // Show the page.
@@ -159,7 +159,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
         // Redirect to the extensions page.
         //
-        return Redirect::to(ADMIN . '/extensions');
+        return Redirect::to_admin('extensions');
     }
 
 
@@ -202,7 +202,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
         // Redirect to the extensions page.
         //
-        return Redirect::to_secure(ADMIN . '/extensions');
+        return Redirect::to_admin('extensions');
     }
 
 
@@ -245,7 +245,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
         // Redirect to the extensions page.
         //
-        return Redirect::to_secure(ADMIN . '/extensions');
+        return Redirect::to_admin('extensions');
     }
 
 
@@ -288,7 +288,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
         // Redirect to the extensions page.
         //
-        return Redirect::to_secure(ADMIN . '/extensions');
+        return Redirect::to_admin('extensions');
     }
 
 
@@ -334,7 +334,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
         // Redirect to the extensions page.
         //
-        return Redirect::to_secure(ADMIN.  '/extensions');
+        return Redirect::to_admin('extensions');
     }
 
 
@@ -380,7 +380,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
         // Redirect to the extensions page.
         //
-        return Redirect::to_secure(ADMIN . '/extensions');
+        return Redirect::to_admin('extensions');
     }
 
 
@@ -419,7 +419,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
             // Redirect to the extensions page.
             //
-            return Redirect::to_secure(ADMIN . '/extensions');
+            return Redirect::to_admin('extensions');
         }
 
         // Show the page.
@@ -479,7 +479,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
         // Redirect to the extension page.
         //
-        return Redirect::to(ADMIN . '/extensions/view/' . $slug);
+        return Redirect::to_admin('extensions/view/' . $slug);
     }
 }
 
