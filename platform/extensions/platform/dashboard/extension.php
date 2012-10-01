@@ -26,18 +26,18 @@
  * --------------------------------------------------------------------------
  */
 return array(
-	/*
+    /*
      * -----------------------------------------
-	 * Extension information.
+     * Extension information.
      * -----------------------------------------
-	 */
-	'info' => array(
-		'name'        => 'Dashboard',
-		'author'      => 'Cartalyst LLC',
-		'description' => 'The main admin screen. The center of your website\'s adminstration.',
-		'version'     => '1.1',
-		'is_core'     => true
-	),
+     */
+    'info' => array(
+        'name'        => 'Dashboard',
+        'author'      => 'Cartalyst LLC',
+        'description' => 'The main admin screen. The center of your website\'s adminstration.',
+        'version'     => '1.1',
+        'is_core'     => true
+    ),
 
 
     /*
@@ -45,11 +45,11 @@ return array(
      * Extension dependencies.
      * -----------------------------------------
      */
-	'dependencies' => array(
-		'menus',
-		'users',
-		'settings'
-	)
+    'dependencies' => array(
+        'menus',
+        'users',
+        'settings'
+    )
 );
 
 /* End of file extension.php */

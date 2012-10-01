@@ -28,31 +28,31 @@ $reserved = array('active', 'active_path');
  */
 Route::any(array(API.'/menus/((?!'.implode('|', $reserved).').*)/children/flat', API.'/menus/flat'), function($slug = false)
 {
-	return Controller::call('menus::api.menus@flat', array($slug));
+    return Controller::call('menus::api.menus@flat', array($slug));
 });
 
 /**
  * Route /api/menus/:children
  *
- *	<code>
- *		/api/menus/admin/children => menus::menus.api@children(admin)
- *	</code>
+ *    <code>
+ *        /api/menus/admin/children => menus::menus.api@children(admin)
+ *    </code>
  */
 Route::any(API.'/menus/((?!'.implode('|', $reserved).').*)/children', function($slug = null)
 {
-	return Controller::call('menus::api.menus@children', array($slug));
+    return Controller::call('menus::api.menus@children', array($slug));
 });
 
 /**
  * Route /api/menus/:menu
  *
- *	<code>
- *		/api/menus/admin => menus::menus.api@index(admin)
- *	</code>
+ *    <code>
+ *        /api/menus/admin => menus::menus.api@index(admin)
+ *    </code>
  */
 Route::any(API.'/menus/((?!'.implode('|', $reserved).').*)', function($slug = null)
 {
-	return Controller::call('menus::api.menus@index', array($slug));
+    return Controller::call('menus::api.menus@index', array($slug));
 });
 
 // Unset the $reserved variable

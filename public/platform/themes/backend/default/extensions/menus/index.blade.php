@@ -22,17 +22,17 @@
 @section('content')
 <section id ="menus">
 
-	<header class="row">
-			<div class="span4">
-				<h1>{{ Lang::line('menus::general.title') }}</h1>
-				<p>{{ Lang::line('menus::general.description') }}</p>
-			</div>
-			<nav class="actions span8 pull-right">
-				{{ HTML::link_to_secure(ADMIN.'/menus/create', Lang::line('button.create'), array('class' => 'btn btn-large btn-primary')) }}
-			</nav>
+	<header class="row-fluid">
+		<div class="span8">
+			<h1>{{ Lang::line('menus::general.title') }}</h1>
+			<p>{{ Lang::line('menus::general.description') }}</p>
+		</div>
+		<nav class="actions span4 pull-right">
+			{{ HTML::link_to_secure(ADMIN.'/menus/create', Lang::line('button.create'), array('class' => 'btn btn-large btn-primary')) }}
+		</nav>
 	</header>
 
-	<hr>
+	<hr />
 
 	<table class="table table-bordered">
 		<thead>

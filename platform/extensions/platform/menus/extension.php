@@ -26,18 +26,18 @@
  * --------------------------------------------------------------------------
  */
 return array(
-	/*
+    /*
      * -----------------------------------------
-	 * Extension information.
+     * Extension information.
      * -----------------------------------------
-	 */
-	'info' => array(
-		'name'        => 'Menus',
-		'author'      => 'Cartalyst LLC',
-		'description' => 'Manages all menus throughout the website admin.',
-		'version'     => '1.1',
-		'is_core'     => true
-	),
+     */
+    'info' => array(
+        'name'        => 'Menus',
+        'author'      => 'Cartalyst LLC',
+        'description' => 'Manages all menus throughout the website admin.',
+        'version'     => '1.1',
+        'is_core'     => true
+    ),
 
 
     /*
@@ -45,11 +45,11 @@ return array(
      * Events
      * -----------------------------------------
      */
-	'events' => array(
-		'menu.create',
-		'menu.update',
-		'menu.delete'
-	),
+    'events' => array(
+        'menu.create',
+        'menu.update',
+        'menu.delete'
+    ),
 
 
     /*
@@ -57,12 +57,12 @@ return array(
      * Rules
      * -----------------------------------------
      */
-	'rules' => array(
-		'menus::admin.menus@index',
-		'menus::admin.menus@create',
-		'menus::admin.menus@edit',
-		'menus::admin.menus@delete'
-	)
+    'rules' => array(
+        'menus::admin.menus@index',
+        'menus::admin.menus@create',
+        'menus::admin.menus@edit',
+        'menus::admin.menus@delete'
+    )
 );
 
 /* End of file extension.php */

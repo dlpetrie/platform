@@ -26,7 +26,7 @@
  * --------------------------------------------------------------------------
  */
 Autoloader::namespaces(array(
-	'Dashboard' => __DIR__ . DS . 'models'
+    'Dashboard' => __DIR__ . DS . 'models'
 ));
 
 /* End of file start.php */

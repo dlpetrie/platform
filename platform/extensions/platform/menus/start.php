@@ -26,8 +26,8 @@
  * --------------------------------------------------------------------------
  */
 Autoloader::namespaces(array(
-	'Platform\\Menus\\Widgets' => __DIR__ . DS . 'widgets',
-	'Platform\\Menus'          => __DIR__ . DS . 'models'
+    'Platform\\Menus\\Widgets' => __DIR__ . DS . 'widgets',
+    'Platform\\Menus'          => __DIR__ . DS . 'models'
 ));
 
 /* End of file start.php */

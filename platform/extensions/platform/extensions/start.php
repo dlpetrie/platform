@@ -26,7 +26,7 @@
  * --------------------------------------------------------------------------
  */
 Autoloader::namespaces(array(
-	'Extensions' => __DIR__ . DS . 'models'
+    'Extensions' => __DIR__ . DS . 'models'
 ));
 
 /* End of file start.php */

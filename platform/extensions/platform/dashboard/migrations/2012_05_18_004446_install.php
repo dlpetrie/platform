@@ -53,24 +53,24 @@ class Dashboard_Install
      * @access   public
      * @return   void
      */
-	public function up()
-	{
+    public function up()
+    {
         /*
          * --------------------------------------------------------------------------
          * # 1) Create the menus.
          * --------------------------------------------------------------------------
          */
-		$admin_menu = Menu::admin_menu();
-		$dashboard = new Menu(array(
-			'name'          => 'Dashboard',
-			'extension'     => 'dashboard',
-			'slug'          => 'admin-dashboard',
-			'uri'           => 'dashboard',
-			'user_editable' => 0,
-			'status'        => 1
-		));
-		$dashboard->first_child_of($admin_menu);
-	}
+        $admin_menu = Menu::admin_menu();
+        $dashboard = new Menu(array(
+            'name'          => 'Dashboard',
+            'extension'     => 'dashboard',
+            'slug'          => 'admin-dashboard',
+            'uri'           => 'dashboard',
+            'user_editable' => 0,
+            'status'        => 1
+        ));
+        $dashboard->first_child_of($admin_menu);
+    }
 
 
     /**
@@ -83,10 +83,10 @@ class Dashboard_Install
      * @access   public
      * @return   void
      */
-	public function down()
-	{
+    public function down()
+    {
 
-	}
+    }
 }
 
 /* End of file 2012_05_18_004446_install.php */

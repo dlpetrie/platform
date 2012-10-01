@@ -26,8 +26,8 @@
  * --------------------------------------------------------------------------
  */
 return array(
-	'title'       => 'Platform Dashboard',
-	'description' => 'Application Overview'
+    'title'       => 'Platform Dashboard',
+    'description' => 'Application Overview'
 );
 
 /* End of file general.php */

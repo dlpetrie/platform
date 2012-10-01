@@ -53,32 +53,32 @@ class Extensions_Add_Class_To_Menus
      * @access   public
      * @return   void
      */
-	public function up()
-	{
+    public function up()
+    {
         /*
          * --------------------------------------------------------------------------
          * # 1) Update the menu items.
          * --------------------------------------------------------------------------
          */
-		// Get the admin menu.
-		//
-		$admin      = Menu::admin_menu();
-		$admin_tree = $admin->{Menu::nesty_col('tree')};
+        // Get the admin menu.
+        //
+        $admin      = Menu::admin_menu();
+        $admin_tree = $admin->{Menu::nesty_col('tree')};
 
-		// Update the extensions class.
-		//
-		$extensions = Menu::find(function($query) use ($admin_tree)
-		{
-			return $query->where('slug', '=', 'admin-extensions')
-			             ->where(Menu::nesty_col('tree'), '=', $admin_tree);
-		});
+        // Update the extensions class.
+        //
+        $extensions = Menu::find(function($query) use ($admin_tree)
+        {
+            return $query->where('slug', '=', 'admin-extensions')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_tree);
+        });
 
-		if ($extensions)
-		{
-			$extensions->class = 'icon-leaf';
-			$extensions->save();
-		}
-	}
+        if ($extensions)
+        {
+            $extensions->class = 'icon-leaf';
+            $extensions->save();
+        }
+    }
 
 
     /**
@@ -91,27 +91,27 @@ class Extensions_Add_Class_To_Menus
      * @access   public
      * @return   void
      */
-	public function down()
-	{
-		// Get the admin menu.
-		//
-		$admin      = Menu::admin_menu();
-		$admin_tree = $admin->{Menu::nesty_col('tree')};
+    public function down()
+    {
+        // Get the admin menu.
+        //
+        $admin      = Menu::admin_menu();
+        $admin_tree = $admin->{Menu::nesty_col('tree')};
 
-		// Update groups list class.
-		//
-		$extensions = Menu::find(function($query) use ($admin_tree)
-		{
-			return $query->where('slug', '=', 'admin-extensions')
-			             ->where(Menu::nesty_col('tree'), '=', $admin_tree);
-		});
+        // Update groups list class.
+        //
+        $extensions = Menu::find(function($query) use ($admin_tree)
+        {
+            return $query->where('slug', '=', 'admin-extensions')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_tree);
+        });
 
-		if ($extensions)
-		{
-			$extensions->class = '';
-			$extensions->save();
-		}
-	}
+        if ($extensions)
+        {
+            $extensions->class = '';
+            $extensions->save();
+        }
+    }
 }
 
 /* End of file 2012_09_08_105000_add_class_to_menus.php */

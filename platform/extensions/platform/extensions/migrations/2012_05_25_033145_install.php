@@ -53,8 +53,8 @@ class Extensions_Install
      * @access   public
      * @return   void
      */
-	public function up()
-	{
+    public function up()
+    {
         /*
          * --------------------------------------------------------------------------
          * # 1) Create the menus.
@@ -72,7 +72,7 @@ class Extensions_Install
             'status'        => 1
         ));
         $extensions->last_child_of( $system );
-	}
+    }
 
 
     /**
@@ -85,10 +85,10 @@ class Extensions_Install
      * @access   public
      * @return   void
      */
-	public function down()
-	{
+    public function down()
+    {
 
-	}
+    }
 }
 
 /* End of file 2012_05_25_033145_install.php */

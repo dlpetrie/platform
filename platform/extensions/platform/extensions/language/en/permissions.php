@@ -20,18 +20,18 @@
 
 return array(
 
-	'admin' => array(
-		'_title_' => 'Admin Extensions',
+    'admin' => array(
+        '_title_' => 'Admin Extensions',
 
-		'extensions' => array(
-			'_title_'   => 'Admin Extensions',
-			'index'     => 'View',
-			'install'   => 'Install',
-			'uninstall' => 'Uninstall',
-			'enable'    => 'Enable',
-			'disable'   => 'Disable',
-			'update'    => 'Update',
-		),
-	),
+        'extensions' => array(
+            '_title_'   => 'Admin Extensions',
+            'index'     => 'View',
+            'install'   => 'Install',
+            'uninstall' => 'Uninstall',
+            'enable'    => 'Enable',
+            'disable'   => 'Disable',
+            'update'    => 'Update',
+        ),
+    ),
 
 );

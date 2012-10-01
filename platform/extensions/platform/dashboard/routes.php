@@ -19,4 +19,13 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * Routes detection.
+ * --------------------------------------------------------------------------
+ */
 Route::controller(Controller::detect('dashboard'));
+
+/* End of file routes.php */
+/* Location: ./platform/extensions/platform/dashboard/routes.php */

@@ -62,8 +62,8 @@ class Dashboard_Admin_Dashboard_Controller extends Admin_Controller
 
         // Set the active menu.
         //
-		$this->active_menu('admin-dashboard');
-	}
+        $this->active_menu('admin-dashboard');
+    }
 
 
     /**
@@ -76,12 +76,12 @@ class Dashboard_Admin_Dashboard_Controller extends Admin_Controller
      * @access   public
      * @return   View
      */
-	public function get_index()
-	{
-		// Show the page.
-		//
-		return Theme::make('dashboard::index');
-	}
+    public function get_index()
+    {
+        // Show the page.
+        //
+        return Theme::make('dashboard::index');
+    }
 }
 
 /* End of file dashboard.php */
