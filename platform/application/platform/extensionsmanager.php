@@ -1043,40 +1043,21 @@ class ExtensionsManager
         //
         $this->start($slug);
 
-        // Get this extension migration files.
+        // Get the migrations of this extension that were executed.
         //
-        $files = glob( Bundle::path( $slug ) . 'migrations' . DS . '*_*' . EXT );
+        $migrations = DB::table('laravel_migrations')->where('bundle', '=', $slug)->order_by('name', 'DESC')->get();
 
-        // When open_basedir is enabled, glob will return false on an
-        // empty directory, so we will return an empty array in this
-        // case so the application doesn't bomb out.
-        if ( $files === false )
+        // Loop through the installed migrations.
+        //
+        foreach ( $migrations as $migration )
         {
-            return array();
-        }
-
-        // Remove the PHP extension from the files.
-        //
-        foreach ( $files as &$file )
-        {
-            $file = str_replace(EXT, '', basename($file));
-        }
-
-        // Sort the files.
-        //
-        sort($files);
-
-        // Spin through files.
-        //
-        foreach ( array_reverse( $files ) as $file )
-        {
-            // Include the file.
+            // Include the migration file.
             //
-            require_once Bundle::path($slug) . 'migrations' . DS . $file . EXT;
+            require_once Bundle::path($slug) . 'migrations' . DS . $migration->name . EXT;
 
             // Prepare the class name.
             //
-            $class = Bundle::class_prefix($slug) . \Laravel\Str::classify( substr( $file, 18 ) );
+            $class = Bundle::class_prefix($slug) . \Laravel\Str::classify( substr( $migration->name, 18 ) );
 
             // Initiate the migration class.
             //
