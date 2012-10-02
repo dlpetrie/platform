@@ -33,8 +33,8 @@
 		// Toggle Checkboxes.
 		$('.toggle').toggle({
 			style: {
-				enabled: 'success',
-				disabled: 'danger'
+				enabled  : 'success',
+				disabled : 'danger'
 			}
 		});
 
@@ -48,36 +48,53 @@
 
 			// Define Nesty Sortable dependency for the menu sortable.
 			nestySortable: {
-				fields           : [
-					{
-						name        : 'name',
-						newSelector : '#new-child-name'
+
+				/**
+				 * An object containing all the fields for the
+				 * Nesty Sortable. Each key in the object represents
+				 * the field's slug. Each field has a unique slug.
+				 * Each value in the object is an object containing
+				 * specifications for the field:
+				 *
+				 *   - newSelector: This is the selector string (or jQuery object)
+				 *                  representing the DOM object for a each new sortable
+				 *                  object.
+				 *
+				 * <code>
+				 *		{
+				 *			'my_field_slug' : {
+				 *				newSelector : '.new-item-my-field'
+				 *			}
+				 *		}
+				 * </code>
+				 */
+				fields : {
+					'name' : {
+						newSelector: '#new-child-name'
 					},
-					{
-						name        : 'slug',
-						newSelector : '#new-child-slug'
+					'slug' : {
+						newSelector: '#new-child-slug'
 					},
-					{
-						name        : 'uri',
-						newSelector : '#new-child-uri'
+					'uri' : {
+						newSelector: '#new-child-uri'
 					},
-					{
-						name        : 'secure',
-						newSelector : '#new-child-secure'
+					'secure' : {
+						newSelector: '#new-child-secure'
 					},
-					{
-						name        : 'visibility',
-						newSelector : '#new-child-visibility'
+					'visibility' : {
+						newSelector: '#new-child-visibility'
 					},
-					{
-						name        : 'target',
-						newSelector : '#new-child-target'
+					'target' : {
+						newSelector: '#new-child-target'
 					},
-					{
-						name 		: 'class',
-						newSelector	: '#new-child-class'
+					'class' : {
+						newSelector: '#new-child-class'
 					}
-				],
+				},
+
+				// The ID of the last item added. Used so we fill
+				// new templates with an ID that won't clash with existing
+				// items.
 				lastItemId           : {{ $last_child_id }}
 			}
 		})
