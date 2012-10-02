@@ -63,35 +63,26 @@
 
 				// The selector for the sortable list,
 				// used to cache the sortable list property
-				sortableSelector : '.menu-children',
+				sortableSelector    : '.menu-children',
+				itemSelector        : '.child',
+				itemDetailsSelector : '.child-details',
+				itemRemoveSelector  : '.child-remove',
+				itemAddSelector     : '.children-add-new',
 
-				// Is the form to AJAX submit or tranditional
-				// submit?
-				ajax             : false,
-
-				// Selectors relating to items, but aren't
-				// located inside each item in the DOM
-				itemAddButtonSelector        : '.children-add-new',
+				// Invalid field callback - must return true for valid
+				// field or false for invalid field.
+				invalidFieldCallback : function(slug, field, value) {
+					alert(slug+' '+value);
+					$(field.newSelector).closest('.control-group').addClass('error');
+				},
 
 				// This is the selector for the new item's template.
 				// This container should be hidden at all times as we
 				// clone the HTML inside of this, apply the template and
 				// then attach that to the end of the list.
-				itemTemplateContainerSelector : '.new-child-template-container',
-				itemTemplateSelector          : '.new-child-template',
-
-				// Selectors for DOM elements for each active
-				// item.
-				itemSelector              : '.child',
-				itemHandleSelector        : '.child-header',
-				itemToggleDetailsSelector : '.child-toggle-details',
-				itemDetailsSelector       : '.child-details',
-				itemRemoveSelector        : '.child-remove',
-
-				// Invalid field callback - must return true for valid
-				// field or false for invalid field.
-				invalidFieldCallback : function(field, value) {
-					$(field.newSelector).closest('.control-group').addClass('error');
+				template : {
+					containerSelector : '.new-child-template-container',
+					selector          : '.new-child-template'
 				},
 
 				// The input name for the items

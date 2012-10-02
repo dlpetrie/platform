@@ -209,7 +209,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
         {
             $persisted_slugs[] = array_get($child, 'slug');
         }
-        sort($persisted_slugs);
+        sort($persisted_slugs); // Purely for debugging on JS end really.
 
         // Prepare the data to be sended to the page.
         //
@@ -270,6 +270,12 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 
         foreach ($input_hierarchy as $child)
         {
+            // Ensure no bad data is coming through from POST
+            if ( ! is_array($child))
+            {
+                continue;
+            }
+
             $this->process_child_recursively($child, $children);
         }
 

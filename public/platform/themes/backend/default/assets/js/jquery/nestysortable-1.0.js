@@ -1,333 +1,230 @@
 (function() {
-	
-	/**
-	 * NestySortable object.
-	 *
-	 * @todo Add more validation support for
-	 *       new items...
-	 */
-	var NestySortable = {
 
-		// Settings for this instance
-		settings: {
+	var NestySortable = function(element, options) {
+		if (this === window) {
+			return new NestySortable(element, options);
+		}
+
+		// Check dependencies
+		if ( ! $().nestedSortable) {
+			$.error('$.nestySortable requires $.nestedSortable');
+		}
+		if (typeof Tempo === 'undefined') {
+			$.error('TempoJS is a dependency for $.portfolio');
+		}
+
+		// Default options
+		this.options = {
+
+			// Namespace for the plugin for registering
+			// dom events
+			namespace: 'nestysortable',
 
 			// The selector for the sortable list,
 			// used to cache the sortable list property
-			sortableSelector: null,
+			sortableSelector    : '.items',
+			itemSelector        : '.item',
+			itemDetailsSelector : '.item-details',
+			itemRemoveSelector  : '.item-remove',
+			itemAddSelector     : '.item-add',
 
-			// Is the form to AJAX submit or tranditional
-			// submit?
-			ajax: false,
+			// Options to be passed to $.NestedSortable()
+			sortable : {
+				disableNesting : 'nestysortable-no-nesting',
+				errorClass     : 'nestysortable-error',
+				doNotClear     : false,
+				listType       : 'ol',
+				items          : 'li',
+				maxLevels      : 0,
+				protectRoot    : false,
+				tolerance      : 'pointer',
+				rootID         : null,
+				rtl            : false,
+				tabSize        : 20,
+
+				isAllowed: function(item, parent) { return true; }
+			},
 
 			/**
-			 * An array of fields for the Nesty sortable.
+			 * An object containing all the fields for the
+			 * Nesty Sortable. Each key in the object represents
+			 * the field's slug. Each field has a unique slug.
+			 * Each value in the object is an object containing
+			 * specifications for the field:
+			 *
+			 *   - newSelector: This is the selector string (or jQuery object)
+			 *                  representing the DOM object for a each new sortable
+			 *                  object.
 			 *
 			 * <code>
-			 *		[{ name : 'my_field', newSelector : '.new-item-my-field' }]
+			 *		{
+			 *			'my_field_slug' : {
+			 *				newSelector : '.new-item-my-field'
+			 *			}
+			 *		}
 			 * </code>
-			 *
-			 * @var array
 			 */
-			fields : [],
+			fields : {},
 
-			// Selectors relating to items, but aren't
-			// located inside each item in the DOM
-			itemAddButtonSelector        : '.items-add-new',
-			itemToggleAllDetailsSelector : '.items-toggle-all',
-
-			// JSON encoded string for new item template
-			itemTemplate: '',
-
-			// This is the selector for the new item's template.
-			// This container should be hidden at all times as we
-			// clone the HTML inside of this, apply the template and
-			// then attach that to the end of the list.
-			itemTemplateContainerSelector : '.items-new-template-container',
-			itemTemplateSelector          : '.items-new-template',
+			// Invalid field callback - must return true for valid
+			// field or false for invalid field.
+			invalidFieldCallback : function(slug, field, value) {},
 
 			// The ID of the last item added. Used so we fill
 			// new templates with an ID that won't clash with existing
 			// items.
 			lastItemId: 0,
 
-			// Selectors for DOM elements for each active
-			// item.
-			itemSelector              : '.item',
-			itemHandleSelector        : '.item-header',
-			itemToggleDetailsSelector : '.item-toggle-details',
-			itemDetailsSelector       : '.item-details',
-			itemRemoveSelector        : '.item-remove',
+			// This is the selector for the new item's template.
+			// This container should be hidden at all times as we
+			// clone the HTML inside of this, apply the template and
+			// then attach that to the end of the list.
+			template : {
+				containerSelector : '.items-template-container',
+				selector          : '.items-template',
+				varBraces         : '\\[\\%\\%\\]',
+				tagBraces         : '\\[\\?\\?\\]'
+			},
 
-			// Invalid field callback - must return true for valid
-			// field or false for invalid field.
-			invalidFieldCallback : function(field, value) {},
+			// Is the form to AJAX submit or tranditional
+			// submit?
+			ajax: false,
 
 			// The input name for the items
 			// hierarchy that's posted to
 			// the server.
-			hierarchyInputName: 'items_hierarchy',
+			hierarchyInputName: 'items_hierarchy'
+		}
 
-			// Misc
-			maxLevels     : 0,
-			tabSize       : 20,
-			levelSelector : 'ol',
-			listSelector  : 'li',
+		// Override options
+		$.extend(true, this.options, options);
+		this.$element  = element;
+		this.$sortable = this.$element.find(this.options.sortableSelector);
+		this.$itemAdd  = this.$element.find(this.options.itemAddSelector);
+
+		if ($.isEmptyObject(this.options.fields)) {
+			$.error('No fields provided.');
+		}
+
+		if (this.$sortable.length === 0) {
+			$.error('No sortable list found for selector ['+this.$sortable.selector+']');
+		}
+
+		if (this.$itemAdd.length === 0) {
+			$.error('No add button found for selector ['+this.$itemAdd.selector+']');
+		}
+
+		return this.setupNestedSortable()
+		           .observeAddingItems()
+		           .observeSaving();
+	}
+
+	NestySortable.prototype = {
+
+		setupNestedSortable: function() {
+			var that = this,
+			      ns = this.options.namespace;
+
+			that.$sortable.nestedSortable(that.options.sortable);
+
+			return this;
 		},
 
-		// The form object we call $.nestySortable on
-		elem: null,
-
-		// The sortable list DOM object, cached
-		// for speed
-		_sortable: null,
-
-		// The selector for an item add button
-		_itemAddButton: null,
-
-		/**
-		 * Used to initialise a new instance of
-		 * nestySortable
-		 */
-		init: function(elem, settings) {
-			var self  = this;
-			self.elem = elem;
-
-			$.extend(true, self.settings, settings);
-
-			// Check for NestedSortable
-			if ( ! $().nestedSortable) {
-				$.error('$.nestySortable requires $.nestedSortable');
-			}
-
-			if ( ! window.Tempo) {
-				$.error('$.nestySortable required TempoJS');
-			}
-
-			// Initialise NestedSortable
-			self.sortable().nestedSortable({
-				disableNesting       : 'no-nest',
-				forcePlaceholderSize : true,
-				handle               : self.settings.itemHandleSelector,
-				helper               :'clone',
-				items                : self.settings.listSelector,
-				maxLevels            : self.settings.maxLevels,
-				opacity              : 0.6,
-				placeholder          : 'placeholder',
-				revert               : 250,
-				tabSize              : self.settings.tabSize,
-				tolerance            : 'pointer',
-				toleranceElement     : '> div'
-			});
-
-			// Observers
-			self.observeAddingItems()
-					.observeToggling()
-					.observeRemovingItems()
-					.observeSaving();
-		},
-
-		/**
-		 * Used to retrieve the sortable DOM object.
-		 */
-		sortable: function() {
-			var self = this;
-
-			if ( ! self._sortable) {
-				self._sortable = self.elem.find(self.settings.sortableSelector);
-			}
-
-			return self._sortable;
-		},
-
-		/**
-		 * Used to retrieve the add button DOM object.
-		 */
-		itemAddButton: function() {
-			var self = this;
-
-			if ( ! self._itemAddButton) {
-				self._itemAddButton = self.elem.find(self.settings.itemAddButtonSelector);
-			}
-
-			return self._itemAddButton;
-		},
-
-		/**
-		 * Observe adding items.
-		 */
 		observeAddingItems: function() {
-			var self = this;
+			var that = this,
+			      ns = this.options.namespace;
 
-			// When user clicks on the add item button
-			self.itemAddButton().on('click', function(e) {
+			that.$itemAdd.on('click', function(e) {
 				e.preventDefault();
 
 				// Get the item template
-				var itemTemplate = self.settings.itemTemplate;
+				var template = that.options.template.selector,
+				    valid    = true,
+				    itemId   = ++that.options.lastItemId;
+				    data     = {
+						id      : itemId,
+						raw     : {},
+						control : {}
+					};
 
-				// Select Fields
-				var selectFields = {};
-
-				// Flag for valid itemTemplate
-				var valid = true;
-
-				var itemId               = self.settings.lastItemId + 1;
-				self.settings.lastItemId = itemId;
-
-				// Data for templat
-				var data = {
-					id      : itemId,
-					raw     : {},
-					control : {}
-				};
-
-				// Loop through the defined fields, and replace
-				// the template variables with the value of each
-				// field's selector.
-				for (i in self.settings.fields) {
-
-					// Get some variables
-					var field        = self.settings.fields[i],
-					    $formElement = $(field.newSelector);
+				$.each(that.options.fields, function(slug, field) {
+					var $formElement = $(field.newSelector);
 
 					// Skip non-existent DOM elements
 					if ( ! $formElement.length) {
-						continue;
+						return;
 					}
 
 					// Validate form element
 					if ($formElement.is(':invalid')) {
-						result = self.settings.invalidFieldCallback(field, $formElement.val());
+						result = that.options.invalidFieldCallback(slug, field, $formElement.val());
  
-						if (typeof result !== 'indefined' && valid === true) {
+						if (typeof result !== 'undefined' && valid === true) {
 							valid = Boolean(result);
+
+							// Invalid, break the loop now.
+							if (valid === false) {
+								return false; // Break
+							}
 						}
- 
-						continue;
+
+						return;
 					}
 
 					// Checkboxes have a boolean attribute,
 					// We add 'checked="checked"' to it.
 					if ($formElement.is(':checkbox')) {
-						data.control[field.name] = ($formElement.attr('checked')) ? 'checked="checked"' : '';
+						data.control[slug] = ($formElement.attr('checked')) ? 'checked="checked"' : '';
 					}
 
 					// Selects have a 'data-selected' attribute
-					// on the select element itself
+					// on the select element itthat
 					else if ($formElement.is('select')) {
-						data.control[field.name] = 'data-value="' + $formElement.val() + '"';
+						data.control[slug] = 'data-value="' + $formElement.val() + '"';
 					}
 					else {
-						data.control[field.name] = $formElement.val();
+						data.control[slug] = $formElement.val();
 						rawValue   = $formElement.val();
 					}
 
-					data.raw[field.name] = $formElement.val();
-				}
+					data.raw[slug] = $formElement.val();
+				});
 
 				if (valid !== true) {
 					return false;
 				}
 
+				console.log(data);
+
 				// Get the template
-				var $template = $(self.settings.itemTemplateSelector).clone();
-				$template.appendTo(self.settings.itemTemplateContainerSelector);
-				$template.attr('id', self.settings.itemTemplateSelector+'-'+self.randomString());
+				var $template = $(that.options.template.selector).clone();
+				$template.appendTo(that.options.template.containerSelector)
+				         .attr('id', that.options.template.selector+'-'+that._randomString());
 
 				// Parse with TempoJS
 				Tempo.prepare($template.attr('id'), {
-					'var_braces' : '\\[\\%\\%\\]',
-					'tag_braces' : '\\[\\?\\?\\]'
+					'var_braces' : that.options.template.varBraces,
+					'tag_braces' : that.options.template.tagBraces
 				}).render(data);
 
 				// Append
 				var $templateContents = $template.children('[data-template]');
-				$templateContents.appendTo(self.sortable());
-
-				// Update values if possible
-				$templateContents.find('select').each(function() {
+				$templateContents.appendTo(that.$sortable)
+				                 .find('select').each(function() {
 					var value;
 					if (value = $(this).attr('data-value')) {
-						$(this).val(value);
-						$(this).removeAttr('data-value');
+						$(this).val(value)
+						       .removeAttr('data-value');
 					}
 				});
 
 				// Delete the DOM element
 				$template.remove();
 
-				// Wipe fields
-				for (i in self.settings.fields) {
-					$(self.settings.fields[i].newSelector).val('');
-				}
-			});
-
-			return this;
-		},
-
-		/**
-		 * Observe toggling item details
-		 */
-		observeToggling: function() {
-			var self = this;
-
-			// Observe toggling item details
-			$('body').on('click', self.elem.selector + ' ' + self.settings.itemToggleDetailsSelector, function(e) {
-				e.preventDefault();
-
-				$(this).closest(self.settings.itemSelector)
-							 .find(self.settings.itemDetailsSelector)
-							 .toggleClass('show');
-			});
-
-			// Toggle all item details
-			self.elem.find(self.settings.itemToggleAllDetailsSelector).on('click', function(e) {
-				e.preventDefault();
-
-				self.elem.find(self.settings.itemDetailsSelector)
-								 .toggleClass('show');
-			});
-
-			return this;
-		},
-
-		/**
-		 * Observe removing items
-		 */
-		observeRemovingItems: function() {
-			var self = this;
-
-			// Observe toggling item details
-			$('body').on('click', self.elem.selector + ' ' + self.settings.itemRemoveSelector, function(e) {
-				e.preventDefault();
-
-				// Find the closest item
-				var list = $(this).closest(self.settings.listSelector);
-
-				// Find the next level of list items
-				var level = list.children(self.settings.levelSelector);
-
-				// If there is no child level,
-				// Just remove this item
-				if (level.length == 0) {
-					return list.remove();
-				}
-
-				// Find children
-				var children = level.children(self.settings.listSelector);
-
-				// If there are no children
-				if (children.length == 0) {
-					return;
-				}
-
-				// Now move the children up to be
-				// the next sibling of our list
-				// item
-				children.insertAfter(list);
-
-				// Remove our list item
-				return list.remove();
+				// Loop through fields
+				$.each(that.options.fields, function(slug, field) {
+					$(field.newSelector).val('');
+				});
 			});
 
 			return this;
@@ -337,18 +234,17 @@
 		 * Observes saving the menu.
 		 */
 		observeSaving: function() {
-			var self = this;
+			var that = this,
+			      ns = this.options.namespace;
 
-			// Catch submit button
-			self.elem.find(':submit').on('click', function(e) {
+			// Catch submit button. Remove validation
+			// from new items.
+			that.$element.find(':submit').on('click', function(e) {
 
 				// Loop through the defined fields and remove
 				// validation on them.
-				for (i in self.settings.fields) {
-
-					// Get some variables
-					var field        = self.settings.fields[i],
-					    $formElement = $(field.newSelector);
+				$.each(that.options.fields, function(slug, field) {
+					var $formElement = $(field.newSelector);
 
 					$formElement.val('');
 
@@ -356,34 +252,35 @@
 						$formElement.attr('data-required', 'required')
 						            .removeAttr('required');
 					}
-				}
+				});
 			});
 
 			// Catch form submission.
-			self.elem.submit(function(e) {
+			that.$element.submit(function(e) {
 
 				// Remove the template from the DOM
 				// so it's not submitted, we'll re-insert
-				// after submit
-				var $template = self.elem.find(self.settings.itemTemplateSelector);
+				// after submit if using AJAX
+				var $template = that.$element.find(that.options.template.selector);
 				$templateClone = $template.clone();
 				$template.remove();
 
-				// If we have fancy button plugin
+				// If we have Bootstrap button plugin
 				if ($().button) {
-					var $submitButton = self.elem.find(':submit');
+					var $submitButton = that.$element.find(':submit');
 				}
 
 				// AJAX form submission
-				if (self.settings.ajax === true) {
+				if (that.options.ajax === true) {
 					e.preventDefault();
 
-					var inputName = self.settings.hierarchyInputName
+					// Get some parameters
+					var inputName = that.options.hierarchyInputName
 					       params = {};
-					params[inputName] = self.sortable().nestedSortable('toHierarchy', {
+					params[inputName] = that.$sortable.nestedSortable('toHierarchy', {
 						attribute: 'data-item'
 					});
-					var postData = $.extend($(this).find('input').serializeObject(), params);
+					var postData = $.extend(that.$element.find('input').serializeObject(), params);
 
 					// AJAX call to save menu
 					$.ajax({
@@ -391,11 +288,15 @@
 						type       : 'POST',
 						data       : postData,
 						beforeSend : function(jqXHR, settings) {
+
+							// If we have Bootstrap button plugin
 							if ($().button) {
 								$submitButton.button('loading');
 							}
 						},
 						success    : function(data, textStatus, jqXHR) {
+
+							// If we have Bootstrap button plugin
 							if ($().button) {
 								$submitButton.button('complete');
 
@@ -406,23 +307,19 @@
 						},
 						error      : function(jqXHR, textStatus, errorThrown) {
 							var response = $.parseJSON(jqXHR.responseText);
-
-							alert(jqXHR.status + ' ' + errorThrown);
+							$.error(jqXHR.status + ' ' + errorThrown);
 						}
 					});
 
 					// If we're using AJAX, put the template back in the DOM.
 					// Traditional form submission doesn't need it again as
 					// we're leaving the page.
-					$templateClone.appendTo(self.settings.itemTemplateContainerSelector);
+					$templateClone.appendTo(that.options.itemTemplateContainerSelector);
 
 					// Loop through the defined fields and re-add
 					// validation back in
-					for (i in self.settings.fields) {
-
-						// Get some variables
-						var field        = self.settings.fields[i],
-						    $formElement = $(field.newSelector);
+					$.each(that.options.fields, function(slug, field) {
+						var $formElement = $(field.newSelector);
 
 						$formElement.val('');
 
@@ -430,42 +327,47 @@
 							$formElement.attr('required', 'required')
 							            .removeAttr('data-required');
 						}
-					}
+					});
 
 					return false;
 				}
 
+				// If we have Bootstrap button plugin
 				if ($().button) {
 					$submitButton.button('loading');
 				}
 
 				// Traditional form submission
-				var postData = self.sortable().nestedSortable('toHierarchy', {
+				var postData = that.$sortable.nestedSortable('toHierarchy', {
 					attribute: 'data-item'
 				});
 
 				// Append input to the form. It's values are JSON encoded..
-				self.elem.append('<input type="hidden" name="' + self.settings.hierarchyInputName + '" value=\'' + JSON.stringify(postData) + '\'>');
+				that.$element.append('<input type="hidden" name="' + that.options.hierarchyInputName + '" value=\'' + JSON.stringify(postData) + '\'>');
 
 				return true;
 			});
+			
+			return this;
 		},
 
-		randomString: function() {
-			var chars = 'abcdefghiklmnopqrstuvwxyz';
-			var string_length = 8;
-			var randomstring = '';
-			for (var i=0; i<string_length; i++) {
+		_randomString: function() {
+			var chars         = 'abcdefghiklmnopqrstuvwxyz',
+			    string_length = 8,
+			    randomstring  = '';
+
+			for (var i = 0; i < string_length; i++) {
 				var rnum = Math.floor(Math.random() * chars.length);
-				randomstring += chars.substring(rnum,rnum+1);
+				randomstring += chars.substring(rnum, rnum + 1);
 			}
-			return randomstring
+
+			return randomstring;
 		}
 	}
 
 	// The actual jquery plugin
 	$.fn.nestySortable = function(settings) {
-		NestySortable.init(this, settings);
+		return new NestySortable(this, settings);
 	}
 
 })(jQuery);
