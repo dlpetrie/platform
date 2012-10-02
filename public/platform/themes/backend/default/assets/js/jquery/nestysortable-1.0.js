@@ -34,6 +34,7 @@
 				errorClass     : 'nestysortable-error',
 				doNotClear     : false,
 				listType       : 'ol',
+				items          : 'li',
 				maxLevels      : 0,
 				protectRoot    : false,
 				tolerance      : 'pointer',
@@ -337,7 +338,7 @@
 				}
 
 				// Traditional form submission
-				var postData = that.sortable().nestedSortable('toHierarchy', {
+				var postData = that.$sortable.nestedSortable('toHierarchy', {
 					attribute: 'data-item'
 				});
 
@@ -362,13 +363,6 @@
 
 			return randomstring;
 		}
-
-		// get sortable() {
-
-		// },
-		// set sortable(value) {
-
-		// }
 	}
 
 	// The actual jquery plugin

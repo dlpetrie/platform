@@ -88,7 +88,7 @@
 				// The input name for the items
 				// hierarchy that's posted to
 				// the server.
-				hierarchyInputName: 'children'
+				hierarchyInputName: 'children_hierarchy'
 			}
 		},
 

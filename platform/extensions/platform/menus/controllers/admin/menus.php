@@ -235,7 +235,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
      */
     public function post_edit( $slug = false )
     {
-        $input_hierarchy = Input::get('children');
+        $input_hierarchy = Input::get('children_hierarchy');
 
         // JSON string on non-AJAX form
         if (is_string($input_hierarchy))
@@ -271,7 +271,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
         foreach ($input_hierarchy as $child)
         {
             // Ensure no bad data is coming through from POST
-            if ( ! is_array($child) or ! array_key_exists('id', $child))
+            if ( ! is_array($child))
             {
                 continue;
             }
