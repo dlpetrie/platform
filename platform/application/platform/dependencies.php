@@ -51,7 +51,7 @@ class Dependencies
      * @param    array
      * @return   array
      */
-    static public function sort( $items = null )
+    public static function sort( $items = null )
     {
         // Make sure we have items.
         //
@@ -88,10 +88,10 @@ class Dependencies
      *
      * This sorts the extensions dependencies.
      *
-     * @access   private
+     * @access   protected
      * @return   array
      */
-    static private function _sort()
+    protected static function _sort()
     {
         // Initiate an empty array, so we can save the sorted dependencies.
         //
