@@ -55,11 +55,14 @@
 			 *   - newSelector: This is the selector string (or jQuery object)
 			 *                  representing the DOM object for a each new sortable
 			 *                  object.
+			 *   - itemSelector: This is the selector string representing the selector
+			 *                   for each Nesty item
 			 *
 			 * <code>
 			 *		{
 			 *			'my_field_slug' : {
-			 *				newSelector : '.new-item-my-field'
+			 *				newSelector  : '#new-item-my-field',
+			 *				itemSelector : '.my-field-input'
 			 *			}
 			 *		}
 			 * </code>
