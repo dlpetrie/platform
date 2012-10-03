@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -47,9 +46,9 @@ class Redirect extends Laravel\Redirect
      * @param    integer
      * @return   mixed
      */
-    public static function back( $status = 302 )
+    public static function back($status = 302)
     {
-        return parent::to_secure( Request::referrer(), $status );
+        return parent::to_secure(Request::referrer(), $status);
     }
 
 
@@ -64,11 +63,8 @@ class Redirect extends Laravel\Redirect
      * @param    string
      * @return   mixed
      */
-    public static function to_admin( $url = null )
+    public static function to_admin($url = null)
     {
-        return parent::to_secure( ADMIN . '/' . $url );
+        return parent::to_secure(ADMIN . '/' . $url);
     }
 }
-
-/* End of file redirect.php */
-/* Location: ./platform/application/platform/core/redirect.php */

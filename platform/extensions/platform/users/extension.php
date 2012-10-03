@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -99,6 +98,3 @@ return array(
 		'users::admin.groups@delete'
 	)
 );
-
-/* End of file extension.php */
-/* Location: ./platform/extensions/platform/users/extension.php */

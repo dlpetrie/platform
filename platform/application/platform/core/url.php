@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -47,13 +46,10 @@ class URL extends Laravel\Url
      * @param    string
      * @return   string
      */
-    public static function to_admin( $url = null )
+    public static function to_admin($url = null)
     {
         // Return the URL.
         //
-        return parent::to_secure( ADMIN . '/' . $url );
+        return parent::to_secure(ADMIN . '/' . $url);
     }
 }
-
-/* End of file url.php */
-/* Location: ./platform/application/platform/core/url.php */

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -28,6 +27,3 @@
  *	</code>
  */
 Route::any(API . '/extensions/(:any)', 'extensions::api.extensions@index');
-
-/* End of file routes.php */
-/* Location: ./platform/extensions/platform/extensions/routes.php */

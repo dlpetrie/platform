@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -74,5 +73,3 @@ return array(
 		'themes::admin.themes@activate'
 	)
 );
-/* End of file extension.php */
-/* Location: ./platform/extensions/platform/themes/extension.php */

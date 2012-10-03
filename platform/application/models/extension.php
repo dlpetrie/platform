@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -27,7 +26,6 @@
  */
 class Extension extends Crud
 {
-
     /**
      * The name of the table associated with the model.
      *
@@ -67,6 +65,3 @@ class Extension extends Crud
         return parent::find($condition, $columns, $events);
     }
 }
-
-/* End of file extension.php */
-/* Location: ./platform/application/models/extension.php */

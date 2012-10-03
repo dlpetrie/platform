@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -88,6 +87,3 @@ class Dashboard_Install
 
     }
 }
-
-/* End of file 2012_05_18_004446_install.php */
-/* Location: ./platform/extensions/platform/dashboard/migrations/2012_05_18_004446_install.php */

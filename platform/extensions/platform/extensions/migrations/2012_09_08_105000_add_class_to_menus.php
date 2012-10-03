@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -113,6 +112,3 @@ class Extensions_Add_Class_To_Menus
         }
     }
 }
-
-/* End of file 2012_09_08_105000_add_class_to_menus.php */
-/* Location: ./platform/extensions/platform/extensions/migrations/2012_09_08_105000_add_class_to_menus.php */

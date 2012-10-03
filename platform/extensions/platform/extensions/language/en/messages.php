@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -74,6 +73,3 @@ return array(
         'bundles'        => 'Every extension.php file must contain a bundles array. None found in :slug'
     )
 );
-
-/* End of file messages.php */
-/* Location: ./platform/extensions/platform/extensions/language/en/messages.php */

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -94,17 +93,17 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
             //
             $extensions = API::get('extensions');
         }
-        catch ( APIClientException $e )
+        catch (APIClientException $e)
         {
             // Set the error message.
             //
-            Platform::messages()->error( $e->getMessage() );
+            Platform::messages()->error($e->getMessage());
 
             // Set all the other error messages.
             //
-            foreach ( $e->errors() as $error )
+            foreach ($e->errors() as $error)
             {
-                Platform::messages()->error( $error );
+                Platform::messages()->error($error);
             }
 
             // Redirect to the admin dashboard.
@@ -133,29 +132,38 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
     {
         // Are we installing an extension ?
         //
-        if ( $slug = Input::get('install') ):
-            $this->get_install( $slug );
+        if ($slug = Input::get('install'))
+        {
+            $this->get_install($slug);
+        }
 
         // Are we uninstalling an extension ?
         //
-        elseif( $slug = Input::get('uninstall') ):
-            $this->get_uninstall( $slug );
+        elseif ($slug = Input::get('uninstall'))
+        {
+            $this->get_uninstall($slug);
+        }
 
         // Are we enabling an extension ?
         //
-        elseif( $slug = Input::get('enable') ):
-            $this->get_enable( $slug );
+        elseif ($slug = Input::get('enable'))
+        {
+            $this->get_enable($slug);
+        }
 
         // Are we disabling an extension ?
         //
-        elseif( $slug = Input::get('disable') ):
-            $this->get_disable( $slug );
+        elseif ($slug = Input::get('disable'))
+        {
+            $this->get_disable($slug);
+        }
 
         // Are we updating an extension ?
         //
-        elseif( $slug = Input::get('update') ):
-            $this->get_update( $slug );
-        endif;
+        elseif ($slug = Input::get('update'))
+        {
+            $this->get_update($slug);
+        }
 
         // Redirect to the extensions page.
         //
@@ -180,23 +188,23 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
         {
             // Make the request.
             //
-            API::put('extensions/' . $slug, array( 'install' => true ));
+            API::put('extensions/' . $slug, array('install' => true));
 
             // Set the success message.
             //
-            Platform::messages()->success( Lang::line('extensions::messages.install.success', array('extension' => $slug))->get() );
+            Platform::messages()->success(Lang::line('extensions::messages.install.success', array('extension' => $slug))->get());
         }
-        catch ( APIClientException $e )
+        catch (APIClientException $e)
         {
             // Set the error message.
             //
-            Platform::messages()->error( $e->getMessage() );
+            Platform::messages()->error($e->getMessage());
 
             // Set the other error messages.
             //
-            foreach ( $e->errors() as $error )
+            foreach ($e->errors() as $error)
             {
-                Platform::messages()->error( $error );
+                Platform::messages()->error($error);
             }
         }
 
@@ -223,23 +231,23 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
         {
             // Make the request.
             //
-            API::put('extensions/' . $slug, array( 'uninstall' => true ));
+            API::put('extensions/' . $slug, array('uninstall' => true));
 
             // Set the success message.
             //
-            Platform::messages()->success( Lang::line('extensions::messages.uninstall.success', array('extension' => $slug))->get() );
+            Platform::messages()->success(Lang::line('extensions::messages.uninstall.success', array('extension' => $slug))->get());
         }
-        catch ( APIClientException $e )
+        catch (APIClientException $e)
         {
             // Set the error message.
             //
-            Platform::messages()->error( $e->getMessage() );
+            Platform::messages()->error($e->getMessage());
 
             // Set the other error messages.
             //
-            foreach ( $e->errors() as $error )
+            foreach ($e->errors() as $error)
             {
-                Platform::messages()->error( $error );
+                Platform::messages()->error($error);
             }
         }
 
@@ -266,23 +274,23 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
         {
             // Make tue request.
             //
-            API::put('extensions/' . $slug, array( 'enable' => true ));
+            API::put('extensions/' . $slug, array('enable' => true));
 
             // Set the success message.
             //
-            Platform::messages()->success( Lang::line('extensions::messages.enable.success', array('extension' => $slug))->get() );
+            Platform::messages()->success(Lang::line('extensions::messages.enable.success', array('extension' => $slug))->get());
         }
-        catch ( APIClientException $e )
+        catch (APIClientException $e)
         {
             // Set the error message.
             //
-            Platform::messages()->error( $e->getMessage() );
+            Platform::messages()->error($e->getMessage());
 
             // Set the other error messages.
             //
-            foreach ( $e->errors() as $error )
+            foreach ($e->errors() as $error)
             {
-                Platform::messages()->error( $error );
+                Platform::messages()->error($error);
             }
         }
 
@@ -309,26 +317,23 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
         {
             // Make tue request.
             //
-            API::put('extensions/' . $slug, array(
-                'installed' => true,
-                'enabled'   => false
-            ));
+            API::put('extensions/' . $slug, array('disable' => true));
 
             // Set the success message.
             //
-            Platform::messages()->success( Lang::line('extensions::messages.disable.success', array('extension' => $slug))->get() );
+            Platform::messages()->success(Lang::line('extensions::messages.disable.success', array('extension' => $slug))->get());
         }
-        catch ( APIClientException $e )
+        catch (APIClientException $e)
         {
             // Set the error message.
             //
-            Platform::messages()->error( $e->getMessage() );
+            Platform::messages()->error($e->getMessage());
 
             // Set the other error messages.
             //
-            foreach ( $e->errors() as $error )
+            foreach ($e->errors() as $error)
             {
-                Platform::messages()->error( $error );
+                Platform::messages()->error($error);
             }
         }
 
@@ -362,17 +367,17 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
             // Set the success message.
             //
-            Pltform::messages()->success( Lang::line('extensions::messages.update.success', array('extension' => $slug))->get() );
+            Pltform::messages()->success(Lang::line('extensions::messages.update.success', array('extension' => $slug))->get());
         }
-        catch ( APIClientException $e )
+        catch (APIClientException $e)
         {
             // Set the error message.
             //
-            Platform::messages()->error( $e->getMessage() );
+            Platform::messages()->error($e->getMessage());
 
             // Set the other error messages.
             //
-            foreach ( $e->errors() as $error )
+            foreach ($e->errors() as $error)
             {
                 Platform::messages()->error($error);
             }
@@ -395,7 +400,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
      * @param    string
      * @return   mixed
      */
-    public function get_view( $slug = null )
+    public function get_view($slug)
     {
         // Check if the extension exists.
         //
@@ -404,17 +409,17 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
             $extension  = API::get('extensions/' . $slug);
             $extensions = API::get('extensions');
         }
-        catch ( APIClientException $e )
+        catch (APIClientException $e)
         {
             // Set the error message.
             //
-            Platform::messages()->error( $e->getMessage() );
+            Platform::messages()->error($e->getMessage());
 
             // Set the other error messages.
             //
-            foreach ( $e->errors() as $error )
+            foreach ($e->errors() as $error)
             {
-                Platform::messages()->error( $error );
+                Platform::messages()->error($error);
             }
 
             // Redirect to the extensions page.
@@ -439,49 +444,59 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
      * @param    string
      * @return   mixed
      */
-    public function post_view( $slug = null )
+    public function post_view($slug)
     {
         // If we are installing a required extension.
         //
-        if ( $required = Input::get('install_required') ):
-            $this->get_install( $required );
+        if ($required = Input::get('install_required'))
+        {
+            $this->get_install($required);
+        }
 
         // If we are enabling a required extension.
         //
-        elseif ( $required = Input::get('enable_required') ):
-            $this->get_enable( $required );
+        elseif ($required = Input::get('enable_required'))
+        {
+            $this->get_enable($required);
+        }
 
         // If we are installing the extension.
         //
-        elseif ( Input::get('install') ):
-            $this->get_install( $slug );
+        elseif (Input::get('install'))
+        {
+            $this->get_install($slug);
+        }
 
         // If we are uninstalling the extension.
         //
-        elseif ( Input::get('uninstall') ):
-            $this->get_uninstall( $slug );
+        elseif (Input::get('uninstall'))
+        {
+            $this->get_uninstall($slug);
+        }
 
         // If we are enabling the extension.
         //
-        elseif ( Input::get('enable') ):
-            $this->get_enable( $slug );
+        elseif (Input::get('enable'))
+        {
+            $this->get_enable($slug);
+        }
 
         // If we are disabling the extension.
         //
-        elseif ( Input::get('disable') ):
-            $this->get_disable( $slug );
+        elseif (Input::get('disable'))
+        {
+            $this->get_disable($slug);
+        }
 
         // If we are updating the extension.
         //
-        elseif ( Input::get('update') ):
-            $this->get_update( $slug );
-        endif;
+        elseif (Input::get('update'))
+        {
+            $this->get_update($slug);
+        }
 
         // Redirect to the extension page.
         //
         return Redirect::to_admin('extensions/view/' . $slug);
     }
 }
-
-/* End of file extensions.php */
-/* Location: ./platform/extensions/platform/extensions/controllers/admin/extensions.php */

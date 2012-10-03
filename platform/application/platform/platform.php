@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -99,14 +98,14 @@ class Platform
     {
         // If we have already initialized Platform.
         //
-        if ( static::$initialized === true )
+        if (static::$initialized === true)
         {
             return true;
         }
 
         // Check if Platform is installed.
         //
-        if ( ! static::is_installed() )
+        if ( ! static::is_installed())
         {
             // Start the installer.
             //
@@ -146,9 +145,9 @@ class Platform
     {
         // Check for the database config file.
         //
-        if ( ! File::exists( path('app') . 'config' . DS . 'database' . EXT ) )
+        if ( ! File::exists(path('app') . 'config' . DS . 'database' . EXT))
         {
-            if ( is_dir( path('base') . 'installer' ) and ! Request::cli() )
+            if (is_dir(path('base') . 'installer') and ! Request::cli())
             {
                 return false;
             }
@@ -162,9 +161,9 @@ class Platform
         //
         try
         {
-            if ( DB::table('extensions')->count() === 0 )
+            if (DB::table('extensions')->count() === 0)
             {
-                if ( is_dir( path('base') . 'installer' ) and ! Request::cli() )
+                if (is_dir(path('base') . 'installer') and ! Request::cli())
                 {
                     return false;
                 }
@@ -174,9 +173,9 @@ class Platform
                 }
             }
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
-            if ( is_dir( path('base') . 'installer' ) and ! Request::cli() )
+            if (is_dir(path('base') . 'installer') and ! Request::cli())
             {
                 return false;
             }
@@ -188,9 +187,9 @@ class Platform
         //
         try
         {
-            if ( DB::table('users')->count() === 0 )
+            if (DB::table('users')->count() === 0)
             {
-                if ( is_dir( path('base') . 'installer') and ! Request::cli() )
+                if (is_dir( path('base') . 'installer') and ! Request::cli())
                 {
                     return false;
                 }
@@ -200,9 +199,9 @@ class Platform
                 }
             }
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
-            if ( is_dir( path('base') . 'installer' ) and ! Request::cli() )
+            if (is_dir(path('base') . 'installer') and ! Request::cli())
             {
                 return false;
             }
@@ -214,7 +213,7 @@ class Platform
 
         // Check if the install directory still exists.
         //
-        if ( is_dir( path('base') . 'installer' ) and ! Request::cli() )
+        if (is_dir(path('base') . 'installer') and ! Request::cli())
         {
             // Initiate the installer.
             //
@@ -222,7 +221,7 @@ class Platform
 
             // This is so we can't see other steps rather than step 5 in the installer !!
             //
-            Session::put('install_directory', true); // maybe change this to platform.installed
+            Session::put('install_directory', true);
         }
 
         // Platform is installed.
@@ -242,7 +241,7 @@ class Platform
      * @param    boolean
      * @return   void
      */
-    public static function start_installer( $redirect = true )
+    public static function start_installer($redirect = true)
     {
         // Register the installer bundle.
         //
@@ -257,7 +256,7 @@ class Platform
 
         // If we are not in the installer and we want to be redirected.
         //
-        if ( ! URI::is('installer|installer/*') and $redirect )
+        if ( ! URI::is('installer|installer/*') and $redirect)
         {
             // Redirect to the installer page.
             //
@@ -281,7 +280,7 @@ class Platform
     {
         // Check if we have already initialized our extensions manager.
         //
-        if ( is_null( static::$extensions_manager ) )
+        if (is_null(static::$extensions_manager))
         {
             static::$extensions_manager = new ExtensionsManager();
         }
@@ -307,7 +306,7 @@ class Platform
     {
         // Check if we have already initialized our messages class.
         //
-        if ( is_null( static::$messages ) )
+        if (is_null(static::$messages))
         {
             // Start the messages class.
             //
@@ -403,7 +402,7 @@ class Platform
      * @param    string
      * @return   mixed
      */
-    public static function get( $setting = null, $default = null )
+    public static function get($setting = null, $default = null)
     {
         $settings = explode('.', $setting);
         $extension = array_shift($settings);
@@ -418,16 +417,17 @@ class Platform
             $name = array_shift($settings);
         }
 
-        if ( ! array_key_exists( $extension, static::$settings ) )
+        if ( ! array_key_exists($extension, static::$settings))
         {
             try
             {
-                // Find all settings for requested extension
+                // Find all the settings for the requested extension.
+                //
                 static::$settings[ $extension ] = API::get('settings', array(
                     'where' => array(
-                        array('extension', '=', $extension),
+                        array('extension', '=', $extension)
                     ),
-                    'organize' => true,
+                    'organize' => true
                 ));
             }
             catch (APIClientException $e)
@@ -438,7 +438,7 @@ class Platform
 
         // Check if the setting value exists.
         //
-        if ( $setting = array_get( static::$settings, $extension . '.' . $type . '.' . $name ) )
+        if ($setting = array_get(static::$settings, $extension . '.' . $type . '.' . $name))
         {
             return $setting['value'];
         }
@@ -460,7 +460,7 @@ class Platform
      * @param    string
      * @return   mixed
      */
-    public static function widget( $name = null )
+    public static function widget($name = null)
     {
         // Get the widget name.
         //
@@ -472,9 +472,10 @@ class Platform
 
         // Check if this widget is from an extension.
         //
-        if ( strpos($name, '::') === false ):
+        if (strpos($name, '::') === false)
+        {
             return;
-        endif;
+        }
 
         // Get the extension path and the action of this widget.
         //
@@ -497,18 +498,18 @@ class Platform
         $path = explode('.', $action);
         $method = array_pop($path);
 
-        // Prepare the plugin class.
+        // Prepare the widget class.
         //
-        $class = ucfirst( $namespace ) . '\\' . ucfirst( $extension ) . '\\Widgets\\' . ucfirst( implode('_', $path) );
+        $class = ucfirst($namespace) . '\\' . ucfirst($extension) . '\\Widgets\\' . ucfirst(implode('_', $path));
 
         // Check if this widget is already initialized.
         //
-        if ( array_key_exists( $class, static::$widgets ) )
+        if (array_key_exists($class, static::$widgets))
         {
-            $widget = static::$widgets[$class];
+            $widget = static::$widgets[ $class ];
         }
 
-        // Plugin is not initialized.
+        // Widget is not initialized.
         //
         else
         {
@@ -518,9 +519,9 @@ class Platform
 
             // Check if the plugin class exists.
             //
-            if ( ! class_exists( $class ) )
+            if ( ! class_exists($class))
             {
-                return; #throw new \Exception('Class: '.$class.' does not exist.');
+                return;
             }
 
             // Initialize the plugin class.
@@ -534,9 +535,10 @@ class Platform
 
         // Check if the method exists.
         //
-        if ( ! method_exists( $class, $method ) ):
-            return; #throw new \Exception('Method: '.$method.' does not exist in class: '.$class);
-        endif;
+        if ( ! method_exists($class, $method))
+        {
+            return;
+        }
 
         // Execute the widget.
         //
@@ -555,7 +557,7 @@ class Platform
      * @param    string
      * @return   mixed
      */
-    public static function plugin( $name = null )
+    public static function plugin($name = null)
     {
         // Get the plugin name.
         //
@@ -567,9 +569,10 @@ class Platform
 
         // Check if this plugin is from an extension.
         //
-        if ( strpos($name, '::') === false ):
+        if (strpos($name, '::') === false)
+        {
             return;
-        endif;
+        }
 
         // Get the extension path and the action of this plugin.
         //
@@ -594,11 +597,11 @@ class Platform
 
         // Prepare the plugin class.
         //
-        $class = ucfirst( $namespace ) . '\\' . ucfirst( $extension ) . '\\Plugins\\' . ucfirst( implode('_', $path) );
+        $class = ucfirst($namespace) . '\\' . ucfirst($extension) . '\\Plugins\\' . ucfirst(implode('_', $path));
 
         // Check if this plugin is already initialized.
         //
-        if ( array_key_exists( $class, static::$plugins ) )
+        if (array_key_exists($class, static::$plugins))
         {
             $plugin = static::$plugins[ $class ];
         }
@@ -613,9 +616,9 @@ class Platform
 
             // Check if the plugin class exists.
             //
-            if ( ! class_exists( $class ) )
+            if ( ! class_exists($class))
             {
-                return; #throw new \Exception('Class: '.$class.' does not exist.');
+                return;
             }
 
             // Initialize the plugin class.
@@ -629,13 +632,14 @@ class Platform
 
         // Check if the method exists.
         //
-        if ( ! method_exists( $class, $method ) ):
-            return; #throw new \Exception('Method: '.$method.' does not exist in class: '.$class);
-        endif;
+        if ( ! method_exists($class, $method))
+        {
+            return;
+        }
 
         // Execute the plugin.
         //
-        return call_user_func_array( array( $plugin, $method ), $parameters );
+        return call_user_func_array(array($plugin, $method), $parameters);
     }
 
 
@@ -652,27 +656,24 @@ class Platform
      * @param    string
      * @return   string
      */
-    public static function license( $file = null )
+    public static function license($file = null)
     {
         // If no file is passed, we return the Platform licence.
         //
-        if ( is_null( $file ) )
+        if (is_null($file))
         {
-            return File::get( path('licenses') . DS . 'platform.txt' );
+            return File::get(path('licenses') . DS . 'platform.txt');
         }
 
         // No file extension found, use the default one.
         //
-        if ( ! pathinfo($file, PATHINFO_EXTENSION) )
+        if ( ! pathinfo($file, PATHINFO_EXTENSION))
         {
-            $file.='.txt';
+            $file .= '.txt';
         }
 
         // Return the license file contents, if the file exists.
         //
-        return File::get( path('licenses') . DS . $file);
+        return File::get(path('licenses') . DS . $file);
     }
 }
-
-/* End of file platform.php */
-/* Location: ./platform/application/platform/platform.php */

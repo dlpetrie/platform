@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -61,6 +60,3 @@ return array(
 		});
 	}
 );
-
-/* End of file extension.php */
-/* Location: ./platform/extensions/platform/pages/extension.php */

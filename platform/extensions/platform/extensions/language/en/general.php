@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -59,6 +58,3 @@ return array(
         )
     )
 );
-
-/* End of file general.php */
-/* Location: ./platform/extensions/platform/extensions/language/en/general.php */

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -83,6 +82,3 @@ class Dashboard_Admin_Dashboard_Controller extends Admin_Controller
         return Theme::make('dashboard::index');
     }
 }
-
-/* End of file dashboard.php */
-/* Location: ./platform/extensions/platform/dashboard/controllers/admin/dashboard.php */

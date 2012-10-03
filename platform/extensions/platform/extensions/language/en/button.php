@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -32,6 +31,3 @@ return array(
     'disable'   => 'Disable',
     'update'    => 'Update'
 );
-
-/* End of file button.php */
-/* Location: ./platform/extensions/platform/extensions/language/en/button.php */

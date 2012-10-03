@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -51,6 +50,3 @@ return array(
         'settings'
     )
 );
-
-/* End of file extension.php */
-/* Location: ./platform/extensions/platform/dashboard/extension.php */

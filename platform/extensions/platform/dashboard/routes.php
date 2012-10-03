@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -26,6 +25,3 @@
  * --------------------------------------------------------------------------
  */
 Route::controller(Controller::detect('dashboard'));
-
-/* End of file routes.php */
-/* Location: ./platform/extensions/platform/dashboard/routes.php */

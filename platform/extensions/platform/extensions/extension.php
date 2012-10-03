@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -65,6 +64,3 @@ return array(
         'extensions::admin.extensions@update'
     )
 );
-
-/* End of file extension.php */
-/* Location: ./platform/extensions/platform/extensions/extension.php */

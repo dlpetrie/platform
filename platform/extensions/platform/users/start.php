@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -30,6 +29,3 @@ Autoloader::namespaces(array(
 	'Platform\\Users\\Plugins' => __DIR__ . DS . 'plugins',
 	'Platform\\Users'          => __DIR__ . DS . 'models'
 ));
-
-/* End of file start.php */
-/* Location: ./platform/extensions/platform/users/start.php */

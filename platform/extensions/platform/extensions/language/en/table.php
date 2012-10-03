@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -35,14 +34,8 @@ return array(
     'version'     => 'Version',
     'is_core'     => 'Is Core Extension',
     'actions'     => 'Actions',
-
     'enabled'     => 'Enabled',
     'disabled'    => 'Disabled',
-
     'installed'   => 'Installed',
     'uninstalled' => 'Uninstalled'
-
 );
-
-/* End of file table.php */
-/* Location: ./platform/extensions/platform/extensions/language/en/table.php */

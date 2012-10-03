@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -73,7 +72,7 @@ class Dashboard_Add_Class_To_Menus
                          ->where(Menu::nesty_col('tree'), '=', $admin_tree);
         });
 
-        if ( $dashboard )
+        if ($dashboard)
         {
             $dashboard->class = 'icon-th';
             $dashboard->save();
@@ -113,6 +112,3 @@ class Dashboard_Add_Class_To_Menus
         }
     }
 }
-
-/* End of file 2012_09_08_105000_add_class_to_menus.php */
-/* Location: ./platform/extensions/platform/dashboard/migrations/2012_09_08_105000_add_class_to_menus.php */

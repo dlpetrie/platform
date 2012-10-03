@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -64,6 +63,3 @@ return array(
         'menus::admin.menus@delete'
     )
 );
-
-/* End of file extension.php */
-/* Location: ./platform/extensions/platform/menus/extension.php */

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -71,7 +70,7 @@ class Extensions_Install
             'user_editable' => 0,
             'status'        => 1
         ));
-        $extensions->last_child_of( $system );
+        $extensions->last_child_of($system);
     }
 
 
@@ -90,6 +89,3 @@ class Extensions_Install
 
     }
 }
-
-/* End of file 2012_05_25_033145_install.php */
-/* Location: ./platform/extensions/platform/extensions/migrations/2012_05_25_033145_install.php */

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -51,29 +50,31 @@ class Dependencies
      * @param    array
      * @return   array
      */
-    public static function sort( $items = null )
+    public static function sort($items = null)
     {
         // Make sure we have items.
         //
-        if ( is_null( $items ) or ! is_array( $items ) or empty( $items ) ):
+        if (is_null($items) or ! is_array($items) or empty($items))
+        {
             return false;
-        endif;
+        }
 
         // Spin through the items.
         //
-        foreach ( $items as $item => $data ):
+        foreach ($items as $item => $data)
+        {
             // Add this item to the aray.
             //
             static::$items[] = $item;
 
             // Get this item dependencies.
             //
-            $dependencies = array_filter( ( isset( $data['dependencies'] ) && is_array( $data['dependencies'] ) && ! empty( $data['dependencies'] ) ? $data['dependencies'] : array() ) );
+            $dependencies = array_filter( ( isset($data['dependencies']) and is_array($data['dependencies']) and ! empty($data['dependencies']) ? $data['dependencies'] : array() ) );
 
             // Store this item dependencies.
             //
             static::$dependencies[ $item ] = $dependencies;
-        endforeach;
+        }
 
         // Return the dependencies in the proper order.
         //
@@ -88,10 +89,10 @@ class Dependencies
      *
      * This sorts the extensions dependencies.
      *
-     * @access   protected
+     * @access   private
      * @return   array
      */
-    protected static function _sort()
+    private static function _sort()
     {
         // Initiate an empty array, so we can save the sorted dependencies.
         //
@@ -103,23 +104,26 @@ class Dependencies
 
         // Make some checks and loops =)
         //
-        while ( count( $sorted ) < count( static::$items ) && $changed === true ):
+        while (count($sorted) < count(static::$items) && $changed === true)
+        {
             // Mark the flag as false.
             //
             $changed = false;
 
             // Spin through the dependencies.
             //
-            foreach ( static::$dependencies as $item => $dependencies ):
+            foreach (static::$dependencies as $item => $dependencies)
+            {
                 // Check if this item has all the dependencies.
                 //
-                if ( static::validate( $item, $sorted ) ):
+                if (static::validate($item, $sorted))
+                {
                     $sorted[] = $item;
-                    unset( static::$dependencies[ $item ]);
+                    unset(static::$dependencies[ $item ]);
                     $changed = true;
-                endif;
-            endforeach;
-        endwhile;
+                }
+            }
+        }
 
         // Return the sorted dependencies.
         //
@@ -139,25 +143,24 @@ class Dependencies
      * @param    array
      * @return   boolean
      */
-    private static function validate( $item = null, $sorted = array() )
+    private static function validate($item = null, $sorted = array())
     {
         // Spin through this item dependencies.
         //
-        foreach ( static::$dependencies[ $item ] as $dependency ):
+        foreach (static::$dependencies[ $item ] as $dependency)
+        {
             // Check if this dependency exists.
             //
-            if ( ! in_array( $dependency, $sorted ) ):
+            if ( ! in_array($dependency, $sorted))
+            {
                 // Item is invalid.
                 //
                 return false;
-            endif;
-        endforeach;
+            }
+        }
 
         // Item is valid.
         //
         return true;
     }
 }
-
-/* End of file dependencies.php */
-/* Location: ./platform/application/platform/dependencies.php */
