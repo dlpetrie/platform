@@ -406,7 +406,7 @@ SQL;
 				// Any user editable children, we'll
 				// check their slug starts with the root
 				// child's slug
-				if ($child->user_editable and $root = Menu::find_root($id) and starts_with($child->slug, $root->slug))
+				if ($child->user_editable and $root = Menu::find_root($id) and ( ! starts_with($child->slug, $root->slug)))
 				{
 					$child->slug = $root->slug.'-'.$child->slug;
 				}

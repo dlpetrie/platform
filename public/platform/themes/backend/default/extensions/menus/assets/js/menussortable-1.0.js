@@ -77,7 +77,7 @@
 
 			// Children
 			children: {
-				toggleSelector: '.child-toggle-details'
+				toggleSelector: '.child-toggle-details',
 			},
 
 			// Nesty sortable default settings
@@ -125,6 +125,7 @@
 
 		return this.setupNestySortable()
 		           .validateSlugs()
+		           .checkUris()
 		           .toggleChildren();
 	}
 
@@ -179,7 +180,7 @@
 			}
 
 			// Slug update events
-			that.$element.bind(ns+'.root_slug_update', function(event, value) {
+			that.$element.bind('root_slug_update.'+ns, function(event, value) {
 
 				if (typeof value === 'undefined') {
 					value = $(that.options.rootNameSelector).val();
@@ -195,7 +196,7 @@
 				}
 			});
 
-			that.$element.bind(ns+'.new_slug_update', function(event, value) {
+			that.$element.bind('new_slug_update.'+ns, function(event, value) {
 
 				if (typeof value === 'undefined') {
 					value = $(that.options.nestySortable.fields.name.newSelector).val();
@@ -209,11 +210,11 @@
 						$dom.val(value);
 
 						// Trigger a validation of the new slug
-						that.$element.trigger(ns+'.new_slug_validate', [$dom, value]);
+						that.$element.trigger('new_slug_validate.'+ns, [$dom, value]);
 					}
 				}
 			});
-			that.$element.bind(ns+'.new_uri_update', function(event, value) {
+			that.$element.bind('new_uri_update.'+ns, function(event, value) {
 				
 				if (typeof value === 'undefined') {
 					value = $(that.options.nestySortable.fields.name.newSelector).val();
@@ -225,12 +226,13 @@
 					    uriSeparator = '/';
 					if ((slug = slugify(value, uriSeparator)) && (prepend = slugPrepend())) {
 						prepend = prepend.replace(separator, uriSeparator);
-						$(that.options.nestySortable.fields.uri.newSelector).val(prepend+slug);
+						$(that.options.nestySortable.fields.uri.newSelector).val(prepend+slug)
+						    .trigger('blur')
 					}
 				}
 
 			});
-			that.$element.bind(ns+'.new_slug_validate', function(event, dom, value) {
+			that.$element.bind('new_slug_validate.'+ns, function(event, dom, value) {
 				if (typeof dom === 'undefined') {
 					dom = $(that.options.slugs.newSelector);
 				}
@@ -251,11 +253,11 @@
 
 			// When the person changes the menu slug
 			$(that.options.rootNameSelector).on('blur', function() {
-				that.$element.trigger(ns+'.root_slug_update');
+				that.$element.trigger('root_slug_update.'+ns);
 			});
 
 			// Lastly, on load, trigger an update event
-			that.$element.trigger(ns+'.root_slug_update');
+			that.$element.trigger('root_slug_update.'+ns);
 
 			// // Loop through fields and build list of selectors
 			// var selectors    = [],
@@ -285,21 +287,72 @@
 			// 	}
 			// });
 			// $(selectors.join(', ')).on('blur', function() {
-			// 	that.$element.trigger(ns+'.new_slug_update')
-			// 	             .trigger(ns+'.new_uri_update');
+			// 	that.$element.trigger('new_slug_update.'+ns)
+			// 	             .trigger('new_uri_update.'+ns);
 			// });
-
-			$(that.options.nestySortable.fields.name.newSelector).on('blur', function() {
+			
+			// New child names
+			$(that.options.nestySortable.fields.name.newSelector).on('blur.'+ns, function() {
 				var value = $(this).val();
-				that.$element.trigger(ns+'.new_slug_update', [value])
-				             .trigger(ns+'.new_uri_update', [value]);
+				that.$element.trigger('new_slug_update.'+ns, [value])
+				             .trigger('new_uri_update.'+ns, [value]);
 			});
 
-
+			// // Existing names
+			// $('body').on('blur.'+ns, that.options.nestySortable.fields.name.itemSelector, function() {
+				
+			// });
 
 			// When the person blurs on a slug
 			$(that.options.slugs.newSelector).on('blur', function() {
-				that.$element.trigger(ns+'.new_slug_validate', [$(this), $(this).val()]);
+				that.$element.trigger('new_slug_validate.'+ns, [$(this), $(this).val()]);
+			});
+
+			return this;
+		},
+
+		checkUris: function() {
+			var that = this,
+			      ns = this.options.namespace;
+
+			function isFullUrl(url) {
+				return /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url);
+			}
+			function isSecureUrl(url) {
+				return /https:\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url);
+			}
+
+			// Check new children
+			var $secure = $(that.options.nestySortable.fields.secure.newSelector);
+			if ($secure.length) {
+				$(that.options.nestySortable.fields.uri.newSelector).on('blur.'+ns, function(e) {
+					var value = $(this).val();
+
+					if (isFullUrl(value)) {
+						$secure.attr('disabled', 'disabled')
+						       [(isSecureUrl(value)) ? 'attr' : 'removeAttr']('checked', 'checked');
+					} else {
+						$secure.removeAttr('disabled')
+						       .removeAttr('checked');
+					}
+				});
+			}
+
+			// Existing
+			$('body').on('blur.'+ns, that.options.nestySortable.fields.uri.itemSelector, function() {
+				var $child = $(this).closest(that.options.nestySortable.itemSelector),
+				   $secure = $child.find(that.options.nestySortable.fields.secure.itemSelector),
+				     value = $(this).val();
+
+				if ($secure.length) {
+					if (isFullUrl(value)) {
+						$secure.attr('disabled', 'disabled')
+						       [(isSecureUrl(value)) ? 'attr' : 'removeAttr']('checked', 'checked');
+					} else {
+						$secure.removeAttr('disabled')
+						       .removeAttr('checked');
+					}
+				}
 			});
 
 			return this;
@@ -310,7 +363,7 @@
 			      ns = this.options.namespace;
 
 			// Live toggle
-			$('body').on('click', that.options.children.toggleSelector, function(e) {
+			$('body').on('click.'+ns, that.options.children.toggleSelector, function(e) {
 				$(this).closest(that.options.nestySortable.itemSelector).find(that.options.nestySortable.itemDetailsSelector).toggleClass('show');
 			});
 

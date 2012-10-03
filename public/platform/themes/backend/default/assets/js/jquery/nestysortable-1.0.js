@@ -239,12 +239,24 @@
 				e.preventDefault();
 
 				if ($(this).hasClass('disabled')) {
-					// return false;
+					return false;
 				}
 
 				// Find closest item
 				var $item = $(this).closest(that.options.sortable.items),
-				 $childrenList = $item.children(that.options.sortable.listType);
+				    $list = $item.children(that.options.sortable.listType);
+
+				// Check the length
+				if ($list.length > 0) {
+
+					// Grab the list's children items and put
+					// them after this item
+					$childItems = $list.children(that.options.sortable.items);
+					$childItems.insertAfter($item);
+				}
+
+				// Remove this item from the DOM
+				$item.remove();
 			});
 
 			return this;
