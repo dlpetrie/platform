@@ -41,10 +41,13 @@
 		// Menu sortable plugin
 		$('#menu').menuSortable({
 
-			// Array of ALL existing
-			// slugs. Just so we don't
-			// have any clashes
-			persistedSlugs: {{ json_encode($persisted_slugs) }},
+			slugs: {
+				// An array of slugs persisted to the
+				// database already. We use to make sure
+				// our slugs are unique and the user doesn't
+				// get an error when saving.
+				persisted: {{ json_encode($persisted_slugs) }},
+			},
 
 			// Define Nesty Sortable dependency for the menu sortable.
 			nestySortable: {
@@ -69,26 +72,45 @@
 				 * </code>
 				 */
 				fields : {
+
+					// ------------------------
+					// Required fields for menu
+					// ------------------------
+
 					'name' : {
-						newSelector: '#new-child-name'
+						newSelector: '#new-child-name',
+						itemSelector: '.child-name'
 					},
+
 					'slug' : {
-						newSelector: '#new-child-slug'
+						newSelector: '#new-child-slug',
+						itemSelector: '.child-slug'
 					},
+
 					'uri' : {
-						newSelector: '#new-child-uri'
+						newSelector: '#new-child-uri',
+						itemSelector: '.child-uri'
 					},
+
+					// ------------------------
+					// Optional fields for menu
+					// ------------------------
+
 					'secure' : {
-						newSelector: '#new-child-secure'
+						newSelector: '#new-child-secure',
+						itemSelector: '.child-secure'
 					},
 					'visibility' : {
-						newSelector: '#new-child-visibility'
+						newSelector: '#new-child-visibility',
+						itemSelector: '.child-visibility'
 					},
 					'target' : {
-						newSelector: '#new-child-target'
+						newSelector: '#new-child-target',
+						itemSelector: '.child-target'
 					},
 					'class' : {
-						newSelector: '#new-child-class'
+						newSelector: '#new-child-class',
+						itemSelector: '.child-class'
 					}
 				},
 
@@ -157,10 +179,10 @@
 											<label>
 												{{ Lang::line('menus::form.child.secure') }}
 											</label>
-											<div class="toggle basic success" data-enabled="{{ Lang::line('general.enabled') }}" data-disabled="{{ Lang::line('general.disabled') }}" data-toggle="toggle">
+											<!-- <div class="toggle basic success" data-enabled="{{ Lang::line('general.enabled') }}" data-disabled="{{ Lang::line('general.disabled') }}" data-toggle="toggle"> -->
 												<input type="checkbox" value="1" id="new-child-secure" class="checkbox">
-												<label class="check" for="new-child-secure"></label>
-											</div>
+												<!-- <label class="check" for="new-child-secure"></label> -->
+											<!-- </div> -->
 										</div>
 
 										<!-- Visibility -->

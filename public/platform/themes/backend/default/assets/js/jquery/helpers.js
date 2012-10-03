@@ -25,7 +25,10 @@ $.fn.slugify = function(separator) {
 	}
 
 	// Get value attribute
-	var str = this.val();
+	var str = this;
+	if (typeof this !== 'string') {
+		var str = this.val();
+	}
 
 	str = str.replace(/^\s+|\s+$/g, ''); // trim
 	str = str.toLowerCase();
@@ -37,9 +40,9 @@ $.fn.slugify = function(separator) {
 		str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
 	}
 
-	str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-		.replace(/\s+/g, separator) // collapse whitespace and replace by _
-		.replace(/-+/g, separator); // collapse dashes
-
-	return str;
+	return str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+				          .replace(/\s+/g, separator) // collapse whitespace and replace by _
+				          .replace(/-+/g, separator) // collapse dashes
+				          .replace(new RegExp(separator+'+$'), '') // Trim separator from start
+				          .replace(new RegExp('^'+separator+'+'), ''); // Trim separator from end
 }
