@@ -75,6 +75,11 @@
 				separator    : '-'
 			},
 
+			// Children
+			children: {
+				toggleSelector: '.child-toggle-details'
+			},
+
 			// Nesty sortable default settings
 			nestySortable: {
 
@@ -119,7 +124,8 @@
 		console.log(this.options);
 
 		return this.setupNestySortable()
-		           .validateSlugs();
+		           .validateSlugs()
+		           .toggleChildren();
 	}
 
 	MenuSortable.prototype = {
@@ -214,9 +220,11 @@
 				}
 
 				if (value) {
-					var slug, prepend;
-					if ((slug = slugify(value)) && (prepend = slugPrepend())) {
-						prepend = prepend.replace(separator, '/');
+					var slug,
+					    prepend,
+					    uriSeparator = '/';
+					if ((slug = slugify(value, uriSeparator)) && (prepend = slugPrepend())) {
+						prepend = prepend.replace(separator, uriSeparator);
 						$(that.options.nestySortable.fields.uri.newSelector).val(prepend+slug);
 					}
 				}
@@ -249,41 +257,61 @@
 			// Lastly, on load, trigger an update event
 			that.$element.trigger(ns+'.root_slug_update');
 
-			// Loop through fields and build list of selectors
-			var selectors    = [],
-			    allowedTypes = 'search tel url email datetime date month week time datetime-local number range color'.split(' ');
+			// // Loop through fields and build list of selectors
+			// var selectors    = [],
+			//     allowedTypes = 'search tel url email datetime date month week time datetime-local number range color'.split(' ');
 
-			// Loop through selectors and observe them. Build a nice slug
-			// accordingly.
-			$.each(that.options.nestySortable.fields, function(fieldSlug, field) {
+			// // Loop through selectors and observe them. Build a nice slug
+			// // accordingly.
+			// $.each(that.options.nestySortable.fields, function(fieldSlug, field) {
 
-				// Skip non allowed field slugs
-				var nonAllowedSlugs = ['slug'];
-				if ($.inArray(fieldSlug, nonAllowedSlugs) > -1) {
-					return;
-				}
+			// 	// Skip non allowed field slugs
+			// 	var nonAllowedSlugs = ['slug'];
+			// 	if ($.inArray(fieldSlug, nonAllowedSlugs) > -1) {
+			// 		return;
+			// 	}
 
-				var $dom = $(field.newSelector);
-				if ($dom.is(function() {
+			// 	var $dom = $(field.newSelector);
+			// 	if ($dom.is(function() {
 
-					// Check input types
-					if ((this.nodeName.toLowerCase() !== 'input') || ($.inArray($(this).attr('type'), allowedTypes) > -1)) {
-						return false;
-					}
+			// 		// Check input types
+			// 		if ((this.nodeName.toLowerCase() !== 'input') || ($.inArray($(this).attr('type'), allowedTypes) > -1)) {
+			// 			return false;
+			// 		}
 
-					return true;
-				} )) {
-					selectors.push(field.newSelector);
-				}
+			// 		return true;
+			// 	} )) {
+			// 		selectors.push(field.newSelector);
+			// 	}
+			// });
+			// $(selectors.join(', ')).on('blur', function() {
+			// 	that.$element.trigger(ns+'.new_slug_update')
+			// 	             .trigger(ns+'.new_uri_update');
+			// });
+
+			$(that.options.nestySortable.fields.name.newSelector).on('blur', function() {
+				var value = $(this).val();
+				that.$element.trigger(ns+'.new_slug_update', [value])
+				             .trigger(ns+'.new_uri_update', [value]);
 			});
-			$(selectors.join(', ')).on('blur', function() {
-				that.$element.trigger(ns+'.new_slug_update')
-				             .trigger(ns+'.new_uri_update');
-			});
+
+
 
 			// When the person blurs on a slug
 			$(that.options.slugs.newSelector).on('blur', function() {
 				that.$element.trigger(ns+'.new_slug_validate', [$(this), $(this).val()]);
+			});
+
+			return this;
+		},
+
+		toggleChildren: function() {
+			var that = this,
+			      ns = this.options.namespace;
+
+			// Live toggle
+			$('body').on('click', that.options.children.toggleSelector, function(e) {
+				$(this).closest(that.options.nestySortable.itemSelector).find(that.options.nestySortable.itemDetailsSelector).toggleClass('show');
 			});
 
 			return this;

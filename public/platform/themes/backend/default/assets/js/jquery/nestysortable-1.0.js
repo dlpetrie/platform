@@ -116,6 +116,7 @@
 
 		return this.setupNestedSortable()
 		           .observeAddingItems()
+		           .observeRemovingItems()
 		           .observeSaving();
 	}
 
@@ -134,7 +135,7 @@
 			var that = this,
 			      ns = this.options.namespace;
 
-			that.$itemAdd.on('click', function(e) {
+			that.$itemAdd.on('click.'+ns, function(e) {
 				e.preventDefault();
 
 				// Get the item template
@@ -230,16 +231,32 @@
 			return this;
 		},
 
-		/**
-		 * Observes saving the menu.
-		 */
+		observeRemovingItems: function() {
+			var that = this,
+			      ns = this.options.namespace;
+
+			$('body').on('click', that.options.itemRemoveSelector, function(e) {
+				e.preventDefault();
+
+				if ($(this).hasClass('disabled')) {
+					// return false;
+				}
+
+				// Find closest item
+				var $item = $(this).closest(that.options.sortable.items),
+				 $childrenList = $item.children(that.options.sortable.listType);
+			});
+
+			return this;
+		},
+
 		observeSaving: function() {
 			var that = this,
 			      ns = this.options.namespace;
 
 			// Catch submit button. Remove validation
 			// from new items.
-			that.$element.find(':submit').on('click', function(e) {
+			that.$element.find(':submit').on('click.'+ns, function(e) {
 
 				// Loop through the defined fields and remove
 				// validation on them.
