@@ -121,8 +121,6 @@
 
 		that.$element = element;
 
-		console.log(this.options);
-
 		return this.setupNestySortable()
 		           .validateSlugs()
 		           .checkUris()

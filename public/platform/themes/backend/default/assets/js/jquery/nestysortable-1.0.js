@@ -198,8 +198,6 @@
 					return false;
 				}
 
-				console.log(data);
-
 				// Get the template
 				var $template = $(that.options.template.selector).clone();
 				$template.appendTo(that.options.template.containerSelector)
