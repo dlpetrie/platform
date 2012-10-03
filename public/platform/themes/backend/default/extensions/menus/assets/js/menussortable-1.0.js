@@ -1,65 +1,86 @@
-(function() {
+(function($) {
 
-	/**
-	 * MenuSortable object.
-	 *
-	 * @todo Add more validation support for
-	 *       new children...
-	 */
-	var MenuSortable = {
+	var MenuSortable = function(element, options) {
+		if (this === window) {
+			return new MenuSortable(element, options);
+		}
 
-		// Settings for this instance
-		settings: {
+		if ( ! $().nestySortable) {
+			$.error('$.menuSortable requires $.nestySortable');
+		}
+		if ( ! $().slugify) {
+			$.error('$.menuSortable requires $.slugify');
+		}
 
-			// New child selectors
-			newChildContainerSelector: '#menu-new-child',
+		var that = this;
 
-			// Control group for children
-			childControlGroupSelector: '.control-group',
+		that.options = {
 
-			// Slug input selector
-			slugInputSelector:       '.child-slug',
-			uriInputSelector:        '.child-uri',
-			classInputSelector:      '.child-class',
-			secureInputSelector:     '.child-secure',
-			visibilityInputSelector: '.child-visibility',
-			targetInputSelector:     '.child-target',
+			// Namespace for the plugin for registering
+			// dom events
+			namespace: 'menusortable',
 
-			// Name
-			rootNameSelector: '#menu-name',
+			// Selector for control groups that wrap inputs
+			controlGroupSelector : '.control-group',
 
-			// Root menu child slug
-			rootSlug: null,
+			// Menu name
+			rootNameSelector : '#menu-name',
 
-			// What should be appended
-			// to the root slug when namespacing
-			// child children? Should match default
-			// slug separator for your application
-			rootSlugAppend: '-',
+			// Slug options
+			slugs: {
 
-			// Root selector
-			rootSlugSelector: '#menu-slug',
+				// An array of slugs persisted to the
+				// database already. We use to make sure
+				// our slugs are unique and the user doesn't
+				// get an error when saving.
+				persisted: [],
 
-			// New child selectors
-			newChildNameSelector:       '#new-child-name',
-			newChildSlugSelector:       '#new-child-slug',
-			newChildUriSelector:        '#new-child-uri',
-			newChildClassSelector:      '#new-child-class',
-			newChildSecureSelector:     '#new-child-secure',
-			newChildVisibilitySelector: '#new-child-visibility',
-			newChildTargetSelector:     '#new-child-target',
+				rootSelector : '#menu-slug',
 
-			// Child selectors
-			childSelector: '.child',
+				// Root value
+				get root() {
+					if (this._root === null) {
+						var value = $(this.rootSelector).val();
+						this._root = value;
+					}
+					
+					return this._root;
+				},
+				set root(value) {
+					this._root = value;
+				},
+				_root         : null,
 
-			// An array of slugs persisted to the
-			// database already. We use to make sure
-			// our slugs are unique and the user doesn't
-			// get an error when saving.
-			persistedSlugs: [],
+				// New selector
+				get newSelector() {
+					if (this._newSelector === null) {
 
-			// Nesty sortable settings
+						var selector = null;
+
+						if (selector = that.options.nestySortable.fields.slug.newSelector) {
+							this._newSelector = selector;
+						} else {
+							this._newSelector = '#new-child-slug';
+						}
+					}
+
+					return this._newSelector;
+				},
+				set newSelector(value) {
+					this._newSelector = value;
+				},
+				_newSelector : null,
+
+				// Separator
+				separator    : '-'
+			},
+
+			// Nesty sortable default settings
 			nestySortable: {
+
+				// Namespace for the plugin for registering
+				// dom events
+				namespace: 'menusortablenestysortable',
 
 				// The selector for the sortable list,
 				// used to cache the sortable list property
@@ -72,7 +93,6 @@
 				// Invalid field callback - must return true for valid
 				// field or false for invalid field.
 				invalidFieldCallback : function(slug, field, value) {
-					alert(slug+' '+value);
 					$(field.newSelector).closest('.control-group').addClass('error');
 				},
 
@@ -90,238 +110,190 @@
 				// the server.
 				hierarchyInputName: 'children_hierarchy'
 			}
-		},
-
-		/**
-		 * Used to initialise a new instance of
-		 * nestySortable
-		 */
-		init: function(elem, settings) {
-			var self  = this;
-			self.elem = elem;
-
-			$.extend(true, self.settings, settings);
-
-			// Check for nesty sortable
-			if ( ! $().nestySortable) {
-				$.error('$.menuSortable requires $.nestySortable');
-			}
-
-			// Check for nesty sortable settings
-			if ( ! self.settings.nestySortable) {
-				$.error('nestySortable configuration is required.');
-			}
-
-			// Setup Nesty sortable
-			elem.nestySortable(self.settings.nestySortable);
-
-			self.validateNewChildren()
-			    .validateSlugs()
-			    .helpNewItems()
-			    .helpSecureUris();
-		},
-
-		validateNewChildren: function() {
-			var self = this;
-
-			// Reverse the error on validation
-			$(self.settings.newChildContainerSelector).find('input, textarea, select').on('focus keyup change', function(e) {
-
-				if ($(this).is(':valid')) {
-					$(this).closest(self.settings.childControlGroupSelector).removeClass('error');
-				}
-			});
-
-			return this;
-		},
-
-		/**
-		 * Validates the slugs.
-		 *
-		 * @todo See if I can make this
-		 *       faster...
-		 */
-		validateSlugs: function() {
-			var self = this;
-
-			// Slugify slugs
-			$('body').on('blur', self.elem.selector+' '+self.settings.slugInputSelector+', '+self.settings.rootSlugSelector, function() {
-
-				$(this).val($(this).slugify())
-				       .trigger('change');
-			});
-
-			$(self.settings.rootNameSelector).on('focus keyup change', function() {
-				$(self.settings.rootSlugSelector).val($(this).slugify())
-				                                 .trigger('change');
-			});
-
-			// New slug
-			$(self.settings.rootSlugSelector).on('focus keyup change', function() {
-
-				// Get the old slug
-				var oldRootSlug = self.settings.rootSlug,
-				       oldStart = oldRootSlug+self.settings.rootSlugAppend;
-
-				// If there is a value
-				if ($(this).val()) {
-
-					// Change the new root slug
-					self.settings.rootSlug = $(this).val();
-					var newStart           = $(this).val()+self.settings.rootSlugAppend;
-
-					// Change all existing children
-					$.each(self.elem.find(self.settings.slugInputSelector), function() {
-
-						// No slug at all, empty...
-						if ( ! $(this).val()) {
-							$(this).val(newStart);
-						}
-
-						// If the input had the old namespaced slug
-						else if ($(this).val().indexOf(oldStart) === 0) {
-
-							$(this).val($(this).val().replace(oldStart, newStart));
-						}
-					});
-				}
-			});
-
-			// Namespace existing slugs
-			$('body').on('focus keyup change', self.elem.selector+' '+self.settings.slugInputSelector, function(e) {
-
-				if ($(this).val().indexOf(self.settings.rootSlug+self.settings.rootSlugAppend) !== 0) {
-					$(this).val(self.settings.rootSlug+self.settings.rootSlugAppend+$(this).val());
-				}
-			});
-
-			// On blur from a slug field, check against DB slugs
-			// console.log(self.settings.persistedSlugs);
-			$('body').on('blur', self.elem.selector+' '+self.settings.slugInputSelector, function(e) {
-
-				// Temp array of taken slugs
-				var takenSlugs = self.settings.persistedSlugs;
-
-				// Add all taken slugs
-				self.elem.find(self.settings.slugInputSelector).not($(this)).each(function() {
-					takenSlugs.push($(this).val());
-				});
-
-				// Check our value against array
-				if ($.inArray($(this).val(), takenSlugs) > -1) {
-					$(this).closest(self.settings.childControlGroupSelector).addClass('error');
-				}
-
-				$(this).on('focus', function(e) {
-					e.stopPropagation();
-					$(this).closest(self.settings.childControlGroupSelector).removeClass('error');
-				});
-
-				console.log(takenSlugs);
-			});
-
-			// Trigger a change on the root child which
-			// populates our cached root slug
-			$(self.settings.rootSlugSelector).trigger('change');
-
-			return this;
-		},
-
-		helpNewItems: function() {
-			var self = this;
-
-			// Autofill the slug based on the name
-			$(self.settings.newChildNameSelector).on('focus keyup change', function() {
-
-				$(self.settings.newChildSlugSelector).val(((self.settings.rootSlug) ? self.settings.rootSlug+self.settings.rootSlugAppend : '')+$(this).slugify()).trigger('change').trigger('blur');
-
-				// And the URI
-				$(self.settings.newChildUriSelector).val($(this).slugify('/')).trigger('change');
-			});
-
-			return this;
-		},
-
-		helpSecureUris: function() {
-			var self = this;
-
-			// New children
-			$(self.settings.newChildUriSelector).on('focus keyup change', function(e) {
-
-				// Full URL, disable the chekcbox
-				if (self.isFullUrl($(this).val())) {
-					$(self.settings.newChildSecureSelector).attr('disabled', 'disabled');
-					$(self.settings.newChildSecureSelector)[self.isSecureUrl($(this).val()) ? 'attr' : 'removeAttr']('checked', 'checked');
-				}
-
-				// Relative, give option
-				else {
-
-					$(self.settings.newChildSecureSelector).removeAttr('disabled');
-				}
-			});
-
-			// Existing children
-			$('body').on('focus keyup change', self.elem.selector+' '+self.settings.uriInputSelector, function() {
-
-				var $secure = $(this).closest(self.settings.childSelector).find(self.settings.secureInputSelector);
-
-				// Full URL
-				if (self.isFullUrl($(this).val())) {
-					$secure.attr('disabled', 'disabled');
-					$secure[self.isSecureUrl($(this).val()) ? 'attr' : 'removeAttr']('checked', 'checked');
-				}
-
-				// Relative URI
-				else {
-					$secure.removeAttr('disabled');
-				}
-			});
-
-			return this;
-		},
-
-		/**
-		 * Tests a URL to see if it's a full
-		 * url
-		 *
-		 * @param   string  uri
-		 * @return  bool
-		 */
-		isFullUrl: function(uri) {
-			return /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(uri);
-		},
-
-		/**
-		 * Tests a URL to see if it's secure
-		 *
-		 * @param   string  uri
-		 * @return  bool
-		 */
-		isSecureUrl: function(uri) {
-			return /https:\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(uri);
 		}
+
+		$.extend(true, that.options, options);
+
+		that.$element = element;
+
+		console.log(this.options);
+
+		return this.setupNestySortable()
+		           .validateSlugs();
 	}
 
+	MenuSortable.prototype = {
+
+		setupNestySortable: function() {
+			var that = this,
+			      ns = this.options.namespace;
+
+			that.$element.nestySortable(that.options.nestySortable);
+
+			return this;
+		},
+
+		validateSlugs: function() {
+			var that  = this,
+			      ns  = this.options.namespace,
+			separator = this.options.slugs.separator;
+
+			function slugPrepend(slug) {
+				if (typeof slug === 'undefined') {
+					slug = that.options.slugs.root;
+				}
+
+				if (slug) {
+					return slug+separator;
+				}
+
+				return null;
+			}
+
+			function slugify(str, separator) {
+				if (typeof separator === 'undefined') {
+					separator = '-';
+				}
+
+				str = str.replace(/^\s+|\s+$/g, ''); // trim
+				str = str.toLowerCase();
+				
+				// remove accents, swap ñ for n, etc
+				var from = "ĺěščřžýťňďàáäâèéëêìíïîòóöôùůúüûñç·/_,:;";
+				var to   = "lescrzytndaaaaeeeeiiiioooouuuuunc------";
+				for (var i=0, l=from.length ; i<l ; i++) {
+					str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+				}
+
+				return str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+				          .replace(/\s+/g, separator) // collapse whitespace and replace by _
+				          .replace(/-+/g, separator) // collapse dashes
+				          .replace(new RegExp(separator+'+$'), '') // Trim separator from start
+				          .replace(new RegExp('^'+separator+'+'), ''); // Trim separator from end
+			}
+
+			// Slug update events
+			that.$element.bind(ns+'.root_slug_update', function(event, value) {
+
+				if (typeof value === 'undefined') {
+					value = $(that.options.rootNameSelector).val();
+				}
+
+				if (value) {
+					var slug;
+					if (slug = slugify(value, separator)) {
+						$(that.options.slugs.rootSelector).val(slug);
+						$(that.options.slugs.newSelector).val(slugPrepend(slug));
+						that.options.slugs.root = slug;
+					}
+				}
+			});
+
+			that.$element.bind(ns+'.new_slug_update', function(event, value) {
+
+				if (typeof value === 'undefined') {
+					value = $(that.options.nestySortable.fields.name.newSelector).val();
+				}
+
+				if (value) {
+					var slug, prepend;
+					if ((slug = slugify(value)) && (prepend = slugPrepend())) {
+						var value = prepend+slug,
+						     $dom = $(that.options.slugs.newSelector);
+						$dom.val(value);
+
+						// Trigger a validation of the new slug
+						that.$element.trigger(ns+'.new_slug_validate', [$dom, value]);
+					}
+				}
+			});
+			that.$element.bind(ns+'.new_uri_update', function(event, value) {
+				
+				if (typeof value === 'undefined') {
+					value = $(that.options.nestySortable.fields.name.newSelector).val();
+				}
+
+				if (value) {
+					var slug, prepend;
+					if ((slug = slugify(value)) && (prepend = slugPrepend())) {
+						prepend = prepend.replace(separator, '/');
+						$(that.options.nestySortable.fields.uri.newSelector).val(prepend+slug);
+					}
+				}
+
+			});
+			that.$element.bind(ns+'.new_slug_validate', function(event, dom, value) {
+				if (typeof dom === 'undefined') {
+					dom = $(that.options.slugs.newSelector);
+				}
+				if (typeof value === 'undefined') {
+					value = dom.val();
+				}
+
+				// Add / remove validation error
+				if (($.inArray(value, that.options.slugs.persisted) > -1)) {
+					dom.addClass('error')
+					    .closest(that.options.controlGroupSelector).addClass('error');
+				} else {
+					dom.removeClass('error')
+					    .closest(that.options.controlGroupSelector).removeClass('error');
+				}
+
+			});
+
+			// When the person changes the menu slug
+			$(that.options.rootNameSelector).on('blur', function() {
+				that.$element.trigger(ns+'.root_slug_update');
+			});
+
+			// Lastly, on load, trigger an update event
+			that.$element.trigger(ns+'.root_slug_update');
+
+			// Loop through fields and build list of selectors
+			var selectors    = [],
+			    allowedTypes = 'search tel url email datetime date month week time datetime-local number range color'.split(' ');
+
+			// Loop through selectors and observe them. Build a nice slug
+			// accordingly.
+			$.each(that.options.nestySortable.fields, function(fieldSlug, field) {
+
+				// Skip non allowed field slugs
+				var nonAllowedSlugs = ['slug'];
+				if ($.inArray(fieldSlug, nonAllowedSlugs) > -1) {
+					return;
+				}
+
+				var $dom = $(field.newSelector);
+				if ($dom.is(function() {
+
+					// Check input types
+					if ((this.nodeName.toLowerCase() !== 'input') || ($.inArray($(this).attr('type'), allowedTypes) > -1)) {
+						return false;
+					}
+
+					return true;
+				} )) {
+					selectors.push(field.newSelector);
+				}
+			});
+			$(selectors.join(', ')).on('blur', function() {
+				that.$element.trigger(ns+'.new_slug_update')
+				             .trigger(ns+'.new_uri_update');
+			});
+
+			// When the person blurs on a slug
+			$(that.options.slugs.newSelector).on('blur', function() {
+				that.$element.trigger(ns+'.new_slug_validate', [$(this), $(this).val()]);
+			});
+
+			return this;
+		}
+	}
+	
+
 	// The actual jquery plugin
-	$.fn.menuSortable = function(settings) {
-		MenuSortable.init(this, settings);
+	$.fn.menuSortable = function(options) {
+		return new MenuSortable(this, options);
 	}
 
 })(jQuery);
-
-
-
-
-// 	/*
-// 	|-------------------------------------
-// 	| Secure menu children
-// 	|-------------------------------------
-// 	|
-// 	| Allows for easy setup of the secure
-// 	| menu children.
-// 	*/
-// 	$('body').on('focus keyup change', '.menu-child-uri', function(e) {
-
-
-// 	});

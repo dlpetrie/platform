@@ -41,10 +41,13 @@
 		// Menu sortable plugin
 		$('#menu').menuSortable({
 
-			// Array of ALL existing
-			// slugs. Just so we don't
-			// have any clashes
-			persistedSlugs: {{ json_encode($persisted_slugs) }},
+			slugs: {
+				// An array of slugs persisted to the
+				// database already. We use to make sure
+				// our slugs are unique and the user doesn't
+				// get an error when saving.
+				persisted: {{ json_encode($persisted_slugs) }},
+			},
 
 			// Define Nesty Sortable dependency for the menu sortable.
 			nestySortable: {
