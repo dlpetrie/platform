@@ -69,7 +69,7 @@ class Dependencies
 
             // Get this item dependencies.
             //
-            $dependencies = array_filter( ( isset($data['dependencies']) and is_array($data['dependencies']) and ! empty($data['dependencies']) ? $data['dependencies'] : array() ) );
+            $dependencies = ( (isset($data['dependencies']) and is_array($data['dependencies']) and ! empty($data['dependencies'])) ? $data['dependencies'] : array() );
 
             // Store this item dependencies.
             //
