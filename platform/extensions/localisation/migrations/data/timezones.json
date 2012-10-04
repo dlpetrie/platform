@@ -1,0 +1,848 @@
+{
+    "International Date Line West" :
+    {
+        "timezone" : "International Date Line West",
+        "gmt"      : "(GMT-12:00)",
+        "offset"   : "-12"
+    },
+    "Midway Island" :
+    {
+        "timezone" : "Midway Island",
+        "gmt"      : "(GMT-11:00)",
+        "offset"   : "-11"
+    },
+    "Samoa" :
+    {
+        "timezone" : "Samoa",
+        "gmt"      : "(GMT-11:00)",
+        "offset"   : "-11"
+    },
+    "Hawaii" :
+    {
+        "timezone" : "Hawaii",
+        "gmt"      : "(GMT-10:00)",
+        "offset"   : "-10"
+    },
+    "Alaska" : 
+    {
+        "timezone" : "Alaska",
+        "gmt"      : "(GMT-09:00)",
+        "offset"   : "-9"
+    },
+    "Pacific Time (US & Canada)" : 
+    {
+        "timezone" : "Pacific Time (US & Canada)",
+        "gmt"      : "(GMT-08:00)",
+        "offset"   : "-8"
+    },
+    "Tijuana" : 
+    {
+        "timezone" : "Tijuana",
+        "gmt"      : "(GMT-08:00)",
+        "offset"   : "-8"
+    },
+    "Arizona" : 
+    {
+        "timezone" : "Arizona",
+        "gmt"      : "(GMT-07:00)",
+        "offset"   : "-7"
+    },
+    "Mountain Time (US & Canada)" : 
+    {
+        "timezone" : "Mountain Time (US & Canada)",
+        "gmt"      : "(GMT-07:00)",
+        "offset"   : "-7"
+    },
+    "Chihuahua" : 
+    {
+        "timezone" : "Chihuahua",
+        "gmt"      : "(GMT-07:00)",
+        "offset"   : "-7"
+    },
+    "La Paz" : 
+    {
+        "timezone" : "La Paz",
+        "gmt"      : "(GMT-04:00)",
+        "offset"   : "-4"
+    },
+    "Mazatlan" : 
+    {
+        "timezone" : "Mazatlan",
+        "gmt"      : "(GMT-07:00)",
+        "offset"   : "-7"
+    },
+    "Central Time (US & Canada)" : 
+    {
+        "timezone" : "Central Time (US & Canada)",
+        "gmt"      : "(GMT-06:00)",
+        "offset"   : "-6"
+    },
+    "Central America" : 
+    {
+        "timezone" : "Central America",
+        "gmt"      : "(GMT-06:00)",
+        "offset"   : "-6"
+    },
+    "Guadalajara" : 
+    {
+        "timezone" : "Guadalajara",
+        "gmt"      : "(GMT-06:00)",
+        "offset"   : "-6"
+    },
+    "Mexico City" : 
+    {
+        "timezone" : "Mexico City",
+        "gmt"      : "(GMT-06:00)",
+        "offset"   : "-6"
+    },
+    "Monterrey" : 
+    {
+        "timezone" : "Monterrey",
+        "gmt"      : "(GMT-06:00)",
+        "offset"   : "-6"
+    },
+    "Saskatchewan" : 
+    {
+        "timezone" : "Saskatchewan",
+        "gmt"      : "(GMT-06:00)",
+        "offset"   : "-6"
+    },
+    "Eastern Time (US & Canada)" : 
+    {
+        "timezone" : "Eastern Time (US & Canada)",
+        "gmt"      : "(GMT-05:00)",
+        "offset"   : "-5"
+    },
+    "Indiana (East)" : 
+    {
+        "timezone" : "Indiana (East)",
+        "gmt"      : "(GMT-05:00)",
+        "offset"   : "-5"
+    },
+    "Bogota" : 
+    {
+        "timezone" : "Bogota",
+        "gmt"      : "(GMT-05:00)",
+        "offset"   : "-5"
+    },
+    "Lima" : 
+    {
+        "timezone" : "Lima",
+        "gmt"      : "(GMT-05:00)",
+        "offset"   : "-5"
+    },
+    "Quito" : 
+    {
+        "timezone" : "Quito",
+        "gmt"      : "(GMT-05:00)",
+        "offset"   : "-5"
+    },
+    "Atlantic Time (Canada)" : 
+    {
+        "timezone" : "Atlantic Time (Canada)",
+        "gmt"      : "(GMT-04:00)",
+        "offset"   : "-4"
+    },
+    "Caracas" : 
+    {
+        "timezone" : "Caracas",
+        "gmt"      : "(GMT-04:00)",
+        "offset"   : "-4"
+    },
+    "Santiago" : 
+    {
+        "timezone" : "Santiago",
+        "gmt"      : "(GMT-04:00)",
+        "offset"   : "-4"
+    },
+    "Newfoundland" : 
+    {
+        "timezone" : "Newfoundland",
+        "gmt"      : "(GMT-03:30)",
+        "offset"   : "-3"
+    },
+    "Brasilia" : 
+    {
+        "timezone" : "Brasilia",
+        "gmt"      : "(GMT-03:00)",
+        "offset"   : "-3"
+    },
+    "Buenos Aires" : 
+    {
+        "timezone" : "Buenos Aires",
+        "gmt"      : "(GMT-03:00)",
+        "offset"   : "-3"
+    },
+    "Georgetown" : 
+    {
+        "timezone" : "Georgetown",
+        "gmt"      : "(GMT-03:00)",
+        "offset"   : "-3"
+    },
+    "Greenland" : 
+    {
+        "timezone" : "Greenland",
+        "gmt"      : "(GMT-03:00)",
+        "offset"   : "-3"
+    },
+    "Mid-Atlantic" : 
+    {
+        "timezone" : "Mid-Atlantic",
+        "gmt"      : "(GMT-02:00)",
+        "offset"   : "-2"
+    },
+    "Azores" : 
+    {
+        "timezone" : "Azores",
+        "gmt"      : "(GMT-01:00)",
+        "offset"   : "-1"
+    },
+    "Cape Verde Is." : 
+    {
+        "timezone" : "Cape Verde Is.",
+        "gmt"      : "(GMT-01:00)",
+        "offset"   : "-1"
+    },
+    "Casablanca" : 
+    {
+        "timezone" : "Casablanca",
+        "gmt"      : "(GMT)",
+        "offset"   : "0"
+    },
+    "Dublin" : 
+    {
+        "timezone" : "Dublin",
+        "gmt"      : "(GMT)",
+        "offset"   : "0"
+    },
+    "Edinburgh" : 
+    {
+        "timezone" : "Edinburgh",
+        "gmt"      : "(GMT)",
+        "offset"   : "0"
+    },
+    "Lisbon" : 
+    {
+        "timezone" : "Lisbon",
+        "gmt"      : "(GMT)",
+        "offset"   : "0"
+    },
+    "London" : 
+    {
+        "timezone" : "London",
+        "gmt"      : "(GMT)",
+        "offset"   : "0"
+    },
+    "Monrovia" : 
+    {
+        "timezone" : "Monrovia",
+        "gmt"      : "(GMT)",
+        "offset"   : "0"
+    },
+    "Amsterdam" : 
+    {
+        "timezone" : "Amsterdam",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Belgrade" : 
+    {
+        "timezone" : "Belgrade",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Berlin" : 
+    {
+        "timezone" : "Berlin",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Bern" : 
+    {
+        "timezone" : "Bern",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Bratislava" : 
+    {
+        "timezone" : "Bratislava",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Brussels" : 
+    {
+        "timezone" : "Brussels",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Budapest" : 
+    {
+        "timezone" : "Budapest",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Copenhagen" : 
+    {
+        "timezone" : "Copenhagen",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Ljubljana" : 
+    {
+        "timezone" : "Ljubljana",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Madrid" : 
+    {
+        "timezone" : "Madrid",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Paris" : 
+    {
+        "timezone" : "Paris",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Prague" : 
+    {
+        "timezone" : "Prague",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Rome" : 
+    {
+        "timezone" : "Rome",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Sarajevo" : 
+    {
+        "timezone" : "Sarajevo",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Skopje" : 
+    {
+        "timezone" : "Skopje",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Stockholm" : 
+    {
+        "timezone" : "Stockholm",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Vienna" : 
+    {
+        "timezone" : "Vienna",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Warsaw" : 
+    {
+        "timezone" : "Warsaw",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "West Central Africa" : 
+    {
+        "timezone" : "West Central Africa",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Zagreb" : 
+    {
+        "timezone" : "Zagreb",
+        "gmt"      : "(GMT+01:00)",
+        "offset"   : "1"
+    },
+    "Athens" : 
+    {
+        "timezone" : "Athens",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Bucharest" : 
+    {
+        "timezone" : "Bucharest",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Cairo" : 
+    {
+        "timezone" : "Cairo",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Harare" : 
+    {
+        "timezone" : "Harare",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Helsinki" : 
+    {
+        "timezone" : "Helsinki",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Istanbul" : 
+    {
+        "timezone" : "Istanbul",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Jerusalem" : 
+    {
+        "timezone" : "Jerusalem",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Kyev" : 
+    {
+        "timezone" : "Kyev",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Minsk" : 
+    {
+        "timezone" : "Minsk",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Pretoria" : 
+    {
+        "timezone" : "Pretoria",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Riga" : 
+    {
+        "timezone" : "Riga",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Sofia" : 
+    {
+        "timezone" : "Sofia",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Tallinn" : 
+    {
+        "timezone" : "Tallinn",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Vilnius" : 
+    {
+        "timezone" : "Vilnius",
+        "gmt"      : "(GMT+02:00)",
+        "offset"   : "2"
+    },
+    "Baghdad" : 
+    {
+        "timezone" : "Baghdad",
+        "gmt"      : "(GMT+03:00)",
+        "offset"   : "3"
+    },
+    "Kuwait" : 
+    {
+        "timezone" : "Kuwait",
+        "gmt"      : "(GMT+03:00)",
+        "offset"   : "3"
+    },
+    "Moscow" : 
+    {
+        "timezone" : "Moscow",
+        "gmt"      : "(GMT+03:00)",
+        "offset"   : "3"
+    },
+    "Nairobi" : 
+    {
+        "timezone" : "Nairobi",
+        "gmt"      : "(GMT+03:00)",
+        "offset"   : "3"
+    },
+    "Riyadh" : 
+    {
+        "timezone" : "Riyadh",
+        "gmt"      : "(GMT+03:00)",
+        "offset"   : "3"
+    },
+    "St. Petersburg" : 
+    {
+        "timezone" : "St. Petersburg",
+        "gmt"      : "(GMT+03:00)",
+        "offset"   : "3"
+    },
+    "Volgograd" : 
+    {
+        "timezone" : "Volgograd",
+        "gmt"      : "(GMT+03:00)",
+        "offset"   : "3"
+    },
+    "Tehran" : 
+    {
+        "timezone" : "Tehran",
+        "gmt"      : "(GMT+03:30)",
+        "offset"   : "3"
+    },
+    "Abu Dhabi" : 
+    {
+        "timezone" : "Abu Dhabi",
+        "gmt"      : "(GMT+04:00)",
+        "offset"   : "4"
+    },
+    "Baku" : 
+    {
+        "timezone" : "Baku",
+        "gmt"      : "(GMT+04:00)",
+        "offset"   : "4"
+    },
+    "Muscat" : 
+    {
+        "timezone" : "Muscat",
+        "gmt"      : "(GMT+04:00)",
+        "offset"   : "4"
+    },
+    "Tbilisi" : 
+    {
+        "timezone" : "Tbilisi",
+        "gmt"      : "(GMT+04:00)",
+        "offset"   : "4"
+    },
+    "Yerevan" : 
+    {
+        "timezone" : "Yerevan",
+        "gmt"      : "(GMT+04:00)",
+        "offset"   : "4"
+    },
+    "Kabul" : 
+    {
+        "timezone" : "Kabul",
+        "gmt"      : "(GMT+04:30)",
+        "offset"   : "4"
+    },
+    "Ekaterinburg" : 
+    {
+        "timezone" : "Ekaterinburg",
+        "gmt"      : "(GMT+05:00)",
+        "offset"   : "5"
+    },
+    "Islamabad" : 
+    {
+        "timezone" : "Islamabad",
+        "gmt"      : "(GMT+05:00)",
+        "offset"   : "5"
+    },
+    "Karachi" : 
+    {
+        "timezone" : "Karachi",
+        "gmt"      : "(GMT+05:00)",
+        "offset"   : "5"
+    },
+    "Tashkent" : 
+    {
+        "timezone" : "Tashkent",
+        "gmt"      : "(GMT+05:00)",
+        "offset"   : "5"
+    },
+    "Chennai" : 
+    {
+        "timezone" : "Chennai",
+        "gmt"      : "(GMT+05:30)",
+        "offset"   : "5"
+    },
+    "Kolkata" : 
+    {
+        "timezone" : "Kolkata",
+        "gmt"      : "(GMT+05:30)",
+        "offset"   : "5"
+    },
+    "Mumbai" : 
+    {
+        "timezone" : "Mumbai",
+        "gmt"      : "(GMT+05:30)",
+        "offset"   : "5"
+    },
+    "New Delhi" : 
+    {
+        "timezone" : "New Delhi",
+        "gmt"      : "(GMT+05:30)",
+        "offset"   : "5"
+    },
+    "Kathmandu" : 
+    {
+        "timezone" : "Kathmandu",
+        "gmt"      : "(GMT+05:45)",
+        "offset"   : "5"
+    },
+    "Almaty" : 
+    {
+        "timezone" : "Almaty",
+        "gmt"      : "(GMT+06:00)",
+        "offset"   : "6"
+    },
+    "Astana" : 
+    {
+        "timezone" : "Astana",
+        "gmt"      : "(GMT+06:00)",
+        "offset"   : "6"
+    },
+    "Dhaka" : 
+    {
+        "timezone" : "Dhaka",
+        "gmt"      : "(GMT+06:00)",
+        "offset"   : "6"
+    },
+    "Novosibirsk" : 
+    {
+        "timezone" : "Novosibirsk",
+        "gmt"      : "(GMT+06:00)",
+        "offset"   : "6"
+    },
+    "Sri Jayawardenepura" : 
+    {
+        "timezone" : "Sri Jayawardenepura",
+        "gmt"      : "(GMT+06:00)",
+        "offset"   : "6"
+    },
+    "Rangoon" : 
+    {
+        "timezone" : "Rangoon",
+        "gmt"      : "(GMT+06:30)",
+        "offset"   : "6"
+    },
+    "Bangkok" : 
+    {
+        "timezone" : "Bangkok",
+        "gmt"      : "(GMT+07:00)",
+        "offset"   : "7"
+    },
+    "Hanoi" : 
+    {
+        "timezone" : "Hanoi",
+        "gmt"      : "(GMT+07:00)",
+        "offset"   : "7"
+    },
+    "Jakarta" : 
+    {
+        "timezone" : "Jakarta",
+        "gmt"      : "(GMT+07:00)",
+        "offset"   : "7"
+    },
+    "Krasnoyarsk" : 
+    {
+        "timezone" : "Krasnoyarsk",
+        "gmt"      : "(GMT+07:00)",
+        "offset"   : "7"
+    },
+    "Beijing" : 
+    {
+        "timezone" : "Beijing",
+        "gmt"      : "(GMT+08:00)",
+        "offset"   : "8"
+    },
+    "Chongqing" : 
+    {
+        "timezone" : "Chongqing",
+        "gmt"      : "(GMT+08:00)",
+        "offset"   : "8"
+    },
+    "Hong Kong" : 
+    {
+        "timezone" : "Hong Kong",
+        "gmt"      : "(GMT+08:00)",
+        "offset"   : "8"
+    },
+    "Irkutsk" : 
+    {
+        "timezone" : "Irkutsk",
+        "gmt"      : "(GMT+08:00)",
+        "offset"   : "8"
+    },
+    "Kuala Lumpur" : 
+    {
+        "timezone" : "Kuala Lumpur",
+        "gmt"      : "(GMT+08:00)",
+        "offset"   : "8"
+    },
+    "Perth" : 
+    {
+        "timezone" : "Perth",
+        "gmt"      : "(GMT+08:00)",
+        "offset"   : "8"
+    },
+    "Singapore" : 
+    {
+        "timezone" : "Singapore",
+        "gmt"      : "(GMT+08:00)",
+        "offset"   : "8"
+    },
+    "Taipei" : 
+    {
+        "timezone" : "Taipei",
+        "gmt"      : "(GMT+08:00)",
+        "offset"   : "8"
+    },
+    "Ulaan Bataar" : 
+    {
+        "timezone" : "Ulaan Bataar",
+        "gmt"      : "(GMT+08:00)",
+        "offset"   : "8"
+    },
+    "Urumqi" : 
+    {
+        "timezone" : "Urumqi",
+        "gmt"      : "(GMT+08:00)",
+        "offset"   : "8"
+    },
+    "Osaka" : 
+    {
+        "timezone" : "Osaka",
+        "gmt"      : "(GMT+09:00)",
+        "offset"   : "9"
+    },
+    "Sapporo" : 
+    {
+        "timezone" : "Sapporo",
+        "gmt"      : "(GMT+09:00)",
+        "offset"   : "9"
+    },
+    "Seoul" : 
+    {
+        "timezone" : "Seoul",
+        "gmt"      : "(GMT+09:00)",
+        "offset"   : "9"
+    },
+    "Tokyo" : 
+    {
+        "timezone" : "Tokyo",
+        "gmt"      : "(GMT+09:00)",
+        "offset"   : "9"
+    },
+    "Yakutsk" : 
+    {
+        "timezone" : "Yakutsk",
+        "gmt"      : "(GMT+09:00)",
+        "offset"   : "9"
+    },
+    "Adelaide" : 
+    {
+        "timezone" : "Adelaide",
+        "gmt"      : "(GMT+09:30)",
+        "offset"   : "9"
+    },
+    "Darwin" : 
+    {
+        "timezone" : "Darwin",
+        "gmt"      : "(GMT+09:30)",
+        "offset"   : "9"
+    },
+    "Brisbane" : 
+    {
+        "timezone" : "Brisbane",
+        "gmt"      : "(GMT+10:00)",
+        "offset"   : "10"
+    },
+    "Canberra" : 
+    {
+        "timezone" : "Canberra",
+        "gmt"      : "(GMT+10:00)",
+        "offset"   : "10"
+    },
+    "Guam" : 
+    {
+        "timezone" : "Guam",
+        "gmt"      : "(GMT+10:00)",
+        "offset"   : "10"
+    },
+    "Hobart" : 
+    {
+        "timezone" : "Hobart",
+        "gmt"      : "(GMT+10:00)",
+        "offset"   : "10"
+    },
+    "Melbourne" : 
+    {
+        "timezone" : "Melbourne",
+        "gmt"      : "(GMT+10:00)",
+        "offset"   : "10"
+    },
+    "Port Moresby" : 
+    {
+        "timezone" : "Port Moresby",
+        "gmt"      : "(GMT+10:00)",
+        "offset"   : "10"
+    },
+    "Sydney" : 
+    {
+        "timezone" : "Sydney",
+        "gmt"      : "(GMT+10:00)",
+        "offset"   : "10"
+    },
+    "Vladivostok" : 
+    {
+        "timezone" : "Vladivostok",
+        "gmt"      : "(GMT+10:00)",
+        "offset"   : "10"
+    },
+    "Magadan" : 
+    {
+        "timezone" : "Magadan",
+        "gmt"      : "(GMT+11:00)",
+        "offset"   : "11"
+    },
+    "New Caledonia" : 
+    {
+        "timezone" : "New Caledonia",
+        "gmt"      : "(GMT+11:00)",
+        "offset"   : "11"
+    },
+    "Solomon Is." : 
+    {
+        "timezone" : "Solomon Is.",
+        "gmt"      : "(GMT+11:00)",
+        "offset"   : "11"
+    },
+    "Auckland" : 
+    {
+        "timezone" : "Auckland",
+        "gmt"      : "(GMT+12:00)",
+        "offset"   : "12"
+    },
+    "Fiji" : 
+    {
+        "timezone" : "Fiji",
+        "gmt"      : "(GMT+12:00)",
+        "offset"   : "12"
+    },
+    "Kamchatka" : 
+    {
+        "timezone" : "Kamchatka",
+        "gmt"      : "(GMT+12:00)",
+        "offset"   : "12"
+    },
+    "Marshall Is." : 
+    {
+        "timezone" : "Marshall Is.",
+        "gmt"      : "(GMT+12:00)",
+        "offset"   : "12"
+    },
+    "Wellington" : 
+    {
+        "timezone" : "Wellington",
+        "gmt"      : "(GMT+12:00)",
+        "offset"   : "12"
+    },
+    "Nuku\\alofa" : 
+    {
+        "timezone" : "Nuku\\alofa",
+        "gmt"      : "(GMT+13:00)",
+        "offset"   : "13"
+    }
+}

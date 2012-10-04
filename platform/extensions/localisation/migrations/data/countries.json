@@ -1,0 +1,2472 @@
+{
+  "AF":{
+    "name":"Afghanistan",
+    "iso_code_2":"AF",
+    "iso_code_3":"AFG",
+    "iso_code_numeric_3":"004",
+    "region":"Asia",
+    "subregion":"Southern Asia",
+    "currency":"AFN",
+    "cdh_id":"2"
+  },
+  "AL":{
+    "name":"Albania",
+    "iso_code_2":"AL",
+    "iso_code_3":"ALB",
+    "iso_code_numeric_3":"008",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"ALK",
+    "cdh_id":"4"
+  },
+  "DZ":{
+    "name":"Algeria",
+    "iso_code_2":"DZ",
+    "iso_code_3":"DZA",
+    "iso_code_numeric_3":"012",
+    "region":"Africa",
+    "subregion":"Northern Africa",
+    "currency":"DZD",
+    "cdh_id":"5"
+  },
+  "AS":{
+    "name":"American Samoa",
+    "iso_code_2":"AS",
+    "iso_code_3":"ASM",
+    "iso_code_numeric_3":"016",
+    "region":"Oceania",
+    "subregion":"Polynesia",
+    "currency":"USD",
+    "cdh_id":"6"
+  },
+  "AD":{
+    "name":"Andorra",
+    "iso_code_2":"AD",
+    "iso_code_3":"AND",
+    "iso_code_numeric_3":"020",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"ADF",
+    "cdh_id":"7"
+  },
+  "AO":{
+    "name":"Angola",
+    "iso_code_2":"AO",
+    "iso_code_3":"AGO",
+    "iso_code_numeric_3":"024",
+    "region":"Africa",
+    "subregion":"Middle Africa",
+    "currency":"AOR",
+    "cdh_id":"8"
+  },
+  "AI":{
+    "name":"Anguilla",
+    "iso_code_2":"AI",
+    "iso_code_3":"AIA",
+    "iso_code_numeric_3":"660",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"XCD",
+    "cdh_id":"9"
+  },
+  "AQ":{
+    "name":"Antarctica",
+    "iso_code_2":"AQ",
+    "iso_code_3":"ATA",
+    "iso_code_numeric_3":"010",
+    "region":"",
+    "subregion":"",
+    "currency":"-",
+    "cdh_id":"10"
+  },
+  "AG":{
+    "name":"Antigua and Barbuda",
+    "iso_code_2":"AG",
+    "iso_code_3":"ATG",
+    "iso_code_numeric_3":"028",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"XCD",
+    "cdh_id":"11"
+  },
+  "AR":{
+    "name":"Argentina",
+    "iso_code_2":"AR",
+    "iso_code_3":"ARG",
+    "iso_code_numeric_3":"032",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"ARA",
+    "cdh_id":"12"
+  },
+  "AM":{
+    "name":"Armenia",
+    "iso_code_2":"AM",
+    "iso_code_3":"ARM",
+    "iso_code_numeric_3":"051",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"AMD",
+    "cdh_id":"13"
+  },
+  "AW":{
+    "name":"Aruba",
+    "iso_code_2":"AW",
+    "iso_code_3":"ABW",
+    "iso_code_numeric_3":"533",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"AWG",
+    "cdh_id":"14"
+  },
+  "AU":{
+    "name":"Australia",
+    "iso_code_2":"AU",
+    "iso_code_3":"AUS",
+    "iso_code_numeric_3":"036",
+    "region":"Oceania",
+    "subregion":"Australia and New Zealand",
+    "currency":"AUD",
+    "cdh_id":"15"
+  },
+  "AT":{
+    "name":"Austria",
+    "iso_code_2":"AT",
+    "iso_code_3":"AUT",
+    "iso_code_numeric_3":"040",
+    "region":"Europe",
+    "subregion":"Western Europe",
+    "currency":"ATS",
+    "cdh_id":"16"
+  },
+  "AZ":{
+    "name":"Azerbaijan",
+    "iso_code_2":"AZ",
+    "iso_code_3":"AZE",
+    "iso_code_numeric_3":"031",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"AZM",
+    "cdh_id":"17"
+  },
+  "BS":{
+    "name":"Bahamas",
+    "iso_code_2":"BS",
+    "iso_code_3":"BHS",
+    "iso_code_numeric_3":"044",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"BSD",
+    "cdh_id":"18"
+  },
+  "BH":{
+    "name":"Bahrain",
+    "iso_code_2":"BH",
+    "iso_code_3":"BHR",
+    "iso_code_numeric_3":"048",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"BHD",
+    "cdh_id":"21"
+  },
+  "BD":{
+    "name":"Bangladesh",
+    "iso_code_2":"BD",
+    "iso_code_3":"BGD",
+    "iso_code_numeric_3":"050",
+    "region":"Asia",
+    "subregion":"Southern Asia",
+    "currency":"BDT",
+    "cdh_id":"22"
+  },
+  "BB":{
+    "name":"Barbados",
+    "iso_code_2":"BB",
+    "iso_code_3":"BRB",
+    "iso_code_numeric_3":"052",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"BBD",
+    "cdh_id":"23"
+  },
+  "BY":{
+    "name":"Belarus",
+    "iso_code_2":"BY",
+    "iso_code_3":"BLR",
+    "iso_code_numeric_3":"112",
+    "region":"Europe",
+    "subregion":"Eastern Europe",
+    "currency":"BYR",
+    "cdh_id":"24"
+  },
+  "BE":{
+    "name":"Belgium",
+    "iso_code_2":"BE",
+    "iso_code_3":"BEL",
+    "iso_code_numeric_3":"056",
+    "region":"Europe",
+    "subregion":"Western Europe",
+    "currency":"BEC",
+    "cdh_id":"25"
+  },
+  "BZ":{
+    "name":"Belize",
+    "iso_code_2":"BZ",
+    "iso_code_3":"BLZ",
+    "iso_code_numeric_3":"084",
+    "region":"Americas",
+    "subregion":"Central America",
+    "currency":"BZD",
+    "cdh_id":"26"
+  },
+  "BJ":{
+    "name":"Benin",
+    "iso_code_2":"BJ",
+    "iso_code_3":"BEN",
+    "iso_code_numeric_3":"204",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"XOF",
+    "cdh_id":"27"
+  },
+  "BM":{
+    "name":"Bermuda",
+    "iso_code_2":"BM",
+    "iso_code_3":"BMU",
+    "iso_code_numeric_3":"060",
+    "region":"Americas",
+    "subregion":"Northern America",
+    "currency":"BMD",
+    "cdh_id":"28"
+  },
+  "BT":{
+    "name":"Bhutan",
+    "iso_code_2":"BT",
+    "iso_code_3":"BTN",
+    "iso_code_numeric_3":"064",
+    "region":"Asia",
+    "subregion":"Southern Asia",
+    "currency":"INR",
+    "cdh_id":"29"
+  },
+  "BO":{
+    "name":"Bolivia, Plurinational State Of",
+    "iso_code_2":"BO",
+    "iso_code_3":"BOL",
+    "iso_code_numeric_3":"068",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"BOP",
+    "cdh_id":"30"
+  },
+  "BA":{
+    "name":"Bosnia and Herzegovina",
+    "iso_code_2":"BA",
+    "iso_code_3":"BIH",
+    "iso_code_numeric_3":"070",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"BAM",
+    "cdh_id":"31"
+  },
+  "BW":{
+    "name":"Botswana",
+    "iso_code_2":"BW",
+    "iso_code_3":"BWA",
+    "iso_code_numeric_3":"072",
+    "region":"Africa",
+    "subregion":"Southern Africa",
+    "currency":"BWP",
+    "cdh_id":"32"
+  },
+  "BV":{
+    "name":"Bouvet Island",
+    "iso_code_2":"BV",
+    "iso_code_3":"BVT",
+    "iso_code_numeric_3":"074",
+    "region":"",
+    "subregion":"",
+    "currency":"NOK",
+    "cdh_id":"33"
+  },
+  "BR":{
+    "name":"Brazil",
+    "iso_code_2":"BR",
+    "iso_code_3":"BRA",
+    "iso_code_numeric_3":"076",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"BRC",
+    "cdh_id":"34"
+  },
+  "IO":{
+    "name":"British Indian Ocean Territory",
+    "iso_code_2":"IO",
+    "iso_code_3":"IOT",
+    "iso_code_numeric_3":"086",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"USD",
+    "cdh_id":"35"
+  },
+  "BN":{
+    "name":"Brunei Darussalam",
+    "iso_code_2":"BN",
+    "iso_code_3":"BRN",
+    "iso_code_numeric_3":"096",
+    "region":"Asia",
+    "subregion":"South-Eastern Asia",
+    "currency":"BND",
+    "cdh_id":"36"
+  },
+  "BG":{
+    "name":"Bulgaria",
+    "iso_code_2":"BG",
+    "iso_code_3":"BGR",
+    "iso_code_numeric_3":"100",
+    "region":"Europe",
+    "subregion":"Eastern Europe",
+    "currency":"BGN",
+    "cdh_id":"37"
+  },
+  "BF":{
+    "name":"Burkina Faso",
+    "iso_code_2":"BF",
+    "iso_code_3":"BFA",
+    "iso_code_numeric_3":"854",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"XOF",
+    "cdh_id":"38"
+  },
+  "BI":{
+    "name":"Burundi",
+    "iso_code_2":"BI",
+    "iso_code_3":"BDI",
+    "iso_code_numeric_3":"108",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"BIF",
+    "cdh_id":"39"
+  },
+  "KH":{
+    "name":"Cambodia",
+    "iso_code_2":"KH",
+    "iso_code_3":"KHM",
+    "iso_code_numeric_3":"116",
+    "region":"Asia",
+    "subregion":"South-Eastern Asia",
+    "currency":"KHR",
+    "cdh_id":"40"
+  },
+  "CM":{
+    "name":"Cameroon",
+    "iso_code_2":"CM",
+    "iso_code_3":"CMR",
+    "iso_code_numeric_3":"120",
+    "region":"Africa",
+    "subregion":"Middle Africa",
+    "currency":"XAF",
+    "cdh_id":"41"
+  },
+  "CA":{
+    "name":"Canada",
+    "iso_code_2":"CA",
+    "iso_code_3":"CAN",
+    "iso_code_numeric_3":"124",
+    "region":"Americas",
+    "subregion":"Northern America",
+    "currency":"CAD",
+    "cdh_id":"42"
+  },
+  "CV":{
+    "name":"Cape Verde",
+    "iso_code_2":"CV",
+    "iso_code_3":"CPV",
+    "iso_code_numeric_3":"132",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"CVE",
+    "cdh_id":"43"
+  },
+  "KY":{
+    "name":"Cayman Islands",
+    "iso_code_2":"KY",
+    "iso_code_3":"CYM",
+    "iso_code_numeric_3":"136",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"KYD",
+    "cdh_id":"44"
+  },
+  "CF":{
+    "name":"Central African Republic",
+    "iso_code_2":"CF",
+    "iso_code_3":"CAF",
+    "iso_code_numeric_3":"140",
+    "region":"Africa",
+    "subregion":"Middle Africa",
+    "currency":"XAF",
+    "cdh_id":"45"
+  },
+  "TD":{
+    "name":"Chad",
+    "iso_code_2":"TD",
+    "iso_code_3":"TCD",
+    "iso_code_numeric_3":"148",
+    "region":"Africa",
+    "subregion":"Middle Africa",
+    "currency":"XAF",
+    "cdh_id":"46"
+  },
+  "CL":{
+    "name":"Chile",
+    "iso_code_2":"CL",
+    "iso_code_3":"CHL",
+    "iso_code_numeric_3":"152",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"CLP",
+    "cdh_id":"47"
+  },
+  "CN":{
+    "name":"China",
+    "iso_code_2":"CN",
+    "iso_code_3":"CHN",
+    "iso_code_numeric_3":"156",
+    "region":"Asia",
+    "subregion":"Eastern Asia",
+    "currency":"CNX",
+    "cdh_id":"48"
+  },
+  "CX":{
+    "name":"Christmas Island",
+    "iso_code_2":"CX",
+    "iso_code_3":"CXR",
+    "iso_code_numeric_3":"162",
+    "region":"Oceania",
+    "subregion":"Australia and New Zealand",
+    "currency":"AUD",
+    "cdh_id":"49"
+  },
+  "CC":{
+    "name":"Cocos (Keeling) Islands",
+    "iso_code_2":"CC",
+    "iso_code_3":"CCK",
+    "iso_code_numeric_3":"166",
+    "region":"Oceania",
+    "subregion":"Australia and New Zealand",
+    "currency":"AUD",
+    "cdh_id":"50"
+  },
+  "CO":{
+    "name":"Colombia",
+    "iso_code_2":"CO",
+    "iso_code_3":"COL",
+    "iso_code_numeric_3":"170",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"COP",
+    "cdh_id":"51"
+  },
+  "KM":{
+    "name":"Comoros",
+    "iso_code_2":"KM",
+    "iso_code_3":"COM",
+    "iso_code_numeric_3":"174",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"KMF",
+    "cdh_id":"52"
+  },
+  "CG":{
+    "name":"Congo",
+    "iso_code_2":"CG",
+    "iso_code_3":"COG",
+    "iso_code_numeric_3":"178",
+    "region":"Africa",
+    "subregion":"Middle Africa",
+    "currency":"XAF",
+    "cdh_id":"53"
+  },
+  "CD":{
+    "name":"Congo, The Democratic Republic Of The",
+    "iso_code_2":"CD",
+    "iso_code_3":"COD",
+    "iso_code_numeric_3":"180",
+    "region":"Africa",
+    "subregion":"Middle Africa",
+    "currency":"CDF",
+    "cdh_id":"54"
+  },
+  "CK":{
+    "name":"Cook Islands",
+    "iso_code_2":"CK",
+    "iso_code_3":"COK",
+    "iso_code_numeric_3":"184",
+    "region":"Oceania",
+    "subregion":"Polynesia",
+    "currency":"NZD",
+    "cdh_id":"55"
+  },
+  "CR":{
+    "name":"Costa Rica",
+    "iso_code_2":"CR",
+    "iso_code_3":"CRI",
+    "iso_code_numeric_3":"188",
+    "region":"Americas",
+    "subregion":"Central America",
+    "currency":"CRC",
+    "cdh_id":"56"
+  },
+  "HR":{
+    "name":"Croatia",
+    "iso_code_2":"HR",
+    "iso_code_3":"HRV",
+    "iso_code_numeric_3":"191",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"HRK",
+    "cdh_id":"58"
+  },
+  "CU":{
+    "name":"Cuba",
+    "iso_code_2":"CU",
+    "iso_code_3":"CUB",
+    "iso_code_numeric_3":"192",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"CUP",
+    "cdh_id":"59"
+  },
+  "CY":{
+    "name":"Cyprus",
+    "iso_code_2":"CY",
+    "iso_code_3":"CYP",
+    "iso_code_numeric_3":"196",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"CYP",
+    "cdh_id":"60"
+  },
+  "CZ":{
+    "name":"Czech Republic",
+    "iso_code_2":"CZ",
+    "iso_code_3":"CZE",
+    "iso_code_numeric_3":"203",
+    "region":"Europe",
+    "subregion":"Eastern Europe",
+    "currency":"CZK",
+    "cdh_id":"61"
+  },
+  "CI":{
+    "name":"C\u00f4te D\\'Ivoire",
+    "iso_code_2":"CI",
+    "iso_code_3":"CIV",
+    "iso_code_numeric_3":"384",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"XOF",
+    "cdh_id":"57"
+  },
+  "DK":{
+    "name":"Denmark",
+    "iso_code_2":"DK",
+    "iso_code_3":"DNK",
+    "iso_code_numeric_3":"208",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"DKK",
+    "cdh_id":"62"
+  },
+  "DJ":{
+    "name":"Djibouti",
+    "iso_code_2":"DJ",
+    "iso_code_3":"DJI",
+    "iso_code_numeric_3":"262",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"DJF",
+    "cdh_id":"63"
+  },
+  "DM":{
+    "name":"Dominica",
+    "iso_code_2":"DM",
+    "iso_code_3":"DMA",
+    "iso_code_numeric_3":"212",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"XCD",
+    "cdh_id":"64"
+  },
+  "DO":{
+    "name":"Dominican Republic",
+    "iso_code_2":"DO",
+    "iso_code_3":"DOM",
+    "iso_code_numeric_3":"214",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"DOP",
+    "cdh_id":"65"
+  },
+  "EC":{
+    "name":"Ecuador",
+    "iso_code_2":"EC",
+    "iso_code_3":"ECU",
+    "iso_code_numeric_3":"218",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"ECS",
+    "cdh_id":"66"
+  },
+  "EG":{
+    "name":"Egypt",
+    "iso_code_2":"EG",
+    "iso_code_3":"EGY",
+    "iso_code_numeric_3":"818",
+    "region":"Africa",
+    "subregion":"Northern Africa",
+    "currency":"EGP",
+    "cdh_id":"67"
+  },
+  "SV":{
+    "name":"El Salvador",
+    "iso_code_2":"SV",
+    "iso_code_3":"SLV",
+    "iso_code_numeric_3":"222",
+    "region":"Americas",
+    "subregion":"Central America",
+    "currency":"SVC",
+    "cdh_id":"68"
+  },
+  "GQ":{
+    "name":"Equatorial Guinea",
+    "iso_code_2":"GQ",
+    "iso_code_3":"GNQ",
+    "iso_code_numeric_3":"226",
+    "region":"Africa",
+    "subregion":"Middle Africa",
+    "currency":"XAF",
+    "cdh_id":"69"
+  },
+  "ER":{
+    "name":"Eritrea",
+    "iso_code_2":"ER",
+    "iso_code_3":"ERI",
+    "iso_code_numeric_3":"232",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"ERN",
+    "cdh_id":"70"
+  },
+  "EE":{
+    "name":"Estonia",
+    "iso_code_2":"EE",
+    "iso_code_3":"EST",
+    "iso_code_numeric_3":"233",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"EUR",
+    "cdh_id":"71"
+  },
+  "ET":{
+    "name":"Ethiopia",
+    "iso_code_2":"ET",
+    "iso_code_3":"ETH",
+    "iso_code_numeric_3":"231",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"ETB",
+    "cdh_id":"73"
+  },
+  "FK":{
+    "name":"Falkland Islands  (Malvinas)",
+    "iso_code_2":"FK",
+    "iso_code_3":"FLK",
+    "iso_code_numeric_3":"238",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"FKP",
+    "cdh_id":"74"
+  },
+  "FO":{
+    "name":"Faroe Islands",
+    "iso_code_2":"FO",
+    "iso_code_3":"FRO",
+    "iso_code_numeric_3":"234",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"DKK",
+    "cdh_id":"75"
+  },
+  "FJ":{
+    "name":"Fiji",
+    "iso_code_2":"FJ",
+    "iso_code_3":"FJI",
+    "iso_code_numeric_3":"242",
+    "region":"Oceania",
+    "subregion":"Melanesia",
+    "currency":"FJD",
+    "cdh_id":"76"
+  },
+  "FI":{
+    "name":"Finland",
+    "iso_code_2":"FI",
+    "iso_code_3":"FIN",
+    "iso_code_numeric_3":"246",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"EUR",
+    "cdh_id":"77"
+  },
+  "FR":{
+    "name":"France",
+    "iso_code_2":"FR",
+    "iso_code_3":"FRA",
+    "iso_code_numeric_3":"250",
+    "region":"Europe",
+    "subregion":"Western Europe",
+    "currency":"EUR",
+    "cdh_id":"78"
+  },
+  "GF":{
+    "name":"French Guiana",
+    "iso_code_2":"GF",
+    "iso_code_3":"GUF",
+    "iso_code_numeric_3":"254",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"EUR",
+    "cdh_id":"80"
+  },
+  "PF":{
+    "name":"French Polynesia",
+    "iso_code_2":"PF",
+    "iso_code_3":"PYF",
+    "iso_code_numeric_3":"258",
+    "region":"Oceania",
+    "subregion":"Polynesia",
+    "currency":"XPF",
+    "cdh_id":"81"
+  },
+  "TF":{
+    "name":"French Southern Territories",
+    "iso_code_2":"TF",
+    "iso_code_3":"ATF",
+    "iso_code_numeric_3":"260",
+    "region":"",
+    "subregion":"",
+    "currency":"EUR",
+    "cdh_id":"82"
+  },
+  "GA":{
+    "name":"Gabon",
+    "iso_code_2":"GA",
+    "iso_code_3":"GAB",
+    "iso_code_numeric_3":"266",
+    "region":"Africa",
+    "subregion":"Middle Africa",
+    "currency":"XAF",
+    "cdh_id":"83"
+  },
+  "GM":{
+    "name":"Gambia",
+    "iso_code_2":"GM",
+    "iso_code_3":"GMB",
+    "iso_code_numeric_3":"270",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"GMD",
+    "cdh_id":"84"
+  },
+  "GE":{
+    "name":"Georgia",
+    "iso_code_2":"GE",
+    "iso_code_3":"GEO",
+    "iso_code_numeric_3":"268",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"GEL",
+    "cdh_id":"1"
+  },
+  "DE":{
+    "name":"Germany",
+    "iso_code_2":"DE",
+    "iso_code_3":"DEU",
+    "iso_code_numeric_3":"276",
+    "region":"Europe",
+    "subregion":"Western Europe",
+    "currency":"DEM",
+    "cdh_id":"85"
+  },
+  "GH":{
+    "name":"Ghana",
+    "iso_code_2":"GH",
+    "iso_code_3":"GHA",
+    "iso_code_numeric_3":"288",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"GHS",
+    "cdh_id":"86"
+  },
+  "GI":{
+    "name":"Gibraltar",
+    "iso_code_2":"GI",
+    "iso_code_3":"GIB",
+    "iso_code_numeric_3":"292",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"GIP",
+    "cdh_id":"87"
+  },
+  "GR":{
+    "name":"Greece",
+    "iso_code_2":"GR",
+    "iso_code_3":"GRC",
+    "iso_code_numeric_3":"300",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"EUR",
+    "cdh_id":"88"
+  },
+  "GL":{
+    "name":"Greenland",
+    "iso_code_2":"GL",
+    "iso_code_3":"GRL",
+    "iso_code_numeric_3":"304",
+    "region":"Americas",
+    "subregion":"Northern America",
+    "currency":"DKK",
+    "cdh_id":"89"
+  },
+  "GD":{
+    "name":"Grenada",
+    "iso_code_2":"GD",
+    "iso_code_3":"GRD",
+    "iso_code_numeric_3":"308",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"XCD",
+    "cdh_id":"90"
+  },
+  "GP":{
+    "name":"Guadeloupe",
+    "iso_code_2":"GP",
+    "iso_code_3":"GLP",
+    "iso_code_numeric_3":"312",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"EUR",
+    "cdh_id":"91"
+  },
+  "GU":{
+    "name":"Guam",
+    "iso_code_2":"GU",
+    "iso_code_3":"GUM",
+    "iso_code_numeric_3":"316",
+    "region":"Oceania",
+    "subregion":"Micronesia",
+    "currency":"USD",
+    "cdh_id":"92"
+  },
+  "GT":{
+    "name":"Guatemala",
+    "iso_code_2":"GT",
+    "iso_code_3":"GTM",
+    "iso_code_numeric_3":"320",
+    "region":"Americas",
+    "subregion":"Central America",
+    "currency":"GTQ",
+    "cdh_id":"93"
+  },
+  "GG":{
+    "name":"Guernsey",
+    "iso_code_2":"GG",
+    "iso_code_3":"GGY",
+    "iso_code_numeric_3":"831",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"GBP",
+    "cdh_id":"94"
+  },
+  "GN":{
+    "name":"Guinea",
+    "iso_code_2":"GN",
+    "iso_code_3":"GIN",
+    "iso_code_numeric_3":"324",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"GNF",
+    "cdh_id":"95"
+  },
+  "GW":{
+    "name":"Guinea-Bissau",
+    "iso_code_2":"GW",
+    "iso_code_3":"GNB",
+    "iso_code_numeric_3":"624",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"XOF",
+    "cdh_id":"96"
+  },
+  "GY":{
+    "name":"Guyana",
+    "iso_code_2":"GY",
+    "iso_code_3":"GUY",
+    "iso_code_numeric_3":"328",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"GYD",
+    "cdh_id":"97"
+  },
+  "HT":{
+    "name":"Haiti",
+    "iso_code_2":"HT",
+    "iso_code_3":"HTI",
+    "iso_code_numeric_3":"332",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"HTG",
+    "cdh_id":"98"
+  },
+  "HM":{
+    "name":"Heard Island and McDonald Islands",
+    "iso_code_2":"HM",
+    "iso_code_3":"HMD",
+    "iso_code_numeric_3":"334",
+    "region":"",
+    "subregion":"",
+    "currency":"AUD",
+    "cdh_id":"99"
+  },
+  "VA":{
+    "name":"Holy See (Vatican City State)",
+    "iso_code_2":"VA",
+    "iso_code_3":"VAT",
+    "iso_code_numeric_3":"336",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"EUR",
+    "cdh_id":"100"
+  },
+  "HN":{
+    "name":"Honduras",
+    "iso_code_2":"HN",
+    "iso_code_3":"HND",
+    "iso_code_numeric_3":"340",
+    "region":"Americas",
+    "subregion":"Central America",
+    "currency":"HNL",
+    "cdh_id":"101"
+  },
+  "HK":{
+    "name":"Hong Kong",
+    "iso_code_2":"HK",
+    "iso_code_3":"HKG",
+    "iso_code_numeric_3":"344",
+    "region":"Asia",
+    "subregion":"Eastern Asia",
+    "currency":"HKD",
+    "cdh_id":"102"
+  },
+  "HU":{
+    "name":"Hungary",
+    "iso_code_2":"HU",
+    "iso_code_3":"HUN",
+    "iso_code_numeric_3":"348",
+    "region":"Europe",
+    "subregion":"Eastern Europe",
+    "currency":"HUF",
+    "cdh_id":"103"
+  },
+  "IS":{
+    "name":"Iceland",
+    "iso_code_2":"IS",
+    "iso_code_3":"ISL",
+    "iso_code_numeric_3":"352",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"ISK",
+    "cdh_id":"104"
+  },
+  "IN":{
+    "name":"India",
+    "iso_code_2":"IN",
+    "iso_code_3":"IND",
+    "iso_code_numeric_3":"356",
+    "region":"Asia",
+    "subregion":"Southern Asia",
+    "currency":"INR",
+    "cdh_id":"105"
+  },
+  "ID":{
+    "name":"Indonesia",
+    "iso_code_2":"ID",
+    "iso_code_3":"IDN",
+    "iso_code_numeric_3":"360",
+    "region":"Asia",
+    "subregion":"South-Eastern Asia",
+    "currency":"IDR",
+    "cdh_id":"106"
+  },
+  "IR":{
+    "name":"Iran, Islamic Republic Of",
+    "iso_code_2":"IR",
+    "iso_code_3":"IRN",
+    "iso_code_numeric_3":"364",
+    "region":"Asia",
+    "subregion":"Southern Asia",
+    "currency":"IRR",
+    "cdh_id":"107"
+  },
+  "IQ":{
+    "name":"Iraq",
+    "iso_code_2":"IQ",
+    "iso_code_3":"IRQ",
+    "iso_code_numeric_3":"368",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"IQD",
+    "cdh_id":"108"
+  },
+  "IE":{
+    "name":"Ireland",
+    "iso_code_2":"IE",
+    "iso_code_3":"IRL",
+    "iso_code_numeric_3":"372",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"EUR",
+    "cdh_id":"109"
+  },
+  "IM":{
+    "name":"Isle of Man",
+    "iso_code_2":"IM",
+    "iso_code_3":"IMN",
+    "iso_code_numeric_3":"833",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"GBP",
+    "cdh_id":"110"
+  },
+  "IL":{
+    "name":"Israel",
+    "iso_code_2":"IL",
+    "iso_code_3":"ISR",
+    "iso_code_numeric_3":"376",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"ILP",
+    "cdh_id":"111"
+  },
+  "IT":{
+    "name":"Italy",
+    "iso_code_2":"IT",
+    "iso_code_3":"ITA",
+    "iso_code_numeric_3":"380",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"EUR",
+    "cdh_id":"112"
+  },
+  "JM":{
+    "name":"Jamaica",
+    "iso_code_2":"JM",
+    "iso_code_3":"JAM",
+    "iso_code_numeric_3":"388",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"JMD",
+    "cdh_id":"113"
+  },
+  "JP":{
+    "name":"Japan",
+    "iso_code_2":"JP",
+    "iso_code_3":"JPN",
+    "iso_code_numeric_3":"392",
+    "region":"Asia",
+    "subregion":"Eastern Asia",
+    "currency":"JPY",
+    "cdh_id":"114"
+  },
+  "JE":{
+    "name":"Jersey",
+    "iso_code_2":"JE",
+    "iso_code_3":"JEY",
+    "iso_code_numeric_3":"832",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"GBP",
+    "cdh_id":"115"
+  },
+  "JO":{
+    "name":"Jordan",
+    "iso_code_2":"JO",
+    "iso_code_3":"JOR",
+    "iso_code_numeric_3":"400",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"JOD",
+    "cdh_id":"116"
+  },
+  "KZ":{
+    "name":"Kazakhstan",
+    "iso_code_2":"KZ",
+    "iso_code_3":"KAZ",
+    "iso_code_numeric_3":"398",
+    "region":"Asia",
+    "subregion":"Central Asia",
+    "currency":"KZT",
+    "cdh_id":"117"
+  },
+  "KE":{
+    "name":"Kenya",
+    "iso_code_2":"KE",
+    "iso_code_3":"KEN",
+    "iso_code_numeric_3":"404",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"KES",
+    "cdh_id":"118"
+  },
+  "KI":{
+    "name":"Kiribati",
+    "iso_code_2":"KI",
+    "iso_code_3":"KIR",
+    "iso_code_numeric_3":"296",
+    "region":"Oceania",
+    "subregion":"Micronesia",
+    "currency":"AUD",
+    "cdh_id":"119"
+  },
+  "KP":{
+    "name":"Korea, Democratic People\\'s Republic Of",
+    "iso_code_2":"KP",
+    "iso_code_3":"PRK",
+    "iso_code_numeric_3":"408",
+    "region":"Asia",
+    "subregion":"Eastern Asia",
+    "currency":"KPW",
+    "cdh_id":"121"
+  },
+  "KR":{
+    "name":"Korea, Republic of",
+    "iso_code_2":"KR",
+    "iso_code_3":"KOR",
+    "iso_code_numeric_3":"410",
+    "region":"Asia",
+    "subregion":"Eastern Asia",
+    "currency":"KRW",
+    "cdh_id":"120"
+  },
+  "KW":{
+    "name":"Kuwait",
+    "iso_code_2":"KW",
+    "iso_code_3":"KWT",
+    "iso_code_numeric_3":"414",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"KWD",
+    "cdh_id":"122"
+  },
+  "KG":{
+    "name":"Kyrgyzstan",
+    "iso_code_2":"KG",
+    "iso_code_3":"KGZ",
+    "iso_code_numeric_3":"417",
+    "region":"Asia",
+    "subregion":"Central Asia",
+    "currency":"KGS",
+    "cdh_id":"123"
+  },
+  "LA":{
+    "name":"Lao People\\'s Democratic Republic",
+    "iso_code_2":"LA",
+    "iso_code_3":"LAO",
+    "iso_code_numeric_3":"418",
+    "region":"Asia",
+    "subregion":"South-Eastern Asia",
+    "currency":"LAK",
+    "cdh_id":"124"
+  },
+  "LV":{
+    "name":"Latvia",
+    "iso_code_2":"LV",
+    "iso_code_3":"LVA",
+    "iso_code_numeric_3":"428",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"LVL",
+    "cdh_id":"125"
+  },
+  "LB":{
+    "name":"Lebanon",
+    "iso_code_2":"LB",
+    "iso_code_3":"LBN",
+    "iso_code_numeric_3":"422",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"LBP",
+    "cdh_id":"126"
+  },
+  "LS":{
+    "name":"Lesotho",
+    "iso_code_2":"LS",
+    "iso_code_3":"LSO",
+    "iso_code_numeric_3":"426",
+    "region":"Africa",
+    "subregion":"Southern Africa",
+    "currency":"LSL",
+    "cdh_id":"127"
+  },
+  "LR":{
+    "name":"Liberia",
+    "iso_code_2":"LR",
+    "iso_code_3":"LBR",
+    "iso_code_numeric_3":"430",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"LRD",
+    "cdh_id":"128"
+  },
+  "LY":{
+    "name":"Libya",
+    "iso_code_2":"LY",
+    "iso_code_3":"LBY",
+    "iso_code_numeric_3":"434",
+    "region":"Africa",
+    "subregion":"Northern Africa",
+    "currency":"LYD",
+    "cdh_id":"129"
+  },
+  "LI":{
+    "name":"Liechtenstein",
+    "iso_code_2":"LI",
+    "iso_code_3":"LIE",
+    "iso_code_numeric_3":"438",
+    "region":"Europe",
+    "subregion":"Western Europe",
+    "currency":"CHF",
+    "cdh_id":"130"
+  },
+  "LT":{
+    "name":"Lithuania",
+    "iso_code_2":"LT",
+    "iso_code_3":"LTU",
+    "iso_code_numeric_3":"440",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"LTL",
+    "cdh_id":"131"
+  },
+  "LU":{
+    "name":"Luxembourg",
+    "iso_code_2":"LU",
+    "iso_code_3":"LUX",
+    "iso_code_numeric_3":"442",
+    "region":"Europe",
+    "subregion":"Western Europe",
+    "currency":"EUR",
+    "cdh_id":"132"
+  },
+  "MO":{
+    "name":"Macao",
+    "iso_code_2":"MO",
+    "iso_code_3":"MAC",
+    "iso_code_numeric_3":"446",
+    "region":"Asia",
+    "subregion":"Eastern Asia",
+    "currency":"MOP",
+    "cdh_id":"133"
+  },
+  "MK":{
+    "name":"Macedonia, the Former Yugoslav Republic Of",
+    "iso_code_2":"MK",
+    "iso_code_3":"MKD",
+    "iso_code_numeric_3":"807",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"MKD",
+    "cdh_id":"134"
+  },
+  "MG":{
+    "name":"Madagascar",
+    "iso_code_2":"MG",
+    "iso_code_3":"MDG",
+    "iso_code_numeric_3":"450",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"MGA",
+    "cdh_id":"135"
+  },
+  "MW":{
+    "name":"Malawi",
+    "iso_code_2":"MW",
+    "iso_code_3":"MWI",
+    "iso_code_numeric_3":"454",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"MWK",
+    "cdh_id":"136"
+  },
+  "MY":{
+    "name":"Malaysia",
+    "iso_code_2":"MY",
+    "iso_code_3":"MYS",
+    "iso_code_numeric_3":"458",
+    "region":"Asia",
+    "subregion":"South-Eastern Asia",
+    "currency":"MYR",
+    "cdh_id":"137"
+  },
+  "MV":{
+    "name":"Maldives",
+    "iso_code_2":"MV",
+    "iso_code_3":"MDV",
+    "iso_code_numeric_3":"462",
+    "region":"Asia",
+    "subregion":"Southern Asia",
+    "currency":"MVQ",
+    "cdh_id":"138"
+  },
+  "ML":{
+    "name":"Mali",
+    "iso_code_2":"ML",
+    "iso_code_3":"MLI",
+    "iso_code_numeric_3":"466",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"XOF",
+    "cdh_id":"139"
+  },
+  "MT":{
+    "name":"Malta",
+    "iso_code_2":"MT",
+    "iso_code_3":"MLT",
+    "iso_code_numeric_3":"470",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"EUR",
+    "cdh_id":"140"
+  },
+  "MH":{
+    "name":"Marshall Islands",
+    "iso_code_2":"MH",
+    "iso_code_3":"MHL",
+    "iso_code_numeric_3":"584",
+    "region":"Oceania",
+    "subregion":"Micronesia",
+    "currency":"USD",
+    "cdh_id":"141"
+  },
+  "MQ":{
+    "name":"Martinique",
+    "iso_code_2":"MQ",
+    "iso_code_3":"MTQ",
+    "iso_code_numeric_3":"474",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"EUR",
+    "cdh_id":"142"
+  },
+  "MR":{
+    "name":"Mauritania",
+    "iso_code_2":"MR",
+    "iso_code_3":"MRT",
+    "iso_code_numeric_3":"478",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"MRO",
+    "cdh_id":"143"
+  },
+  "MU":{
+    "name":"Mauritius",
+    "iso_code_2":"MU",
+    "iso_code_3":"MUS",
+    "iso_code_numeric_3":"480",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"MUR",
+    "cdh_id":"144"
+  },
+  "YT":{
+    "name":"Mayotte",
+    "iso_code_2":"YT",
+    "iso_code_3":"MYT",
+    "iso_code_numeric_3":"175",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"EUR",
+    "cdh_id":"145"
+  },
+  "MX":{
+    "name":"Mexico",
+    "iso_code_2":"MX",
+    "iso_code_3":"MEX",
+    "iso_code_numeric_3":"484",
+    "region":"Americas",
+    "subregion":"Central America",
+    "currency":"MXP",
+    "cdh_id":"146"
+  },
+  "FM":{
+    "name":"Micronesia, Federated States Of",
+    "iso_code_2":"FM",
+    "iso_code_3":"FSM",
+    "iso_code_numeric_3":"583",
+    "region":"Oceania",
+    "subregion":"Micronesia",
+    "currency":"USD",
+    "cdh_id":"147"
+  },
+  "MD":{
+    "name":"Moldova, Republic of",
+    "iso_code_2":"MD",
+    "iso_code_3":"MDA",
+    "iso_code_numeric_3":"498",
+    "region":"Europe",
+    "subregion":"Eastern Europe",
+    "currency":"MDL",
+    "cdh_id":"148"
+  },
+  "MC":{
+    "name":"Monaco",
+    "iso_code_2":"MC",
+    "iso_code_3":"MCO",
+    "iso_code_numeric_3":"492",
+    "region":"Europe",
+    "subregion":"Western Europe",
+    "currency":"EUR",
+    "cdh_id":"149"
+  },
+  "MN":{
+    "name":"Mongolia",
+    "iso_code_2":"MN",
+    "iso_code_3":"MNG",
+    "iso_code_numeric_3":"496",
+    "region":"Asia",
+    "subregion":"Eastern Asia",
+    "currency":"MNT",
+    "cdh_id":"150"
+  },
+  "ME":{
+    "name":"Montenegro",
+    "iso_code_2":"ME",
+    "iso_code_3":"MNE",
+    "iso_code_numeric_3":"499",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"EUR",
+    "cdh_id":"151"
+  },
+  "MS":{
+    "name":"Montserrat",
+    "iso_code_2":"MS",
+    "iso_code_3":"MSR",
+    "iso_code_numeric_3":"500",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"XCD",
+    "cdh_id":"152"
+  },
+  "MA":{
+    "name":"Morocco",
+    "iso_code_2":"MA",
+    "iso_code_3":"MAR",
+    "iso_code_numeric_3":"504",
+    "region":"Africa",
+    "subregion":"Northern Africa",
+    "currency":"MAD",
+    "cdh_id":"153"
+  },
+  "MZ":{
+    "name":"Mozambique",
+    "iso_code_2":"MZ",
+    "iso_code_3":"MOZ",
+    "iso_code_numeric_3":"508",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"MZM",
+    "cdh_id":"154"
+  },
+  "MM":{
+    "name":"Myanmar",
+    "iso_code_2":"MM",
+    "iso_code_3":"MMR",
+    "iso_code_numeric_3":"104",
+    "region":"Asia",
+    "subregion":"South-Eastern Asia",
+    "currency":"MMK",
+    "cdh_id":"155"
+  },
+  "NA":{
+    "name":"Namibia",
+    "iso_code_2":"NA",
+    "iso_code_3":"NAM",
+    "iso_code_numeric_3":"516",
+    "region":"Africa",
+    "subregion":"Southern Africa",
+    "currency":"NAD",
+    "cdh_id":"156"
+  },
+  "NR":{
+    "name":"Nauru",
+    "iso_code_2":"NR",
+    "iso_code_3":"NRU",
+    "iso_code_numeric_3":"520",
+    "region":"Oceania",
+    "subregion":"Micronesia",
+    "currency":"AUD",
+    "cdh_id":"157"
+  },
+  "NP":{
+    "name":"Nepal",
+    "iso_code_2":"NP",
+    "iso_code_3":"NPL",
+    "iso_code_numeric_3":"524",
+    "region":"Asia",
+    "subregion":"Southern Asia",
+    "currency":"NPR",
+    "cdh_id":"158"
+  },
+  "NL":{
+    "name":"Netherlands",
+    "iso_code_2":"NL",
+    "iso_code_3":"NLD",
+    "iso_code_numeric_3":"528",
+    "region":"Europe",
+    "subregion":"Western Europe",
+    "currency":"EUR",
+    "cdh_id":"159"
+  },
+  "NC":{
+    "name":"New Caledonia",
+    "iso_code_2":"NC",
+    "iso_code_3":"NCL",
+    "iso_code_numeric_3":"540",
+    "region":"Oceania",
+    "subregion":"Melanesia",
+    "currency":"XPF",
+    "cdh_id":"161"
+  },
+  "NZ":{
+    "name":"New Zealand",
+    "iso_code_2":"NZ",
+    "iso_code_3":"NZL",
+    "iso_code_numeric_3":"554",
+    "region":"Oceania",
+    "subregion":"Australia and New Zealand",
+    "currency":"NZD",
+    "cdh_id":"162"
+  },
+  "NI":{
+    "name":"Nicaragua",
+    "iso_code_2":"NI",
+    "iso_code_3":"NIC",
+    "iso_code_numeric_3":"558",
+    "region":"Americas",
+    "subregion":"Central America",
+    "currency":"NIO",
+    "cdh_id":"163"
+  },
+  "NE":{
+    "name":"Niger",
+    "iso_code_2":"NE",
+    "iso_code_3":"NER",
+    "iso_code_numeric_3":"562",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"XOF",
+    "cdh_id":"164"
+  },
+  "NG":{
+    "name":"Nigeria",
+    "iso_code_2":"NG",
+    "iso_code_3":"NGA",
+    "iso_code_numeric_3":"566",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"NGN",
+    "cdh_id":"165"
+  },
+  "NU":{
+    "name":"Niue",
+    "iso_code_2":"NU",
+    "iso_code_3":"NIU",
+    "iso_code_numeric_3":"570",
+    "region":"Oceania",
+    "subregion":"Polynesia",
+    "currency":"NZD",
+    "cdh_id":"166"
+  },
+  "NF":{
+    "name":"Norfolk Island",
+    "iso_code_2":"NF",
+    "iso_code_3":"NFK",
+    "iso_code_numeric_3":"574",
+    "region":"Oceania",
+    "subregion":"Australia and New Zealand",
+    "currency":"AUD",
+    "cdh_id":"167"
+  },
+  "MP":{
+    "name":"Northern Mariana Islands",
+    "iso_code_2":"MP",
+    "iso_code_3":"MNP",
+    "iso_code_numeric_3":"580",
+    "region":"Oceania",
+    "subregion":"Micronesia",
+    "currency":"USD",
+    "cdh_id":"168"
+  },
+  "NO":{
+    "name":"Norway",
+    "iso_code_2":"NO",
+    "iso_code_3":"NOR",
+    "iso_code_numeric_3":"578",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"NOK",
+    "cdh_id":"169"
+  },
+  "OM":{
+    "name":"Oman",
+    "iso_code_2":"OM",
+    "iso_code_3":"OMN",
+    "iso_code_numeric_3":"512",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"OMR",
+    "cdh_id":"170"
+  },
+  "PK":{
+    "name":"Pakistan",
+    "iso_code_2":"PK",
+    "iso_code_3":"PAK",
+    "iso_code_numeric_3":"586",
+    "region":"Asia",
+    "subregion":"Southern Asia",
+    "currency":"PKR",
+    "cdh_id":"171"
+  },
+  "PW":{
+    "name":"Palau",
+    "iso_code_2":"PW",
+    "iso_code_3":"PLW",
+    "iso_code_numeric_3":"585",
+    "region":"Oceania",
+    "subregion":"Micronesia",
+    "currency":"USD",
+    "cdh_id":"172"
+  },
+  "PS":{
+    "name":"Palestinian Territory, Occupied",
+    "iso_code_2":"PS",
+    "iso_code_3":"PSE",
+    "iso_code_numeric_3":"275",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"-",
+    "cdh_id":"173"
+  },
+  "PA":{
+    "name":"Panama",
+    "iso_code_2":"PA",
+    "iso_code_3":"PAN",
+    "iso_code_numeric_3":"591",
+    "region":"Americas",
+    "subregion":"Central America",
+    "currency":"PAB",
+    "cdh_id":"175"
+  },
+  "PG":{
+    "name":"Papua New Guinea",
+    "iso_code_2":"PG",
+    "iso_code_3":"PNG",
+    "iso_code_numeric_3":"598",
+    "region":"Oceania",
+    "subregion":"Melanesia",
+    "currency":"PGK",
+    "cdh_id":"176"
+  },
+  "PY":{
+    "name":"Paraguay",
+    "iso_code_2":"PY",
+    "iso_code_3":"PRY",
+    "iso_code_numeric_3":"600",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"PYG",
+    "cdh_id":"177"
+  },
+  "PE":{
+    "name":"Peru",
+    "iso_code_2":"PE",
+    "iso_code_3":"PER",
+    "iso_code_numeric_3":"604",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"PEN",
+    "cdh_id":"178"
+  },
+  "PH":{
+    "name":"Philippines",
+    "iso_code_2":"PH",
+    "iso_code_3":"PHL",
+    "iso_code_numeric_3":"608",
+    "region":"Asia",
+    "subregion":"South-Eastern Asia",
+    "currency":"PHP",
+    "cdh_id":"180"
+  },
+  "PN":{
+    "name":"Pitcairn",
+    "iso_code_2":"PN",
+    "iso_code_3":"PCN",
+    "iso_code_numeric_3":"612",
+    "region":"Oceania",
+    "subregion":"Polynesia",
+    "currency":"NZD",
+    "cdh_id":"182"
+  },
+  "PL":{
+    "name":"Poland",
+    "iso_code_2":"PL",
+    "iso_code_3":"POL",
+    "iso_code_numeric_3":"616",
+    "region":"Europe",
+    "subregion":"Eastern Europe",
+    "currency":"PLZ",
+    "cdh_id":"183"
+  },
+  "PT":{
+    "name":"Portugal",
+    "iso_code_2":"PT",
+    "iso_code_3":"PRT",
+    "iso_code_numeric_3":"620",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"EUR",
+    "cdh_id":"184"
+  },
+  "PR":{
+    "name":"Puerto Rico",
+    "iso_code_2":"PR",
+    "iso_code_3":"PRI",
+    "iso_code_numeric_3":"630",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"USD",
+    "cdh_id":"185"
+  },
+  "QA":{
+    "name":"Qatar",
+    "iso_code_2":"QA",
+    "iso_code_3":"QAT",
+    "iso_code_numeric_3":"634",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"QAR",
+    "cdh_id":"186"
+  },
+  "RO":{
+    "name":"Romania",
+    "iso_code_2":"RO",
+    "iso_code_3":"ROU",
+    "iso_code_numeric_3":"642",
+    "region":"Europe",
+    "subregion":"Eastern Europe",
+    "currency":"RON",
+    "cdh_id":"189"
+  },
+  "RU":{
+    "name":"Russian Federation",
+    "iso_code_2":"RU",
+    "iso_code_3":"RUS",
+    "iso_code_numeric_3":"643",
+    "region":"Europe",
+    "subregion":"Eastern Europe",
+    "currency":"RUB",
+    "cdh_id":"190"
+  },
+  "RW":{
+    "name":"Rwanda",
+    "iso_code_2":"RW",
+    "iso_code_3":"RWA",
+    "iso_code_numeric_3":"646",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"RWF",
+    "cdh_id":"191"
+  },
+  "RE":{
+    "name":"R\u00e9union",
+    "iso_code_2":"RE",
+    "iso_code_3":"REU",
+    "iso_code_numeric_3":"638",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"EUR",
+    "cdh_id":"187"
+  },
+  "BL":{
+    "name":"Saint Barth\u00e9lemy",
+    "iso_code_2":"BL",
+    "iso_code_3":"BLM",
+    "iso_code_numeric_3":"652",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"EUR",
+    "cdh_id":"300"
+  },
+  "SH":{
+    "name":"Saint Helena, Ascension and Tristan Da Cunha",
+    "iso_code_2":"SH",
+    "iso_code_3":"SHN",
+    "iso_code_numeric_3":"654",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"SHP",
+    "cdh_id":"192"
+  },
+  "KN":{
+    "name":"Saint Kitts And Nevis",
+    "iso_code_2":"KN",
+    "iso_code_3":"KNA",
+    "iso_code_numeric_3":"659",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"XCD",
+    "cdh_id":"193"
+  },
+  "LC":{
+    "name":"Saint Lucia",
+    "iso_code_2":"LC",
+    "iso_code_3":"LCA",
+    "iso_code_numeric_3":"662",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"XCD",
+    "cdh_id":"194"
+  },
+  "MF":{
+    "name":"Saint Martin (French Part)",
+    "iso_code_2":"MF",
+    "iso_code_3":"MAF",
+    "iso_code_numeric_3":"663",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"EUR",
+    "cdh_id":"301"
+  },
+  "PM":{
+    "name":"Saint Pierre And Miquelon",
+    "iso_code_2":"PM",
+    "iso_code_3":"SPM",
+    "iso_code_numeric_3":"666",
+    "region":"Americas",
+    "subregion":"Northern America",
+    "currency":"EUR",
+    "cdh_id":"181"
+  },
+  "VC":{
+    "name":"Saint Vincent And The Grenadines",
+    "iso_code_2":"VC",
+    "iso_code_3":"VCT",
+    "iso_code_numeric_3":"670",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"XCD",
+    "cdh_id":"195"
+  },
+  "WS":{
+    "name":"Samoa",
+    "iso_code_2":"WS",
+    "iso_code_3":"WSM",
+    "iso_code_numeric_3":"882",
+    "region":"Oceania",
+    "subregion":"Polynesia",
+    "currency":"WST",
+    "cdh_id":"196"
+  },
+  "SM":{
+    "name":"San Marino",
+    "iso_code_2":"SM",
+    "iso_code_3":"SMR",
+    "iso_code_numeric_3":"674",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"EUR",
+    "cdh_id":"197"
+  },
+  "ST":{
+    "name":"Sao Tome and Principe",
+    "iso_code_2":"ST",
+    "iso_code_3":"STP",
+    "iso_code_numeric_3":"678",
+    "region":"Africa",
+    "subregion":"Middle Africa",
+    "currency":"STD",
+    "cdh_id":"198"
+  },
+  "SA":{
+    "name":"Saudi Arabia",
+    "iso_code_2":"SA",
+    "iso_code_3":"SAU",
+    "iso_code_numeric_3":"682",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"SAR",
+    "cdh_id":"199"
+  },
+  "SN":{
+    "name":"Senegal",
+    "iso_code_2":"SN",
+    "iso_code_3":"SEN",
+    "iso_code_numeric_3":"686",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"XOF",
+    "cdh_id":"200"
+  },
+  "RS":{
+    "name":"Serbia",
+    "iso_code_2":"RS",
+    "iso_code_3":"SRB",
+    "iso_code_numeric_3":"688",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"CSD",
+    "cdh_id":"201"
+  },
+  "SC":{
+    "name":"Seychelles",
+    "iso_code_2":"SC",
+    "iso_code_3":"SYC",
+    "iso_code_numeric_3":"690",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"SCR",
+    "cdh_id":"202"
+  },
+  "SL":{
+    "name":"Sierra Leone",
+    "iso_code_2":"SL",
+    "iso_code_3":"SLE",
+    "iso_code_numeric_3":"694",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"SLL",
+    "cdh_id":"203"
+  },
+  "SG":{
+    "name":"Singapore",
+    "iso_code_2":"SG",
+    "iso_code_3":"SGP",
+    "iso_code_numeric_3":"702",
+    "region":"Asia",
+    "subregion":"South-Eastern Asia",
+    "currency":"SGD",
+    "cdh_id":"205"
+  },
+  "SX":{
+    "name":"Sint Maarten (Dutch part)",
+    "iso_code_2":"SX",
+    "iso_code_3":"SXM",
+    "iso_code_numeric_3":"534",
+    "region":"",
+    "subregion":"",
+    "currency":"ANG",
+    "cdh_id":"702"
+  },
+  "SK":{
+    "name":"Slovakia",
+    "iso_code_2":"SK",
+    "iso_code_3":"SVK",
+    "iso_code_numeric_3":"703",
+    "region":"Europe",
+    "subregion":"Eastern Europe",
+    "currency":"EUR",
+    "cdh_id":"206"
+  },
+  "SI":{
+    "name":"Slovenia",
+    "iso_code_2":"SI",
+    "iso_code_3":"SVN",
+    "iso_code_numeric_3":"705",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"EUR",
+    "cdh_id":"207"
+  },
+  "SB":{
+    "name":"Solomon Islands",
+    "iso_code_2":"SB",
+    "iso_code_3":"SLB",
+    "iso_code_numeric_3":"090",
+    "region":"Oceania",
+    "subregion":"Melanesia",
+    "currency":"SBD",
+    "cdh_id":"208"
+  },
+  "SO":{
+    "name":"Somalia",
+    "iso_code_2":"SO",
+    "iso_code_3":"SOM",
+    "iso_code_numeric_3":"706",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"SOS",
+    "cdh_id":"209"
+  },
+  "ZA":{
+    "name":"South Africa",
+    "iso_code_2":"ZA",
+    "iso_code_3":"ZAF",
+    "iso_code_numeric_3":"710",
+    "region":"Africa",
+    "subregion":"Southern Africa",
+    "currency":"ZAR",
+    "cdh_id":"210"
+  },
+  "GS":{
+    "name":"South Georgia and the South Sandwich Islands",
+    "iso_code_2":"GS",
+    "iso_code_3":"SGS",
+    "iso_code_numeric_3":"239",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"-",
+    "cdh_id":"211"
+  },
+  "SS":{
+    "name":"South Sudan",
+    "iso_code_2":"SS",
+    "iso_code_3":"SSD",
+    "iso_code_numeric_3":"728",
+    "region":"",
+    "subregion":"",
+    "currency":"SSP",
+    "cdh_id":"703"
+  },
+  "ES":{
+    "name":"Spain",
+    "iso_code_2":"ES",
+    "iso_code_3":"ESP",
+    "iso_code_numeric_3":"724",
+    "region":"Europe",
+    "subregion":"Southern Europe",
+    "currency":"EUR",
+    "cdh_id":"212"
+  },
+  "LK":{
+    "name":"Sri Lanka",
+    "iso_code_2":"LK",
+    "iso_code_3":"LKA",
+    "iso_code_numeric_3":"144",
+    "region":"Asia",
+    "subregion":"Southern Asia",
+    "currency":"LKR",
+    "cdh_id":"213"
+  },
+  "SD":{
+    "name":"Sudan",
+    "iso_code_2":"SD",
+    "iso_code_3":"SDN",
+    "iso_code_numeric_3":"729",
+    "region":"Africa",
+    "subregion":"Northern Africa",
+    "currency":"SDD",
+    "cdh_id":"214"
+  },
+  "SR":{
+    "name":"Suriname",
+    "iso_code_2":"SR",
+    "iso_code_3":"SUR",
+    "iso_code_numeric_3":"740",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"SRD",
+    "cdh_id":"215"
+  },
+  "SJ":{
+    "name":"Svalbard And Jan Mayen",
+    "iso_code_2":"SJ",
+    "iso_code_3":"SJM",
+    "iso_code_numeric_3":"744",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"NOK",
+    "cdh_id":"216"
+  },
+  "SZ":{
+    "name":"Swaziland",
+    "iso_code_2":"SZ",
+    "iso_code_3":"SWZ",
+    "iso_code_numeric_3":"748",
+    "region":"Africa",
+    "subregion":"Southern Africa",
+    "currency":"SZL",
+    "cdh_id":"217"
+  },
+  "SE":{
+    "name":"Sweden",
+    "iso_code_2":"SE",
+    "iso_code_3":"SWE",
+    "iso_code_numeric_3":"752",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"SEK",
+    "cdh_id":"218"
+  },
+  "CH":{
+    "name":"Switzerland",
+    "iso_code_2":"CH",
+    "iso_code_3":"CHE",
+    "iso_code_numeric_3":"756",
+    "region":"Europe",
+    "subregion":"Western Europe",
+    "currency":"CHF",
+    "cdh_id":"219"
+  },
+  "SY":{
+    "name":"Syrian Arab Republic",
+    "iso_code_2":"SY",
+    "iso_code_3":"SYR",
+    "iso_code_numeric_3":"760",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"SYP",
+    "cdh_id":"220"
+  },
+  "TW":{
+    "name":"Taiwan, Province Of China",
+    "iso_code_2":"TW",
+    "iso_code_3":"TWN",
+    "iso_code_numeric_3":"158",
+    "region":"Asia",
+    "subregion":"Eastern Asia",
+    "currency":"TWD",
+    "cdh_id":"221"
+  },
+  "TJ":{
+    "name":"Tajikistan",
+    "iso_code_2":"TJ",
+    "iso_code_3":"TJK",
+    "iso_code_numeric_3":"762",
+    "region":"Asia",
+    "subregion":"Central Asia",
+    "currency":"TJS",
+    "cdh_id":"222"
+  },
+  "TZ":{
+    "name":"Tanzania, United Republic of",
+    "iso_code_2":"TZ",
+    "iso_code_3":"TZA",
+    "iso_code_numeric_3":"834",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"TZS",
+    "cdh_id":"223"
+  },
+  "TH":{
+    "name":"Thailand",
+    "iso_code_2":"TH",
+    "iso_code_3":"THA",
+    "iso_code_numeric_3":"764",
+    "region":"Asia",
+    "subregion":"South-Eastern Asia",
+    "currency":"THB",
+    "cdh_id":"224"
+  },
+  "TL":{
+    "name":"Timor-Leste",
+    "iso_code_2":"TL",
+    "iso_code_3":"TLS",
+    "iso_code_numeric_3":"626",
+    "region":"Asia",
+    "subregion":"South-Eastern Asia",
+    "currency":"USD",
+    "cdh_id":"226"
+  },
+  "TG":{
+    "name":"Togo",
+    "iso_code_2":"TG",
+    "iso_code_3":"TGO",
+    "iso_code_numeric_3":"768",
+    "region":"Africa",
+    "subregion":"Western Africa",
+    "currency":"XOF",
+    "cdh_id":"227"
+  },
+  "TK":{
+    "name":"Tokelau",
+    "iso_code_2":"TK",
+    "iso_code_3":"TKL",
+    "iso_code_numeric_3":"772",
+    "region":"Oceania",
+    "subregion":"Polynesia",
+    "currency":"NZD",
+    "cdh_id":"228"
+  },
+  "TO":{
+    "name":"Tonga",
+    "iso_code_2":"TO",
+    "iso_code_3":"TON",
+    "iso_code_numeric_3":"776",
+    "region":"Oceania",
+    "subregion":"Polynesia",
+    "currency":"TOP",
+    "cdh_id":"229"
+  },
+  "TT":{
+    "name":"Trinidad and Tobago",
+    "iso_code_2":"TT",
+    "iso_code_3":"TTO",
+    "iso_code_numeric_3":"780",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"TTD",
+    "cdh_id":"230"
+  },
+  "TN":{
+    "name":"Tunisia",
+    "iso_code_2":"TN",
+    "iso_code_3":"TUN",
+    "iso_code_numeric_3":"788",
+    "region":"Africa",
+    "subregion":"Northern Africa",
+    "currency":"TND",
+    "cdh_id":"231"
+  },
+  "TR":{
+    "name":"Turkey",
+    "iso_code_2":"TR",
+    "iso_code_3":"TUR",
+    "iso_code_numeric_3":"792",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"TRY",
+    "cdh_id":"232"
+  },
+  "TM":{
+    "name":"Turkmenistan",
+    "iso_code_2":"TM",
+    "iso_code_3":"TKM",
+    "iso_code_numeric_3":"795",
+    "region":"Asia",
+    "subregion":"Central Asia",
+    "currency":"TMM",
+    "cdh_id":"233"
+  },
+  "TC":{
+    "name":"Turks and Caicos Islands",
+    "iso_code_2":"TC",
+    "iso_code_3":"TCA",
+    "iso_code_numeric_3":"796",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"USD",
+    "cdh_id":"234"
+  },
+  "TV":{
+    "name":"Tuvalu",
+    "iso_code_2":"TV",
+    "iso_code_3":"TUV",
+    "iso_code_numeric_3":"798",
+    "region":"Oceania",
+    "subregion":"Polynesia",
+    "currency":"AUD",
+    "cdh_id":"235"
+  },
+  "UG":{
+    "name":"Uganda",
+    "iso_code_2":"UG",
+    "iso_code_3":"UGA",
+    "iso_code_numeric_3":"800",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"UGX",
+    "cdh_id":"236"
+  },
+  "UA":{
+    "name":"Ukraine",
+    "iso_code_2":"UA",
+    "iso_code_3":"UKR",
+    "iso_code_numeric_3":"804",
+    "region":"Europe",
+    "subregion":"Eastern Europe",
+    "currency":"UAH",
+    "cdh_id":"237"
+  },
+  "AE":{
+    "name":"United Arab Emirates",
+    "iso_code_2":"AE",
+    "iso_code_3":"ARE",
+    "iso_code_numeric_3":"784",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"AED",
+    "cdh_id":"238"
+  },
+  "GB":{
+    "name":"United Kingdom",
+    "iso_code_2":"GB",
+    "iso_code_3":"GBR",
+    "iso_code_numeric_3":"826",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"GBP",
+    "cdh_id":"239"
+  },
+  "US":{
+    "name":"United States",
+    "iso_code_2":"US",
+    "iso_code_3":"USA",
+    "iso_code_numeric_3":"840",
+    "region":"Americas",
+    "subregion":"Northern America",
+    "currency":"USD",
+    "cdh_id":"240"
+  },
+  "UM":{
+    "name":"United States Minor Outlying Islands",
+    "iso_code_2":"UM",
+    "iso_code_3":"UMI",
+    "iso_code_numeric_3":"581",
+    "region":"Americas",
+    "subregion":"Northern America",
+    "currency":"USD",
+    "cdh_id":"241"
+  },
+  "UY":{
+    "name":"Uruguay",
+    "iso_code_2":"UY",
+    "iso_code_3":"URY",
+    "iso_code_numeric_3":"858",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"UYU",
+    "cdh_id":"242"
+  },
+  "UZ":{
+    "name":"Uzbekistan",
+    "iso_code_2":"UZ",
+    "iso_code_3":"UZB",
+    "iso_code_numeric_3":"860",
+    "region":"Asia",
+    "subregion":"Central Asia",
+    "currency":"UZS",
+    "cdh_id":"243"
+  },
+  "VU":{
+    "name":"Vanuatu",
+    "iso_code_2":"VU",
+    "iso_code_3":"VUT",
+    "iso_code_numeric_3":"548",
+    "region":"Oceania",
+    "subregion":"Melanesia",
+    "currency":"VUV",
+    "cdh_id":"244"
+  },
+  "VE":{
+    "name":"Venezuela, Bolivarian Republic of",
+    "iso_code_2":"VE",
+    "iso_code_3":"VEN",
+    "iso_code_numeric_3":"862",
+    "region":"Americas",
+    "subregion":"South America",
+    "currency":"VEF",
+    "cdh_id":"245"
+  },
+  "VN":{
+    "name":"Viet Nam",
+    "iso_code_2":"VN",
+    "iso_code_3":"VNM",
+    "iso_code_numeric_3":"704",
+    "region":"Asia",
+    "subregion":"South-Eastern Asia",
+    "currency":"VND",
+    "cdh_id":"247"
+  },
+  "VG":{
+    "name":"Virgin Islands, British",
+    "iso_code_2":"VG",
+    "iso_code_3":"VGB",
+    "iso_code_numeric_3":"092",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"USD",
+    "cdh_id":"248"
+  },
+  "VI":{
+    "name":"Virgin Islands, U.S.",
+    "iso_code_2":"VI",
+    "iso_code_3":"VIR",
+    "iso_code_numeric_3":"850",
+    "region":"Americas",
+    "subregion":"Caribbean",
+    "currency":"USD",
+    "cdh_id":"249"
+  },
+  "WF":{
+    "name":"Wallis and Futuna",
+    "iso_code_2":"WF",
+    "iso_code_3":"WLF",
+    "iso_code_numeric_3":"876",
+    "region":"Oceania",
+    "subregion":"Polynesia",
+    "currency":"XPF",
+    "cdh_id":"250"
+  },
+  "EH":{
+    "name":"Western Sahara",
+    "iso_code_2":"EH",
+    "iso_code_3":"ESH",
+    "iso_code_numeric_3":"732",
+    "region":"Africa",
+    "subregion":"Northern Africa",
+    "currency":"MAD",
+    "cdh_id":"251"
+  },
+  "YE":{
+    "name":"Yemen",
+    "iso_code_2":"YE",
+    "iso_code_3":"YEM",
+    "iso_code_numeric_3":"887",
+    "region":"Asia",
+    "subregion":"Western Asia",
+    "currency":"YER",
+    "cdh_id":"252"
+  },
+  "ZM":{
+    "name":"Zambia",
+    "iso_code_2":"ZM",
+    "iso_code_3":"ZMB",
+    "iso_code_numeric_3":"894",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"ZMK",
+    "cdh_id":"255"
+  },
+  "ZW":{
+    "name":"Zimbabwe",
+    "iso_code_2":"ZW",
+    "iso_code_3":"ZWE",
+    "iso_code_numeric_3":"716",
+    "region":"Africa",
+    "subregion":"Eastern Africa",
+    "currency":"ZWL",
+    "cdh_id":"256"
+  },
+  "AX":{
+    "name":"\u00c5land Islands",
+    "iso_code_2":"AX",
+    "iso_code_3":"ALA",
+    "iso_code_numeric_3":"248",
+    "region":"Europe",
+    "subregion":"Northern Europe",
+    "currency":"EUR",
+    "cdh_id":"3"
+  }
+}
