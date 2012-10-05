@@ -1,7 +1,7 @@
 ## TODO List
 
 - Countries:
-    - Add the option to make a country the default one on the fly !
+    - Done, for now !
 
 - Languages
     - Need to do all !

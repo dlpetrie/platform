@@ -224,7 +224,7 @@ class Localisation_API_Countries_Controller extends API_Controller
         $country->region             = ( Input::get('region') ?: $country['region'] );
         $country->subregion          = ( Input::get('subregion') ?: $country['subregion'] );
         $country->currency           = ( Input::get('currency') ?: $country['currency'] );
-        $country->status             = Input::get('status');
+        $country->status             = ( ! $country['default'] ? Input::get('status') : 1 );
 
         try
         {
@@ -398,6 +398,54 @@ class Localisation_API_Countries_Controller extends API_Controller
             'count_filtered'  => $count_filtered,
             'paging'          => $paging,
             'default_country' => $default_country
+        ));
+    }
+
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: put_default()
+     * --------------------------------------------------------------------------
+     *
+     * Makes a country the default country on the system.
+     *
+     *  <code>
+     *      API::put('localisation/countries/default/gb');
+     *  </code>
+     *
+     * @access   public
+     * @param    mixed
+     * @return   Response
+     */
+    public function put_default($country_code)
+    {
+        try
+        {
+            // Get this country information.
+            //
+            $country = Country::find_custom($country_code);
+        }
+        catch (Exception $e)
+        {
+            // Return a response.
+            //
+            return new Response(array(
+                'message' => Lang::line('localisation::countries/message.error.not_found', array('country' => $country_code))->get()
+            ), API::STATUS_NOT_FOUND);
+        }
+
+        // Update the settings table.
+        //
+        DB::table('settings')
+            ->where('extension', '=', 'localisation')
+            ->where('type', '=', 'site')
+            ->where('name', '=', 'country')
+            ->update(array('value' => $country['iso_code_2']));
+
+        // Return a response.
+        //
+        return new Response(array(
+            'message' => Lang::line('localisation::countries/message.update.default', array('country' => $country->name))->get()
         ));
     }
 }

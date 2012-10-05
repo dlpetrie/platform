@@ -106,7 +106,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
                 'content'        => Theme::make('localisation::countries.partials.table', $data)->render(),
                 'count'          => $datatable['count'],
                 'count_filtered' => $datatable['count_filtered'],
-                'paging'         => $datatable['paging'],
+                'paging'         => $datatable['paging']
             ));
         }
 
@@ -169,7 +169,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
             //
             $country = API::get('localisation/country/' . $country_code);
         }
-        catch (Exception $e)
+        catch (APIClientException $e)
         {
             // Set the error message.
             //
@@ -249,7 +249,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
                 return Redirect::to_admin('localisation/countries');
             }
         }
-        catch (Exception $e)
+        catch (APIClientException $e)
         {
             // Set the error message.
             //
@@ -288,7 +288,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
             //
             $country = API::get('localisation/country/' . $country_code);
         }
-        catch (Exception $e)
+        catch (APIClientException $e)
         {
             // Set the error message.
             //
@@ -335,8 +335,52 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
             //
             Platform::messages()->success($request['message']);
         }
-        catch (Exception $e)
+        catch (APIClientException $e)
         {
+            // Set the error message.
+            //
+            Platform::messages()->error($e->getMessage());
+
+            // Set the other error messages.
+            //
+            foreach ($e->errors() as $error)
+            {
+                Platform::messages()->error($error);
+            }
+        }
+
+        // Redirect to the countries page.
+        //
+        return Redirect::to_admin('localisation/countries');
+    }
+
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: get_default()
+     * --------------------------------------------------------------------------
+     *
+     * Makes a country the default country by the system.
+     *
+     * @access   public
+     * @param    mixed
+     * @return   mixed
+     */
+    public function get_default($country_code)
+    {
+        try
+        {
+            // Make the request.
+            //
+            $request = API::put('localisation/countries/default/' . $country_code);
+
+            // Set the success message.
+            //
+            Platform::messages()->success($request['message']);
+        }
+        catch (APIClientException $e)
+        {
+            echo $e->getMessage();
             // Set the error message.
             //
             Platform::messages()->error($e->getMessage());

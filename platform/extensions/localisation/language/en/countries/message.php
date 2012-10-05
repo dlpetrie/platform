@@ -40,7 +40,8 @@ return array(
         'success'       => 'Country :country was successfully updated.',
         'fail'          => 'An error occurred while updating the country :country !',
         'disable_error' => 'You cannot disable a default country !',
-        'errors'        => 'Please check the form for errors'
+        'errors'        => 'Please check the form for errors',
+        'default'       => 'Country :country is now the current default system country.'
     ),
 
     'delete' => array(
