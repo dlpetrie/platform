@@ -53,9 +53,9 @@ class Country extends Crud
      */
     public static $_rules = array(
         'name'               => 'required',
-        'iso_code_2'         => 'required|size:2',
-        'iso_code_3'         => 'required|size:3',
-        'iso_code_numeric_3' => 'required|numeric',
+        'iso_code_2'         => 'required|size:2|unique:countries,iso_code_2',
+        'iso_code_3'         => 'required|size:3|unique:countries,iso_code_3',
+        'iso_code_numeric_3' => 'required|numeric|unique:countries,iso_code_numeric_3',
         'status'             => 'required'
     );
 
@@ -65,7 +65,7 @@ class Country extends Crud
      * Function: update_rules()
      * --------------------------------------------------------------------------
      *
-     * Updates or adds a new rules to be validated.
+     * Updates or adds new rules to be validated.
      *
      * @access   public
      * @param    array
@@ -107,15 +107,15 @@ class Country extends Crud
      * @param    mixed
      * @return   Response
      */
-	public static function find_custom($country_code)
-	{
+    public static function find_custom($country_code)
+    {
         return parent::find(function($query) use ($country_code)
         {
             // Do we have the country id ?
             //
             if(is_numeric($country_code))
             {
-            	return $query->where('id', '=', $country_code);
+                return $query->where('id', '=', $country_code);
             }
 
             // Do we have the country iso code 2 ?
@@ -129,8 +129,8 @@ class Country extends Crud
             //
             else
             {
-            	return $query->where('slug', '=', strtolower($country_code));
+                return $query->where('slug', '=', strtolower($country_code));
             }
         });
-	}
+    }
 }

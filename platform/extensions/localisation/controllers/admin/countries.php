@@ -261,9 +261,9 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
                 Platform::messages()->error($error);
             }
 
-            // Redirect to the countries page.
+            // Redirect to the previous page.
             //
-            return Redirect::back()->with_errors($e->errors());
+            return Redirect::back()->with_input()->with_errors($e->errors());
         }
     }
 
@@ -280,6 +280,49 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
      * @return   mixed
      */
     public function get_delete($country_code)
+    {
+        try
+        {
+            // Get this country information.
+            //
+            $country = API::get('localisation/country/' . $country_code);
+        }
+        catch (Exception $e)
+        {
+            // Set the error message.
+            //
+            Platform::messages()->error($e->getMessage());
+
+            // Set the other error messages.
+            //
+            foreach ($e->errors() as $error)
+            {
+                Platform::messages()->error($error);
+            }
+
+            // Redirect to the countries page.
+            //
+            return Redirect::to_admin('localisation/countries');
+        }
+
+        // Show the page.
+        //
+        return Theme::make('localisation::countries.delete')->with('country', $country);
+    }
+
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: post_delete()
+     * --------------------------------------------------------------------------
+     *
+     * Country deletion form processing page.
+     *
+     * @access   public
+     * @param    string
+     * @return   mixed
+     */
+    public function post_delete($country_code)
     {
         try
         {

@@ -94,6 +94,10 @@ class Localisation_API_Countries_Controller extends API_Controller
             #$regions = API::get('localisation/regions/' . $country_code);
             $regions = array();
 
+            // Check if country is being used by the system.
+            //
+            $country['default'] = false; # make it false for now.
+
             // Add the regions to the country array.
             //
             $country['regions'] = $regions;
@@ -127,7 +131,19 @@ class Localisation_API_Countries_Controller extends API_Controller
     {
         // Create the country.
         //
-        $country = new Country(Input::get());
+        $country = new Country();
+
+        // Update the country data.
+        //
+        $country->name               = Input::get('name');
+        $country->slug               = \Str::slug(Input::get('name'));
+        $country->iso_code_2         = Input::get('iso_code_2');
+        $country->iso_code_3         = Input::get('iso_code_3');
+        $country->iso_code_numeric_3 = Input::get('iso_code_numeric_3');
+        $country->region             = Input::get('region');
+        $country->subregion          = Input::get('subregion');
+        $country->currency           = Input::get('currency');
+        $country->status             = Input::get('status');
 
         try
         {
@@ -136,8 +152,8 @@ class Localisation_API_Countries_Controller extends API_Controller
             if ($country->save())
             {
                 return new Response(array(
-                    'message'      => Lang::line('localisation::countries/message.create.success')->get(),
-                    'country_slug' => $country->slug
+                    'message'      => Lang::line('localisation::countries/message.create.success', array('country' => $country->name))->get(),
+                    'slug' => $country->slug
                 ), API::STATUS_CREATED);
             }
 
@@ -146,9 +162,9 @@ class Localisation_API_Countries_Controller extends API_Controller
             else
             {
                 return new Response(array(
-                    'message' => Lang::line('users::messages.users.create.error')->get(),
-                    'errors'  => ($user->validation()->errors->has()) ? $user->validation()->errors->all() : array()
-                ), ($user->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
+                    'message' => Lang::line('localisation::countries/message.create.fail')->get(),
+                    'errors'  => ($country->validation()->errors->has()) ? $country->validation()->errors->all() : array()
+                ), ($country->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
             }
         }
         catch (Exception $e)

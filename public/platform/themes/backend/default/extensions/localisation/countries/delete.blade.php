@@ -16,7 +16,22 @@
 		</nav>
 	</header>
 
+	<hr />
 
+	<form action="{{ URL::to_admin('localisation/countries/delete/' . $country['slug']) }}" id="edit-form" class="form-horizontal" method="POST" accept-char="UTF-8">
+		<input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
 
+	    <div class="alert alert-error">
+	        <h3>{{ Lang::line('general.warning')->get() }}</h3>
+	        @if ( $country['default'] )
+	        <p>{{ Lang::line('localisation::countries/message.delete.single.being_used', array('country' => $country['name']))->get() }}</p>
+	        @else
+	        <p>{{ Lang::line('localisation::countries/message.delete.single.confirm', array('country' => $country['name']))->get() }}</p>
+
+	    	<button class="btn btn-danger"><i class="icon-ok icon-white"></i> Delete</button> 
+	        <a href="{{ URL::to_admin('localisation/countries') }}" class="btn btn-success"><i class="icon-remove icon-white"></i> {{ Lang::line('button.cancel')->get() }}</a>
+	        @endif
+	    </div>
+	</form>
 </section>
 @endsection

@@ -1,7 +1,6 @@
 ## TODO List
 
 - Countries:
-    - Add alert messages when deleting a country, or add a view page with a form for country deletion confirmation.
     - Work the create view page
 
 - Languages

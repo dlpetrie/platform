@@ -59,3 +59,16 @@ Route::any(API . '/localisation/(:any)/(:any)', function( $local, $slug )
 {
 	return Controller::call('localisation::api.' . Str::plural( $local ) . '@index', array($slug));
 });
+
+
+/**
+ * Route /api/localisation/:local
+ *
+ *	<code>
+ *		/api/localisation/country => localisation::api.countries@index
+ *	</code>
+ */
+Route::any(API . '/localisation/(:any)', function( $local )
+{
+	return Controller::call('localisation::api.' . Str::plural( $local ) . '@index');
+});
