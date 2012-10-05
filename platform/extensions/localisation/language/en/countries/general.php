@@ -26,5 +26,9 @@
  */
 return array(
     'title'       => 'Countries',
-    'description' => 'Manage your system countries.'
+    'description' => array(
+    	'index'  => 'Manage your system countries.',
+    	'view'   => 'Viewing the country :country',
+    	'delete' => 'Deleting the country :country'
+    ),
 );

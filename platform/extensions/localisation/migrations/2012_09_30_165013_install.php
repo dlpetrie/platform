@@ -62,8 +62,7 @@ class Localisation_Install
          */
         // Admin > System > Localisation
         //
-        #$system_menu = Menu::find('admin-system');
-        $system_menu = Menu::admin_menu();
+        $system_menu = Menu::find('admin-system');
         $localisation = new Menu(array(
             'name'          => 'Localisation',
             'extension'     => 'localisation',

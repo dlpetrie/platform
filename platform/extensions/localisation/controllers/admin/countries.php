@@ -85,8 +85,8 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
      * @access   public
      * @return   mixed
      */
-	public function get_index()
-	{
+    public function get_index()
+    {
         // Grab the datatable.
         //
         $datatable = API::get('localisation/countries/datatable', Input::get());
@@ -94,8 +94,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
         // Prepare the array.
         //
         $data = array(
-            'columns' => $datatable['columns'],
-            'rows'    => $datatable['rows']
+            'rows' => $datatable['rows']
         );
 
         // If this is an ajax request, only return the body of the datatable.
@@ -103,7 +102,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
         if (Request::ajax())
         {
             return json_encode(array(
-                'content'        => Theme::make('localisation::countries.partials.table_countries', $data)->render(),
+                'content'        => Theme::make('localisation::countries.partials.table', $data)->render(),
                 'count'          => $datatable['count'],
                 'count_filtered' => $datatable['count_filtered'],
                 'paging'         => $datatable['paging']
@@ -113,7 +112,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
         // Show the page.
         //
         return Theme::make('localisation::countries.index', $data);
-	}
+    }
 
 
     /**
@@ -146,7 +145,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
      */
     public function post_create()
     {
-        # TODO !
+        return $this->post_view();
     }
 
 
@@ -204,13 +203,31 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
      * @param    string
      * @return   mixed
      */
-    public function post_view($country_code)
+    public function post_view($country_code = false)
     {
         try
         {
-            // Make the request.
+            // Are we creating a country ?
             //
-            $request = API::put('localisation/country/' . $country_code, Input::get());
+            if ($country_code === false)
+            {
+                // Make the request.
+                //
+                $request = API::post('localisation/country', Input::get());
+            }
+
+            // We are editing the country.
+            //
+            else
+            {
+                // Make the request.
+                //
+                $request = API::put('localisation/country/' . $country_code, Input::get());
+            }
+
+            // Get the country slug.
+            //
+            $country_code = $request['slug'];
 
             // Set the success message.
             //
@@ -246,7 +263,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
 
             // Redirect to the countries page.
             //
-            return Redirect::to_admin('localisation/countries');
+            return Redirect::back()->with_errors($e->errors());
         }
     }
 
@@ -268,50 +285,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
         {
             // Make the request.
             //
-            $country = API::get('localisation/country/' . $country_code);
-        }
-        catch (Exception $e)
-        {
-            // Set the error message.
-            //
-            Platform::messages()->error($e->getMessage());
-
-            // Set the other error messages.
-            //
-            foreach ($e->errors() as $error)
-            {
-                Platform::messages()->error($error);
-            }
-
-            // Redirect to the countries page.
-            //
-            return Redirect::to_admin('localisation/countries');
-        }
-
-        // Show the page.
-        //
-        return Theme::make('localisation::countries.delete')->with('country', $country);
-    }
-
-
-    /**
-     * --------------------------------------------------------------------------
-     * Function: post_delete()
-     * --------------------------------------------------------------------------
-     *
-     * Country deletion form processing page.
-     *
-     * @access   public
-     * @param    string
-     * @return   mixed
-     */
-    public function post_delete($country_code)
-    {
-        try
-        {
-            // Make the request.
-            //
-            $request = API::delete('localisation/country/delete/' . $country_code);
+            $request = API::delete('localisation/country/' . $country_code);
 
             // Set the success message.
             //

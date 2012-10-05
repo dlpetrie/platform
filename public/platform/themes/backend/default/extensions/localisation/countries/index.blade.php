@@ -1,15 +1,71 @@
 @layout('templates.default')
 
 @section('title')
-* Localisation | {{ Lang::line('localisation::countries/general.title')->get() }}
+	{{ Lang::line('localisation::countries/general.title')->get() }}
+@endsection
+
+@section ('styles')
+{{ Theme::asset('css/table.css') }}
+@endsection
+
+@section('scripts')
+{{ Theme::asset('js/table.js') }}
+{{ Theme::asset('localisation::js/countries.js') }}
 @endsection
 
 @section('content')
-	<header class="row-fluid">
+<section id="countries">
+	<header class="head row-fluid">
 		<div class="span6">
-			<h1>{{ Lang::line('localisation::countries/general.title')->get() }}</h1>
-			<p>{{ Lang::line('localisation::countries/general.description')->get() }}</p>
+			<h1>{{ Lang::line('localisation::countries/general.title') }}</h1>
+			<p>{{ Lang::line('localisation::countries/general.description.index') }}</p>
 		</div>
-		<nav class="actions span4 pull-right"></nav>
+		<nav class="tertiary-navigation span6">
+			@widget('platform.menus::menus.nav', 2, 1, 'nav nav-pills pull-right', ADMIN)
+		</nav>
 	</header>
+
+	<hr />
+
+	<div id="table">
+		<div class="actions clearfix">
+			<div id="table-filters" class="form-inline pull-left"></div>
+			<div class="pull-right">
+				<a class="btn btn-large btn-primary" href="{{ URL::to_admin('localisation/countries/create') }}">{{ Lang::line('button.create') }}</a>
+			</div>
+		</div>
+
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="row-fluid">
+					<ul id="table-filters-applied" class="nav nav-tabs span10"></ul>
+				</div>
+				<div class="row-fluid">
+					<div class="span10">
+						<div class="table-wrapper">
+							<table id="users-table" class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th class="span4">Country</th>
+										<th class="span2">Iso Code 2</th>
+										<th class="span2"></th>
+									</tr>
+								<thead>
+								<tbody>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="tabs-right span2">
+						<div class="processing"></div>
+						<ul id="table-pagination" class="nav nav-tabs"></ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</section>
 @endsection
