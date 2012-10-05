@@ -25,22 +25,13 @@
  * --------------------------------------------------------------------------
  */
 return array(
-    /*
-     * -----------------------------------------
-     * Page title.
-     * -----------------------------------------
-     */
-    'title' => 'Countries',
-
-    /*
-     * -----------------------------------------
-     * Descriptions.
-     * -----------------------------------------
-     */
-    'description' => array(
-        'index'  => 'Manage your system countries.',
-        'create' => 'Creating a new country',
-        'view'   => 'Viewing the country :country',
-        'delete' => 'Deleting the country :country'
-    ),
+    'id'                 => 'Id',
+    'name'               => 'Country Name',
+    'iso_code_2'         => 'ISO Code 2',
+    'iso_code_3'         => 'ISO Code 3',
+    'iso_code_numeric_3' => 'ISO Code Numeric 3',
+    'region'             => 'Region',
+    'subregion'          => 'Subregion',
+    'currency'           => 'Currency',
+    'status'             => 'Country Status'
 );

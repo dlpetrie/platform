@@ -94,7 +94,8 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
         // Prepare the array.
         //
         $data = array(
-            'rows' => $datatable['rows']
+            'rows'            => $datatable['rows'],
+            'default_country' => $datatable['default_country']
         );
 
         // If this is an ajax request, only return the body of the datatable.
@@ -105,7 +106,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
                 'content'        => Theme::make('localisation::countries.partials.table', $data)->render(),
                 'count'          => $datatable['count'],
                 'count_filtered' => $datatable['count_filtered'],
-                'paging'         => $datatable['paging']
+                'paging'         => $datatable['paging'],
             ));
         }
 

@@ -96,7 +96,7 @@ class Localisation_API_Countries_Controller extends API_Controller
 
             // Check if country is being used by the system.
             //
-            $country['default'] = false; # make it false for now.
+            $country['default'] = ( $country['iso_code_2'] === strtoupper(Platform::get('localisation.site.country')) ? true : false );
 
             // Add the regions to the country array.
             //
@@ -151,9 +151,11 @@ class Localisation_API_Countries_Controller extends API_Controller
             //
             if ($country->save())
             {
+                // Return a response.
+                //
                 return new Response(array(
-                    'message'      => Lang::line('localisation::countries/message.create.success', array('country' => $country->name))->get(),
-                    'slug' => $country->slug
+                    'message' => Lang::line('localisation::countries/message.create.success', array('country' => $country->name))->get(),
+                    'slug'    => $country->slug
                 ), API::STATUS_CREATED);
             }
 
@@ -161,6 +163,8 @@ class Localisation_API_Countries_Controller extends API_Controller
             //
             else
             {
+                // Return a response.
+                //
                 return new Response(array(
                     'message' => Lang::line('localisation::countries/message.create.fail')->get(),
                     'errors'  => ($country->validation()->errors->has()) ? $country->validation()->errors->all() : array()
@@ -169,7 +173,7 @@ class Localisation_API_Countries_Controller extends API_Controller
         }
         catch (Exception $e)
         {
-            // 
+            // Return a response.
             //
             return new Response(array(
                 'message' => $e->getMessage()
@@ -228,6 +232,8 @@ class Localisation_API_Countries_Controller extends API_Controller
             //
             if ($country->save())
             {
+                // Return a response.
+                //
                 return new Response(array(
                     'slug'    => $country->slug,
                     'message' => Lang::line('localisation::countries/message.update.success', array('country' => $country['name']))->get()
@@ -235,14 +241,18 @@ class Localisation_API_Countries_Controller extends API_Controller
             }
             else
             {
+                // Return a response.
+                //
                 return new Response(array(
                     'message' => Lang::line('localisation::countries/message.update.fail', array('country' => $country['name']))->get(),
-                    'errors'  => ($country->validation()->errors->has()) ? $country->validation()->errors->all() : array(),
+                    'errors'  => ($country->validation()->errors->has()) ? $country->validation()->errors->all() : array()
                 ), ($country->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
             }
         }
         catch (Exception $e)
         {
+            // Return a response.
+            //
             return new Response(array(
                 'message' => $e->getMessage()
             ), API::STATUS_BAD_REQUEST);
@@ -290,6 +300,17 @@ class Localisation_API_Countries_Controller extends API_Controller
             ), API::STATUS_NOT_FOUND);
         }
 
+        // Check if this is a default country.
+        //
+        if ($country['default'])
+        {
+            // Return a response.
+            //
+            return new Response( array(
+                'message' => Lang::line('localisation::countries/message.delete.single.being_used')->get()
+            ), API::STATUS_BAD_REQUEST);
+        }
+
         // Try to delete the country.
         //
         try
@@ -315,20 +336,6 @@ class Localisation_API_Countries_Controller extends API_Controller
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * --------------------------------------------------------------------------
      * Function: get_datatable()
@@ -346,6 +353,11 @@ class Localisation_API_Countries_Controller extends API_Controller
      */
     public function get_datatable()
     {
+        // Get the default country.
+        //
+        $default_country = strtoupper(Platform::get('localisation.site.country'));
+
+
         $defaults = array(
             'select'   => array(
                 'countries.id'         => 'ID',
@@ -381,10 +393,11 @@ class Localisation_API_Countries_Controller extends API_Controller
 
 
         return new Response(array(
-            'rows'           => ( $items ?: array() ),
-            'count'          => $count_total,
-            'count_filtered' => $count_filtered,
-            'paging'         => $paging,
+            'rows'            => ( $items ?: array() ),
+            'count'           => $count_total,
+            'count_filtered'  => $count_filtered,
+            'paging'          => $paging,
+            'default_country' => $default_country
         ));
     }
 }

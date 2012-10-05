@@ -1,7 +1,7 @@
 ## TODO List
 
 - Countries:
-    - Work the create view page
+    - Add the option to make a country the default one on the fly !
 
 - Languages
     - Need to do all !

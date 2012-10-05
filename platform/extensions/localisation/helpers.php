@@ -19,28 +19,20 @@
  */
 
 
-/*
+/**
  * --------------------------------------------------------------------------
- * Return the language lines.
+ * Function: country_statuses()
  * --------------------------------------------------------------------------
+ *
+ * Returns an array of the country statuses..
+ *
+ * @access   public
+ * @return   array
  */
-return array(
-    /*
-     * -----------------------------------------
-     * Page title.
-     * -----------------------------------------
-     */
-    'title' => 'Countries',
-
-    /*
-     * -----------------------------------------
-     * Descriptions.
-     * -----------------------------------------
-     */
-    'description' => array(
-        'index'  => 'Manage your system countries.',
-        'create' => 'Creating a new country',
-        'view'   => 'Viewing the country :country',
-        'delete' => 'Deleting the country :country'
-    ),
-);
+function country_statuses()
+{
+	return array(
+		1 => Lang::line('general.enabled')->get(),
+		0 => Lang::line('general.disabled')->get()
+	);
+}

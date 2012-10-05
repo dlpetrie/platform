@@ -30,9 +30,9 @@ Route::any(ADMIN . '/localisation', 'localisation::admin.languages@index');
 /**
  * Route /api/localisation/:country_code
  *
- *	<code>
- *		/api/localisation/gb => localisation::api.countries@index(gb)
- *	</code>
+ *  <code>
+ *      /api/localisation/gb => localisation::api.countries@index(gb)
+ *  </code>
  */
 # Don't think we need this anymore, since you are using different combinations 
 #Route::any(API . '/localisation/([a-z]{2})', 'localisation::api.countries@index');
@@ -41,9 +41,9 @@ Route::any(ADMIN . '/localisation', 'localisation::admin.languages@index');
 /**
  * Route /api/localisation/:local/datatable
  *
- *	<code>
- *		/api/localisation/countries/datatable => localisation::api.countries@datatable
- *	</code>
+ *  <code>
+ *      /api/localisation/countries/datatable => localisation::api.countries@datatable
+ *  </code>
  */
 Route::any(API . '/localisation/(:any)/datatable', 'localisation::api.(:1)@datatable');
 
@@ -51,24 +51,24 @@ Route::any(API . '/localisation/(:any)/datatable', 'localisation::api.(:1)@datat
 /**
  * Route /api/localisation/:local/:country_code
  *
- *	<code>
- *		/api/localisation/country/gb => localisation::api.countries@index(gb)
- *	</code>
+ *  <code>
+ *      /api/localisation/country/gb => localisation::api.countries@index(gb)
+ *  </code>
  */
 Route::any(API . '/localisation/(:any)/(:any)', function( $local, $slug )
 {
-	return Controller::call('localisation::api.' . Str::plural( $local ) . '@index', array($slug));
+    return Controller::call('localisation::api.' . Str::plural( $local ) . '@index', array($slug));
 });
 
 
 /**
  * Route /api/localisation/:local
  *
- *	<code>
- *		/api/localisation/country => localisation::api.countries@index
- *	</code>
+ *  <code>
+ *      /api/localisation/country => localisation::api.countries@index
+ *  </code>
  */
 Route::any(API . '/localisation/(:any)', function( $local )
 {
-	return Controller::call('localisation::api.' . Str::plural( $local ) . '@index');
+    return Controller::call('localisation::api.' . Str::plural( $local ) . '@index');
 });
