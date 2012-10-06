@@ -192,7 +192,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
             // Set the success message.
             //
-            Platform::messages()->success(Lang::line('extensions::messages.install.success', array('extension' => $slug))->get());
+            Platform::messages()->success(Lang::line('extensions.install.success', array('extension' => $slug))->get());
         }
         catch (APIClientException $e)
         {
@@ -235,7 +235,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
             // Set the success message.
             //
-            Platform::messages()->success(Lang::line('extensions::messages.uninstall.success', array('extension' => $slug))->get());
+            Platform::messages()->success(Lang::line('extensions.uninstall.success', array('extension' => $slug))->get());
         }
         catch (APIClientException $e)
         {
@@ -278,7 +278,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
             // Set the success message.
             //
-            Platform::messages()->success(Lang::line('extensions::messages.enable.success', array('extension' => $slug))->get());
+            Platform::messages()->success(Lang::line('extensions.enable.success', array('extension' => $slug))->get());
         }
         catch (APIClientException $e)
         {
@@ -321,7 +321,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
             // Set the success message.
             //
-            Platform::messages()->success(Lang::line('extensions::messages.disable.success', array('extension' => $slug))->get());
+            Platform::messages()->success(Lang::line('extensions.disable.success', array('extension' => $slug))->get());
         }
         catch (APIClientException $e)
         {
@@ -367,7 +367,7 @@ class Extensions_Admin_Extensions_Controller extends Admin_Controller
 
             // Set the success message.
             //
-            Pltform::messages()->success(Lang::line('extensions::messages.update.success', array('extension' => $slug))->get());
+            Pltform::messages()->success(Lang::line('extensions.update.success', array('extension' => $slug))->get());
         }
         catch (APIClientException $e)
         {

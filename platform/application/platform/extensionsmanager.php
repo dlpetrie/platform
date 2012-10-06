@@ -119,7 +119,7 @@ class ExtensionsManager
      * Initiate all the installed and enabled extensions.
      *
      * @access   public
-     * @return   array
+     * @return   void
      */
     public function start_extensions()
     {
@@ -131,7 +131,14 @@ class ExtensionsManager
         //
         foreach ($this->enabled() as $slug => $extension)
         {
-            $this->start($slug);
+            // Check if the extension was started with success.
+            //
+            if( ! $this->start($slug))
+            {
+                // Set the warning message.
+                //
+                Platform::messages()->warning(Lang::line('extensions.missing_files', array('extension' => $slug))->get());
+            }
         }
     }
 
@@ -145,13 +152,16 @@ class ExtensionsManager
      *
      * @access   public
      * @param    string
-     * @return   array
+     * @return   boolean
      */
     public function start($slug = null)
     {
-        // Get this extension information.
+        // Try to get this extension information.
         //
-        $extension = $this->get($slug);
+        if( ! $extension = $this->get($slug))
+        {
+            return false;
+        }
 
         // Check if this extension is already started.
         //
@@ -176,7 +186,7 @@ class ExtensionsManager
             //
             if ( ! $routes instanceof Closure)
             {
-                throw new Exception('"routes" must be a function / closure in [' . $slug . ']');
+                throw new Exception(Lang::line('extensions.invalid_routes', array('extension' => $slug))->get());
             }
 
             // Register it.
@@ -192,7 +202,7 @@ class ExtensionsManager
             //
             if ( ! $listeners instanceof Closure)
             {
-                throw new Exception('"listeners" must be a function / closure in [' . $slug . ']');
+                throw new Exception(Lang::line('extensions.invalid_listeners', array('extension' => $slug))->get());
             }
 
             // Register it.
@@ -264,7 +274,8 @@ class ExtensionsManager
 
                 // The extension is disabled.
                 //
-                else {
+                else
+                {
                     // Can we enable it ?
                     //
                     $extension['info']['can_enable'] = $this->can_enable($slug);
@@ -281,7 +292,8 @@ class ExtensionsManager
 
             // The extension is uninstalled.
             //
-            else {
+            else
+            {
                 // Update the extension information.
                 //
                 $extension['info']['can_install'] = $this->can_install($slug);
@@ -450,10 +462,10 @@ class ExtensionsManager
             return $this->disabled;
         }
 
-        // Get the enabled extensions.
+        // Get the disabled extensions.
         //
         return $this->disabled = $this->installed(function($query){
-            return $query->where('enabled', '=', '1');
+            return $query->where('enabled', '=', '0');
         });
     }
 
@@ -636,7 +648,7 @@ class ExtensionsManager
             return false;
         }
 
-        // Now check if this extension is installed, just in case.
+        // Now check if this extension is installed.
         //
         if ( ! $this->is_installed($slug))
         {
@@ -688,6 +700,13 @@ class ExtensionsManager
             return true;
         }
 
+        // Check if this extension is already enabled.
+        //
+        if($this->is_enabled($slug))
+        {
+            return false;
+        }
+
         // Check if this extension has dependencies.
         //
         if ($dependencies = array_get($this->dependencies, $slug))
@@ -733,7 +752,7 @@ class ExtensionsManager
             return false;
         }
 
-        // Now check if this extension is enable, just in case.
+        // Now check if this extension is enabled.
         //
         if ( ! $this->is_enabled($slug))
         {
@@ -754,7 +773,7 @@ class ExtensionsManager
                 //
                 if ($this->is_installed($dependent))
                 {
-                    // extension can't be disabled.
+                    // Extension can't be disabled.
                     //
                     return false;
                 }
@@ -939,25 +958,18 @@ class ExtensionsManager
      */
     public function install($slug = null, $enable = false)
     {
-        // Check if this extension exists in the array.
-        //
-        if ( ! isset($this->extensions[ $slug ]))
-        {
-            return false;
-        }
-
         // Check if this extension is already installed.
         //
         if (Extension::find($slug))
         {
-            return true;
+            throw new Exception(Lang::line('extensions.install.fail', array('extension' => $slug))->get());
         }
 
         // Check if this extension can be installed.
         //
         if ( ! $this->can_install($slug))
         {
-            throw new Exception('Extension [' . $slug . '] can\'t be installed.');
+            throw new Exception(Lang::line('extensions.install.fail', array('extension' => $slug))->get());
         }
 
         // Get this extension information.
@@ -1026,14 +1038,14 @@ class ExtensionsManager
         //
         if (is_null($extension = Extension::find($slug)))
         {
-            throw new Exception('Extension [' . $slug . '] was not found !');
+            throw new Exception(Lang::line('extensions.not_found', array('extension' => $slug))->get());
         }
 
         // Check if this extension can be uninstalled.
         //
         if ( ! $this->can_uninstall($slug))
         {
-            throw new Exception('Extension [' . $slug . '] can\'t be uninstalled.');
+            throw new Exception(Lang::line('extensions.uninstall.fail', array('extension' => $slug))->get());
         }
 
         // Resolves core tasks.
@@ -1100,14 +1112,14 @@ class ExtensionsManager
         //
         if (is_null($extension = Extension::find($slug)))
         {
-            throw new Exception('Extension [' . $slug . '] was not found !');
+            throw new Exception(Lang::line('extensions.not_found', array('extension' => $slug))->get());
         }
 
         // Check if this extension can be enabled.
         //
         if ( ! $this->can_enable($slug))
         {
-            throw new Exception('Extension [' . $slug . '] can\'t be enabled.');
+            throw new Exception(Lang::line('extensions.enable.fail', array('extension' => $slug))->get());
         }
 
         // Enable all menus related to this extension.
@@ -1151,16 +1163,16 @@ class ExtensionsManager
     {
         // Get this extension information.
         //
-        if (is_null($extension = extension::find($slug)))
+        if (is_null($extension = Extension::find($slug)))
         {
-            throw new Exception('Extension [' . $slug . '] was not found !');
+            throw new Exception(Lang::line('extensions.not_found', array('extension' => $slug))->get());
         }
 
         // Check if this extension can be disabled.
         //
         if ( ! $this->can_disable($slug))
         {
-            throw new Exception('Extension [' . $slug . '] can\'t be disabled.');
+            throw new Exception(Lang::line('extensions.disable.fail', array('extension' => $slug))->get());
         }
 
         // Disable all menus related to this extension.
@@ -1202,9 +1214,9 @@ class ExtensionsManager
     {
         // Get this extension information.
         //
-        if (is_null($extension = extension::find($slug)))
+        if (is_null($extension = Extension::find($slug)))
         {
-            throw new Exception('Extension [' . $slug . '] was not found !');
+            throw new Exception(Lang::line('extensions.not_found', array('extension' => $slug))->get());
         }
 
         // Get this extension information.
@@ -1258,7 +1270,7 @@ class ExtensionsManager
         //
         if ( ! $file = $this->find_extension($slug))
         {
-            throw new Exception('Extension [' . $slug . '] was not found !');
+            return false;
         }
 
         // Read the extension.php file.
@@ -1269,7 +1281,7 @@ class ExtensionsManager
         //
         if ( ! is_array($extension) or ! array_get($extension, 'info.name') or ! array_get($extension, 'info.version'))
         {
-            throw new Exception('extension ' . $slug . ' doesn\'t have a valid extension.php file');
+            throw new Exception(Lang::line('extensions.invalid_file', array('extension' => $slug))->get());
         }
 
         // Add/change some extension information..

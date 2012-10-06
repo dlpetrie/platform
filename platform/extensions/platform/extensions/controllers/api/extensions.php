@@ -105,7 +105,7 @@ class Extensions_API_Extensions_Controller extends API_Controller
                 // Invalid filter, return the message.
                 //
                 return new Response(array(
-                    'message' => Lang::line('extensions::messages.error.invalid_filter')->get()
+                    'message' => Lang::line('extensions.invalid_filter')->get()
                 ), API::STATUS_BAD_REQUEST);
             }
 
@@ -137,9 +137,20 @@ class Extensions_API_Extensions_Controller extends API_Controller
             return new Response($extensions);
         }
 
+        // Check if this extension exists.
+        //
+        if ( ! Platform::extensions_manager()->exists($slug))
+        {
+            // Extension doesn't exist.
+            //
+            return new Response(array(
+                'message' => Lang::line('extensions.not_found', array('extension' => $slug))->get()
+            ), API::STATUS_BAD_REQUEST);
+        }
+
         try
         {
-            // Check if the extension exists.
+            // Get this extension information.
             //
             $extension = Platform::extensions_manager()->get($slug);
 
@@ -208,23 +219,14 @@ class Extensions_API_Extensions_Controller extends API_Controller
      */
     public function put_index($slug = null)
     {
-        try
-        {
-            // Check if the extension exists.
-            //
-            $extension = Platform::extensions_manager()->get($slug);
-
-            // Remove callbacks as they're no use in JSON.
-            //
-            array_forget($extension, 'listeners');
-            array_forget($extension, 'routes');
-        }
-        catch (Exception $e)
+        // Check if the extension exists.
+        //
+        if( ! $extension = Platform::extensions_manager()->get($slug))
         {
             // Extension doesn't exist.
             //
             return new Response(array(
-                'message' => $e->getMessage()
+                'message' => Lang::line('extensions.not_found', array('extension' => $slug))->get()
             ), API::STATUS_BAD_REQUEST);
         }
 
@@ -253,19 +255,14 @@ class Extensions_API_Extensions_Controller extends API_Controller
             //
             if ($installed === true)
             {
-                // Check if the extension is not installed.
+                // Install the extension.
                 //
-                if ( Platform::extensions_manager()->is_uninstalled($slug))
-                {
-                    // Install the extension.
-                    //
-                    $extension = Platform::extensions_manager()->install($slug);
-                }
+                $extension = Platform::extensions_manager()->install($slug);
             }
 
             // If we want the extension to be uninstalled.
             //
-            elseif ($installed === false and Platform::extensions_manager()->is_installed($slug))
+            elseif ($installed === false)
             {
                 // Uninstall the extension.
                 //
@@ -276,14 +273,13 @@ class Extensions_API_Extensions_Controller extends API_Controller
             //
             if (Platform::extensions_manager()->is_installed($slug))
             {
-                // If we want the module enabled or not.
+                // If we want the module to be enabled or not.
                 //
                 if ( ! is_null($enabled))
                 {
                     $method = ( $enabled === true ) ? 'enable' : 'disable';
                     $module = Platform::extensions_manager()->$method($slug);
                 }
-
                 // If we want the module to be updated.
                 //
                 if ($update = Input::get('update'))
