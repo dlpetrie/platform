@@ -46,40 +46,40 @@ class ExtensionsManager
     /**
      * Stores all the extensions.
      *
-     * @access   private
-     * @param    array
+     * @access   public
+     * @var      array
      */
     public $extensions = array();
 
     /**
      * Stores all the installed extensions.
      *
-     * @access   private
-     * @param    Object
+     * @access   public
+     * @var      object
      */
     public $installed = array();
 
     /**
      * Stores all the uninstalled extensions.
      *
-     * @access   private
-     * @param    array
+     * @access   public
+     * @var      array
      */
     public $uninstalled = array();
 
     /**
      * Stores all the enabled extensions.
      *
-     * @access   private
-     * @param    array
+     * @access   public
+     * @var      array
      */
     public $enabled = array();
 
     /**
      * Stores all the disabled extensions.
      *
-     * @access   private
-     * @param    array
+     * @access   public
+     * @var      array
      */
     public $disabled = array();
 
@@ -87,7 +87,7 @@ class ExtensionsManager
      * Stores each extension dependencies.
      *
      * @access   private
-     * @param    array
+     * @var      array
      */
     private $dependencies = array();
 
@@ -95,7 +95,7 @@ class ExtensionsManager
      * Stores each extension dependents.
      *
      * @access   private
-     * @param    array
+     * @var      array
      */
     private $dependents = array();
 
@@ -106,7 +106,7 @@ class ExtensionsManager
      * We can use this flag to turn the checking Off when installing Platform.
      *
      * @access   private
-     * @param    boolean
+     * @var      boolean
      */
     private $checking = true;
 

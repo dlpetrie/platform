@@ -35,7 +35,20 @@
  */
 class Dependencies
 {
-    private static $items        = array();
+    /**
+     * Stores the items.
+     *
+     * @access   private
+     * @var      array
+     */
+    private static $items = array();
+
+    /**
+     * Stores the dependencies.
+     *
+     * @access   private
+     * @var      array
+     */
     private static $dependencies = array();
 
 
