@@ -67,10 +67,10 @@ class Menus_Install
 			$table->string('name');
 			$table->string('slug')->unique();
 			$table->string('uri')->nullable();
-			$table->boolean('target');
-			$table->integer('visibility');
-			$table->boolean('secure');
-			$table->boolean('user_editable');
+			$table->boolean('target')->nullable();
+			$table->integer('visibility')->default(0);
+			$table->boolean('secure')->default(0);
+			$table->boolean('user_editable')->default(0);
 			$table->integer('lft');
 			$table->integer('rgt');
 			$table->integer('menu_id');

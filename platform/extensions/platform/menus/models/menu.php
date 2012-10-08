@@ -493,10 +493,10 @@ SQL;
 		{
 			if (isset($result->secure))
 			{
-				$result->secure = (bool) $result->secure;
+				$result->secure = $result->secure;
 			}
-			$result->user_editable = (bool) $result->user_editable;
-			$result->status        = (bool) $result->status;
+			$result->user_editable = $result->user_editable;
+			$result->status        = $result->status;
 		}
 
 		return $result;
@@ -534,10 +534,10 @@ SQL;
 		{
 			if (isset($result->secure))
 			{
-				$result->secure = (bool) $result->secure;
+				$result->secure = $result->secure;
 			}
-			$result->user_editable = (bool) $result->user_editable;
-			$result->status        = (bool) $result->status;
+			$result->user_editable = $result->user_editable;
+			$result->status        = $result->status;
 		}
 
 		return $results;
