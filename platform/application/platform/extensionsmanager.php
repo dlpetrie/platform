@@ -31,7 +31,7 @@ use Laravel\Config, Laravel\CLI\Command, Laravel\Database\Schema;
  * --------------------------------------------------------------------------
  * Extensions Manager Class
  * --------------------------------------------------------------------------
- * 
+ *
  * A class to manage our extensions.
  *
  * @package    Platform
@@ -940,7 +940,7 @@ class ExtensionsManager
         //
         return $this->current_version($slug);
     }
-    
+
 
     /**
      * --------------------------------------------------------------------------
@@ -1458,7 +1458,6 @@ class ExtensionsManager
                 $table->string('slug', 50)->unique();
                 $table->string('version', 10)->default(0);
                 $table->boolean('enabled');
-                $table->timestamps();
             });
         }
 
