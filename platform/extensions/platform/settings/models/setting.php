@@ -105,7 +105,6 @@ class Setting extends Crud
         	{
             	$attribute = \HTML::entities($attribute);
         	}
-
         }
 
         return $attributes;
