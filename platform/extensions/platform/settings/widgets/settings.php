@@ -53,8 +53,8 @@ class Settings
      * @param    array
      */
     public static $validation = array(
-        'site-title' => 'required',
-        'site-email' => 'required|email'
+        'title' => 'required',
+        'email' => 'required|email'
     );
 
 

@@ -32,7 +32,7 @@ use Crud;
  * --------------------------------------------------------------------------
  * Settings > Setting Model
  * --------------------------------------------------------------------------
- * 
+ *
  * The settings model class.
  *
  * @package    Platform
@@ -62,6 +62,25 @@ class Setting extends Crud
         #static::$_messages = $messages;
     }
 
+    /**
+	 * Get all the attributes of the model.
+	 *
+	 * @return  array
+	 */
+	public function attributes()
+	{
+		$attributes = get_object_public_vars($this);
+
+		if (is_array(static::$_rules))
+		{
+			foreach (static::$_rules as $key => $val)
+			{
+				$attributes[$key] = $attributes['value'];
+			}
+		}
+
+		return $attributes;
+	}
 
     /**
      * --------------------------------------------------------------------------
@@ -76,9 +95,17 @@ class Setting extends Crud
      */
     protected function prep_attributes( $attributes )
     {
-        foreach ( $attributes as &$attribute );
+        foreach ( $attributes as $key => &$attribute );
         {
-            $attribute = \HTML::entities($attribute);
+        	if (is_array(static::$_rules) and array_key_exists($key, static::$_rules))
+        	{
+        		unset($attributes[$key]);
+        	}
+        	else
+        	{
+            	$attribute = \HTML::entities($attribute);
+        	}
+
         }
 
         return $attributes;
