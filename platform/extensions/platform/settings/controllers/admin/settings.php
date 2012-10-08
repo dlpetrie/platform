@@ -33,7 +33,7 @@ use Platform\Settings\Model\Setting;
  * --------------------------------------------------------------------------
  * Settings > Admin Class
  * --------------------------------------------------------------------------
- * 
+ *
  * Settings to manage your website settings.
  *
  * @package    Platform
@@ -174,7 +174,7 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
             {
                 // Get the rules.
                 //
-                $validation = array( 'value' => array_get($widget::$validation, $name) );
+                $validation = array( $name => array_get($widget::$validation, $name) );
             }
 
             // Set the values.

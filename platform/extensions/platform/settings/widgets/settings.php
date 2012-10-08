@@ -34,7 +34,7 @@ use Theme;
  * --------------------------------------------------------------------------
  * Settings > Widget Class
  * --------------------------------------------------------------------------
- * 
+ *
  * The settings widgets class.
  *
  * @package    Platform
@@ -53,8 +53,8 @@ class Settings
      * @param    array
      */
     public static $validation = array(
-        'title' => 'required',
-        'email' => 'required|email'
+        'site-title' => 'required',
+        'site-email' => 'required|email'
     );
 
 
@@ -63,7 +63,7 @@ class Settings
      * Function: index()
      * --------------------------------------------------------------------------
      *
-     * 
+     *
      *
      * @access   public
      * @param    array

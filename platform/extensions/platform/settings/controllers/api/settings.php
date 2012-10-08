@@ -32,7 +32,7 @@ use Platform\Settings\Model\Setting;
  * --------------------------------------------------------------------------
  * Settings > API Class
  * --------------------------------------------------------------------------
- * 
+ *
  * API class to manage the settings.
  *
  * @package    Platform
@@ -98,14 +98,14 @@ class Settings_API_Settings_Controller extends API_Controller
             //
             $settings = array();
 
-            // 
+            //
             //
             foreach ( $result as $setting )
             {
                 $settings[ $setting['type'] ][ $setting['name'] ] = $setting;
             }
 
-            // 
+            //
             //
             $result = $settings;
             unset($settings);
@@ -122,7 +122,7 @@ class Settings_API_Settings_Controller extends API_Controller
      * Function: put_index()
      * --------------------------------------------------------------------------
      *
-     * 
+     *
      *
      *  <code>
      *      API::put('settings', array( 'settings' => $settings ));
@@ -166,7 +166,7 @@ class Settings_API_Settings_Controller extends API_Controller
             //
             $setting['id'] = array_get($setting, 'id') ?: null;
 
-            // 
+            //
             //
             $setting_model = Setting::find(function($query) use($setting)
             {
@@ -209,13 +209,13 @@ class Settings_API_Settings_Controller extends API_Controller
             //
             if ( $validation )
             {
-                $rules['value'] = $validation['value'];
+                $rules = $validation;
                 #$rules[ $setting['name'] ] = $validation['value'];
             }
 
             // Pass the validation rules to the model.
             //
-            $setting_model->set_validation($rules);
+            $setting_model->set_validation($validation);
 
             try
             {
@@ -244,7 +244,7 @@ class Settings_API_Settings_Controller extends API_Controller
             }
         }
 
-        // 
+        //
         //
         return new Response( array('updated' => $updated, 'errors' => $errors) );
     }
