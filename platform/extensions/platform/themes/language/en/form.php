@@ -31,7 +31,7 @@ return array(
      * -----------------------------------------
      */
     'settings' => array(
-        'title' => 'Themes',
+        'legend' => 'Themes',
 
         'fields' => array(
             'frontend' => 'Frontend Theme',

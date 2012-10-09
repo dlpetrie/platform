@@ -4,6 +4,7 @@
     {{ Lang::line('settings::general.title')->get() }}
 @endsection
 
+{{ Theme::queue_asset('validate', 'js/validate.js', 'jquery') }}
 {{ Theme::queue_asset('bootstrap-tab', 'js/bootstrap/tab.js', 'jquery') }}
 
 @section('content')
@@ -21,7 +22,7 @@
     <div class="tabbable">
         <ul class="nav nav-tabs">
             @foreach ( $settings as $extension => $data )
-            <li{{ ( $extension === 'settings' ? ' class="active"' : '' ) }}><a href="#tab_{{ $extension }}" data-toggle="tab">{{ Lang::line($extension . '::form.settings.title')->get() }}</a></li>
+            <li{{ ( $extension === 'settings' ? ' class="active"' : '' ) }}><a href="#tab_{{ $extension }}" data-toggle="tab">{{ Lang::line($extension . '::form.settings.legend')->get() }}</a></li>
             @endforeach
         </ul>
         <div class="tab-content">

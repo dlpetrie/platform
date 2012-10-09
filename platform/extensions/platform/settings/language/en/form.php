@@ -31,7 +31,7 @@ return array(
      * -----------------------------------------
      */
     'settings' => array(
-        'title' => 'General Settings',
+        'legend' => 'General Settings',
 
         'fields' => array(
             'title'   => 'Site Title',
