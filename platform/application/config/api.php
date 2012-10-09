@@ -18,9 +18,14 @@
  * @link       http://cartalyst.com
  */
 
-return array(
 
-	// The default format to return
-	// data in from the API
-	'default_format' => 'json',
+/*
+ * --------------------------------------------------------------------------
+ * Return the configuration.
+ * --------------------------------------------------------------------------
+ */
+return array(
+    // The default format to return data in from the API.
+    //
+    'default_format' => 'json'
 );

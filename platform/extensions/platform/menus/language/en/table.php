@@ -18,12 +18,17 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * Return the language lines.
+ * --------------------------------------------------------------------------
+ */
 return array(
+    'name'           => 'Menu Name',
+    'slug'           => 'Slug',
 
-	'name'           => 'Menu Name',
-	'slug'           => 'Slug',
-
-	// Children specific
-	'children_count' => 'Number of Children',
-	'children'       => ':count children',
+    // Children specific
+    'children_count' => 'Number of Children',
+    'children'       => ':count children'
 );

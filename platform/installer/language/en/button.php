@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -26,14 +25,6 @@
  * --------------------------------------------------------------------------
  */
 return array(
-    /*
-     * -----------------------------------------
-     * General.
-     * -----------------------------------------
-     */
     'previous' => 'Back',
     'next'     => 'Continue'
 );
-
-/* End of file button.php */
-/* Location: ./platform/installer/language/en/button.php */

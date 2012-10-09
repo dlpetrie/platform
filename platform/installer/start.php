@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -28,6 +27,3 @@
 Autoloader::namespaces(array(
     'Installer' => __DIR__ . DS . 'models'
 ));
-
-/* End of file start.php */
-/* Location: ./platform/installer/start.php */

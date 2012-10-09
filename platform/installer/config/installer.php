@@ -18,9 +18,14 @@
  * @link       http://cartalyst.com
  */
 
-return array(
 
-	// The key used for identifying
-	// data in the session
-	'session_key' => 'installer',
+/*
+ * --------------------------------------------------------------------------
+ * Return the configuration.
+ * --------------------------------------------------------------------------
+ */
+return array(
+   // The key used for identifying data in the session.
+   //
+   'session_key' => 'installer'
 );

@@ -18,24 +18,50 @@
  * @link       http://cartalyst.com
  */
 
+
+/**
+ * --------------------------------------------------------------------------
+ * Authorized Controller Class
+ * --------------------------------------------------------------------------
+ * 
+ * 
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.0
+ */
 class Authorized_Controller extends Base_Controller
 {
+    /**
+     * Whitelisted auth routes.
+     *
+     * @access    protected
+     * @var       array
+     */
+    protected $whitelist = array();
 
-	/**
-	 * Whitelisted auth routes.
-	 *
-	 * @var  array
-	 */
-	protected $whitelist = array();
 
-	/**
-	 * Called when the class object is
-	 * initialized
-	 */
-	public function __construct()
-	{
-		$this->filter('before', 'auth')->except($this->whitelist);
-		parent::__construct();
-	}
+    /**
+     * --------------------------------------------------------------------------
+     * Function: __construct()
+     * --------------------------------------------------------------------------
+     *
+     * Initializer.
+     *
+     * @access   public
+     * @return   void
+     */
+    public function __construct()
+    {
+        // Check if the user is logged in.
+        //
+        $this->filter('before', 'auth')->except( $this->whitelist );
 
+        // Call parent.
+        //
+        parent::__construct();
+    }
 }

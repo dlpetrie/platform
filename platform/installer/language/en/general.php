@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -28,7 +27,7 @@
 return array(
     /*
      * -----------------------------------------
-     * General.
+     * Installer header.
      * -----------------------------------------
      */
     'title'       => 'Installer',
@@ -91,6 +90,3 @@ return array(
         'licence'          => 'Platform Licence Agreement'
     )
 );
-
-/* End of file general.php */
-/* Location: ./platform/installer/language/en/general.php */

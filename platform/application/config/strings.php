@@ -1,22 +1,44 @@
 <?php
+/**
+ * Part of the Platform application.
+ *
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the 3-clause BSD License.
+ *
+ * This source file is subject to the 3-clause BSD License that is
+ * bundled with this package in the LICENSE file.  It is also available at
+ * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
+ *
+ * @package    Platform
+ * @version    1.0.1
+ * @author     Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @link       http://cartalyst.com
+ */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * Return the configuration.
+ * --------------------------------------------------------------------------
+ */
 return array(
-
 	/*
-	|--------------------------------------------------------------------------
-	| String Inflection
-	|--------------------------------------------------------------------------
-	|
-	| This array contains the singular and plural forms of words. It's used by
-	| the "singular" and "plural" methods on the Str class to convert a given
-	| word from singular to plural and vice versa.
-	|
-	| Note that the regular expressions are only for inflecting English words.
-	| To inflect a non-English string, simply add its singular and plural
-	| form to the array of "irregular" word forms.
-	|
-	*/
-
+	 * --------------------------------------------------------------------------
+	 * String Inflection
+	 * --------------------------------------------------------------------------
+	 *
+	 * This array contains the singular and plural forms of words. It's used by
+	 * the "singular" and "plural" methods on the Str class to convert a given
+	 * word from singular to plural and vice versa.
+	 *
+	 * Note that the regular expressions are only for inflecting English words.
+	 * To inflect a non-English string, simply add its singular and plural
+	 * form to the array of "irregular" word forms.
+	 *
+	 */
 	'plural' => array(
 		'/(quiz)$/i' => "$1zes",
 		'/^(ox)$/i' => "$1en",
@@ -68,18 +90,18 @@ return array(
 		'/(corpse)s$/i' => "$1",
 		'/(us)es$/i' => "$1",
 		'/(us|ss)$/i' => "$1",
-		'/s$/i' => "",
+		'/s$/i' => ""
 	),
 
 	'irregular' => array(
-		'child' => 'children',
-		'foot' => 'feet',
-		'goose' => 'geese',
-		'man' => 'men',
-		'move' => 'moves',
+		'child'  => 'children',
+		'foot'   => 'feet',
+		'goose'  => 'geese',
+		'man'    => 'men',
+		'move'   => 'moves',
 		'person' => 'people',
-		'sex' => 'sexes',
-		'tooth' => 'teeth',
+		'sex'    => 'sexes',
+		'tooth'  => 'teeth'
 	),
 
 	'uncountable' => array(
@@ -94,26 +116,25 @@ return array(
 		'police',
 		'series',
 		'sheep',
-		'species',
+		'species'
 	),
 
+
 	/*
-	|--------------------------------------------------------------------------
-	| ASCII Characters
-	|--------------------------------------------------------------------------
-	|
-	| This array contains foreign characters and their 7-bit ASCII equivalents.
-	| The array is used by the "ascii" method on the Str class to get strings
-	| ready for inclusion in a URL slug.
-	|
-	| Of course, the "ascii" method may also be used by you for whatever your
-	| application requires. Feel free to add any characters we missed, and be
-	| sure to let us know about them!
-	|
-	*/
-
+	 * --------------------------------------------------------------------------
+	 * ASCII Characters
+	 * --------------------------------------------------------------------------
+	 *
+	 * This array contains foreign characters and their 7-bit ASCII equivalents.
+	 * The array is used by the "ascii" method on the Str class to get strings
+	 * ready for inclusion in a URL slug.
+	 *
+	 * Of course, the "ascii" method may also be used by you for whatever your
+	 * application requires. Feel free to add any characters we missed, and be
+	 * sure to let us know about them!
+	 *
+	 */
 	'ascii' => array(
-
 		'/æ|ǽ/' => 'ae',
 		'/œ/' => 'oe',
 		'/À|Á|Â|Ã|Ä|Å|Ǻ|Ā|Ă|Ą|Ǎ|А/' => 'A',
@@ -180,8 +201,6 @@ return array(
 		'/Щ/' => 'Shch',
 		'/щ/' => 'shch',
 		'/Ж/' => 'Zh',
-		'/ж/' => 'zh',
-
-	),
-
+		'/ж/' => 'zh'
+	)
 );

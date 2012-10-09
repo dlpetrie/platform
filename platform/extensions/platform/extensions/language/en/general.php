@@ -27,17 +27,10 @@
 return array(
     /*
      * -----------------------------------------
-     * Extension page title.
+     * Extension header.
      * -----------------------------------------
      */
     'title' => 'Extension Management',
-
-
-    /*
-     * -----------------------------------------
-     * Descriptions.
-     * -----------------------------------------
-     */
     'description' => array(
         'index' => 'Install, uninstall, enable or disable extensions for platform',
         'view'  => 'Viewing the extension :extension'

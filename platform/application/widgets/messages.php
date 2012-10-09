@@ -20,34 +20,107 @@
 
 namespace Platform\Application\Widgets;
 
+
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
 use Theme;
 
+
+/**
+ * --------------------------------------------------------------------------
+ * Messages widget
+ * --------------------------------------------------------------------------
+ * 
+ * This widget purpose is to show messages on the UI.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.0
+ */
 class Messages
 {
+    /**
+     * --------------------------------------------------------------------------
+     * Function: all()
+     * --------------------------------------------------------------------------
+     *
+     * Shows all the messages.
+     *
+     * @access   public
+     * @return   View
+     */
+    public function all()
+    {
+        return Theme::make('widgets.messages.all');
+    }
 
-	public function all()
-	{
-		return Theme::make('widgets.messages.all');
-	}
 
-	public function success()
-	{
-		return Theme::make('widgets.messages.success');
-	}
+    /**
+     * --------------------------------------------------------------------------
+     * Function: success()
+     * --------------------------------------------------------------------------
+     *
+     * Shows all the success messages.
+     *
+     * @access   public
+     * @return   View
+     */
+    public function success()
+    {
+        return Theme::make('widgets.messages.success');
+    }
 
-	public function errors()
-	{
-		return Theme::make('widgets.messages.errors');
-	}
 
-	public function warning()
-	{
-		return Theme::make('widgets.messages.warning');
-	}
+    /**
+     * --------------------------------------------------------------------------
+     * Function: errors()
+     * --------------------------------------------------------------------------
+     *
+     * Shows all the error messages.
+     *
+     * @access   public
+     * @return   View
+     */
+    public function errors()
+    {
+        return Theme::make('widgets.messages.errors');
+    }
 
-	public function info()
-	{
-		return Theme::make('widgets.messages.info');
-	}
 
+    /**
+     * --------------------------------------------------------------------------
+     * Function: warning()
+     * --------------------------------------------------------------------------
+     *
+     * Shows all the warning messages.
+     *
+     * @access   public
+     * @return   View
+     */
+    public function warning()
+    {
+        return Theme::make('widgets.messages.warning');
+    }
+
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: info()
+     * --------------------------------------------------------------------------
+     *
+     * Shows all the information messages.
+     *
+     * @access   public
+     * @return   View
+     */
+    public function info()
+    {
+        return Theme::make('widgets.messages.info');
+    }
 }

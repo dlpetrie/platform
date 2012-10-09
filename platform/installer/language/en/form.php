@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -67,6 +66,3 @@ return array(
         'password_confirm_help' => 'Password confirmation for admin.'
     )
 );
-
-/* End of file form.php */
-/* Location: ./platform/installer/language/en/form.php */

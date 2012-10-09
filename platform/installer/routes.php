@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -27,8 +26,5 @@
  */
 Route::any('installer/(:any?)', function($action = 'index')
 {
-    return Controller::call('installer::index@'.$action);
+    return Controller::call('installer::index@' . $action);
 });
-
-/* End of file routes.php */
-/* Location: ./platform/installer/routes.php */
