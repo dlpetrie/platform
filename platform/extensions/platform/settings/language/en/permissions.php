@@ -28,7 +28,7 @@ return array(
     'admin' => array(
         'settings' => array(
             '_title_'  => 'Admin Settings',
-            'general'  => 'View / Edit',
+            'general'  => 'View / Edit'
         )
     )
 );

@@ -27,6 +27,6 @@
 return array(
     'success' => ':setting has been updated.',
     'errors' => array(
-        'none_found' => 'No settings found for the given parameters.',
+        'none_found' => 'No settings found for the given parameters.'
     )
 );

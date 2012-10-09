@@ -51,7 +51,7 @@ class Settings_API_Settings_Controller extends API_Controller
      * Gets a group of settings by the given parameters.
      *
      *  <code>
-     *        API::get('settings', $conditions);
+     *      API::get('settings', $conditions);
      *  </code>
      *
      * @access   public
@@ -59,12 +59,12 @@ class Settings_API_Settings_Controller extends API_Controller
      */
     public function get_index()
     {
-        // 
+        // Get the inputs.
         //
         $where    = Input::get('where');
         $organize = Input::get('organize', false);
 
-        // 
+        // Get the settings based on the request.
         //
         $result = Setting::all(function($query) use ($where)
         {
@@ -101,14 +101,14 @@ class Settings_API_Settings_Controller extends API_Controller
             //
             $settings = array();
 
-            //
+            // Sort the settings array.
             //
             foreach ($result as $setting)
             {
                 $settings[ $setting['type'] ][ $setting['name'] ] = $setting;
             }
 
-            //
+            // Save the settings in our result variable.
             //
             $result = $settings;
             unset($settings);
@@ -125,7 +125,7 @@ class Settings_API_Settings_Controller extends API_Controller
      * Function: put_index()
      * --------------------------------------------------------------------------
      *
-     *
+     * Update the settings in the database.
      *
      *  <code>
      *      API::put('settings', array('settings' => $settings));

@@ -18,13 +18,21 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * Return the language lines.
+ * --------------------------------------------------------------------------
+ */
 return array(
-
-
+    /*
+     * -----------------------------------------
+     * Extension header.
+     * -----------------------------------------
+     */
 	'title'       => 'Theme Management',
 	'description' => 'Activate, deactivate, and customize themes.',
 
 	'author'      => 'Author:',
-	'version'     => 'Version:',
-
+	'version'     => 'Version:'
 );

@@ -25,13 +25,18 @@
  * --------------------------------------------------------------------------
  */
 return array(
+    /*
+     * -----------------------------------------
+     * Settings form.
+     * -----------------------------------------
+     */
     'settings' => array(
         'title' => 'General Settings',
 
         'fields' => array(
-            'title'       => 'Site Title',
-            'tagline'     => 'Site Tagline',
-            'email'       => 'Site Email Address',
+            'title'   => 'Site Title',
+            'tagline' => 'Site Tagline',
+            'email'   => 'Site Email Address'
         )
     )
 );

@@ -5,13 +5,13 @@
 
     <fieldset>
         <div>
-            <label for="theme-frontend">{{ Lang::line('themes::form.frontend') }}</label>
+            <label for="theme-frontend">{{ Lang::line('themes::form.settings.fields.frontend') }}</label>
             {{ Form::select('theme:frontend', $frontend_themes, array_get($settings, 'theme.frontend'), array('id' => 'theme-frontend')) }}
             <span class="help"></span>
         </div>
 
         <div>
-            <label for="theme-backend">{{ Lang::line('themes::form.backend') }}</label>
+            <label for="theme-backend">{{ Lang::line('themes::form.settings.fields.backend') }}</label>
             {{ Form::select('theme:backend', $backend_themes, array_get($settings, 'theme.backend'), array('id' => 'theme-backend')) }}
             <span class="help"></span>
         </div>

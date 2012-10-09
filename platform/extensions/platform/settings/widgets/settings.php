@@ -54,8 +54,8 @@ class Settings
      * @var      array
      */
     public static $validation = array(
-        'title'   => 'required',
-        'tagline' => 'required',
+        'title'   => 'required|min:3',
+        'tagline' => 'required|min:3',
         'email'   => 'required|email'
     );
 
