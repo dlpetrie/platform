@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -60,11 +59,15 @@ class Settings_API_Settings_Controller extends API_Controller
      */
     public function get_index()
     {
+        // 
+        //
         $where    = Input::get('where');
         $organize = Input::get('organize', false);
 
-        $result = Setting::all(function($query) use ($where) {
-
+        // 
+        //
+        $result = Setting::all(function($query) use ($where)
+        {
             if ( ! is_array($where) or ! is_array($where[0]))
             {
                 $where = array($where);
@@ -92,7 +95,7 @@ class Settings_API_Settings_Controller extends API_Controller
 
         // Do we want to return an organized array ?
         //
-        if ( $organize )
+        if ($organize)
         {
             // Initialize an empty array.
             //
@@ -100,7 +103,7 @@ class Settings_API_Settings_Controller extends API_Controller
 
             //
             //
-            foreach ( $result as $setting )
+            foreach ($result as $setting)
             {
                 $settings[ $setting['type'] ][ $setting['name'] ] = $setting;
             }
@@ -125,7 +128,7 @@ class Settings_API_Settings_Controller extends API_Controller
      *
      *
      *  <code>
-     *      API::put('settings', array( 'settings' => $settings ));
+     *      API::put('settings', array('settings' => $settings));
      *  </code>
      *
      * @access   public
@@ -144,12 +147,12 @@ class Settings_API_Settings_Controller extends API_Controller
 
         // Loop through the settings.
         //
-        foreach ( $settings as $setting )
+        foreach ($settings as $setting)
         {
             // Validation rules.
             //
             $validation = $setting['validation'];
-            unset( $setting['validation'] );
+            unset($setting['validation']);
 
             // Lets make sure the values are set.
             //
@@ -188,7 +191,7 @@ class Settings_API_Settings_Controller extends API_Controller
             if ( ! $setting_model)
             {
                 unset( $setting['id'] );
-                $setting_model = new Setting( $setting );
+                $setting_model = new Setting($setting);
             }
 
             // Otherwise update the values.
@@ -207,10 +210,9 @@ class Settings_API_Settings_Controller extends API_Controller
 
             // Set this setting rules.
             //
-            if ( $validation )
+            if ($validation)
             {
                 $rules = $validation;
-                #$rules[ $setting['name'] ] = $validation['value'];
             }
 
             // Pass the validation rules to the model.
@@ -221,7 +223,7 @@ class Settings_API_Settings_Controller extends API_Controller
             {
                 // Save the setting.
                 //
-                if ( $setting_model->save() )
+                if ($setting_model->save())
                 {
                     $updated[] = ucfirst($setting_model->name);
                 }
@@ -232,23 +234,20 @@ class Settings_API_Settings_Controller extends API_Controller
                 {
                     // Get the errors.
                     //
-                    foreach ( $setting_model->validation()->errors->all() as $error )
+                    foreach ($setting_model->validation()->errors->all() as $error)
                     {
                         $errors[] = $error;
                     }
                 }
             }
-            catch ( Exception $e )
+            catch (Exception $e)
             {
                 $errors[] = $e->getMessage();
             }
         }
 
+        // Return the updated and non updated settings.
         //
-        //
-        return new Response( array('updated' => $updated, 'errors' => $errors) );
+        return new Response(array('updated' => $updated, 'errors' => $errors));
     }
 }
-
-/* End of file settings.php */
-/* Location: ./platform/extensions/platform/settings/controllers/api/settings.php */

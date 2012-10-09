@@ -19,24 +19,17 @@
  */
 
 
+/*
+ * --------------------------------------------------------------------------
+ * Return the language lines.
+ * --------------------------------------------------------------------------
+ */
 return array(
-
-	/* Header */
-	'title'			=> 	'Settings',
-	'description'	=>	'You can change your preferences at anytime by choosing from the sections below.',
-
-	'localization' => array(
-		/* Form localization */
-		'title'       => 'Localization',
-		'description' => '',
-		'country'     => 'Country',
-	),
-
-	// remove?
-	'section_2_desc'	=>	'It is highly recommended that you have a SSL Certificate if in production. Below are some extra security settings to help assist you during development vs production.',
-	'section_3_desc'	=>	'',
-
-	/* Logs */
-	'log_edit' => 'Edited Site Settings',
-
+    /*
+     * -----------------------------------------
+     * Extension header.
+     * -----------------------------------------
+     */
+    'title'       => 'Settings',
+    'description' => 'You can change your preferences at anytime by choosing from the sections below.'
 );

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -43,11 +42,15 @@ use Platform\Menus\Menu;
  */
 class Settings_Install
 {
-
     /**
+     * --------------------------------------------------------------------------
+     * Function: up()
+     * --------------------------------------------------------------------------
+     *
      * Make changes to the database.
      *
-     * @return void
+     * @access   public
+     * @return   void
      */
     public function up()
     {
@@ -72,7 +75,6 @@ class Settings_Install
          * --------------------------------------------------------------------------
          */
         $system = Menu::find('admin-system');
-
         $settings = new Menu(array(
             'name'          => 'Settings',
             'extension'     => 'settings',
@@ -89,33 +91,22 @@ class Settings_Install
          * # 3) Configuration settings.
          * --------------------------------------------------------------------------
          */
-/*
-IS THIS NEEDED ?
-        // Platform version
-        /*$version = DB::table('settings')->insert(array(
-            'extension' => 'platform',
-            'type'      => 'system',
-            'name'      => 'version',
-            'value'     => 'beta'
-        ));
-*/
-
         // Website title.
         //
         $query = DB::table('settings')->insert(array(
-            'extension'     => 'settings',
-            'type'             => 'site',
-            'name'             => 'title',
-            'value'         => 'Platform'
+            'extension' => 'settings',
+            'type'      => 'site',
+            'name'      => 'title',
+            'value'     => 'Platform'
         ));
 
         // Site tagline.
         //
         $query = DB::table('settings')->insert(array(
-            'extension'     => 'settings',
-            'type'             => 'site',
-            'name'             => 'tagline',
-            'value'         => 'A base application on Laravel'
+            'extension' => 'settings',
+            'type'      => 'site',
+            'name'      => 'tagline',
+            'value'     => 'A base application on Laravel'
         ));
     }
 
@@ -135,6 +126,3 @@ IS THIS NEEDED ?
         Schema::drop('settings');
     }
 }
-
-/* End of file 2012_05_15_045038_install.php */
-/* Location: ./platform/extensions/platform/extensions/migrations/2012_05_15_045038_install.php */

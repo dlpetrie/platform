@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -25,8 +24,8 @@
  * What we can use in this class.
  * --------------------------------------------------------------------------
  */
-use Platform\Menus\Menu;
-use Platform\Settings\Model\Setting;
+use Platform\Menus\Menu,
+    Platform\Settings\Model\Setting;
 
 
 /**
@@ -103,11 +102,11 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 
         // Get all the settings from the database.
         //
-        foreach ( API::get('settings', array('organize' => true)) as $setting )
+        foreach (API::get('settings', array('organize' => true)) as $setting)
         {
             // Populate the extension name of each setting.
             //
-            foreach ( $setting as $data )
+            foreach ($setting as $data)
             {
                 $settings[ $data['extension'] ][ $data['type'] ][ $data['name'] ] = $data['value'];
             }
@@ -137,19 +136,19 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 
         // Loop through the submited data.
         //
-        foreach ( Input::get() as $field => $value )
+        foreach (Input::get() as $field => $value)
         {
             // Extension field shall not pass !
             //
-            if ( $field === 'extension' )
+            if ($field === 'extension')
             {
                 continue;
             }
 
             // Find the type and name for the respective field.
-            // If a field contains a ':', then a type was given
+            // If a field contains a ':', then a type was given.
             //
-            if ( strpos($field, ':') !== false )
+            if (strpos($field, ':') !== false)
             {
                 list($type, $name) = explode(':', $field);
             }
@@ -170,11 +169,11 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
             // Check if this widget has validation rules.
             //
             $widget = 'Platform\\' . ucfirst($extension) . '\\Widgets\\Settings';
-            if ( isset( $widget::$validation ) and array_key_exists( $name, $widget::$validation ) )
+            if (isset($widget::$validation) and array_key_exists($name, $widget::$validation))
             {
                 // Get the rules.
                 //
-                $validation = array( $name => array_get($widget::$validation, $name) );
+                $validation = array($name => array_get($widget::$validation, $name));
             }
 
             // Set the values.
@@ -196,52 +195,49 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 
             // If we have fields that were updated with success.
             //
-            if ( $updated = array_get($request, 'updated') )
+            if ($updated = array_get($request, 'updated'))
             {
                 // Loop through each updated setting.
                 //
-                foreach ( $updated as $setting )
+                foreach ($updated as $setting)
                 {
                     // Set the success message.
                     //
-                    Platform::messages()->success( Lang::line('settings::messages.success.update', array('setting' => $setting)) );
+                    Platform::messages()->success(Lang::line('settings::message.success', array('setting' => $setting)));
                 }
             }
 
             // If we have fields that were not updated with success.
             //
-            if ( $errors = array_get($request, 'errors') )
+            if ($errors = array_get($request, 'errors'))
             {
                 // Loop through the error messages.
                 //
-                foreach ( $errors as $error )
+                foreach ($errors as $error)
                 {
                     // Set the error message.
                     //
-                    Platform::messages()->error( $error );
+                    Platform::messages()->error($error);
                 }
             }
-
         }
-        catch ( APIClientException $e )
+        catch (APIClientException $e)
         {
             // Set the error message.
             //
-            Platform::messages()->error( $e->getMessage() );
+            Platform::messages()->error($e->getMessage());
 
             // Set the other error messages.
             //
-            foreach ( $e->errors() as $error )
+            foreach ($e->errors() as $error)
             {
-                Platform::messages()->error( $error );
+                Platform::messages()->error($error);
             }
         }
 
         // Redirect back to the settings page.
         //
         return Redirect::to_secure(ADMIN . '/settings');
+        #return Redirect::to_admin('settings');
     }
 }
-
-/* End of file settings.php */
-/* Location: ./platform/extensions/platform/settings/controllers/admin/settings.php */

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -71,6 +70,3 @@ return array(
         'settings::admin.settings@general'
     )
 );
-
-/* End of file extension.php */
-/* Location: ./platform/extensions/platform/settings/extension.php */

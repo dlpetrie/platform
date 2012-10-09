@@ -1,5 +1,4 @@
-<?php namespace Platform\Settings\Model;
-
+<?php
 /**
  * Part of the Platform application.
  *
@@ -18,6 +17,8 @@
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
  * @link       http://cartalyst.com
  */
+
+namespace Platform\Settings\Model;
 
 
 /*
@@ -56,31 +57,47 @@ class Setting extends Crud
      * @param    array
      * @return   void
      */
-    public function set_validation( $rules = array(), $messages = array() )
+    public function set_validation($rules = array())
     {
         static::$_rules = $rules;
-        #static::$_messages = $messages;
     }
 
+
     /**
-	 * Get all the attributes of the model.
-	 *
-	 * @return  array
-	 */
-	public function attributes()
-	{
-		$attributes = get_object_public_vars($this);
+     * --------------------------------------------------------------------------
+     * Function: attributes()
+     * --------------------------------------------------------------------------
+     *
+     * Get all the attributes of the model.
+     *
+     * @access   public
+     * @param    array
+     * @param    array
+     * @return   void
+     */
+    public function attributes()
+    {
+        // Get the attributes.
+        //
+        $attributes = get_object_public_vars($this);
 
-		if (is_array(static::$_rules))
-		{
-			foreach (static::$_rules as $key => $val)
-			{
-				$attributes[$key] = $attributes['value'];
-			}
-		}
+        // Do we have rules ?
+        //
+        if (is_array(static::$_rules))
+        {
+            // Loop throgh the rules.
+            //
+            foreach (static::$_rules as $key => $val)
+            {
+                $attributes[ $key ] = $attributes['value'];
+            }
+        }
 
-		return $attributes;
-	}
+        // Return the attributes.
+        //
+        return $attributes;
+    }
+
 
     /**
      * --------------------------------------------------------------------------
@@ -93,23 +110,24 @@ class Setting extends Crud
      * @param    array
      * @return   array
      */
-    protected function prep_attributes( $attributes )
+    protected function prep_attributes($attributes)
     {
-        foreach ( $attributes as $key => &$attribute );
+        // Loop through the attributes.
+        //
+        foreach ($attributes as $key => &$attribute);
         {
-        	if (is_array(static::$_rules) and array_key_exists($key, static::$_rules))
-        	{
-        		unset($attributes[$key]);
-        	}
-        	else
-        	{
-            	$attribute = \HTML::entities($attribute);
-        	}
+            if (is_array(static::$_rules) and array_key_exists($key, static::$_rules))
+            {
+                unset($attributes[ $key ]);
+            }
+            else
+            {
+                $attribute = \HTML::entities($attribute);
+            }
         }
 
+        // Return the attributes.
+        //
         return $attributes;
     }
 }
-
-/* End of file setting.php */
-/* Location: ./platform/extensions/platform/settings/models/setting.php */

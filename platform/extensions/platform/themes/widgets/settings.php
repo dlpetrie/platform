@@ -21,13 +21,64 @@
 namespace Platform\Themes\Widgets;
 
 
-use Theme\Theme;
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
+use API,
+    Theme\Theme;
 
+
+/**
+ * --------------------------------------------------------------------------
+ * Themes > Widget Class
+ * --------------------------------------------------------------------------
+ *
+ * Wigdet class for changing themes.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.0
+ */
 class Settings
 {
-	public function index( $settings = null )
-	{
-		return Theme::make('themes::widgets.settings')->with('settings', $settings);
-	}
+    /**
+     * --------------------------------------------------------------------------
+     * Function: index()
+     * --------------------------------------------------------------------------
+     *
+     * Shows the themes settings form.
+     *
+     * @access   public
+     * @return   View
+     */
+    public function index($settings = null)
+    {
+        // Get all themes for the frontend.
+        //
+        $frontend = array();
+        foreach(API::get('themes/frontend') as $theme)
+        {
+            $frontend[ $theme['theme'] ] = $theme['name'];
+        }
 
+        // Get all themes for the backend.
+        //
+        $backend = array();
+        foreach(API::get('themes/backend') as $theme)
+        {
+            $backend[ $theme['theme'] ] = $theme['name'];
+        }
+
+        // Show the form page.
+        //
+        return Theme::make('themes::widgets.form.settings')
+                ->with('settings', $settings)
+                ->with('frontend_themes', $frontend)
+                ->with('backend_themes', $backend);
+    }
 }

@@ -1,5 +1,4 @@
-<?php namespace Platform\Settings\Widgets;
-
+<?php
 /**
  * Part of the Platform application.
  *
@@ -19,15 +18,17 @@
  * @link       http://cartalyst.com
  */
 
+namespace Platform\Settings\Widgets;
+
 
 /*
  * --------------------------------------------------------------------------
  * What we can use in this class.
  * --------------------------------------------------------------------------
  */
-use API;
-use APIClientException;
-use Theme;
+use API,
+    APIClientException,
+    Theme\Theme;
 
 
 /**
@@ -42,7 +43,7 @@ use Theme;
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
  * @license    BSD License (3-clause)
  * @link       http://cartalyst.com
- * @version    1.1
+ * @version    1.0
  */
 class Settings
 {
@@ -50,11 +51,12 @@ class Settings
      * The validation rules.
      *
      * @access   public
-     * @param    array
+     * @var      array
      */
     public static $validation = array(
-        'title' => 'required',
-        'email' => 'required|email'
+        'title'   => 'required',
+        'tagline' => 'required',
+        'email'   => 'required|email'
     );
 
 
@@ -63,17 +65,16 @@ class Settings
      * Function: index()
      * --------------------------------------------------------------------------
      *
-     *
+     * Shows the general settings form.
      *
      * @access   public
      * @param    array
      * @return   View
      */
-    public function index( $settings = null )
+    public function index($settings = null)
     {
-        return Theme::make('settings::widgets.form.general')->with('settings', $settings);
+        // Show the form.
+        //
+        return Theme::make('settings::widgets.form.settings')->with('settings', $settings);
     }
 }
-
-/* End of file settings.php */
-/* Location: ./platform/extensions/platform/settings/widgets/settings.php */
