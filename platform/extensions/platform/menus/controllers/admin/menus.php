@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -12,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -76,17 +75,17 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
             //
             $menus = API::get('menus');
         }
-        catch ( APIClientException $e )
+        catch (APIClientException $e)
         {
             // Set the error message.
             //
-            Platform::messages()->error( $e->getMessage() );
+            Platform::messages()->error($e->getMessage());
 
             // Set all the other error messages.
             //
-            foreach ( $e->errors() as $error )
+            foreach ($e->errors() as $error)
             {
-                Platform::messages()->error( $error );
+                Platform::messages()->error($error);
             }
 
             // Redirect to the admin dashboard.
@@ -143,11 +142,11 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
      * @param    string
      * @return   mixed
      */
-    public function get_edit( $slug = false )
+    public function get_edit($slug = false)
     {
         // If we are editing a menu.
         //
-        if ( $slug != false )
+        if ($slug != false)
         {
             try
             {
@@ -155,7 +154,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
                 //
                 $menu = API::get('menus/' . $slug, array('children' => true));
             }
-            catch ( APIClientException $e )
+            catch (APIClientException $e)
             {
                 // Set the error message.
                 //
@@ -163,9 +162,9 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 
                 // Set the other error messages.
                 //
-                foreach ( $e->errors() as $error )
+                foreach ($e->errors() as $error)
                 {
-                    Platform::messages()->error( $error );
+                    Platform::messages()->error($error);
                 }
 
                 // Redirect back to the menus page.
@@ -189,7 +188,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
             //
             $all_children = API::get('menus/flat');
         }
-        catch ( APIClientException $e )
+        catch (APIClientException $e)
         {
             // Fallback array.
             //
@@ -205,7 +204,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
         // client end in addition to server end.
         //
         $persisted_slugs = array();
-        foreach ( $all_children as $child )
+        foreach ($all_children as $child)
         {
             $persisted_slugs[] = array_get($child, 'slug');
         }
@@ -228,49 +227,59 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 
 
     /**
-     * Processes editing a menu.
+     * --------------------------------------------------------------------------
+     * Function: post_edit()
+     * --------------------------------------------------------------------------
      *
-     * @param   string  $slug
-     * @return  mixed
+     * Menu editing form processing page.
+     *
+     * @access   public
+     * @param    string
+     * @return   mixed
      */
-    public function post_edit( $slug = false )
+    public function post_edit($slug = false)
     {
+        // Get the children hierarchy.
+        //
         $input_hierarchy = Input::get('children_hierarchy');
 
-        // JSON string on non-AJAX form
+        // JSON string on non-AJAX form.
+        //
         if (is_string($input_hierarchy))
         {
             $input_hierarchy = json_decode($input_hierarchy, true);
         }
 
-        // Check for input hierarchy
+        // Check for input hierarchy.
+        //
         if ( ! $input_hierarchy or ! is_array($input_hierarchy))
         {
+            // Ajax request ?
+            //
             if (Request::ajax())
             {
                 return new Response(array(
-                    'message' => Lang::line('menus::messages.update.no_chidren'),
+                    'message' => Lang::line('menus::messages.update.no_children')->get()
                 ), API::STATUS_BAD_REQUEST);
             }
 
-            Platform::messages()->error('No children hierarchy was provided.');
+            // Set the error message.
+            //
+            Platform::messages()->error(Lang::line('menus::messages.update.no_children')->get());
 
-            if (Request::ajax())
-            {
-                return new Response(array(
-                    'message' => Lang::line('menus::messages.update.no_chidren'),
-                ), API::STATUS_BAD_REQUEST);
-            }
-
-            return Redirect::to_admin('menus'.(($slug) ? '/edit/'.$slug : null));
+            // Redirect to the menus page.
+            //
+            return Redirect::to_admin('menus'. ( $slug ? '/edit/' . $slug : null));
         }
 
-        // Prepare our children
+        // Prepare our children.
+        //
         $children = array();
 
         foreach ($input_hierarchy as $child)
         {
-            // Ensure no bad data is coming through from POST
+            // Ensure no bad data is coming through from POST.
+            //
             if ( ! is_array($child))
             {
                 continue;
@@ -279,7 +288,8 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
             $this->process_child_recursively($child, $children);
         }
 
-        // Prepare data for the API
+        // Prepare data for the API.
+        //
         $data = array();
 
         if ($name = Input::get('name'))
@@ -301,11 +311,15 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 
         try
         {
-            // If we're updating a menu
+            // If we're updating a menu.
+            //
             if ($slug != false)
             {
-                API::put('menus/'.$slug, $data);
+                API::put('menus/' . $slug, $data);
             }
+
+            // Nop, we are creating a menu.
+            //
             else
             {
                 API::post('menus', $data);
@@ -316,7 +330,7 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
             if (Request::ajax())
             {
                 return new Response(array(
-                    'message' => $e->getMessage(),
+                    'message' => $e->getMessage()
                 ), $e->getCode());
             }
 
@@ -327,18 +341,25 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
                 Platform::messages()->error($error);
             }
 
-            return Redirect::to_admin('menus'.(($slug) ? '/edit/'.$slug : null));
+            // Redirect to the menu page.
+            //
+            return Redirect::to_admin('menus' . ( $slug ? '/edit/' . $slug : null));
         }
 
-
+        // Check if this is an ajax request.
+        //
         if (Request::ajax())
         {
             return new Response(null, API::STATUS_NO_CONTENT);
         }
 
-        // Redirect back to the menus page.
+        // Set the success message.
         //
-        return Redirect::to_admin('menus');
+        Platform::messages()->success(Lang::line('menus::messages.update.success', array('menu' => $slug))->get());
+
+        // Redirect to the menu page.
+        //
+        return Redirect::to_admin('menus' . ( $slug ? '/edit/' . $slug : null));
     }
 
 
@@ -386,45 +407,54 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
 
 
     /**
+     * --------------------------------------------------------------------------
+     * Function: process_child_recursively()
+     * --------------------------------------------------------------------------
+     *
      * Recursively processes an child and it's children
      * based on POST data.
      *
-     * @param   array  $child
-     * @param   array  $children
+     * @access   public
+     * @param    array
+     * @param    array
+     * @return   void
      */
     protected function process_child_recursively($child, &$children)
     {
         $new_child = array(
-            'name'       => Input::get('children.'.$child['id'].'.name'),
-            'slug'       => Input::get('children.'.$child['id'].'.slug'),
-            'uri'        => Input::get('children.'.$child['id'].'.uri'),
-            'class'      => Input::get('children.'.$child['id'].'.class'),
-            'target'     => Input::get('children.'.$child['id'].'.target', 0),
-            'visibility' => Input::get('children.'.$child['id'].'.visibility', 0),
-            'status'     => Input::get('children.'.$child['id'].'.status', 1),
+            'name'       => Input::get('children.' . $child['id'] . '.name'),
+            'slug'       => Input::get('children.' . $child['id'] . '.slug'),
+            'uri'        => Input::get('children.' . $child['id'] . '.uri'),
+            'class'      => Input::get('children.' . $child['id'] . '.class'),
+            'target'     => Input::get('children.' . $child['id'] . '.target', 0),
+            'visibility' => Input::get('children.' . $child['id'] . '.visibility', 0),
+            'status'     => Input::get('children.' . $child['id'] . '.status', 1)
         );
 
         // Determine if we're a new child or not. If we're
         // new, we don't attach an ID. Nesty will handle the
         // rest.
-        if ( ! Input::get('children.'.$child['id'].'.is_new'))
+        if ( ! Input::get('children.' . $child['id'] . '.is_new'))
         {
             $new_child['id'] = $child['id'];
         }
 
-        // Now, look for secure URLs
+        // Now, look for secure URLs.
+        //
         if (URL::valid($new_child['uri']))
         {
             $new_child['secure'] = (int) starts_with($new_child['uri'], 'https://');
         }
 
-        // Relative URL, look in the POST data
+        // Relative URL, look in the POST data.
+        //
         else
         {
-            $new_child['secure'] = Input::get('children.'.$child['id'].'.secure', 0);
+            $new_child['secure'] = Input::get('children.' . $child['id'] . '.secure', 0);
         }
 
-        // If we have children, call the function again
+        // If we have children, call the function again.
+        //
         if (isset($child['children']) and is_array($child['children']) and count($child['children']) > 0)
         {
             $grand_children = array();
@@ -440,6 +470,3 @@ class Menus_Admin_Menus_Controller extends Admin_Controller
         $children[] = $new_child;
     }
 }
-
-/* End of file menus.php */
-/* Location: ./platform/extensions/platform/menus/controllers/admin/menus.php */
