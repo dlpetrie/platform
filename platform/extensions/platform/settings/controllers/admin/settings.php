@@ -11,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -108,6 +108,16 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
             //
             foreach ($setting as $data)
             {
+                // Make sure this settings extension widget exist.
+                //
+                $widget = 'Platform\\' . ucfirst($data['extension']) . '\\Widgets\\Settings';
+                if( ! class_exists($widget))
+                {
+                    continue;
+                }
+
+                // Populate the array.
+                //
                 $settings[ $data['extension'] ][ $data['type'] ][ $data['name'] ] = $data['value'];
             }
         }
@@ -237,7 +247,6 @@ class Settings_Admin_Settings_Controller extends Admin_Controller
 
         // Redirect back to the settings page.
         //
-        return Redirect::to_secure(ADMIN . '/settings');
-        #return Redirect::to_admin('settings');
+        return Redirect::to_admin('settings');
     }
 }

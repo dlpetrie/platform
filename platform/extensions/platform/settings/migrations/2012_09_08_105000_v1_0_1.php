@@ -11,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -29,10 +29,10 @@ use Platform\Menus\Menu;
 
 /**
  * --------------------------------------------------------------------------
- * Install Class
+ * Install Class v1.0.1
  * --------------------------------------------------------------------------
  * 
- * Settings installation.
+ * Adds a class to menu items.
  *
  * @package    Platform
  * @author     Cartalyst LLC
@@ -40,7 +40,7 @@ use Platform\Menus\Menu;
  * @license    BSD License (3-clause)
  * @link       http://cartalyst.com
  */
-class Settings_Install
+class Settings_v1_0_1
 {
     /**
      * --------------------------------------------------------------------------
@@ -56,58 +56,27 @@ class Settings_Install
     {
         /*
          * --------------------------------------------------------------------------
-         * # 1) Create the settings table.
+         * # 1) Update the menu items.
          * --------------------------------------------------------------------------
          */
-        Schema::create('settings', function($table)
+        // Get the admin menu.
+        //
+        $admin      = Menu::admin_menu();
+        $admin_tree = $admin->{Menu::nesty_col('tree')};
+
+        // Update groups list link.
+        //
+        $settings = Menu::find(function($query) use ($admin_tree)
         {
-            $table->increments('id')->unsigned();
-            $table->string('extension');
-            $table->string('type');
-            $table->string('name');
-            $table->text('value');
+            return $query->where('slug', '=', 'admin-settings')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_tree);
         });
 
-
-        /*
-         * --------------------------------------------------------------------------
-         * # 2) Create the menus.
-         * --------------------------------------------------------------------------
-         */
-        $system = Menu::find('admin-system');
-        $settings = new Menu(array(
-            'name'          => 'Settings',
-            'extension'     => 'settings',
-            'slug'          => 'admin-settings',
-            'uri'           => 'settings',
-            'user_editable' => 0,
-            'status'        => 1,
-        ));
-        $settings->last_child_of($system);
-
-
-        /*
-         * --------------------------------------------------------------------------
-         * # 3) Configuration settings.
-         * --------------------------------------------------------------------------
-         */
-        // Website title.
-        //
-        $query = DB::table('settings')->insert(array(
-            'extension' => 'settings',
-            'type'      => 'site',
-            'name'      => 'title',
-            'value'     => 'Platform'
-        ));
-
-        // Site tagline.
-        //
-        $query = DB::table('settings')->insert(array(
-            'extension' => 'settings',
-            'type'      => 'site',
-            'name'      => 'tagline',
-            'value'     => 'A base application on Laravel'
-        ));
+        if ($settings)
+        {
+            $settings->class = 'icon-cog';
+            $settings->save();
+        }
     }
 
 
@@ -123,6 +92,23 @@ class Settings_Install
      */
     public function down()
     {
-        Schema::drop('settings');
+        // Get the admin menu.
+        //
+        $admin      = Menu::admin_menu();
+        $admin_tree = $admin->{Menu::nesty_col('tree')};
+
+        // Update groups list link.
+        //
+        $settings = Menu::find(function($query) use ($admin_tree)
+        {
+            return $query->where('slug', '=', 'admin-settings')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_tree);
+        });
+
+        if ($settings)
+        {
+            $settings->class = '';
+            $settings->save();
+        }
     }
 }
