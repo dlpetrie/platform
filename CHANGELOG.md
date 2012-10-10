@@ -7,6 +7,7 @@
   * Cleaned a bit the application/platform/platform.php
   * Fixed installer issues on some MySQL versions.
   * Extended Laravel URL and Redirect core classes.
+  * HTML comments are now compiled to PHP comments (in Blade templates),
 
 **Extensions Manager:**
 
