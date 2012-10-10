@@ -38,7 +38,7 @@ class Platform
     /**
      * The current Platform version.
      *
-     * @var       string
+     * @constant
      */
     const PLATFORM_VERSION = '1.0.3';
 
@@ -394,7 +394,7 @@ class Platform
         });
 
         /**
-         * Compile HTML coments
+         * Compile HTML comments.
          *
          * @see http://stackoverflow.com/questions/1013499/stripping-html-comments-with-php-but-leaving-conditionals#answer-1013864
          *
