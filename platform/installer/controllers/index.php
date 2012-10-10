@@ -263,7 +263,14 @@ class Installer_Index_Controller extends Base_Controller
      */
     public function get_install()
     {
-        // Update config for this request instance.
+        // 1) Create the database config file.
+        //
+        Installer::create_database_config(Installer::get_step_data(2, function() {
+            Redirect::to('installer/step_2')->send();
+            exit;
+        }));
+
+        // 1.1) Update config for this request instance.
         //
         $step2_data = Installer::get_step_data(2);
         Config::set('database.connections.'.$step2_data['driver'], array(
@@ -276,46 +283,41 @@ class Installer_Index_Controller extends Base_Controller
             'prefix'   => ''
         ));
 
-        // Get the admin user data.
-        //
-        $user = Installer::get_step_data(3, function() {
-            Redirect::to('installer/step_3')->send();
-            exit;
-        });
-        $user = array(
-            'email'                 => $user['email'],
-            'password'              => $user['password'],
-            'password_confirmation' => $user['password_confirmation'],
-            'groups'                => array('admin', 'users'),
-            'metadata'              => array(
-                'first_name' => $user['first_name'],
-                'last_name'  => $user['last_name']
-            ),
-            'permissions' => array(
-                Config::get('sentry::sentry.permissions.superuser') => 1
-            )
-        );
-
-        // 1. Create the database config file.
-        //
-        Installer::create_database_config(Installer::get_step_data(2, function() {
-            Redirect::to('installer/step_2')->send();
-            exit;
-        }));
-
-        // 2. Generate the application random key.
+        // 2) Generate the application random key.
         //
         Installer::generate_key();
 
-        // 3. Install extensions.
+        // 3) Install extensions.
         //
         Installer::install_extensions();
 
-        // 4. Create the admin user.
+        // 4) Create the admin user.
         //
         try
         {
-            $create_user = API::post('users', $user);
+            // Get the admin user data.
+            //
+            $user = Installer::get_step_data(3, function() {
+                Redirect::to('installer/step_3')->send();
+                exit;
+            });
+            $user = array(
+                'email'                 => $user['email'],
+                'password'              => $user['password'],
+                'password_confirmation' => $user['password_confirmation'],
+                'groups'                => array('admin', 'users'),
+                'metadata'              => array(
+                    'first_name' => $user['first_name'],
+                    'last_name'  => $user['last_name']
+                ),
+                'permissions' => array(
+                    Config::get('sentry::sentry.permissions.superuser') => 1
+                )
+            );
+            
+            // Create the admin user.
+            //
+            API::post('users', $user);
         }
         catch (APIClientException $e)
         {
