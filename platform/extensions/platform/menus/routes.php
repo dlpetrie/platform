@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -12,54 +11,55 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-// All reserved API routes should be put here.
-// Menu children cannot match these routes.
-$reserved = array('active', 'active_path');
+
+/*
+ * All reserved API routes should be put here.
+ * Menu children cannot match these routes.
+ */
+$reserved = implode('|', array(
+    'active', 'active_path'
+));
+
 
 /**
- * Route flat menu children.
+ * Route /api/menus/flat
+ *
+ *  <code>
+ *     /api/menus/flat => menus::menus.api@children
+ *     /api/menus/admin/children/flat => menus::menus.api@children
+ *  </code>
  */
-Route::any(array(API.'/menus/((?!'.implode('|', $reserved).').*)/children/flat', API.'/menus/flat'), function($slug = false)
-{
-    return Controller::call('menus::api.menus@flat', array($slug));
-});
+Route::any(array(API . '/menus/((?!' . $reserved .').*)/children/flat', API . '/menus/flat'), 'menus::api.menus@flat');
+
 
 /**
  * Route /api/menus/:children
  *
- *    <code>
- *        /api/menus/admin/children => menus::menus.api@children(admin)
- *    </code>
+ *  <code>
+ *     /api/menus/admin/children => menus::menus.api@children(admin)
+ *  </code>
  */
-Route::any(API.'/menus/((?!'.implode('|', $reserved).').*)/children', function($slug = null)
-{
-    return Controller::call('menus::api.menus@children', array($slug));
-});
+Route::any(API . '/menus/((?!' . $reserved . ').*)/children', 'menus::api.menus@children');
+
 
 /**
  * Route /api/menus/:menu
  *
- *    <code>
- *        /api/menus/admin => menus::menus.api@index(admin)
- *    </code>
+ *  <code>
+ *     /api/menus/admin => menus::menus.api@index(admin)
+ *  </code>
  */
-Route::any(API.'/menus/((?!'.implode('|', $reserved).').*)', function($slug = null)
-{
-    return Controller::call('menus::api.menus@index', array($slug));
-});
+Route::any(API . '/menus/((?!' . $reserved . ').*)', 'menus::api.menus@index');
 
-// Unset the $reserved variable
-// from the global namespace
+
+/*
+ * Unset the $reserved variable from the global namespace.
+ */
 unset($reserved);
-
-Route::controller(Controller::detect('menus'));
-
-/* End of file routes.php */
-/* Location: ./platform/extensions/platform/menus/routes.php */

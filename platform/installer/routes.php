@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -12,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -27,8 +26,5 @@
  */
 Route::any('installer/(:any?)', function($action = 'index')
 {
-    return Controller::call('installer::index@'.$action);
+    return Controller::call('installer::index@' . $action);
 });
-
-/* End of file routes.php */
-/* Location: ./platform/installer/routes.php */

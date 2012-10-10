@@ -69,7 +69,7 @@
 
 			<div class="wrapper">
 				<div class="navigation">
-					@widget('platform.menus::menus.nav', 'admin', 1, 'nav nav-tabs')
+					@widget('platform.menus::menus.nav', 'admin', 1, 'nav nav-tabs', ADMIN)
 				</div>
 			</div>
 		</header>
@@ -77,7 +77,7 @@
 		<div id="page" class="rows expand">
 			<div id="inside" class="grid wrapper">
 				<div class="navigation column left-nav">
-					@widget('platform.menus::menus.nav', 1, 2, 'nav nav-stacked nav-pills')
+					@widget('platform.menus::menus.nav', 1, 2, 'nav nav-stacked nav-pills', ADMIN)
 				</div>
 
 				<div class="content column expand">

@@ -11,16 +11,21 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-return array(
 
-	// The default format to return
-	// data in from the API
-	'default_format' => 'json',
+/*
+ * --------------------------------------------------------------------------
+ * Return the configuration.
+ * --------------------------------------------------------------------------
+ */
+return array(
+    // The default format to return data in from the API.
+    //
+    'default_format' => 'json'
 );

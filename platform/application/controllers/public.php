@@ -11,25 +11,48 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
+
+/**
+ * --------------------------------------------------------------------------
+ * Public Controller Class
+ * --------------------------------------------------------------------------
+ * 
+ * Public controller, for the frontend.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.0
+ */
 class Public_Controller extends Base_Controller
 {
+    /**
+     * --------------------------------------------------------------------------
+     * Function: before()
+     * --------------------------------------------------------------------------
+     *
+     * This function is called before the action is executed.
+     *
+     * @access   public
+     * @return   void
+     */
+    public function before()
+    {
+        // Set the active theme.
+        //
+        Theme::active('frontend' . DS . Platform::get('themes.theme.frontend'));
 
-	/**
-	 * This function is called before the action is executed.
-	 *
-	 * @return  void
-	 */
-	public function before()
-	{
-		Theme::active('frontend'.DS.Platform::get('themes.theme.frontend'));
-		Theme::fallback('frontend'.DS.'default');
-	}
-
+        // Set the fallback theme.
+        //
+        Theme::fallback('frontend' . DS . 'default');
+    }
 }

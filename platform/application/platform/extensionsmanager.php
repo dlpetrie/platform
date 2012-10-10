@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -12,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -32,7 +31,7 @@ use Laravel\Config, Laravel\CLI\Command, Laravel\Database\Schema;
  * --------------------------------------------------------------------------
  * Extensions Manager Class
  * --------------------------------------------------------------------------
- * 
+ *
  * A class to manage our extensions.
  *
  * @package    Platform
@@ -47,40 +46,40 @@ class ExtensionsManager
     /**
      * Stores all the extensions.
      *
-     * @access   private
-     * @param    array
+     * @access   public
+     * @var      array
      */
     public $extensions = array();
 
     /**
      * Stores all the installed extensions.
      *
-     * @access   private
-     * @param    Object
+     * @access   public
+     * @var      object
      */
     public $installed = array();
 
     /**
      * Stores all the uninstalled extensions.
      *
-     * @access   private
-     * @param    array
+     * @access   public
+     * @var      array
      */
     public $uninstalled = array();
 
     /**
      * Stores all the enabled extensions.
      *
-     * @access   private
-     * @param    array
+     * @access   public
+     * @var      array
      */
     public $enabled = array();
 
     /**
      * Stores all the disabled extensions.
      *
-     * @access   private
-     * @param    array
+     * @access   public
+     * @var      array
      */
     public $disabled = array();
 
@@ -88,7 +87,7 @@ class ExtensionsManager
      * Stores each extension dependencies.
      *
      * @access   private
-     * @param    array
+     * @var      array
      */
     private $dependencies = array();
 
@@ -96,7 +95,7 @@ class ExtensionsManager
      * Stores each extension dependents.
      *
      * @access   private
-     * @param    array
+     * @var      array
      */
     private $dependents = array();
 
@@ -107,7 +106,7 @@ class ExtensionsManager
      * We can use this flag to turn the checking Off when installing Platform.
      *
      * @access   private
-     * @param    boolean
+     * @var      boolean
      */
     private $checking = true;
 
@@ -120,7 +119,7 @@ class ExtensionsManager
      * Initiate all the installed and enabled extensions.
      *
      * @access   public
-     * @return   array
+     * @return   void
      */
     public function start_extensions()
     {
@@ -130,9 +129,16 @@ class ExtensionsManager
 
         // Initiate the enabled extensions.
         //
-        foreach ( $this->enabled() as $slug => $extension )
+        foreach ($this->enabled() as $slug => $extension)
         {
-            $this->start( $slug );
+            // Check if the extension was started with success.
+            //
+            if( ! $this->start($slug))
+            {
+                // Set the warning message.
+                //
+                Platform::messages()->warning(Lang::line('extensions.missing_files', array('extension' => $slug))->get());
+            }
         }
     }
 
@@ -146,17 +152,20 @@ class ExtensionsManager
      *
      * @access   public
      * @param    string
-     * @return   array
+     * @return   boolean
      */
-    public function start( $slug = null )
+    public function start($slug = null)
     {
-        // Get this extension information.
+        // Try to get this extension information.
         //
-        $extension = $this->get( $slug );
+        if( ! $extension = $this->get($slug))
+        {
+            return false;
+        }
 
         // Check if this extension is already started.
         //
-        if ( $bundle = array_get($extension, 'bundles.handles', $slug) and Bundle::started($bundle) )
+        if ($bundle = array_get($extension, 'bundles.handles', $slug) and Bundle::started($bundle))
         {
             return true;
         }
@@ -171,13 +180,13 @@ class ExtensionsManager
 
         // Register this extension routes.
         //
-        if ( $routes = array_get($extension, 'routes') )
+        if ($routes = array_get($extension, 'routes'))
         {
             // Check if we've been given a closure.
             //
-            if ( ! $routes instanceof Closure )
+            if ( ! $routes instanceof Closure)
             {
-                throw new Exception('"routes" must be a function / closure in [' . $slug . ']');
+                throw new Exception(Lang::line('extensions.invalid_routes', array('extension' => $slug))->get());
             }
 
             // Register it.
@@ -187,13 +196,13 @@ class ExtensionsManager
 
         // Register this extension listeners.
         //
-        if ( $listeners = array_get($extension, 'listeners') )
+        if ($listeners = array_get($extension, 'listeners'))
         {
             // Check if we've been given a closure.
             //
-            if ( ! $listeners instanceof Closure )
+            if ( ! $listeners instanceof Closure)
             {
-                throw new Exception('"listeners" must be a function / closure in [' . $slug . ']');
+                throw new Exception(Lang::line('extensions.invalid_listeners', array('extension' => $slug))->get());
             }
 
             // Register it.
@@ -221,7 +230,7 @@ class ExtensionsManager
     {
         // Check if we have the extensions loaded.
         //
-        if ( ! empty( $this->extensions ) )
+        if ( ! empty($this->extensions))
         {
             return $this->extensions;
         }
@@ -236,7 +245,7 @@ class ExtensionsManager
 
         // Spin through the extensions from the directories, and merge with the installed extensions data.
         //
-        foreach ( $this->extensions_directories() as $extension )
+        foreach ($this->extensions_directories() as $extension)
         {
             // Get this extension slug.
             //
@@ -244,50 +253,54 @@ class ExtensionsManager
 
             // Check if this extension is installed.
             //
-            if ( $info = array_get( $this->installed, $slug ) )
+            if ($info = array_get($this->installed, $slug))
             {
                 // Update the extension information.
                 //
                 $extension['info']['installed']     = true;
-                $extension['info']['version']       = ( $this->has_update( $slug ) ? $this->new_version( $slug ) : $this->current_version( $slug ) );
-                $extension['info']['enabled']       = $this->is_enabled( $slug );
-                $extension['info']['can_uninstall'] = $this->can_uninstall( $slug );
-                $extension['info']['has_update']    = $this->has_update( $slug );
+                $extension['info']['version']       = ( $this->has_update($slug) ? $this->new_version($slug) : $this->current_version($slug));
+                $extension['info']['enabled']       = $this->is_enabled($slug);
+                $extension['info']['can_uninstall'] = $this->can_uninstall($slug);
+                $extension['info']['has_update']    = $this->has_update($slug);
 
                 // Check if the extension is enabled.
                 //
-                if ( $this->is_enabled( $slug ) )
+                if ($this->is_enabled($slug))
                 {
                     // Can we disable it ?
                     //
-                    $extension['info']['can_disable'] = $this->can_disable( $slug );
+                    $extension['info']['can_disable'] = $this->can_disable($slug);
+                }
 
                 // The extension is disabled.
                 //
-                } else {
+                else
+                {
                     // Can we enable it ?
                     //
-                    $extension['info']['can_enable'] = $this->can_enable( $slug );
+                    $extension['info']['can_enable'] = $this->can_enable($slug);
                 }
 
                 // Sort the info array.
                 //
-                ksort( $extension['info'] );
+                ksort($extension['info']);
 
                 // Update the installed array.
                 //
-                $this->installed[ $slug ] = array_replace_recursive( $extension, $this->installed[ $slug ] );
+                $this->installed[ $slug ] = array_replace_recursive($extension, $this->installed[ $slug ]);
+            }
 
             // The extension is uninstalled.
             //
-            } else {
+            else
+            {
                 // Update the extension information.
                 //
-                $extension['info']['can_install'] = $this->can_install( $slug );
+                $extension['info']['can_install'] = $this->can_install($slug);
 
                 // Sort the info array.
                 //
-                ksort( $extension['info'] );
+                ksort($extension['info']);
 
                 // Store it in the array.
                 //
@@ -301,7 +314,7 @@ class ExtensionsManager
 
         // Sort the extensions.
         //
-        ksort( $extensions );
+        ksort($extensions);
 
         // Store and return the extensions.
         //
@@ -319,7 +332,7 @@ class ExtensionsManager
      * @access   public
      * @return   array
      */
-    public function installed( $condition = null )
+    public function installed($condition = null)
     {
         // Initiate an empty array.
         //
@@ -327,7 +340,7 @@ class ExtensionsManager
 
         // Loop through the extensions.
         //
-        foreach ( Extension::all( $condition ) as $extension )
+        foreach (Extension::all($condition) as $extension)
         {
             // Extension slug.
             //
@@ -344,7 +357,7 @@ class ExtensionsManager
 
         // Sort the extensions.
         //
-        ksort( $extensions );
+        ksort($extensions);
 
         // Store and return the installed extensions.
         //
@@ -366,7 +379,7 @@ class ExtensionsManager
     {
         // Check if we have loaded the extensions already.
         //
-        if ( ! empty( $this->uninstalled ) )
+        if ( ! empty($this->uninstalled))
         {
             return $this->uninstalled;
         }
@@ -377,7 +390,7 @@ class ExtensionsManager
 
         // Loop through the extensions.
         //
-        foreach ( $this->extensions as $extension )
+        foreach ($this->extensions as $extension)
         {
             // Extension slug.
             //
@@ -385,7 +398,7 @@ class ExtensionsManager
 
             // Check if this extension is not installed.
             //
-            if ( $this->is_uninstalled( $slug ) )
+            if ($this->is_uninstalled($slug))
             {
                 // extension information.
                 //
@@ -395,7 +408,7 @@ class ExtensionsManager
 
         // Sort the extensions.
         //
-        ksort( $extensions );
+        ksort($extensions);
 
         // Store and return the extensions.
         //
@@ -417,7 +430,7 @@ class ExtensionsManager
     {
         // If we already have the enabled extensions.
         //
-        if ( ! empty( $this->enabled ) )
+        if ( ! empty($this->enabled))
         {
             return $this->enabled;
         }
@@ -444,15 +457,15 @@ class ExtensionsManager
     {
         // If we already have the disabled extensions.
         //
-        if ( ! empty( $this->disabled ) )
+        if ( ! empty($this->disabled))
         {
             return $this->disabled;
         }
 
-        // Get the enabled extensions.
+        // Get the disabled extensions.
         //
         return $this->disabled = $this->installed(function($query){
-            return $query->where('enabled', '=', '1');
+            return $query->where('enabled', '=', '0');
         });
     }
 
@@ -468,9 +481,9 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function is_installed( $slug = null )
+    public function is_installed($slug = null)
     {
-        return (bool) array_get( $this->installed, $slug );
+        return (bool) array_get($this->installed, $slug);
     }
 
 
@@ -485,9 +498,9 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function is_uninstalled( $slug = null )
+    public function is_uninstalled($slug = null)
     {
-        return (bool) ! array_get( $this->installed, $slug );
+        return (bool) ! array_get($this->installed, $slug);
     }
 
 
@@ -502,9 +515,9 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function is_enabled( $slug = null )
+    public function is_enabled($slug = null)
     {
-        return (bool) array_get( $this->installed, $slug . '.info.enabled' );
+        return (bool) array_get($this->installed, $slug . '.info.enabled');
     }
 
 
@@ -519,9 +532,9 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function is_disabled( $slug = null )
+    public function is_disabled($slug = null)
     {
-        return (bool) ! array_get( $this->installed, $slug . '.info.enabled' );
+        return (bool) ! array_get($this->installed, $slug . '.info.enabled');
     }
 
 
@@ -536,9 +549,9 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function is_core( $slug = null )
+    public function is_core($slug = null)
     {
-        return (bool) array_get( $this->extensions, $slug . '.info.is_core' );
+        return (bool) array_get($this->extensions, $slug . '.info.is_core');
     }
 
 
@@ -553,9 +566,9 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function exists( $slug )
+    public function exists($slug)
     {
-        return (bool) array_get( $this->extensions, $slug );
+        return (bool) array_get($this->extensions, $slug);
     }
 
 
@@ -570,11 +583,11 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function can_install( $slug = null )
+    public function can_install($slug = null)
     {
         // If we are installing Platform, this check is useless.
         //
-        if ( $this->checking === false )
+        if ($this->checking === false)
         {
             // Extension can be installed.
             //
@@ -583,22 +596,22 @@ class ExtensionsManager
 
         // Check if this extension exists.
         //
-        if ( ! $this->exists( $slug ) )
+        if ( ! $this->exists($slug))
         {
             return false;
         }
 
         // Check if this extension has dependencies.
         //
-        if ( $dependencies = $this->has_dependencies( $slug ) )
+        if ($dependencies = $this->has_dependencies($slug))
         {
             // Loop through the dependencies.
             //
-            foreach ( $dependencies as $dependent )
+            foreach ($dependencies as $dependent)
             {
                 // Check if this dependent extension is uninstalled and/or disabled.
                 //
-                if ( $this->is_uninstalled( $dependent ) or $this->is_disabled( $dependent ) )
+                if ($this->is_uninstalled($dependent) or $this->is_disabled($dependent))
                 {
                     // Extension can't be installed.
                     //
@@ -624,35 +637,35 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function can_uninstall( $slug = null )
+    public function can_uninstall($slug = null)
     {
         // First check if this is a core extension.
         //
-        if ( array_get( $this->extensions, $slug . '.info.is_core') )
+        if (array_get($this->extensions, $slug . '.info.is_core'))
         {
             // Core extensions can't be uninstalled !
             //
             return false;
         }
 
-        // Now check if this extension is installed, just in case.
+        // Now check if this extension is installed.
         //
-        if ( ! $this->is_installed( $slug ) )
+        if ( ! $this->is_installed($slug))
         {
             return false;
         }
 
         // Check if this extension has dependents.
         //
-        if ( $dependents = array_get( $this->dependents, $slug ) )
+        if ($dependents = array_get($this->dependents, $slug))
         {
             // Loop through the dependents.
             //
-            foreach ( $dependents as $dependent )
+            foreach ($dependents as $dependent)
             {
                 // Check if this dependent extension is installed.
                 //
-                if ( $this->is_installed( $dependent ) )
+                if ($this->is_installed($dependent))
                 {
                     return false;
                 }
@@ -676,28 +689,35 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function can_enable( $slug = null )
+    public function can_enable($slug = null)
     {
         // If we are installing Platform, this check is useless.
         //
-        if ( $this->checking === false )
+        if ($this->checking === false)
         {
             // Extension can be enabled.
             //
             return true;
         }
 
+        // Check if this extension is already enabled.
+        //
+        if($this->is_enabled($slug))
+        {
+            return false;
+        }
+
         // Check if this extension has dependencies.
         //
-        if ( $dependencies = array_get( $this->dependencies, $slug ) )
+        if ($dependencies = array_get($this->dependencies, $slug))
         {
             // Loop through the dependencies.
             //
-            foreach ( $dependencies as $dependent )
+            foreach ($dependencies as $dependent)
             {
                 // Check if this dependent extension is enabled and installed.
                 //
-                if ( $this->is_uninstalled( $dependent )  )
+                if ($this->is_uninstalled($dependent))
                 {
                     return false;
                 }
@@ -721,20 +741,20 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function can_disable( $slug = null )
+    public function can_disable($slug = null)
     {
         // First check if this is a core extension.
         //
-        if ( array_get( $this->extensions, $slug . '.info.is_core') )
+        if (array_get($this->extensions, $slug . '.info.is_core'))
         {
             // Core extensions can't be disabled !
             //
             return false;
         }
 
-        // Now check if this extension is enable, just in case.
+        // Now check if this extension is enabled.
         //
-        if ( ! $this->is_enabled( $slug ) )
+        if ( ! $this->is_enabled($slug))
         {
             // Extension can't be disabled.
             //
@@ -743,17 +763,17 @@ class ExtensionsManager
 
         // Check if this extension has dependents.
         //
-        if ( $dependents = array_get( $this->dependents, $slug ) )
+        if ($dependents = array_get($this->dependents, $slug))
         {
             // Loop through the dependents.
             //
-            foreach ( $dependents as $dependent )
+            foreach ($dependents as $dependent)
             {
                 // Check if this dependent extension is enabled.
                 //
-                if ( $this->is_installed( $dependent ) )
+                if ($this->is_installed($dependent))
                 {
-                    // extension can't be disabled.
+                    // Extension can't be disabled.
                     //
                     return false;
                 }
@@ -777,19 +797,19 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function has_update( $slug = null )
+    public function has_update($slug = null)
     {
         // Check if this extension is installed.
         //
-        if ( $this->is_installed( $slug ) )
+        if ( $this->is_installed($slug))
         {
             // Get the info from the extension.php file.
             //
-            $extension = $this->get( $slug );
+            $extension = $this->get($slug);
 
             // Compare both versions, and return the result.
             //
-            return ( version_compare( $extension['info']['version'], $this->installed[ $slug ]['info']['version'] ) > 0 );
+            return ( version_compare($extension['info']['version'], $this->installed[ $slug ]['info']['version']) > 0 );
         }
 
         // The extension is not installed.
@@ -809,9 +829,9 @@ class ExtensionsManager
      * @param    string
      * @return   mixed
      */
-    public function has_dependencies( $slug = null )
+    public function has_dependencies($slug = null)
     {
-        return ( array_get( $this->dependencies, $slug ) ?: false );
+        return ( array_get($this->dependencies, $slug) ?: false );
     }
 
 
@@ -826,9 +846,9 @@ class ExtensionsManager
      * @param    string
      * @return   mixed
      */
-    public function has_dependents( $slug = null )
+    public function has_dependents($slug = null)
     {
-        return ( array_get( $this->dependents, $slug ) ?: false );
+        return ( array_get($this->dependents, $slug) ?: false );
     }
 
 
@@ -847,11 +867,11 @@ class ExtensionsManager
      * @param    string
      * @return   array
      */
-    public function required_extensions( $slug = null )
+    public function required_extensions($slug = null)
     {
         // Get this extension dependencies.
         //
-        if ( ! $dependencies = array_get( $this->dependencies, $slug ) )
+        if ( ! $dependencies = array_get($this->dependencies, $slug))
         {
             return array();
         }
@@ -862,11 +882,11 @@ class ExtensionsManager
 
         // Spin through this extension dependencies.
         //
-        foreach ( $dependencies as $dependent )
+        foreach ($dependencies as $dependent)
         {
             // Check if this dependent extensions is not installed or is disabled.
             //
-            if ( $this->is_uninstalled( $dependent ) or $this->is_disabled( $dependent ) )
+            if ($this->is_uninstalled($dependent) or $this->is_disabled($dependent))
             {
                 $required[ $dependent ] = $dependent;
             }
@@ -889,9 +909,9 @@ class ExtensionsManager
      * @param    string
      * @return   mixed
      */
-    public function current_version( $slug = null )
+    public function current_version($slug = null)
     {
-        return array_get( $this->installed, $slug . '.info.version' );
+        return array_get($this->installed, $slug . '.info.version');
     }
 
 
@@ -907,20 +927,20 @@ class ExtensionsManager
      * @param    string
      * @return   mixed
      */
-    public function new_version( $slug = null )
+    public function new_version($slug = null)
     {
         // Check if this extension has an update available.
         //
-        if ( $this->has_update( $slug ) )
+        if ($this->has_update($slug))
         {
-            return array_get( $this->extensions, $slug . '.info.version' );
+            return array_get($this->extensions, $slug . '.info.version');
         }
 
         // No update available, return the current version.
         //
-        return $this->current_version( $slug );
+        return $this->current_version($slug);
     }
-    
+
 
     /**
      * --------------------------------------------------------------------------
@@ -936,32 +956,25 @@ class ExtensionsManager
      * @param    boolean
      * @return   boolean
      */
-    public function install( $slug = null, $enable = false )
+    public function install($slug = null, $enable = false)
     {
-        // Check if this extension exists in the array.
-        //
-        if ( ! isset( $this->extensions[ $slug ] ) )
-        {
-            return false;
-        }
-
         // Check if this extension is already installed.
         //
-        if ( Extension::find( $slug ) )
+        if (Extension::find($slug))
         {
-            return true;
+            throw new Exception(Lang::line('extensions.install.fail', array('extension' => $slug))->get());
         }
 
         // Check if this extension can be installed.
         //
-        if ( ! $this->can_install( $slug ) )
+        if ( ! $this->can_install($slug))
         {
-            throw new Exception('Extension [' . $slug . '] can\'t be installed.');
+            throw new Exception(Lang::line('extensions.install.fail', array('extension' => $slug))->get());
         }
 
         // Get this extension information.
         //
-        $extension = $this->get( $slug );
+        $extension = $this->get($slug);
 
         // Create a new model instance.
         //
@@ -986,7 +999,7 @@ class ExtensionsManager
 
         // Disable menus related to this extension, if the extension is disabled by default.
         //
-        if ( ! $is_core and ! $enable )
+        if ( ! $is_core and ! $enable)
         {
             try
             {
@@ -996,7 +1009,7 @@ class ExtensionsManager
                     API::put('menus/' . $menu['slug'], array('status' => 0));
                 }
             }
-            catch ( APIClientException $e )
+            catch (APIClientException $e)
             {
 
             }
@@ -1019,20 +1032,20 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function uninstall( $slug = null )
+    public function uninstall($slug = null)
     {
         // Get this extension information from the database.
         //
-        if ( is_null( $extension = Extension::find( $slug ) ) )
+        if (is_null($extension = Extension::find($slug)))
         {
-            throw new Exception('Extension [' . $slug . '] was not found !');
+            throw new Exception(Lang::line('extensions.not_found', array('extension' => $slug))->get());
         }
 
         // Check if this extension can be uninstalled.
         //
-        if ( ! $this->can_uninstall( $slug ) )
+        if ( ! $this->can_uninstall($slug))
         {
-            throw new Exception('Extension [' . $slug . '] can\'t be uninstalled.');
+            throw new Exception(Lang::line('extensions.uninstall.fail', array('extension' => $slug))->get());
         }
 
         // Resolves core tasks.
@@ -1049,7 +1062,7 @@ class ExtensionsManager
 
         // Loop through the installed migrations.
         //
-        foreach ( $migrations as $migration )
+        foreach ($migrations as $migration)
         {
             // Include the migration file.
             //
@@ -1093,20 +1106,20 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function enable( $slug = null )
+    public function enable($slug = null)
     {
         // Get this extension information.
         //
-        if ( is_null( $extension = Extension::find( $slug ) ) )
+        if (is_null($extension = Extension::find($slug)))
         {
-            throw new Exception('Extension [' . $slug . '] was not found !');
+            throw new Exception(Lang::line('extensions.not_found', array('extension' => $slug))->get());
         }
 
         // Check if this extension can be enabled.
         //
-        if ( ! $this->can_enable( $slug ) )
+        if ( ! $this->can_enable($slug))
         {
-            throw new Exception('Extension [' . $slug . '] can\'t be enabled.');
+            throw new Exception(Lang::line('extensions.enable.fail', array('extension' => $slug))->get());
         }
 
         // Enable all menus related to this extension.
@@ -1114,13 +1127,15 @@ class ExtensionsManager
         try
         {
             $menus = API::get('menus/flat', array('extension' => $slug));
-            foreach ( $menus as $menu )
+            foreach ($menus as $menu)
             {
                 API::put('menus/' . $menu['slug'], array('status' => 1));
             }
         }
-        catch ( APIClientException $e )
-        {}
+        catch (APIClientException $e)
+        {
+
+        }
 
         // Enable the extension.
         //
@@ -1144,20 +1159,20 @@ class ExtensionsManager
      * @param    string
      * @return   boolean
      */
-    public function disable( $slug = null )
+    public function disable($slug = null)
     {
         // Get this extension information.
         //
-        if ( is_null( $extension = extension::find( $slug ) ) )
+        if (is_null($extension = Extension::find($slug)))
         {
-            throw new Exception('Extension [' . $slug . '] was not found !');
+            throw new Exception(Lang::line('extensions.not_found', array('extension' => $slug))->get());
         }
 
         // Check if this extension can be disabled.
         //
-        if ( ! $this->can_disable( $slug ) )
+        if ( ! $this->can_disable($slug))
         {
-            throw new Exception('Extension [' . $slug . '] can\'t be disabled.');
+            throw new Exception(Lang::line('extensions.disable.fail', array('extension' => $slug))->get());
         }
 
         // Disable all menus related to this extension.
@@ -1165,12 +1180,12 @@ class ExtensionsManager
         try
         {
             $menus = API::get('menus/flat', array('extension' => $slug));
-            foreach ( $menus as $menu )
+            foreach ($menus as $menu)
             {
                 API::put('menus/' . $menu['slug'], array('status' => 0));
             }
         }
-        catch ( APIClientException $e )
+        catch (APIClientException $e)
         {}
 
         // Disable the extension.
@@ -1199,14 +1214,14 @@ class ExtensionsManager
     {
         // Get this extension information.
         //
-        if ( is_null( $extension = extension::find( $slug ) ) )
+        if (is_null($extension = Extension::find($slug)))
         {
-            throw new Exception('Extension [' . $slug . '] was not found !');
+            throw new Exception(Lang::line('extensions.not_found', array('extension' => $slug))->get());
         }
 
         // Get this extension information.
         //
-        $info = $this->get( $slug );
+        $info = $this->get($slug);
 
         // Update extension.
         //
@@ -1242,20 +1257,20 @@ class ExtensionsManager
      * @param    string
      * @return   array
      */
-    public function get( $slug = null )
+    public function get($slug = null)
     {
         // Check if the extension is already in the array.
         //
-        if ( $extension = array_get( $this->extensions, $slug ) )
+        if ($extension = array_get($this->extensions, $slug))
         {
             return $extension;
         }
 
         // Check if the extension.php file of this extension exists.
         //
-        if ( ! $file = $this->find_extension( $slug )  )
+        if ( ! $file = $this->find_extension($slug))
         {
-            throw new Exception('Extension [' . $slug . '] was not found !');
+            return false;
         }
 
         // Read the extension.php file.
@@ -1264,9 +1279,9 @@ class ExtensionsManager
 
         // Some requirements for the extension.php file.
         //
-        if ( ! is_array($extension) or ! array_get($extension, 'info.name') or ! array_get($extension, 'info.version') )
+        if ( ! is_array($extension) or ! array_get($extension, 'info.name') or ! array_get($extension, 'info.version'))
         {
-            throw new Exception('extension ' . $slug . ' doesn\'t have a valid extension.php file');
+            throw new Exception(Lang::line('extensions.invalid_file', array('extension' => $slug))->get());
         }
 
         // Add/change some extension information..
@@ -1280,18 +1295,18 @@ class ExtensionsManager
         //
         $extension['bundles'] = array(
             'handles'  => $slug,
-            'location' => 'path: ' . dirname( $file )
+            'location' => 'path: ' . dirname($file)
         );
 
         // Sort this extension info array.
         //
-        ksort( $extension['info'] );
+        ksort($extension['info']);
 
         // Check if this extension has dependencies.
         //
-        if ( $dependencies = array_get($extension, 'dependencies') )
+        if ($dependencies = array_get($extension, 'dependencies'))
         {
-            foreach ( $dependencies as $dependent )
+            foreach ($dependencies as $dependent)
             {
                 $this->dependencies[ $slug ][] = $dependent;
                 $this->dependents[ $dependent ][] = $slug;
@@ -1315,29 +1330,29 @@ class ExtensionsManager
      * @param    string
      * @return   string
      */
-    public function find_extension( $slug = null )
+    public function find_extension($slug = null)
     {
         // Check if we have a slug.
         //
-        if ( is_null( $slug ) )
+        if (is_null($slug))
         {
             return false;
         }
 
         // We'll search for the extension in the root dir first.
         //
-        $files = glob( path('extensions') . $slug . DS . 'extension' . EXT );
+        $files = glob(path('extensions') . $slug . DS . 'extension' . EXT);
 
         // We couldn't find the extension in the first path, so we'll try the second path.
         //
-        if ( empty( $files ) )
+        if (empty($files))
         {
-            $files = glob( path('extensions') . '*' . DS . $slug . DS . 'extension' . EXT );
+            $files = glob(path('extensions') . '*' . DS . $slug . DS . 'extension' . EXT);
         }
 
         // Return the file path.
         //
-        return ( ! empty( $files ) ? $files[0] : false );
+        return ( ! empty($files) ? $files[0] : false );
     }
 
 
@@ -1360,38 +1375,38 @@ class ExtensionsManager
         // Declare the directories we want to search for extensions.
         //
         $directories = array(
-            (array) glob( path('extensions') . '*' . DS . '*' . DS . 'extension' . EXT, GLOB_NOSORT ),
-            (array) glob( path('extensions') . '*' . DS . 'extension' . EXT, GLOB_NOSORT )
+            (array) glob(path('extensions') . '*' . DS . '*' . DS . 'extension' . EXT, GLOB_NOSORT),
+            (array) glob(path('extensions') . '*' . DS . 'extension' . EXT, GLOB_NOSORT)
         );
 
         // Loop through the directories.
         //
-        foreach ( $directories as $directory )
+        foreach ($directories as $directory)
         {
             // Loop through each extension.
             //
-            foreach ( (array) $directory as $extension )
+            foreach ((array) $directory as $extension)
             {
                 // The full path to this extension
                 //
-                $extension = dirname( $extension );
+                $extension = dirname($extension);
 
                 // The name of this extension.
                 //
-                $slug = basename( $extension );
+                $slug = basename($extension);
 
                 // Check if the extension is not in the array already.
                 //
-                if ( ! in_array($slug, $extensions) )
+                if ( ! in_array($slug, $extensions))
                 {
-                    $extensions[ $slug ] = $this->get( $slug );
+                    $extensions[ $slug ] = $this->get($slug);
                 }
             }
         }
 
         // Sort the extensions.
         //
-        ksort( $extensions );
+        ksort($extensions);
 
         // Return and store the extensions.
         //
@@ -1442,9 +1457,7 @@ class ExtensionsManager
                 $table->increments('id');
                 $table->string('slug', 50)->unique();
                 $table->string('version', 10)->default(0);
-                $table->boolean('is_core');
                 $table->boolean('enabled');
-                $table->timestamps();
             });
         }
 
@@ -1453,6 +1466,3 @@ class ExtensionsManager
         $this->start_extensions();
     }
 }
-
-/* End of file extensionsmanager.php */
-/* Location: ./platform/application/platform/extensionsmanager.php */

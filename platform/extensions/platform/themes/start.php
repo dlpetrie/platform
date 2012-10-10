@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -12,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -29,6 +28,3 @@ Autoloader::namespaces(array(
 	'Platform\\Themes\\Widgets' => __DIR__ . DS . 'widgets',
 	'Platform\\Themes'          => __DIR__ . DS . 'models'
 ));
-
-/* End of file start.php */
-/* Location: ./platform/extensions/platform/themes/start.php */

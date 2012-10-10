@@ -137,6 +137,7 @@
 		</header>
 
 		<form method="POST" method="POST" accept-char="UTF-8" autocomplete="off" id="menu">
+			{{ Form::token() }}
 
 			<div class="tabbable">
 

@@ -11,199 +11,242 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
+
 /**
- * @author  Daniel Petrie
+ * --------------------------------------------------------------------------
+ * Table Class
+ * --------------------------------------------------------------------------
+ *
+ * 
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.0
  */
 class Table
 {
+    /**
+     * --------------------------------------------------------------------------
+     * Function: query()
+     * --------------------------------------------------------------------------
+     *
+     * 
+     *
+     * @access   public
+     * @param    array
+     * @param    array
+     * @param    array
+     * @return   array
+     */
+    public static function query($query, $defaults, $paging = array())
+    {
+        $data = Input::get() + $defaults;
 
-	public static function query($query, $defaults, $paging = array())
-	{
-		$data = Input::get() + $defaults;
+        extract($data);
 
-		extract($data);
+        if ( isset($live_search) and ! empty($live_search))
+        {
+            // if search all was passed
+            $query = static::build_query($live_search, $select, $query);
+        }
 
-		if ( isset($live_search) and ! empty($live_search))
-		{
-			// if search all was passed
-			$query = static::build_query($live_search, $select, $query);
-		}
+        if ( ! empty($where))
+        {
+            // if search all was passed
+            $query = static::build_query($where, $select, $query);
+        }
 
-		if ( ! empty($where))
-		{
-			// if search all was passed
-			$query = static::build_query($where, $select, $query);
-		}
+        // set order by statements
+        foreach ($order_by as $field => $dir)
+        {
+            $query = $query->order_by($field, $dir);
+        }
 
-		// set order by statements
-		foreach ($order_by as $field => $dir)
-		{
-			$query = $query->order_by($field, $dir);
-		}
+        if (count($paging))
+        {
+            // set limit for paging
+            $query = $query->take($paging['limit']);
 
-		if (count($paging))
-		{
-			// set limit for paging
-			$query = $query->take($paging['limit']);
+            // set offset for paging
+            $query = $query->skip($paging['offset']);
+        }
 
-			// set offset for paging
-			$query = $query->skip($paging['offset']);
-		}
+        // set columsn to grab
+        $columns = array();
 
-		// set columsn to grab
-		$columns = array();
+        // alias columsn if the array and key exists
+        if (array_key_exists('alias', $defaults))
+        {
+            foreach ($defaults['select'] as $key => $val)
+            {
+                if (array_key_exists($key, $defaults['alias']))
+                {
+                    $columns[] = $key . ' as ' . $defaults['alias'][$key];
+                }
+                else
+                {
+                    $columns[] = $key;
+                }
+            }
+        }
+        // alias isn't set, so just grab the keys
+        else
+        {
+            $columns = array_keys($defaults['select']);
+        }
 
-		// alias columsn if the array and key exists
-		if (array_key_exists('alias', $defaults))
-		{
-			foreach ($defaults['select'] as $key => $val)
-			{
-				if (array_key_exists($key, $defaults['alias']))
-				{
-					$columns[] = $key . ' as ' . $defaults['alias'][$key];
-				}
-				else
-				{
-					$columns[] = $key;
-				}
-			}
-		}
-		// alias isn't set, so just grab the keys
-		else
-		{
-			$columns = array_keys($defaults['select']);
-		}
+        return array($query, $columns);
+    }
 
-		return array($query, $columns);
-	}
 
-	/**
-	 * Get number of records with filtering
-	 *
-	 * @param   object  DB object
-	 * @return  object  DB object
-	 */
-	public static function count($query, $defaults = array())
-	{
-		$where = Input::get('where');
-		$live_search = Input::get('live_search');
+    /**
+     * --------------------------------------------------------------------------
+     * Function: count()
+     * --------------------------------------------------------------------------
+     *
+     * Get the number of records with filtering.
+     *
+     * @access   public
+     * @param    string
+     * @param    object
+     * @return   object
+     */
+    public static function count($query, $defaults = array())
+    {
+        $where = Input::get('where');
+        $live_search = Input::get('live_search');
 
-		if ( empty($defaults) )
-		{
-			$defaults['select'] = array();
-		}
+        if ( empty($defaults) )
+        {
+            $defaults['select'] = array();
+        }
 
-		$query = static::build_query($where, $defaults['select'], $query);
-		$query = static::build_query($live_search, $defaults['select'], $query);
+        $query = static::build_query($where, $defaults['select'], $query);
+        $query = static::build_query($live_search, $defaults['select'], $query);
 
-		return $query;
-	}
+        return $query;
+    }
 
-	public static function prep_paging($item_count, $threshold = 20)
-	{
-		$threshold   = 10;
-		$where       = Input::get('where', null);
-		$live_search = Input::get('live_search', null);
-		$page        = Input::get('page', 1);
-		$pages       = 10;
 
-		// if ($item_count > $threshold)
-		// {
-			// find offset and limit
-			$limit = ceil( $item_count / $pages );
+    /**
+     * --------------------------------------------------------------------------
+     * Function: prep_paging()
+     * --------------------------------------------------------------------------
+     *
+     * Create a new Messages instance
+     *
+     * @access   public
+     * @param    integer
+     * @param    integer
+     * @return   array
+     */
+    public static function prep_paging($item_count, $threshold = 20)
+    {
+        $threshold   = 10;
+        $where       = Input::get('where', null);
+        $live_search = Input::get('live_search', null);
+        $page        = Input::get('page', 1);
+        $pages       = 10;
 
-			// if the limit is less than threshold, set to limit to threshold to prevent uneccessary paging
-			if ($limit < $threshold)
-			{
-				$limit = $threshold;
-			}
+        // if ($item_count > $threshold)
+        // {
+            // find offset and limit
+            $limit = ceil( $item_count / $pages );
 
-			$offset = $limit * ( $page - 1 );
-		// }
-		// else
-		// {
-		// 	// otherwise use defaults
-		// 	$offset = 0;
-		// 	$limit  = $threshold;
-		// }
+            // if the limit is less than threshold, set to limit to threshold to prevent uneccessary paging
+            if ($limit < $threshold)
+            {
+                $limit = $threshold;
+            }
 
-		return array(
-			'limit'  => $limit,
-			'offset' => $offset,
-			'pages'  => $pages
-		);
-	}
+            $offset = $limit * ( $page - 1 );
+        // }
+        // else
+        // {
+        //     // otherwise use defaults
+        //     $offset = 0;
+        //     $limit  = $threshold;
+        // }
 
-	protected static function build_query(&$where, $select, $query)
-	{
-		if (empty($where))
-		{
-			return $query;
-		}
+        return array(
+            'limit'  => $limit,
+            'offset' => $offset,
+            'pages'  => $pages
+        );
+    }
 
-		// if search all was passed
-		if (array_key_exists('search_all', $where))
-		{
-			if ( ! is_array($where['search_all']))
-			{
-				$where['search_all'] = array($where['search_all']);
-			}
-			// loop through search all array
-			foreach($where['search_all'] as $search)
-			{
-				// split spaces into words
-				$words = explode(' ', trim($search));
+    protected static function build_query(&$where, $select, $query)
+    {
+        if (empty($where))
+        {
+            return $query;
+        }
 
-				// loop through all search words
-				foreach ($words as $word)
-				{
-					// open a new and where clause for current search word
-					if ( ! empty($select))
-					{
-						$query = $query->where(function($query) use($select, $word)
-						{
-							// find all columns selected and search for word
-							foreach ($select as $col => $val)
-							{
-								$query = $query->or_where($col, 'like', '%'.$word.'%');
-							}
-						});
-					}
-				}
-			}
+        // if search all was passed
+        if (array_key_exists('search_all', $where))
+        {
+            if ( ! is_array($where['search_all']))
+            {
+                $where['search_all'] = array($where['search_all']);
+            }
+            // loop through search all array
+            foreach($where['search_all'] as $search)
+            {
+                // split spaces into words
+                $words = explode(' ', trim($search));
 
-			// remove search all from array to prevent searching later on
-			unset($where['search_all']);
-		}
+                // loop through all search words
+                foreach ($words as $word)
+                {
+                    // open a new and where clause for current search word
+                    if ( ! empty($select))
+                    {
+                        $query = $query->where(function($query) use($select, $word)
+                        {
+                            // find all columns selected and search for word
+                            foreach ($select as $col => $val)
+                            {
+                                $query = $query->or_where($col, 'like', '%'.$word.'%');
+                            }
+                        });
+                    }
+                }
+            }
 
-		// set column specific filters
-		foreach ($where as $col => $search)
-		{
-			// split spaces into words
-			$words = explode(' ', trim($search));
+            // remove search all from array to prevent searching later on
+            unset($where['search_all']);
+        }
 
-			if ( ! empty($words))
-			{
-				// open a new and where clause for current search word
-				$query = $query->where(function($query) use($col, $words) {
+        // set column specific filters
+        foreach ($where as $col => $search)
+        {
+            // split spaces into words
+            $words = explode(' ', trim($search));
 
-					// loop through all search words
-					foreach ($words as $word)
-					{
-						$query = $query->where($col, 'like', '%'.$word.'%');
-					}
-				});
-			}
-		}
+            if ( ! empty($words))
+            {
+                // open a new and where clause for current search word
+                $query = $query->where(function($query) use($col, $words) {
 
-		return $query;
-	}
+                    // loop through all search words
+                    foreach ($words as $word)
+                    {
+                        $query = $query->where($col, 'like', '%'.$word.'%');
+                    }
+                });
+            }
+        }
 
+        return $query;
+    }
 }

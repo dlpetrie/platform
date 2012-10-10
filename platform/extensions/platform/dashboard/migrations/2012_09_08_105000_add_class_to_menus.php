@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -12,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -73,7 +72,7 @@ class Dashboard_Add_Class_To_Menus
                          ->where(Menu::nesty_col('tree'), '=', $admin_tree);
         });
 
-        if ( $dashboard )
+        if ($dashboard)
         {
             $dashboard->class = 'icon-th';
             $dashboard->save();
@@ -113,6 +112,3 @@ class Dashboard_Add_Class_To_Menus
         }
     }
 }
-
-/* End of file 2012_09_08_105000_add_class_to_menus.php */
-/* Location: ./platform/extensions/platform/dashboard/migrations/2012_09_08_105000_add_class_to_menus.php */

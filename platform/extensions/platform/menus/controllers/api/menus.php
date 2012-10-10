@@ -12,7 +12,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -214,7 +214,7 @@ class Menus_API_Menus_Controller extends API_Controller
 	 * @param   string  $slug
 	 * @return  Response
 	 */
-	public function get_children($slug)
+	public function get_children($slug = null)
 	{
 		// Find the children belonging to either a root item
 		// or a child item

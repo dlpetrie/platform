@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -12,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -113,6 +112,3 @@ class Extensions_Add_Class_To_Menus
         }
     }
 }
-
-/* End of file 2012_09_08_105000_add_class_to_menus.php */
-/* Location: ./platform/extensions/platform/extensions/migrations/2012_09_08_105000_add_class_to_menus.php */

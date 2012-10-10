@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -12,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -44,11 +43,15 @@ use Installer\Installer;
  */
 class Installer_Index_Controller extends Base_Controller
 {
-
     /**
+     * --------------------------------------------------------------------------
+     * Function: before()
+     * --------------------------------------------------------------------------
+     *
      * This function is called before the action is executed.
      *
-     * @return void
+     * @access   public
+     * @return   mixed
      */
     public function before()
     {
@@ -260,31 +263,25 @@ class Installer_Index_Controller extends Base_Controller
      */
     public function get_install()
     {
-        // 1. Create the database config file
-        Installer::create_database_config(Installer::get_step_data(2, function() {
-            Redirect::to('installer/step_2')->send();
-            exit;
-        }));
-
-        // update config for this request instance
+        // Update config for this request instance.
+        //
         $step2_data = Installer::get_step_data(2);
         Config::set('database.connections.'.$step2_data['driver'], array(
-                'driver'   => $step2_data['driver'],
-                'host'     => $step2_data['host'],
-                'database' => $step2_data['database'],
-                'username' => $step2_data['username'],
-                'password' => $step2_data['password'],
-                'charset'  => 'utf8',
-                'prefix'   => '',
+            'driver'   => $step2_data['driver'],
+            'host'     => $step2_data['host'],
+            'database' => $step2_data['database'],
+            'username' => $step2_data['username'],
+            'password' => $step2_data['password'],
+            'charset'  => 'utf8',
+            'prefix'   => ''
         ));
 
-        // 2. Create user
+        // Get the admin user data.
+        //
         $user = Installer::get_step_data(3, function() {
             Redirect::to('installer/step_3')->send();
             exit;
         });
-
-        // override user with input format
         $user = array(
             'email'                 => $user['email'],
             'password'              => $user['password'],
@@ -292,28 +289,43 @@ class Installer_Index_Controller extends Base_Controller
             'groups'                => array('admin', 'users'),
             'metadata'              => array(
                 'first_name' => $user['first_name'],
-                'last_name'  => $user['last_name'],
+                'last_name'  => $user['last_name']
             ),
             'permissions' => array(
-                Config::get('sentry::sentry.permissions.superuser') => 1,
-            ),
+                Config::get('sentry::sentry.permissions.superuser') => 1
+            )
         );
 
-        // 3. Create a random key
+        // 1. Create the database config file.
+        //
+        Installer::create_database_config(Installer::get_step_data(2, function() {
+            Redirect::to('installer/step_2')->send();
+            exit;
+        }));
+
+        // 2. Generate the application random key.
+        //
         Installer::generate_key();
 
-        // 4. Install extensions
+        // 3. Install extensions.
+        //
         Installer::install_extensions();
 
+        // 4. Create the admin user.
+        //
         try
         {
             $create_user = API::post('users', $user);
         }
         catch (APIClientException $e)
         {
+            // Redirect to the step 3.
+            //
             return Redirect::to('installer/step_3');
         }
 
+        // Redirect to the final step.
+        //
         return Redirect::to('installer/step_4');
     }
 
@@ -356,13 +368,21 @@ class Installer_Index_Controller extends Base_Controller
         return new Response(json_encode(Installer::permissions()));
     }
 
+
     /**
+     * --------------------------------------------------------------------------
+     * Function: post_confirm_db()
+     * --------------------------------------------------------------------------
+     *
      * Confirm database - Step 1
      *
-     * @return  Response
+     * @access   public
+     * @return   Response
      */
     public function post_confirm_db()
     {
+        // If this is not an Ajax request.
+        //
         if ( ! Request::ajax())
         {
             return Event::fire('404');
@@ -375,83 +395,107 @@ class Installer_Index_Controller extends Base_Controller
                 'host'     => Input::get('host'),
                 'database' => Input::get('database'),
                 'username' => Input::get('username'),
-                'password' => Input::get('password'),
+                'password' => Input::get('password')
             ));
         }
         catch (Exception $e)
         {
-            // Error 1146 is actually good, because it
-            // means we connected fine, just couldn't
-            // get the contents of the random table above.
+            // Error 1146 is actually good, because it means we connected fine, 
+            // just couldn't get the contents of the random table above.
             // For some reason this exception has a code of "0"
             // whereas all of the other exceptions match the
             // database errors. Life goes on.
             if ($e->getCode() !== 0)
             {
                 return new Response(json_encode(array(
-                    'message' => $e->getMessage(),
+                    'message' => $e->getMessage()
                 )), API::STATUS_BAD_REQUEST);
             }
         }
 
         return json_encode(array(
-            'message' => 'Successfully connected to the database',
+            'message' => 'Successfully connected to the database'
         ));
     }
 
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: post_confirm_user()
+     * --------------------------------------------------------------------------
+     *
+     * Confirm user - Step 3
+     *
+     * @access   public
+     * @return   Response
+     */
     public function post_confirm_user()
     {
+        // If this is not an Ajax request.
+        //
         if ( ! Request::ajax())
         {
             return Event::fire('404');
         }
 
+        // Prepare the user data.
+        //
         $user = array(
             'email'                 => Input::get('email'),
             'password'              => Input::get('password'),
             'password_confirmation' => Input::get('password_confirmation'),
             'metadata'              => array(
                 'first_name' => Input::get('first_name'),
-                'last_name'  => Input::get('last_name'),
-            ),
+                'last_name'  => Input::get('last_name')
+            )
         );
 
+        // Declare the rules for the validator.
+        //
         $rules = array(
             'metadata.first_name'   => 'required',
             'metadata.last_name'    => 'required',
             'email'                 => 'required|email',
-            'password_confirmation' => 'same:password',
+            'password_confirmation' => 'same:password'
         );
 
+        // Run the validator.
+        //
         $validation = Validator::make($user, $rules);
 
+        // Validation failed ?
+        //
         if ($validation->fails())
         {
             return json_encode(array(
                 'error'   => true,
-                'message' => $validation->errors->all(':message'),
+                'message' => $validation->errors->all(':message')
             ));
         }
 
+        // Admin user created with success.
+        //
         return json_encode(array(
             'error'   => false,
-            'message' => array('Successfully validated user'),
+            'message' => array('Successfully validated user')
         ));
     }
 
+
     /**
+     * --------------------------------------------------------------------------
+     * Function: __call()
+     * --------------------------------------------------------------------------
+     *
      * Catch-all method for requests that can't be matched.
      *
-     * @param  string    $method
-     * @param  array     $parameters
-     * @return Response
+     * @access   public
+     * @param    string
+     * @param    array
+     * @return   Response
      */
     public function __call($method, $parameters)
     {
         return $this->get_index();
     }
-
 }
-
-/* End of file installer.php */
-/* Location: ./platform/installer/controllers/installer.php */

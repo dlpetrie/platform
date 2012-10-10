@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -12,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -88,6 +87,3 @@ class Dashboard_Install
 
     }
 }
-
-/* End of file 2012_05_18_004446_install.php */
-/* Location: ./platform/extensions/platform/dashboard/migrations/2012_05_18_004446_install.php */

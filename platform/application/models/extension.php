@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -12,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -21,41 +20,39 @@
 
 
 /**
- * Extension class.
+ * --------------------------------------------------------------------------
+ * Extension Class
+ * --------------------------------------------------------------------------
+ * 
+ * Extension model class.
  *
- * @author Ben Corlett
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.1
  */
 class Extension extends Crud
 {
-
     /**
-     * The name of the table associated with the model.
+     * --------------------------------------------------------------------------
+     * Function: find()
+     * --------------------------------------------------------------------------
      *
-     * @access    protected
-     * @var       string
-     */
-    protected static $_table = 'extensions';
-
-    /**
-     * Indicates if the model has update and creation timestamps.
+     * Finds an extension by either it's primary key or by a condition that
+     * modifies the query object.
      *
-     * @access    protected
-     * @var       boolean
-     */
-    protected static $_timestamps = false;
-
-
-    /**
-     * Find a model by either it's primary key
-     * or a condition that modifies the query object.
-     *
-     * @param   string  $condition
-     * @param   array   $columns
-     * @return  Crud
+     * @access   public
+     * @param    mixed
+     * @param    array
+     * @param    array
+     * @return   object
      */
     public static function find($condition = 'first', $columns = array('*'), $events = array('before', 'after'))
     {
-        // Find by slug
+        // Find the extension by slug.
+        //
         if (is_string($condition) and ! is_numeric($condition) and ! in_array($condition, array('first', 'last')))
         {
             return parent::find(function($query) use ($condition)
@@ -64,9 +61,8 @@ class Extension extends Crud
             }, $columns, $events);
         }
 
+        // Call parent.
+        //
         return parent::find($condition, $columns, $events);
     }
 }
-
-/* End of file extension.php */
-/* Location: ./platform/application/models/extension.php */

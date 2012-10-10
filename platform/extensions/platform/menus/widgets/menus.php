@@ -11,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -20,35 +20,63 @@
 
 namespace Platform\Menus\Widgets;
 
-use API;
-use APIClientException;
-use Input;
-use Sentry;
-use Theme;
 
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
+use API,
+    APIClientException,
+    Input,
+    Sentry,
+    Theme;
+
+
+/**
+ * --------------------------------------------------------------------------
+ * Menus widget
+ * --------------------------------------------------------------------------
+ * 
+ * This widget purpose is to show navigation menus on the UI.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.0
+ */
 class Menus
 {
-
     /**
+     * --------------------------------------------------------------------------
+     * Function: nav()
+     * --------------------------------------------------------------------------
+     *
      * Returns a navigation menu, based off the active menu.
      *
-     * If the start is an integer, it's the depth from the
-     * top level item based on the current active item. If it's
-     * a string, it's the slug of the item to start rendering
-     * from, irrespective of active item.
+     * If the start is an integer, it's the depth from the top level item based 
+     * on the current active item.
      *
-     * @param   int     $start
-     * @param   int     $children_depth
-     * @param   string  $class
-     * @param   string  $before_uri
-     * @param   string  $class
+     * If it's a string, it's the slug of the item to start rendering from, 
+     * irrespective of active item.
+     *
+     * @access   public
+     * @param    integer
+     * @param    integer
+     * @param    string
+     * @param    string
+     * @return   object
      */
     public function nav($start = 0, $children_depth = 0, $class = null, $before_uri = null)
     {
-        // We have the slug?
+        // Do we have a menu slug ?
+        //
         if ( ! is_numeric($start))
         {
             // Make sure we have a slug
+            //
             if ( ! strlen($start))
             {
                 return '';
@@ -56,7 +84,7 @@ class Menus
 
             try
             {
-                $items = API::get('menus/'.$start.'/children', array(
+                $items = API::get('menus/' . $start . '/children', array(
 
                     // Only enabled
                     'enabled' => true,
@@ -67,7 +95,7 @@ class Menus
                     // We want to automatically filter
                     // what items show (according to Session)
                     // data
-                    'filter_visibility' => 'automatic',
+                    'filter_visibility' => 'automatic'
                 ));
             }
             catch (APIClientException $e)
@@ -99,8 +127,8 @@ class Menus
             // Items
             try
             {
-                $items = API::get('menus/'.$active_path[(int) $start].'/children', array(
-                    'limit' => $children_depth ?: false,
+                $items = API::get('menus/' . $active_path[(int) $start] . '/children', array(
+                    'limit' => $children_depth ?: false
                 ));
             }
             catch (APIClientException $e)
@@ -109,7 +137,8 @@ class Menus
             }
         }
 
-        // Return the widget
+        // Return the widget view.
+        //
         return Theme::make('menus::widgets.nav')
                     ->with('items', $items)
                     ->with('active_path', $active_path)
@@ -118,5 +147,4 @@ class Menus
                     ->with('start', $start)
                     ->with('child_depth', $children_depth);
     }
-
 }

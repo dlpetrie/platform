@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -12,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -47,13 +46,10 @@ class URL extends Laravel\Url
      * @param    string
      * @return   string
      */
-    public static function to_admin( $url = null )
+    public static function to_admin($url = null)
     {
         // Return the URL.
         //
-        return parent::to_secure( ADMIN . '/' . $url );
+        return parent::to_secure(ADMIN . '/' . $url);
     }
 }
-
-/* End of file url.php */
-/* Location: ./platform/application/platform/core/url.php */

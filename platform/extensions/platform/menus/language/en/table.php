@@ -11,19 +11,24 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * Return the language lines.
+ * --------------------------------------------------------------------------
+ */
 return array(
+    'name'           => 'Menu Name',
+    'slug'           => 'Slug',
 
-	'name'           => 'Menu Name',
-	'slug'           => 'Slug',
-
-	// Children specific
-	'children_count' => 'Number of Children',
-	'children'       => ':count children',
+    // Children specific
+    'children_count' => 'Number of Children',
+    'children'       => ':count children'
 );

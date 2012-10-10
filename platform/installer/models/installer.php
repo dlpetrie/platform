@@ -1,5 +1,4 @@
-<?php namespace Installer;
-
+<?php
 /**
  * Part of the Platform application.
  *
@@ -12,12 +11,14 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
  * @link       http://cartalyst.com
  */
+
+namespace Installer;
 
 
 /*
@@ -25,17 +26,17 @@
  * What we can use in this class.
  * --------------------------------------------------------------------------
  */
-use Bundle;
-use Config;
-use DB;
-use Dependencies;
-use File;
-use Exception;
-use Laravel\CLI\Command;
-use Platform;
-use Session;
-use Theme\Theme;
-use Str;
+use Bundle,
+    Config,
+    DB,
+    Dependencies,
+    File,
+    Exception,
+    Laravel\CLI\Command,
+    Platform,
+    Session,
+    Theme\Theme,
+    Str;
 
 
 /**
@@ -111,11 +112,11 @@ class Installer
 
         // Loop through the directories.
         //
-        foreach ( $directories as $directory )
+        foreach ($directories as $directory)
         {
             // Check this directory permissions.
             //
-            $permissions[ ( is_dir( $directory ) and is_writable( $directory ) ) ? 'pass' : 'fail' ][] = $directory;
+            $permissions[ ( is_dir($directory) and is_writable($directory) ) ? 'pass' : 'fail' ][] = $directory;
         }
 
         // Loop through the files.
@@ -131,13 +132,13 @@ class Installer
 
             // Check this file permissions.
             //
-            $permissions[(is_writable($file)) ? 'pass' : 'fail'][] = $file;
+            $permissions[ ( is_writable($file) ) ? 'pass' : 'fail' ][] = $file;
         }
 
         // Sort the permissions.
         //
-        sort( $permissions['pass'] );
-        sort( $permissions['fail'] );
+        sort($permissions['pass']);
+        sort($permissions['fail']);
 
         // Return the permissions.
         //
@@ -177,21 +178,21 @@ class Installer
      * @param    array
      * @return   void
      */
-    public static function create_database_config( $config = array() )
+    public static function create_database_config($config = array())
     {
         // Load config file stub.
         //
-        $string = File::get( Bundle::path('installer') . 'stubs' . DS . 'database' . DS . $config['driver'] . EXT, function()
+        $string = File::get(Bundle::path('installer') . 'stubs' . DS . 'database' . DS . $config['driver'] . EXT, function()
         {
             // File does not exist, fallback to standard config.
             //
-            return File::get( Bundle::path('installer') . 'stubs' . DS . 'database' . EXT);
+            return File::get(Bundle::path('installer') . 'stubs' . DS . 'database' . EXT);
         });
 
         // Determine replacements.
         //
         $replacements = array();
-        foreach ( $config as $key => $value )
+        foreach ($config as $key => $value)
         {
             $replacements[ '{{' . $key . '}}' ] = $value;
         }
@@ -202,7 +203,7 @@ class Installer
 
         // Write the new file.
         //
-        File::put( path('app') . 'config' . DS . 'database' . EXT, $string );
+        File::put(path('app') . 'config' . DS . 'database' . EXT, $string);
     }
 
 
@@ -221,7 +222,7 @@ class Installer
     {
         // Check what database driver we want to use.
         //
-        switch ( $config['driver'] )
+        switch ($config['driver'])
         {
             case 'sqlite':
                 $driver = new \Laravel\Database\Connectors\SQLite;
@@ -240,7 +241,7 @@ class Installer
                 break;
 
             default:
-                throw new Exception("Database driver [{$config['driver']}] is not supported.", 1000);
+                throw new Exception('Database driver [' . $config['driver'] . '] is not supported.', 1000);
         }
 
         // Create a database connection.
@@ -276,15 +277,15 @@ class Installer
 
         // Get all the uninstalled extensions and sort the dependencies.
         //
-        $extensions = Dependencies::sort( Platform::extensions_manager()->uninstalled() );
+        $extensions = Dependencies::sort(Platform::extensions_manager()->uninstalled());
 
         // Spin through all the extensions.
         //
-        foreach ( $extensions as $extension )
+        foreach ($extensions as $extension)
         {
             // Check if this is a core extension.
             //
-            if ( Platform::extensions_manager()->is_core($extension) )
+            if (Platform::extensions_manager()->is_core($extension))
             {
                 // Install the extension and enable it aswell.
                 //
@@ -328,7 +329,7 @@ class Installer
      * @param    mixed
      * @return   void
      */
-    public static function remember_step_data( $step = null, $data = null )
+    public static function remember_step_data($step, $data)
     {
         // Check if this is a valid step.
         //
@@ -339,7 +340,7 @@ class Installer
 
         // Store this step data in the session.
         //
-        Session::put( Config::get('installer::installer.session_key', 'installer') . '.steps.' . $step, $data );
+        Session::put(Config::get('installer::installer.session_key', 'installer') . '.steps.' . $step, $data);
     }
 
 
@@ -355,9 +356,9 @@ class Installer
      * @param    string
      * @return   array
      */
-    public static function get_step_data( $step = null, $default = null )
+    public static function get_step_data($step, $default = null)
     {
-        return Session::get( Config::get('installer::installer.session_key', 'installer') . '.steps' . ( $step ? '.' . $step : null ), $default );
+        return Session::get(Config::get('installer::installer.session_key', 'installer') . '.steps' . ( $step ? '.' . $step : null ), $default);
     }
 
 
@@ -377,6 +378,3 @@ class Installer
         return (bool) ( count( $permissions['fail'] ) === 0 );
     }
 }
-
-/* End of file installer.php */
-/* Location: ./platform/installer/models/installer.php */

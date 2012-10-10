@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -12,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -47,9 +46,9 @@ class Redirect extends Laravel\Redirect
      * @param    integer
      * @return   mixed
      */
-    public static function back( $status = 302 )
+    public static function back($status = 302)
     {
-        return parent::to_secure( Request::referrer(), $status );
+        return parent::to_secure(Request::referrer(), $status);
     }
 
 
@@ -64,11 +63,8 @@ class Redirect extends Laravel\Redirect
      * @param    string
      * @return   mixed
      */
-    public static function to_admin( $url = null )
+    public static function to_admin($url = null)
     {
-        return parent::to_secure( ADMIN . '/' . $url );
+        return parent::to_secure(ADMIN . '/' . $url);
     }
 }
-
-/* End of file redirect.php */
-/* Location: ./platform/application/platform/core/redirect.php */
