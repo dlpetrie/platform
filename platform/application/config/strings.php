@@ -1,5 +1,3 @@
-
-RAWFORKNEW
 <?php
 /**
  * Part of the Platform application.
