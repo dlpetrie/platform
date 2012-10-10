@@ -36,6 +36,13 @@
 class Platform
 {
     /**
+     * The current Platform version.
+     *
+     * @var       string
+     */
+    const PLATFORM_VERSION = '1.0.3';
+
+    /**
      * Flag for whether Platform is initalized.
      *
      * @access    protected
@@ -691,5 +698,21 @@ class Platform
         // Return the license file contents, if the file exists.
         //
         return File::get(path('licenses') . DS . $file);
+    }
+
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: version()
+     * --------------------------------------------------------------------------
+     *
+     * Returns the current Platform version.
+     *
+     * @access   public
+     * @return   string
+     */
+    public static function version()
+    {
+        return self::PLATFORM_VERSION;
     }
 }
