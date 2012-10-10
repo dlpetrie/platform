@@ -5,9 +5,9 @@
 
   * Moved the Platform::is_installed() from application/start.php to application/platform/platform.php
   * Cleaned a bit the application/platform/platform.php
-  * Fixed installer issues on some MySQL versions.
   * Extended Laravel URL and Redirect core classes.
-  * HTML comments are now compiled to PHP comments (in Blade templates),
+  * HTML comments are now compiled to PHP comments (in Blade templates).
+  * Added method to return the current Platform version.
 
 **Extensions Manager:**
 
@@ -15,7 +15,13 @@
 
 **Installer:**
 
-  * Added a new dependencies manager for the installer
+  * Fixed installer issues on some MySQL versions.
+  * Added a new dependencies manager for the installer.
+
+**Settings:**
+
+  * Bug fixes.
+  * Settings are now modular.
 
 1.0.2 Changelog
 ----------
