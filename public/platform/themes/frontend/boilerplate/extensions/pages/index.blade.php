@@ -24,23 +24,23 @@
 	<!-- Main hero unit for a primary marketing message or call to action -->
 	<div class="introduction hero-unit">
 		<h1>@get.settings.site.title</h1>
-		<p>an application bootstrap on Laravel. The fundamentals + a few essentials included. It's well documented, feature awesome, open source, and always free.</p>
+		<p>An application bootstrap for Laravel. The fundamentals + a few essentials included. It's well documented, feature awesome, open source, and always free.</p>
 		<p><a href="http://www.getplatform.com" class="btn btn-primary btn-large" target="_blank">Learn more &raquo;</a></p>
 	</div>
 
 	<!-- Example row of columns -->
 	<div class="features row">
 		<div class="span4">
-			<h2>Solid Foundation</h2>
-			<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+			<h2>Develop</h2>
+			<p>Platform is Core light and built upon a strong PHP framework with great documentation and a fantastic community, Laravel.</p>
 		</div>
 		<div class="span4">
-			<h2>Well Organized</h2>
-			<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+			<h2>Design</h2>
+			<p>Powerful theme system that utilizes the blade template engine giving front end developers a solid separation between logic and markup. </p>
 		</div>
 		<div class="span4">
-			<h2>Pretty Smart</h2>
-			<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+			<h2>Extend</h2>
+			<p>You won’t find complex and tangled control structures; everything in Platform is an extension and completely modular.</p>
 		</div>
 	</div>
 
