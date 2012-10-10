@@ -363,7 +363,6 @@ class Platform
             return preg_replace($pattern, '<?php echo Platform::widget$2; ?>', $view);
         });
 
-
         /**
          * Register @plugin with blade.
          *
@@ -376,7 +375,6 @@ class Platform
             return preg_replace($pattern, '<?php $$2 = Platform::plugin(\'$1\',$3); ?>', $view);
         });
 
-
         /**
          * Register @get with blade.
          *
@@ -387,6 +385,24 @@ class Platform
             $pattern = "/@get\.([^\s\"<]*)/";
 
             return preg_replace($pattern, '<?php echo Platform::get(\'$1\'); ?>', $view);
+        });
+
+        /**
+         * Compile HTML coments
+         *
+         * @see http://stackoverflow.com/questions/1013499/stripping-html-comments-with-php-but-leaving-conditionals#answer-1013864
+         *
+         * @return   string
+         */
+        Blade::extend(function($view)
+        {
+            $replacements = array(
+                '/<!--((?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->).)*)-->(?:\n)?/is' => "<?php /* $1 */ ?>",
+                // '/\/\*/' => '', // Not needed as /* can exist in PHP comments
+                // '/\*\//' => '', // Is needed because we don't want to close the comments early
+            );
+
+            return preg_replace(array_keys($replacements), array_values($replacements), $view);
         });
     }
 
