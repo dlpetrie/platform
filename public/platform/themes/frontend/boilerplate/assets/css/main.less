@@ -1,0 +1,61 @@
+/**
+ * Part of the Platform application.
+ *
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the 3-clause BSD License.
+ *
+ * This source file is subject to the 3-clause BSD License that is
+ * bundled with this package in the LICENSE file.  It is also available at
+ * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
+ *
+ * @package    Platform
+ * @version    1.0.1
+ * @author     Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @link       http://getplatform.com
+ */
+
+
+@import "bootstrap/less/bootstrap.less";
+
+/* #Layout
+================================================== */
+body {
+	background: @bodyBackground url(../img/bg-body.png);
+	padding-top: 60px;
+}
+
+.introduction,
+.features div {
+	text-align:center;
+}
+
+footer p {
+	font-size:11px;
+	text-align:center;
+	padding:0;
+	line-height:12px;
+}
+
+/* #A few bootstrap overides
+==================================================*/
+
+.table {
+	background-color:@white;
+}
+
+.btn-primary:hover {
+	color: @white;
+    text-decoration: none;
+    background-color: lighten(@purple, 5%);
+    *background-color: lighten(@purple, 10%); /* Buttons in IE7 don't get borders, so darken on hover */
+    background-position: 0 -40px;
+    // transition is only when going to hover, otherwise the background
+    // behind the gradient (there for IE<=9 fallback) gets mismatched
+    .transition(background-position .08s linear);
+}
+
+
+@import "bootstrap/less/responsive.less";
