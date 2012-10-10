@@ -32,12 +32,84 @@ body {
 	text-align:center;
 }
 
-footer p {
+.copyright, .licence {
 	font-size:11px;
 	text-align:center;
 	padding:0;
 	line-height:12px;
 }
+
+/* #Forms
+================================================== */
+form legend {
+	border-bottom:none;
+}
+
+form .help-block {
+	font-style: italic;
+}
+form hr {
+	margin: 10px 0;
+	border: 0;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #fff;
+}
+
+form input,
+form textarea,
+form select,
+form .input-append .add-on, form .input-prepend .add-on {
+	min-height: 28px;
+	padding:4px 10px;
+	/*background:#f7f7f7 url(../img/ico-alerts.png) -32px 2px no-repeat;*/
+	outline: none;
+}
+
+form .input-append .add-on i, form .input-prepend .add-on i {
+	padding-top:4px;
+	display:inline-block;
+	font-size:18px;
+}
+
+
+form input:required.valid + .add-on > i,
+form input.valid:focus + .add-on > i,
+form input:checked + .add-on > i,
+form select:required.valid + .add-on > i,
+form select.valid:focus + .add-on > i{
+	color: @green;
+}
+
+form input:required.required + .add-on > i,
+form input:required.error + .add-on > i,
+form input.required:focus + .add-on > i,
+form select:required.required + .add-on > i,
+form select.required:focus + .add-on > i {
+	color: @red;
+}
+
+
+/* Enhanced error styling */
+form input.error + .add-on > i::before
+{
+	/*background-position: right -62px;*/
+	color:@orange;
+	content: "\f071";
+
+
+}
+form input.required + .add-on > i::before
+{
+	/*background-position: right -30px;*/
+	color:@red;
+	content: "\f06a";
+}
+form input.valid + .add-on > i::before
+{
+	/*background-position: right 2px;*/
+	//content: "\f071";
+}
+
 
 /* #A few bootstrap overides
 ==================================================*/

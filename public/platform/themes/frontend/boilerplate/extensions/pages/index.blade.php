@@ -25,7 +25,7 @@
 	<div class="introduction hero-unit">
 		<h1>@get.settings.site.title</h1>
 		<p>an application bootstrap on Laravel. The fundamentals + a few essentials included. It's well documented, feature awesome, open source, and always free.</p>
-		<p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+		<p><a href="http://www.getplatform.com" class="btn btn-primary btn-large" target="_blank">Learn more &raquo;</a></p>
 	</div>
 
 	<!-- Example row of columns -->

@@ -10,18 +10,21 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <!-- Learn: documentation address -->
+		<!-- Queue Styles -->
 		{{ Theme::queue_asset('style', 'css/main.less') }}
 
+		<!-- Release Styles -->
 		{{ Theme::release_assets('styles') }}
 
 		<!-- Styles -->
 		@yield('styles')
 
+		<!-- Apply Style Options -->
 		<style>
             @widget('platform.themes::options.css')
         </style>
 
+        <!-- Modernizr -->
 		{{ Theme::queue_asset('modernizr', 'js/vendor/modernizr-2.6.1-respond-1.1.0.min.js') }}
 
 		<link rel="shortcut icon" href="{{ Theme::asset('img/favicon.png') }}">
@@ -60,31 +63,25 @@
 			<hr>
 
 			<footer>
-				<p>Created, developed, and designed by @Cartalyst</p>
-				<p>The BSD 3-Clause License - Copyright &copy; 2011-2012, Cartalyst LLC</p>
+				@include('templates.partials.footer')
 			</footer>
 
 		</div> <!-- /container -->
 
-	<!-- Placed at the end of the document so the pages load faster -->
+	<!-- Queue Global Scripts -->
 	{{ Theme::queue_asset('jquery', 'js/vendor/jquery-1.8.2.min.js') }}
+	{{ Theme::queue_asset('platform-url', 'js/vendor/platform-url.js') }}
+	{{ Theme::queue_asset('bootstrap-transition', 'js/bootstrap/transition.js') }}
+	{{ Theme::queue_asset('bootstrap-collapse', 'js/bootstrap/collapse.js') }}
+
+	<!-- Queue App Specific Scripts -->
 	{{ Theme::queue_asset('plugins', 'js/plugins.js') }}
 	{{ Theme::queue_asset('main', 'js/main.js') }}
 
-	{{ Theme::queue_asset('bootstrap-transition', 'js/bootstrap/transition.js') }}
-	{{ Theme::queue_asset('bootstrap-alert', 'js/bootstrap/alert.js') }}
-	{{ Theme::queue_asset('bootstrap-modal', 'js/bootstrap/modal.js') }}
-	{{ Theme::queue_asset('bootstrap-dropdown', 'js/bootstrap/dropdown.js') }}
-	{{ Theme::queue_asset('bootstrap-scrollspy', 'js/bootstrap/scrollspy.js') }}
-	{{ Theme::queue_asset('bootstrap-tab', 'js/bootstrap/tab.js') }}
-	{{ Theme::queue_asset('bootstrap-tooltip', 'js/bootstrap/tooltip.js') }}
-	{{ Theme::queue_asset('bootstrap-popover', 'js/bootstrap/popover.js') }}
-	{{ Theme::queue_asset('bootstrap-button', 'js/bootstrap/button.js') }}
-	{{ Theme::queue_asset('bootstrap-collapse', 'js/bootstrap/collapse.js') }}
-	{{ Theme::queue_asset('bootstrap-typeahead', 'js/bootstrap/typeahead.js') }}
-
+	<!-- Release Scripts -->
 	{{ Theme::release_assets('scripts') }}
 
+	<!-- Apply View Specific Scripts -->
 	@yield('scripts')
 
     </body>
