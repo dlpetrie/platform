@@ -29,7 +29,7 @@ use Platform\Menus\Menu;
 
 /**
  * --------------------------------------------------------------------------
- * Localisation install class
+ * Localisation Install Class v1.0.0
  * --------------------------------------------------------------------------
  * 
  * Localisation installation.
@@ -41,7 +41,7 @@ use Platform\Menus\Menu;
  * @link       http://cartalyst.com
  * @version    1.0
  */
-class Localisation_Install
+class Localisation_v1_0_0
 {
     /**
      * --------------------------------------------------------------------------

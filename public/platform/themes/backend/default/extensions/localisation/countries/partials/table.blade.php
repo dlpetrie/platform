@@ -3,7 +3,7 @@
         <td>
             <a href="{{ URL::to_admin('localisation/countries/view/' . $row['slug']) }}">{{ $row['name'] }}</a>
             <span class="pull-right">
-                @if ($row['iso_code_2'] != $default_country)
+                @if ($default_country != $row['iso_code_2'])
                 <a class="btn btn-mini" href="{{ URL::to_admin('localisation/countries/default/' . $row['slug']) }}" title="* Make this the default country."><i class="icon-star"></i></a>
                 @endif
             </span>

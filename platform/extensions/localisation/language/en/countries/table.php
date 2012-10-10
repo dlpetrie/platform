@@ -25,8 +25,9 @@
  * --------------------------------------------------------------------------
  */
 return array(
-    'id'                 => 'Id',
+    'id'                 => 'ID',
     'name'               => 'Country Name',
+    'slug'               => 'Country Slug',
     'iso_code_2'         => 'ISO Code 2',
     'iso_code_3'         => 'ISO Code 3',
     'iso_code_numeric_3' => 'ISO Code Numeric 3',

@@ -29,10 +29,10 @@ use Platform\Menus\Menu;
 
 /**
  * --------------------------------------------------------------------------
- * Localisation Countries install class
+ * Currencies Install Class v1.0.0
  * --------------------------------------------------------------------------
  * 
- * Countries installation.
+ * Currencies installation.
  *
  * @package    Platform
  * @author     Cartalyst LLC
@@ -41,7 +41,7 @@ use Platform\Menus\Menu;
  * @link       http://cartalyst.com
  * @version    1.0
  */
-class Localisation_Install_Countries
+class Localisation_Currencies_v1_0_0
 {
     /**
      * --------------------------------------------------------------------------
@@ -57,19 +57,13 @@ class Localisation_Install_Countries
     {
         /*
          * --------------------------------------------------------------------------
-         * # 1) Create the countries table.
+         * # 1) Create the currencies table.
          * --------------------------------------------------------------------------
          */
-        Schema::create('countries', function($table){
-            $table->increments('id');
+        Schema::create('currencies', function($table){
+            $table->increments('id')->unsigned();
             $table->string('name');
-            $table->string('slug');
-            $table->string('iso_code_2')->nullable();
-            $table->string('iso_code_3')->nullable();
-            $table->string('iso_code_numeric_3')->nullable();
-            $table->string('region')->nullable();
-            $table->string('subregion')->nullable();
-            $table->string('currency')->nullable();
+            $table->string('code', 5);
             $table->integer('cdh_id')->nullable();
             $table->integer('default')->default(0);
             $table->integer('status')->default(1);
@@ -79,67 +73,73 @@ class Localisation_Install_Countries
 
         /*
          * --------------------------------------------------------------------------
-         * # 2) Populate the countries table.
+         * # 2) Insert the currencies.
          * --------------------------------------------------------------------------
          */
-        // Read the countries from the CSV file.
+        // Read the json file.
         //
-        $file = json_decode(File::get(__DIR__ . DS . 'data' . DS . 'countries.json'), true);
+        /*$file = json_decode( File::get( __DIR__ . DS . 'currencies.json' ), true );
 
-        // Loop through the countries.
+        // Loop through the currencies.
         //
-        $countries = array();
-        foreach ($file as $data)
+        $currencies = array();
+        $default = null;
+        foreach ( $file as $currency )
         {
-            // Make sure we have these values.
-            //
-            $countries[] = array(
-                'name'               => $data['name'],
-                'slug'               => \Str::slug( $data['name'] ),
-                'iso_code_2'         => strtoupper( $data['iso_code_2'] ),
-                'iso_code_3'         => strtoupper( $data['iso_code_3'] ),
-                'iso_code_numeric_3' => $data['iso_code_numeric_3'],
-                'region'             => $data['region'],
-                'subregion'          => $data['subregion'],
-                'currency'           => $data['currency'],
-                'cdh_id'             => $data['cdh_id'],
-                'created_at'         => new \DateTime,
-                'updated_at'         => new \DateTime
+            $currencies[] = array(
+                'name'       => $currency['name'],
+                'code'       => $currency['code'],
+                'cdh_id'     => $currency['cdh_id'],
+                'default'    => ( isset( $currency['default'] ) ? 1 : 0),
+                'status'     => ( isset( $currency['status'] ) ? $currency['status'] : 0),
+                'created_at' => new \DateTime,
+                'updated_at' => new \DateTime
             );
+
+            // Is this a default currency ?
+            //
+            if ( isset( $currency['default'] ) )
+            {
+                $default = $currency['code'];
+            }
         }
 
-        // Insert the countries into the database.
+        // Insert the currencies into the database.
         //
-        DB::table('countries')->insert( $countries );
+        DB::table('currencies')->insert( $currencies );
 
-        // Make the United Kingdom the default country.
+        // If we have a default currency, set it has the default.
         //
-        DB::table('countries')->where('iso_code_2', '=', 'GB')->update(array('default' => 1));
-        DB::table('settings')->insert(array(
-            'extension' => 'localisation',
-            'type'      => 'site',
-            'name'      => 'country',
-            'value'     => 'gb'
-        ));
+        if ( ! is_null( $default ) )
+        {
+            // Set it as the default currency.
+            //
+            DB::table('settings')->insert(array(
+                'extension' => 'localisation',
+                'type'      => 'site',
+                'name'      => 'currency',
+                'value'     => $default
+            ));
+        }*/
 
 
         /*
          * --------------------------------------------------------------------------
-         * # 3) Create the menu.
+         * # 3) Create the menus.
          * --------------------------------------------------------------------------
          */
-        // Admin > System > Localisation > Countries
+        // Admin > System > Localisation > Languages
         //
         $localisation_menu = Menu::find('admin-localisation');
-        $countries_menu = new Menu(array(
-            'name'          => 'Countries',
-            'extension'     => 'countries',
-            'slug'          => 'admin-countries',
-            'uri'           => 'localisation/countries',
+        $currencies_menu = new Menu(array(
+            'name'          => 'Currencies',
+            'extension'     => 'currencies',
+            'slug'          => 'admin-currencies',
+            'uri'           => 'localisation/currencies',
             'user_editable' => 1,
             'status'        => 1
         ));
-        $countries_menu->last_child_of($localisation_menu);
+        $currencies_menu->last_child_of($localisation_menu);
     }
 
 
@@ -155,17 +155,17 @@ class Localisation_Install_Countries
      */
     public function down()
     {
-        // Delete the countries table.
+        // Delete the currencies table.
         //
-        Schema::drop('countries');
+        Schema::drop('currencies');
 
         // Delete the record from the settings table.
         //  
-        DB::table('settings')->where('extension', '=', 'localisation')->where('name', '=', 'country')->delete();
+        DB::table('settings')->where('extension', '=', 'localisation')->where('name', '=', 'currency')->delete();
 
         // Delete the menu.
         //
-        if ($menu = Menu::find('admin-countries'))
+        if ($menu = Menu::find('admin-currencies'))
         {
             $menu->delete();
         }

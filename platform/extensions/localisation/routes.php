@@ -28,13 +28,13 @@ Route::any(ADMIN . '/localisation', 'localisation::admin.languages@index');
 
 
 /**
- * Route /api/localisation/:country_code
+ * Route /api/localisation/:code
  *
  *  <code>
  *      /api/localisation/gb => localisation::api.countries@index(gb)
  *  </code>
  */
-# Don't think we need this anymore, since you are using different combinations 
+# Don't think we need this anymore, since we are using different combinations 
 #Route::any(API . '/localisation/([a-z]{2})', 'localisation::api.countries@index');
 
 
@@ -49,15 +49,28 @@ Route::any(API . '/localisation/(:any)/datatable', 'localisation::api.(:1)@datat
 
 
 /**
- * Route /api/localisation/:local/:country_code
+ * Route /api/localisation/:local/default/:code
+ *
+ *  <code>
+ *      /api/localisation/countries/default/gb => localisation::api.countries@default(gb)
+ *  </code>
+ */
+Route::any(API . '/localisation/(:any)/default/(:any)', function($local, $slug)
+{
+    return Controller::call('localisation::api.' . Str::plural($local) . '@default', array($slug));
+});
+
+
+/**
+ * Route /api/localisation/:local/:code
  *
  *  <code>
  *      /api/localisation/country/gb => localisation::api.countries@index(gb)
  *  </code>
  */
-Route::any(API . '/localisation/(:any)/(:any)', function( $local, $slug )
+Route::any(API . '/localisation/(:any)/(:any)', function($local, $slug)
 {
-    return Controller::call('localisation::api.' . Str::plural( $local ) . '@index', array($slug));
+    return Controller::call('localisation::api.' . Str::plural($local) . '@index', array($slug));
 });
 
 
@@ -68,7 +81,7 @@ Route::any(API . '/localisation/(:any)/(:any)', function( $local, $slug )
  *      /api/localisation/country => localisation::api.countries@index
  *  </code>
  */
-Route::any(API . '/localisation/(:any)', function( $local )
+Route::any(API . '/localisation/(:any)', function($local)
 {
-    return Controller::call('localisation::api.' . Str::plural( $local ) . '@index');
+    return Controller::call('localisation::api.' . Str::plural($local) . '@index');
 });

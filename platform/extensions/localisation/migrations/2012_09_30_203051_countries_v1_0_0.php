@@ -29,10 +29,10 @@ use Platform\Menus\Menu;
 
 /**
  * --------------------------------------------------------------------------
- * Localisation Languages install class
+ * Countries Install Class v1.0.0
  * --------------------------------------------------------------------------
  * 
- * Languages installation.
+ * Countries installation.
  *
  * @package    Platform
  * @author     Cartalyst LLC
@@ -41,7 +41,7 @@ use Platform\Menus\Menu;
  * @link       http://cartalyst.com
  * @version    1.0
  */
-class Localisation_Install_Languages
+class Localisation_Countries_v1_0_0
 {
     /**
      * --------------------------------------------------------------------------
@@ -57,14 +57,20 @@ class Localisation_Install_Languages
     {
         /*
          * --------------------------------------------------------------------------
-         * # 1) Create the language table.
+         * # 1) Create the countries table.
          * --------------------------------------------------------------------------
          */
-        Schema::create('languages', function($table){
-            $table->increments('id')->unsigned();
+        Schema::create('countries', function($table){
+            $table->increments('id');
             $table->string('name');
-            $table->string('code', 5);
-            $table->string('locale');
+            $table->string('slug');
+            $table->string('iso_code_2')->nullable();
+            $table->string('iso_code_3')->nullable();
+            $table->string('iso_code_numeric_3')->nullable();
+            $table->string('region')->nullable();
+            $table->string('subregion')->nullable();
+            $table->string('currency')->nullable();
+            $table->integer('cdh_id')->nullable();
             $table->integer('default')->default(0);
             $table->integer('status')->default(1);
             $table->timestamps();
@@ -73,73 +79,67 @@ class Localisation_Install_Languages
 
         /*
          * --------------------------------------------------------------------------
-         * # 2) Insert the languages.
+         * # 2) Populate the countries table.
          * --------------------------------------------------------------------------
          */
-        // Read the json file.
+        // Read the countries from the CSV file.
         //
-        $file = json_decode(File::get(__DIR__ . DS . 'data' . DS . 'languages.json'), true);
+        $file = json_decode(File::get(__DIR__ . DS . 'data' . DS . 'countries.json'), true);
 
-        // Loop through the languages.
+        // Loop through the countries.
         //
-        $languages = array();
-        $default = null;
-        foreach ($file as $language)
+        $countries = array();
+        foreach ($file as $country)
         {
-            $languages[] = array(
-                'name'       => $language['name'],
-                'code'       => $language['code'],
-                'locale'     => $language['locale'],
-                'default'    => ( isset( $language['default'] ) ? 1 : 0),
-                'status'     => ( isset( $language['status'] ) ? $language['status'] : 0),
-                'created_at' => new \DateTime,
-                'updated_at' => new \DateTime
+            // Make sure we have these values.
+            //
+            $countries[] = array(
+                'name'               => $country['name'],
+                'slug'               => \Str::slug( $country['name'] ),
+                'iso_code_2'         => strtoupper( $country['iso_code_2'] ),
+                'iso_code_3'         => strtoupper( $country['iso_code_3'] ),
+                'iso_code_numeric_3' => $country['iso_code_numeric_3'],
+                'region'             => $country['region'],
+                'subregion'          => $country['subregion'],
+                'currency'           => $country['currency'],
+                'cdh_id'             => $country['cdh_id'],
+                'created_at'         => new \DateTime,
+                'updated_at'         => new \DateTime
             );
-
-            // Is this a default language ?
-            //
-            if (isset($language['default']))
-            {
-                $default = $language['code'];
-            }
         }
 
-        // Insert the languages into the database.
+        // Insert the countries into the database.
         //
-        DB::table('languages')->insert($languages);
+        DB::table('countries')->insert( $countries );
 
-        // If we have a default language, set it has the default.
+        // Make the United Kingdom the default country.
         //
-        if ( ! is_null($default))
-        {
-            // Set it as the default currency.
-            //
-            DB::table('settings')->insert(array(
-                'extension' => 'localisation',
-                'type'      => 'site',
-                'name'      => 'language',
-                'value'     => $default
-            ));
-        }
+        DB::table('countries')->where('iso_code_2', '=', 'GB')->update(array('default' => 1));
+        DB::table('settings')->insert(array(
+            'extension' => 'localisation',
+            'type'      => 'site',
+            'name'      => 'country',
+            'value'     => 'GB'
+        ));
 
 
         /*
          * --------------------------------------------------------------------------
-         * # 3) Create the menus.
+         * # 3) Create the menu.
          * --------------------------------------------------------------------------
          */
-        // Admin > System > Localisation > Languages
+        // Admin > System > Localisation > Countries
         //
         $localisation_menu = Menu::find('admin-localisation');
-        $languages_menu = new Menu(array(
-            'name'          => 'Languages',
-            'extension'     => 'languages',
-            'slug'          => 'admin-languages',
-            'uri'           => 'localisation/languages',
+        $countries_menu = new Menu(array(
+            'name'          => 'Countries',
+            'extension'     => 'countries',
+            'slug'          => 'admin-countries',
+            'uri'           => 'localisation/countries',
             'user_editable' => 1,
             'status'        => 1
         ));
-        $languages_menu->last_child_of($localisation_menu);
+        $countries_menu->last_child_of($localisation_menu);
     }
 
 
@@ -155,17 +155,17 @@ class Localisation_Install_Languages
      */
     public function down()
     {
-        // Delete the languages table.
+        // Delete the countries table.
         //
-        Schema::drop('languages');
+        Schema::drop('countries');
 
         // Delete the record from the settings table.
         //  
-        DB::table('settings')->where('extension', '=', 'localisation')->where('name', '=', 'language')->delete();
+        DB::table('settings')->where('extension', '=', 'localisation')->where('name', '=', 'country')->delete();
 
         // Delete the menu.
         //
-        if ($menu = Menu::find('admin-languages'))
+        if ($menu = Menu::find('admin-countries'))
         {
             $menu->delete();
         }

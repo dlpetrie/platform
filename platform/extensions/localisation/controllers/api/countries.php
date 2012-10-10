@@ -70,13 +70,13 @@ class Localisation_API_Countries_Controller extends API_Controller
      */
     public function get_index($country_code)
     {
-        // If we have a country code, we return the information about that country.
+        // If we have the country code, we return the information about that country.
         //
         if ($country_code != false)
         {
             // Get this country information.
             //
-            $country = Country::find_custom($country_code);
+            $country = Country::find($country_code);
 
             // Check if the country exists.
             //
@@ -137,8 +137,8 @@ class Localisation_API_Countries_Controller extends API_Controller
         //
         $country->name               = Input::get('name');
         $country->slug               = \Str::slug(Input::get('name'));
-        $country->iso_code_2         = Input::get('iso_code_2');
-        $country->iso_code_3         = Input::get('iso_code_3');
+        $country->iso_code_2         = strtoupper(Input::get('iso_code_2'));
+        $country->iso_code_3         = strtoupper(Input::get('iso_code_3'));
         $country->iso_code_numeric_3 = Input::get('iso_code_numeric_3');
         $country->region             = Input::get('region');
         $country->subregion          = Input::get('subregion');
@@ -187,8 +187,8 @@ class Localisation_API_Countries_Controller extends API_Controller
      * Function: put_index()
      * --------------------------------------------------------------------------
      *
-     * Edits a country using the provided country id, country iso code 2 or the
-     * provided country slug.
+     * Edits a given country using the provided country id, country code 
+     * or by using the country slug.
      *
      *  <code>
      *      API::put('localisation/country/232');
@@ -204,11 +204,11 @@ class Localisation_API_Countries_Controller extends API_Controller
     {
         // Get this country information.
         //
-        $country = Country::find_custom($country_code);
+        $country = Country::find($country_code);
 
         // Now update the rules.
         //
-        Country::update_rules(array(
+        Country::set_validation(array(
             'iso_code_2'         => 'required|size:2|unique:countries,iso_code_2,' . $country->iso_code_2 . ',iso_code_2',
             'iso_code_3'         => 'required|size:3|unique:countries,iso_code_3,' . $country->iso_code_3 . ',iso_code_3',
             'iso_code_numeric_3' => 'required|numeric|unique:countries,iso_code_numeric_3,' . $country->iso_code_numeric_3 . ',iso_code_numeric_3'
@@ -218,8 +218,8 @@ class Localisation_API_Countries_Controller extends API_Controller
         //
         $country->name               = Input::get('name');
         $country->slug               = \Str::slug(Input::get('name'));
-        $country->iso_code_2         = Input::get('iso_code_2');
-        $country->iso_code_3         = Input::get('iso_code_3');
+        $country->iso_code_2         = strtoupper(Input::get('iso_code_2'));
+        $country->iso_code_3         = strtoupper(Input::get('iso_code_3'));
         $country->iso_code_numeric_3 = Input::get('iso_code_numeric_3');
         $country->region             = ( Input::get('region') ?: $country['region'] );
         $country->subregion          = ( Input::get('subregion') ?: $country['subregion'] );
@@ -266,8 +266,8 @@ class Localisation_API_Countries_Controller extends API_Controller
      * Function: delete_index()
      * --------------------------------------------------------------------------
      *
-     * Delete a given country using the provided country id, country iso code 2 
-     * or using the country slug.
+     * Deletes a given country using the provided country id, country code 
+     * or by using the country slug.
      *
      *  <code>
      *      $country = API::delete('localisation/country/232');
@@ -279,17 +279,13 @@ class Localisation_API_Countries_Controller extends API_Controller
      * @param    mixed
      * @return   Response
      */
-    # TODO :
-    #
-    #   * Check if the country is the system default country !
-    #
     public function delete_index($country_code)
     {
         try
         {
             // Get this country information.
             //
-            $country = Country::find_custom($country_code);
+            $country = Country::find($country_code);
         }
         catch (Exception $e)
         {
@@ -410,7 +406,9 @@ class Localisation_API_Countries_Controller extends API_Controller
      * Makes a country the default country on the system.
      *
      *  <code>
-     *      API::put('localisation/countries/default/gb');
+     *      API::put('localisation/country/default/232');
+     *      API::put('localisation/country/default/gb');
+     *      API::put('localisation/country/default/united-kingdom');
      *  </code>
      *
      * @access   public
@@ -419,13 +417,13 @@ class Localisation_API_Countries_Controller extends API_Controller
      */
     public function put_default($country_code)
     {
-        try
-        {
-            // Get this country information.
-            //
-            $country = Country::find_custom($country_code);
-        }
-        catch (Exception $e)
+        // Get this country information.
+        //
+        $country = Country::find($country_code);
+
+        // Check if the country exists.
+        //
+        if (is_null($language))
         {
             // Return a response.
             //

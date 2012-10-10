@@ -30,11 +30,11 @@ return array(
      * Extension header.
      * -----------------------------------------
      */
-    'title' => 'Countries',
+    'title' => 'Languages',
     'description' => array(
-        'index'  => 'Manage your system countries.',
-        'create' => 'Creating a new country',
-        'view'   => 'Viewing the country :country',
-        'delete' => 'Deleting the country :country'
+        'index'  => 'Manage your system languages.',
+        'create' => 'Creating a new language',
+        'view'   => 'Viewing the language :language',
+        'delete' => 'Deleting the language :language'
     )
 );

@@ -11,14 +11,14 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.0.3
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
-namespace Localisation;
+namespace Platform\Settings\Widgets;
 
 
 /*
@@ -26,15 +26,17 @@ namespace Localisation;
  * What we can use in this class.
  * --------------------------------------------------------------------------
  */
-use Crud;
+use API,
+    APIClientException,
+    Theme\Theme;
 
 
 /**
  * --------------------------------------------------------------------------
- * Currency model Class
+ * Settings > Widget Class
  * --------------------------------------------------------------------------
- * 
- * Model to manage currencies.
+ *
+ * The settings widget class.
  *
  * @package    Platform
  * @author     Cartalyst LLC
@@ -43,4 +45,37 @@ use Crud;
  * @link       http://cartalyst.com
  * @version    1.0
  */
-class Currency extends Crud { }
+class Settings
+{
+    /**
+     * The validation rules.
+     *
+     * @access   public
+     * @var      array
+     */
+    public static $validation = array(
+        'country'  => 'required',
+        'language' => 'required',
+        'currency' => 'required',
+        'timezone' => 'required'
+    );
+
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: index()
+     * --------------------------------------------------------------------------
+     *
+     * Shows the settings form.
+     *
+     * @access   public
+     * @param    array
+     * @return   View
+     */
+    public function index($settings = null)
+    {
+        // Show the form.
+        //
+        return Theme::make('localisation::widgets.form.settings')->with('settings', $settings);
+    }
+}

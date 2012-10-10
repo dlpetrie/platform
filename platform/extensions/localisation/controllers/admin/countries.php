@@ -217,7 +217,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
                 $request = API::post('localisation/country', Input::get());
             }
 
-            // We are editing the country.
+            // We must be editing the country.
             //
             else
             {
@@ -228,7 +228,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
 
             // Get the country slug.
             //
-            $country_code = $request['slug'];
+            $country_slug = $request['slug'];
 
             // Set the success message.
             //
@@ -240,7 +240,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
             {
                 // Redirect to the country page.
                 //
-                return Redirect::to_admin('localisation/countries/view/' . $country_code);
+                return Redirect::to_admin('localisation/countries/view/' . $country_slug);
             }
             else
             {
@@ -372,7 +372,7 @@ class Localisation_Admin_Countries_Controller extends Admin_Controller
         {
             // Make the request.
             //
-            $request = API::put('localisation/countries/default/' . $country_code);
+            $request = API::put('localisation/country/default/' . $country_code);
 
             // Set the success message.
             //

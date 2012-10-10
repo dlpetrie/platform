@@ -29,7 +29,7 @@ use Platform\Menus\Menu;
 
 /**
  * --------------------------------------------------------------------------
- * Localisation timezones install class
+ * Timezones Install Class v1.0.0
  * --------------------------------------------------------------------------
  * 
  * Timezones installation.
@@ -41,7 +41,7 @@ use Platform\Menus\Menu;
  * @link       http://cartalyst.com
  * @version    1.0
  */
-class Localisation_Install_Timezones
+class Localisation_Timezones_v1_0_0
 {
     /**
      * --------------------------------------------------------------------------

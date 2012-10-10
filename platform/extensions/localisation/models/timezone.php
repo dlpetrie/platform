@@ -18,7 +18,6 @@
  * @link       http://cartalyst.com
  */
 
-
 namespace Localisation;
 
 
@@ -48,6 +47,3 @@ class Timezone
 {
 
 }
-
-/* End of file timezone.php */
-/* Location: ./platform/extensions/localisation/models/timezone.php */

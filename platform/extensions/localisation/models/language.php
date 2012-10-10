@@ -18,7 +18,6 @@
  * @link       http://cartalyst.com
  */
 
-
 namespace Localisation;
 
 
@@ -44,7 +43,110 @@ use Crud;
  * @link       http://cartalyst.com
  * @version    1.0
  */
-class Language extends Crud { }
+class Language extends Crud
+{
+    /**
+     * Rules to be validated when creating or updating countries.
+     *
+     * @access   public
+     * @param    array
+     */
+    public static $_rules = array(
+        'name'   => 'required',
+        'code'   => 'required|size:2|unique:languages,code',
+        'status' => 'required'
+    );
 
-/* End of file language.php */
-/* Location: ./platform/extensions/localisation/models/language.php */
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: set_validation()
+     * --------------------------------------------------------------------------
+     *
+     * Updates or adds new rules to be validated.
+     *
+     * @access   public
+     * @param    array
+     * @return   boolean
+     */
+    public static function set_validation($rules)
+    {
+        // Make sure we have an array.
+        //
+        if ( ! is_array($rules))
+        {
+            return false;
+        }
+
+        // Loop through the rules.
+        //
+        foreach ($rules as $value => $rule)
+        {
+            // Set or update the rule.
+            //
+            static::$_rules[ $value ] = $rule;
+        }
+
+        // Done.
+        //
+        return true;
+    }
+
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: find()
+     * --------------------------------------------------------------------------
+     *
+     * A custom method to find languages, we can use the language id, language code
+     * or the language slug to return language information.
+     *
+     * @access   public
+     * @param    mixed
+     * @param    array
+     * @param    array
+     * @return   object
+     */
+    public static function find($condition = 'first', $columns = array('*'), $events = array('before', 'after'))
+    {
+        // Do we have the language id ?
+        //
+        if (is_numeric($condition) and ! in_array($condition, array('first', 'last')))
+        {
+            // Execute the query.
+            //
+            return parent::find(function($query) use ($condition)
+            {
+                return $query->where('id', '=', $condition);
+            }, $columns, $events);
+        }
+
+        // Do we have the language code ?
+        //
+        elseif (strlen($condition) === 2)
+        {
+            // Execute the query.
+            //
+            return parent::find(function($query) use ($condition)
+            {
+                return $query->where('code', '=', strtoupper($condition));
+            }, $columns, $events);
+        }
+
+        // We must have the language slug.
+        //
+        elseif( ! in_array($condition, array('first', 'last')) )
+        {
+            // Execute the query.
+            //
+            return parent::find(function($query) use ($condition)
+            {
+                return $query->where('slug', '=', strtolower($condition));
+            }, $columns, $events);
+        }
+
+        // Call parent.
+        //
+        return parent::find($condition, $columns, $events);
+    }
+}

@@ -25,16 +25,10 @@
  * --------------------------------------------------------------------------
  */
 return array(
-    /*
-     * -----------------------------------------
-     * Extension header.
-     * -----------------------------------------
-     */
-    'title' => 'Countries',
-    'description' => array(
-        'index'  => 'Manage your system countries.',
-        'create' => 'Creating a new country',
-        'view'   => 'Viewing the country :country',
-        'delete' => 'Deleting the country :country'
-    )
+    'id'     => 'ID',
+    'name'   => 'Language Name',
+    'slug'   => 'Language Slug',
+    'code'   => 'Code',
+    'locale' => 'Locale',
+    'status' => 'Language Status'
 );

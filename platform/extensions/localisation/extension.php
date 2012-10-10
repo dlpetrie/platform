@@ -60,14 +60,16 @@ return array(
         'localisation::admin.countries@view',
         'localisation::admin.countries@create',
         'localisation::admin.countries@delete',
+
         'localisation::admin.currencies@index',
         'localisation::admin.currencies@view',
         'localisation::admin.currencies@create',
         'localisation::admin.currencies@delete',
+        
         'localisation::admin.languages@index',
         'localisation::admin.languages@view',
         'localisation::admin.languages@create',
         'localisation::admin.languages@delete',
-        'localisation::admin.timezones@index'
+        #'localisation::admin.timezones@index'
     )
 );

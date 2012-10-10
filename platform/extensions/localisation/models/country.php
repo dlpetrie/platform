@@ -62,16 +62,16 @@ class Country extends Crud
 
     /**
      * --------------------------------------------------------------------------
-     * Function: update_rules()
+     * Function: set_validation()
      * --------------------------------------------------------------------------
      *
      * Updates or adds new rules to be validated.
      *
      * @access   public
      * @param    array
-     * @return   Response
+     * @return   boolean
      */
-    public static function update_rules($rules)
+    public static function set_validation($rules)
     {
         // Make sure we have an array.
         //
@@ -91,13 +91,13 @@ class Country extends Crud
 
         // Done.
         //
-        return false;
+        return true;
     }
 
 
     /**
      * --------------------------------------------------------------------------
-     * Function: find_custom()
+     * Function: find()
      * --------------------------------------------------------------------------
      *
      * A custom method to find countries, we can use the country id, country iso
@@ -105,32 +105,50 @@ class Country extends Crud
      *
      * @access   public
      * @param    mixed
-     * @return   Response
+     * @param    array
+     * @param    array
+     * @return   object
      */
-    public static function find_custom($country_code)
+    public static function find($condition = 'first', $columns = array('*'), $events = array('before', 'after'))
     {
-        return parent::find(function($query) use ($country_code)
+        // Do we have the country id ?
+        //
+        if (is_numeric($condition) and ! in_array($condition, array('first', 'last')))
         {
-            // Do we have the country id ?
+            // Execute the query.
             //
-            if(is_numeric($country_code))
+            return parent::find(function($query) use ($condition)
             {
-                return $query->where('id', '=', $country_code);
-            }
+                return $query->where('id', '=', $condition);
+            }, $columns, $events);
+        }
 
-            // Do we have the country iso code 2 ?
+        // Do we have the country iso code 2 ?
+        //
+        elseif (strlen($condition) === 2)
+        {
+            // Execute the query.
             //
-            elseif (strlen($country_code) === 2)
+            return parent::find(function($query) use ($condition)
             {
-                return $query->where('iso_code_2', '=', strtoupper($country_code));
-            }
+                return $query->where('iso_code_2', '=', strtoupper($condition));
+            }, $columns, $events);
+        }
 
-            // We must have the country slug.
+        // We must have the country slug.
+        //
+        elseif( ! in_array($condition, array('first', 'last')) )
+        {
+            // Execute the query.
             //
-            else
+            return parent::find(function($query) use ($condition)
             {
-                return $query->where('slug', '=', strtolower($country_code));
-            }
-        });
+                return $query->where('slug', '=', strtolower($condition));
+            }, $columns, $events);
+        }
+
+        // Call parent.
+        //
+        return parent::find($condition, $columns, $events);
     }
 }
