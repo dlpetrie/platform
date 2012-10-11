@@ -9,6 +9,7 @@
         <title>@yield('title')</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
+        <meta name="base_url" content="{{ URL::to() }}">
 
 		<!-- Queue Styles -->
 		{{ Theme::queue_asset('style', 'css/main.less') }}

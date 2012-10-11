@@ -32,8 +32,6 @@
 
 	</fieldset>
 
-	<p class="messages" data-wait="{{ Lang::line('users::messages.auth.wait') }}" data-redirecting="{{ Lang::line('users::messages.auth.redirect') }}"></p>
-
 	<div class="form-actions">
 		<a class="btn" href="{{ URL::to_secure('/reset_password') }}">{{ Lang::line('users::form.auth.login.reset_password') }}</a>
 		<button class="btn btn-primary" type="submit">{{ Lang::line('users::form.auth.login.submit') }}</button>
