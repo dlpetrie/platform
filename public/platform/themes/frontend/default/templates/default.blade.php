@@ -70,9 +70,9 @@
 
 	<!-- Queue Global Scripts -->
 	{{ Theme::queue_asset('jquery', 'js/vendor/jquery-1.8.2.min.js') }}
-	{{ Theme::queue_asset('platform-url', 'js/vendor/platform-url.js') }}
-	{{ Theme::queue_asset('bootstrap-transition', 'js/bootstrap/transition.js') }}
-	{{ Theme::queue_asset('bootstrap-collapse', 'js/bootstrap/collapse.js') }}
+	{{ Theme::queue_asset('platform-url', 'js/vendor/platform-url.js', 'jquery') }}
+	{{ Theme::queue_asset('bootstrap-transition', 'js/bootstrap/transition.js', 'jquery') }}
+	{{ Theme::queue_asset('bootstrap-collapse', 'js/bootstrap/collapse.js', 'jquery') }}
 
 	<!-- Queue App Specific Scripts -->
 	{{ Theme::queue_asset('plugins', 'js/plugins.js') }}

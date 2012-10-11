@@ -1,8 +1,8 @@
 {
-	"name": "Boilerplate",
+	"name": "Platform Default",
 	"description": "A frontend theme for Platform",
 	"author": "Cartalyst LLC",
-	"version": 0.1,
+	"version": 1.0,
 
 	"options": {}
 
