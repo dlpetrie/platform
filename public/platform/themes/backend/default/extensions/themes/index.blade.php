@@ -38,7 +38,7 @@
 		@if($active)
 			<div class="active span3">
 				<div class="thumbnail">
-					<img src="{{ Theme::asset('../../'.$active['theme'].'/assets/img/theme-thumbnail.png') }}" title="{{ $active['theme'] }}">
+					<img src="{{ Theme\Asset::url(str_finish(Theme::directory(), DS).$type.DS.$active['theme'].DS.'assets'.DS.'img'.DS.'theme-thumbnail.png') }}" title="{{ $active['theme'] }}">
 					<div class="caption">
 						<h5>{{ $active['name'] }}</h5>
 						<p class="version">{{ Lang::line('themes::general.version') }} {{ $active['version'] }}</p>
@@ -61,7 +61,7 @@
 		@foreach ($inactive as $theme)
 			<div class="span3">
 				<div class="thumbnail inactive">
-					<img src="{{ Theme::asset('../../'.$theme['theme'].'/assets/img/theme-thumbnail.png') }}" title="{{ $theme['theme'] }}">
+					<img src="{{ Theme\Asset::url(str_finish(Theme::directory(), DS).$type.DS.$theme['theme'].DS.'assets'.DS.'img'.DS.'theme-thumbnail.png') }}" title="{{ $theme['theme'] }}">
 					<div class="caption">
 						<h5>{{ $theme['name'] }}</h5>
 						<p>{{ $theme['description'] }}</p>
