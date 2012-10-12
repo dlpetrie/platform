@@ -24,7 +24,7 @@
  * What we can use in this class.
  * --------------------------------------------------------------------------
  */
-use Localisation\Currency;
+use Platform\Localisation\Currency;
 
 
 /**

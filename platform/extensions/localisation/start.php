@@ -25,7 +25,8 @@
  * --------------------------------------------------------------------------
  */
 Autoloader::namespaces(array(
-    'Localisation' => __DIR__ . DS . 'models'
+    'Platform\\Localisation\\Widgets' => __DIR__ . DS . 'widgets',
+    'Platform\\Localisation'          => __DIR__ . DS . 'models'
 ));
 
 
@@ -36,49 +37,31 @@ Autoloader::namespaces(array(
  */
 require_once __DIR__ . DS . 'helpers.php';
 
-/*
-       $teste = API::get('settings', array(
-    'where' => array(
-        array('extension', '=', 'localisation'),
-        array('name', '=', 'country')
-    )
-));
-
-       var_dump( $teste );
-
-die;
-*/
-#Config::set('application.timezone', 'America/Los_Angeles');
-/*
-// set the language locales and runtime configuration aswell
-Config::set('application.language', 'pt');
-setlocale(LC_ALL, "pt_PT",  "portuguese");
-echo strftime('%A, %d. %B %Y');
-*/
-
-// Get the localisation default settings.
-//
-#$localisation = DB::table('settings')->where('extension', '=', 'localisation')->get();
-# tenho de trabalhar este array, para ser mais facil de usar os dados...
-
 
 /*
  * --------------------------------------------------------------------------
- * Set the language locales and update the configuration at runtime.
+ * Check if the extension is enabled !
  * --------------------------------------------------------------------------
  */
-$language = DB::table('languages')->where('default', '=', 1)->first();
-Config::set('application.language', strtolower($language->abbreviation));
-#setlocale(LC_ALL, explode(', ', $language->locale));
+if (Platform::extensions_manager()->is_enabled('localisation'))
+{
+    // Get all the settings.
+    //
+    $localisation = array();
+    foreach (DB::table('settings')->where('extension', '=', 'localisation')->get() as $local)
+    {
+        $localisation[ $local->name ] = $local->value;
+    }
 
+    // Set the currency.
+    //
+    Config::set('application.currency', strtolower($localisation['currency']));
 
-// tests..
-#echo strftime('%A, %d. %B %Y');
+    // Set the language.
+    //
+    Config::set('application.language', strtolower($localisation['language']));
 
-/*
- * --------------------------------------------------------------------------
- * Initiate the localisation library, so we can make the necessary changes
- * to the runtime configuration.
- * --------------------------------------------------------------------------
- */
-#Localisation::init();
+    // Set the timezone.
+    //
+    Config::set('application.timezone', strtolower($localisation['timezone']));
+}

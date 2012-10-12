@@ -56,9 +56,9 @@ function countries()
 
     // Grab the countries from the database.
     //
-    foreach (Localisation\Country::all() as $country)
+    foreach (Platform\Localisation\Country::all() as $country)
     {
-        $countries[ $country['id'] ] = $country['name'];
+        $countries[ strtolower($country['iso_code_2']) ] = $country['name'];
     }
 
     // Return the countries.
@@ -85,9 +85,9 @@ function languages()
 
     // Grab the languages from the database.
     //
-    foreach (Localisation\Language::all() as $language)
+    foreach (Platform\Localisation\Language::all() as $language)
     {
-        $languages[ $language['id'] ] = $language['name'];
+        $languages[ $language['abbreviation'] ] = $language['name'];
     }
 
     // Return the languages.
@@ -114,9 +114,9 @@ function currencies()
 
     // Grab the currencies from the database.
     //
-    foreach (Localisation\Currency::all() as $currency)
+    foreach (Platform\Localisation\Currency::all() as $currency)
     {
-        $currencies[ $currency['id'] ] = $currency['name'];
+        $currencies[ $currency['code'] ] = $currency['name'];
     }
 
     // Return the currencies.
@@ -143,7 +143,7 @@ function timezones()
 
     // Grab the timezones.
     //
-    foreach (Localisation\Timezone::all() as $item => $value)
+    foreach (Platform\Localisation\Timezone::all() as $item => $value)
     {
         $timezones[ $item ] = $value;
     }

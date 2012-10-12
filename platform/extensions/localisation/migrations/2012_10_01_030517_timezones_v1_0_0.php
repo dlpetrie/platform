@@ -57,72 +57,15 @@ class Localisation_Timezones_v1_0_0
     {
         /*
          * --------------------------------------------------------------------------
-         * # 1) Create the timezones table.
+         * # 1) Set the default timezone.
          * --------------------------------------------------------------------------
          */
-        /*Schema::create('timezones', function($table){
-            $table->increments('id')->unsigned();
-            $table->string('timezone');
-            $table->string('gmt');
-            $table->integer('offset')->default(0);
-            $table->integer('default')->default(0);
-            $table->integer('status')->default(1);
-            $table->timestamps();
-        });*/
-
-
-        /*
-         * --------------------------------------------------------------------------
-         * # 2) Insert the timezones into the database.
-         * --------------------------------------------------------------------------
-         */
-        // Read the json file.
-        //
-        /*$file = json_decode( File::get( __DIR__ . DS . 'timezones.json' ), true );
-
-        // Loop through the timezones.
-        //
-        $timezones = array();
-        $default = null;
-        foreach ( $file as $currency )
-        {
-            $timezones[] = array(
-                'timezone'   => $currency['timezone'],
-                'gmt'        => $currency['gmt'],
-                'offset'     => $currency['offset'],
-                'default'    => ( isset( $currency['default'] ) ? 1 : 0),
-                'status'     => ( isset( $currency['status'] ) ? $currency['status'] : 0),
-                'created_at' => new \DateTime,
-                'updated_at' => new \DateTime
-            );
-
-            // Is this a default timezone ?
-            //
-            if ( isset( $currency['default'] ) )
-            {
-                $default = $currency['code'];
-            }
-        }
-
-        // Insert the timezones into the database.
-        //
-        DB::table('timezones')->insert( $timezones );
-
-        // If we have a default timezone, set it has the default.
-        //
-        if ( ! is_null( $default ) )
-        {
-            // Set it as the default currency.
-            //
-            DB::table('settings')->insert(array(
-                'extension' => 'localisation',
-                'type'      => 'site',
-                'name'      => 'timezone',
-                'value'     => $default
-            ));
-        }*/
-
-
+        DB::table('settings')->insert(array(
+            'extension' => 'localisation',
+            'type'      => 'site',
+            'name'      => 'timezone',
+            'value'     => 'Europe\London'
+        ));
     }
 
 
@@ -138,10 +81,6 @@ class Localisation_Timezones_v1_0_0
      */
     public function down()
     {
-        // Delete the timezones table.
-        //
-        #Schema::drop('timezones');
-
         // Delete the record from the settings table.
         //  
         DB::table('settings')->where('extension', '=', 'localisation')->where('name', '=', 'timezone')->delete();

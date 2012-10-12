@@ -18,7 +18,7 @@
  * @link       http://cartalyst.com
  */
 
-namespace Platform\Settings\Widgets;
+namespace Platform\Localisation\Widgets;
 
 
 /*
