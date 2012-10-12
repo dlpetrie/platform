@@ -41,7 +41,8 @@ return array(
         'fail'          => 'An error occurred while updating the language :language !',
         'disable_error' => 'You cannot disable a default language !',
         'errors'        => 'Please check the form for errors',
-        'default'       => 'Language :language is now the current default system language.'
+        'default'       => 'Language :language is now the current default system language.',
+        'already_default' => 'Language :language is already the default language'
     ),
 
     'delete' => array(

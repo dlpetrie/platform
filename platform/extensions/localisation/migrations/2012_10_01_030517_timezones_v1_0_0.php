@@ -60,7 +60,7 @@ class Localisation_Timezones_v1_0_0
          * # 1) Create the timezones table.
          * --------------------------------------------------------------------------
          */
-        Schema::create('timezones', function($table){
+        /*Schema::create('timezones', function($table){
             $table->increments('id')->unsigned();
             $table->string('timezone');
             $table->string('gmt');
@@ -68,7 +68,7 @@ class Localisation_Timezones_v1_0_0
             $table->integer('default')->default(0);
             $table->integer('status')->default(1);
             $table->timestamps();
-        });
+        });*/
 
 
         /*
@@ -123,23 +123,6 @@ class Localisation_Timezones_v1_0_0
         }*/
 
 
-        /*
-         * --------------------------------------------------------------------------
-         * # 3) Create the menus.
-         * --------------------------------------------------------------------------
-         */
-        // Admin > System > Localisation > Languages
-        //
-        $localisation_menu = Menu::find('admin-localisation');
-        $timezones_menu = new Menu(array(
-            'name'          => 'Timezones',
-            'extension'     => 'timezones',
-            'slug'          => 'admin-timezones',
-            'uri'           => 'localisation/timezones',
-            'user_editable' => 1,
-            'status'        => 1
-        ));
-        $timezones_menu->last_child_of( $localisation_menu );
     }
 
 
@@ -157,17 +140,10 @@ class Localisation_Timezones_v1_0_0
     {
         // Delete the timezones table.
         //
-        Schema::drop('timezones');
+        #Schema::drop('timezones');
 
         // Delete the record from the settings table.
         //  
         DB::table('settings')->where('extension', '=', 'localisation')->where('name', '=', 'timezone')->delete();
-
-        // Delete the menu.
-        //
-        if ( $menu = Menu::find('admin-timezones') )
-        {
-            $menu->delete();
-        }
     }
 }

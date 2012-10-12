@@ -25,10 +25,10 @@
  * --------------------------------------------------------------------------
  */
 return array(
-    'id'     => 'ID',
-    'name'   => 'Language Name',
-    'slug'   => 'Language Slug',
-    'code'   => 'Code',
-    'locale' => 'Locale',
-    'status' => 'Language Status'
+    'id'           => 'ID',
+    'name'         => 'Language Name',
+    'slug'         => 'Language Slug',
+    'abbreviation' => 'Abbreviation',
+    'locale'       => 'Locale',
+    'status'       => 'Language Status'
 );

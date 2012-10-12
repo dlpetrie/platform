@@ -29,9 +29,9 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="code">{{ Lang::line('localisation::languages/table.code')->get() }}</label>
+                <label class="control-label" for="abbreviation">{{ Lang::line('localisation::languages/table.abbreviation')->get() }}</label>
                 <div class="controls">
-                    <input type="text" name="code" id="code" value="{{ Input::old('code'); }}" placeholder="{{ Lang::line('localisation::languages/table.code')->get() }}" required>
+                    <input type="text" name="abbreviation" id="abbreviation" value="{{ Input::old('abbreviation'); }}" placeholder="{{ Lang::line('localisation::languages/table.abbreviation')->get() }}" required>
                     <span class="help-block"></span>
                 </div>
             </div>

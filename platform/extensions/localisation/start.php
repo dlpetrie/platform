@@ -35,3 +35,50 @@ Autoloader::namespaces(array(
  * --------------------------------------------------------------------------
  */
 require_once __DIR__ . DS . 'helpers.php';
+
+/*
+       $teste = API::get('settings', array(
+    'where' => array(
+        array('extension', '=', 'localisation'),
+        array('name', '=', 'country')
+    )
+));
+
+       var_dump( $teste );
+
+die;
+*/
+#Config::set('application.timezone', 'America/Los_Angeles');
+/*
+// set the language locales and runtime configuration aswell
+Config::set('application.language', 'pt');
+setlocale(LC_ALL, "pt_PT",  "portuguese");
+echo strftime('%A, %d. %B %Y');
+*/
+
+// Get the localisation default settings.
+//
+#$localisation = DB::table('settings')->where('extension', '=', 'localisation')->get();
+# tenho de trabalhar este array, para ser mais facil de usar os dados...
+
+
+/*
+ * --------------------------------------------------------------------------
+ * Set the language locales and update the configuration at runtime.
+ * --------------------------------------------------------------------------
+ */
+$language = DB::table('languages')->where('default', '=', 1)->first();
+Config::set('application.language', strtolower($language->abbreviation));
+#setlocale(LC_ALL, explode(', ', $language->locale));
+
+
+// tests..
+#echo strftime('%A, %d. %B %Y');
+
+/*
+ * --------------------------------------------------------------------------
+ * Initiate the localisation library, so we can make the necessary changes
+ * to the runtime configuration.
+ * --------------------------------------------------------------------------
+ */
+#Localisation::init();

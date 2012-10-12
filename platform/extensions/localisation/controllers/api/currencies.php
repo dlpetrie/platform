@@ -410,6 +410,14 @@ class Localisation_API_Currencies_Controller extends API_Controller
             ), API::STATUS_NOT_FOUND);
         }
 
+        // Make the current default currency, not default anymore.
+        //
+        DB::table('currencies')->where('default', '=', 1)->update(array('default' => 0));
+
+        // Make this currency the default.
+        //
+        DB::table('currencies')->where('code', '=', $currency['code'])->update(array('default' => 1));
+
         // Update the settings table.
         //
         DB::table('settings')

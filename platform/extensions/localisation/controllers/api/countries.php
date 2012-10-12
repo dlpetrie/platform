@@ -137,8 +137,8 @@ class Localisation_API_Countries_Controller extends API_Controller
         //
         $country->name               = Input::get('name');
         $country->slug               = \Str::slug(Input::get('name'));
-        $country->iso_code_2         = strtoupper(Input::get('iso_code_2'));
-        $country->iso_code_3         = strtoupper(Input::get('iso_code_3'));
+        $country->iso_code_2         = Input::get('iso_code_2');
+        $country->iso_code_3         = Input::get('iso_code_3');
         $country->iso_code_numeric_3 = Input::get('iso_code_numeric_3');
         $country->region             = Input::get('region');
         $country->subregion          = Input::get('subregion');
@@ -218,8 +218,8 @@ class Localisation_API_Countries_Controller extends API_Controller
         //
         $country->name               = Input::get('name');
         $country->slug               = \Str::slug(Input::get('name'));
-        $country->iso_code_2         = strtoupper(Input::get('iso_code_2'));
-        $country->iso_code_3         = strtoupper(Input::get('iso_code_3'));
+        $country->iso_code_2         = Input::get('iso_code_2');
+        $country->iso_code_3         = Input::get('iso_code_3');
         $country->iso_code_numeric_3 = Input::get('iso_code_numeric_3');
         $country->region             = ( Input::get('region') ?: $country['region'] );
         $country->subregion          = ( Input::get('subregion') ?: $country['subregion'] );
@@ -377,9 +377,12 @@ class Localisation_API_Countries_Controller extends API_Controller
             return Table::count($query, $defaults);
         });
 
-        // set paging
+        // Set the pagination.
+        //
         $paging = Table::prep_paging($count_filtered, 20);
 
+        // Get the countries.
+        //
         $items = Country::all(function($query) use ($defaults, $paging)
         {
             list($query, $columns) = Table::query($query, $defaults, $paging);
@@ -388,6 +391,8 @@ class Localisation_API_Countries_Controller extends API_Controller
         });
 
 
+        // Return our data.
+        //
         return new Response(array(
             'rows'            => ( $items ?: array() ),
             'count'           => $count_total,
@@ -423,7 +428,7 @@ class Localisation_API_Countries_Controller extends API_Controller
 
         // Check if the country exists.
         //
-        if (is_null($language))
+        if (is_null($country))
         {
             // Return a response.
             //
@@ -431,6 +436,14 @@ class Localisation_API_Countries_Controller extends API_Controller
                 'message' => Lang::line('localisation::countries/message.error.not_found', array('country' => $country_code))->get()
             ), API::STATUS_NOT_FOUND);
         }
+
+        // Make the current default country, not default anymore.
+        //
+        DB::table('countries')->where('default', '=', 1)->update(array('default' => 0));
+
+        // Make this country the default.
+        //
+        DB::table('countries')->where('iso_code_2', '=', $country['iso_code_2'])->update(array('default' => 1));
 
         // Update the settings table.
         //

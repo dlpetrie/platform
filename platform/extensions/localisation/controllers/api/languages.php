@@ -51,8 +51,8 @@ class Localisation_API_Languages_Controller extends API_Controller
      * Returns an array of all the languages.
      *
      * If you want to retrieve information about a specific language, you can
-     * pass the language code, the language id or the language slug as the 
-     * last parameter.
+     * pass the language abbreviation, the language id or the language slug as 
+     * the last parameter.
      *
      *  <code>
      *      $all_languages = API::get('localisation/languages');
@@ -119,11 +119,11 @@ class Localisation_API_Languages_Controller extends API_Controller
 
         // Update the language data.
         //
-        $language->name   = Input::get('name');
-        $language->slug   = \Str::slug(Input::get('name'));
-        $language->code   = strtoupper(Input::get('code'));
-        $language->locale = Input::get('locale');
-        $language->status = Input::get('status');
+        $language->name         = Input::get('name');
+        $language->slug         = \Str::slug(Input::get('name'));
+        $language->abbreviation = Input::get('abbreviation');
+        $language->locale       = Input::get('locale');
+        $language->status       = Input::get('status');
 
         try
         {
@@ -167,7 +167,7 @@ class Localisation_API_Languages_Controller extends API_Controller
      * Function: put_index()
      * --------------------------------------------------------------------------
      *
-     * Edits a given language using the provided language id, language code 
+     * Edits a given language using the provided language id, language abbreviation 
      * or by using the language slug.
      *
      *  <code>
@@ -189,16 +189,16 @@ class Localisation_API_Languages_Controller extends API_Controller
         // Now update the rules.
         //
         Language::set_validation(array(
-            'code' => 'required|size:2|unique:languages,code,' . $language->code . ',code'
+            'abbreviation' => 'required|min:2|max:3|unique:languages,abbreviation,' . $language->abbreviation . ',abbreviation'
         ));
 
         // Update the language data.
         //
-        $language->name   = Input::get('name');
-        $language->slug   = \Str::slug(Input::get('name'));
-        $language->code   = strtoupper(Input::get('code'));
-        $language->locale = Input::get('locale');
-        $language->status = ( ! $language['default'] ? Input::get('status') : 1 );
+        $language->name         = Input::get('name');
+        $language->slug         = \Str::slug(Input::get('name'));
+        $language->abbreviation = Input::get('abbreviation');
+        $language->locale       = Input::get('locale');
+        $language->status       = ( ! $language['default'] ? Input::get('status') : 1 );
 
         try
         {
@@ -240,7 +240,7 @@ class Localisation_API_Languages_Controller extends API_Controller
      * Function: delete_index()
      * --------------------------------------------------------------------------
      *
-     * Deletes a given language using the provided language id, language code 
+     * Deletes a given language using the provided language id, language abbreviation 
      * or by using the language slug.
      *
      *  <code>
@@ -325,15 +325,15 @@ class Localisation_API_Languages_Controller extends API_Controller
     {
         // Get the default language.
         //
-        $default_language = strtoupper(Platform::get('localisation.site.language'));
+        $default_language = Platform::get('localisation.site.language');
 
 
         $defaults = array(
             'select'   => array(
-                'languages.id'   => 'id',
-                'languages.name' => 'name',
-                'languages.code' => 'code',
-                'languages.slug' => 'slug'
+                'languages.id'           => 'id',
+                'languages.name'         => 'name',
+                'languages.abbreviation' => 'abbreviation',
+                'languages.slug'         => 'slug'
             ),
             'where'    => array(),
             'order_by' => array('languages.name' => 'asc')
@@ -398,7 +398,7 @@ class Localisation_API_Languages_Controller extends API_Controller
         // Get this language information.
         //
         $language = Language::find($language_code);
-        
+
         // Check if the language exists.
         //
         if (is_null($language))
@@ -410,13 +410,32 @@ class Localisation_API_Languages_Controller extends API_Controller
             ), API::STATUS_NOT_FOUND);
         }
 
+        // Is this language the default already ?
+        //
+        if ($language['default'] === 1)
+        {
+            // Return a response.
+            //
+            return new Response(array(
+                'message' => Lang::line('localisation::languages/message.update.already_default', array('language' => $language_code))->get()
+            ));
+        }
+
+        // Make the current default language, not default anymore.
+        //
+        DB::table('languages')->where('default', '=', 1)->update(array('default' => 0));
+
+        // Make this language the default.
+        //
+        DB::table('languages')->where('abbreviation', '=', $language['abbreviation'])->update(array('default' => 1));
+
         // Update the settings table.
         //
         DB::table('settings')
             ->where('extension', '=', 'localisation')
             ->where('type', '=', 'site')
             ->where('name', '=', 'language')
-            ->update(array('value' => $language['code']));
+            ->update(array('value' => $language['abbreviation']));
 
         // Return a response.
         //

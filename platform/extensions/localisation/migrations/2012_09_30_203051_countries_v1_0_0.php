@@ -96,8 +96,8 @@ class Localisation_Countries_v1_0_0
             $countries[] = array(
                 'name'               => $country['name'],
                 'slug'               => \Str::slug($country['name']),
-                'iso_code_2'         => strtoupper($country['iso_code_2']),
-                'iso_code_3'         => strtoupper($country['iso_code_3']),
+                'iso_code_2'         => $country['iso_code_2'],
+                'iso_code_3'         => $country['iso_code_3'],
                 'iso_code_numeric_3' => $country['iso_code_numeric_3'],
                 'region'             => $country['region'],
                 'subregion'          => $country['subregion'],
@@ -119,7 +119,7 @@ class Localisation_Countries_v1_0_0
             'extension' => 'localisation',
             'type'      => 'site',
             'name'      => 'country',
-            'value'     => 'GB'
+            'value'     => 'gb'
         ));
 
 

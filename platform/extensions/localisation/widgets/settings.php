@@ -26,9 +26,7 @@ namespace Platform\Settings\Widgets;
  * What we can use in this class.
  * --------------------------------------------------------------------------
  */
-use API,
-    APIClientException,
-    Theme\Theme;
+use Theme\Theme;
 
 
 /**

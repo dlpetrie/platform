@@ -52,9 +52,9 @@ class Language extends Crud
      * @param    array
      */
     public static $_rules = array(
-        'name'   => 'required',
-        'code'   => 'required|size:2|unique:languages,code',
-        'status' => 'required'
+        'name'         => 'required',
+        'abbreviation' => 'required|min:2|max:3|unique:languages,abbreviation',
+        'status'       => 'required'
     );
 
 
@@ -98,8 +98,8 @@ class Language extends Crud
      * Function: find()
      * --------------------------------------------------------------------------
      *
-     * A custom method to find languages, we can use the language id, language code
-     * or the language slug to return language information.
+     * A custom method to find languages, we can use the language id, language
+     * abbreviation or the language slug to return language information.
      *
      * @access   public
      * @param    mixed
@@ -121,7 +121,7 @@ class Language extends Crud
             }, $columns, $events);
         }
 
-        // Do we have the language code ?
+        // Do we have the language abbreviation ?
         //
         elseif (strlen($condition) === 2)
         {
@@ -129,7 +129,7 @@ class Language extends Crud
             //
             return parent::find(function($query) use ($condition)
             {
-                return $query->where('code', '=', strtoupper($condition));
+                return $query->where('abbreviation', '=', strtoupper($condition));
             }, $columns, $events);
         }
 

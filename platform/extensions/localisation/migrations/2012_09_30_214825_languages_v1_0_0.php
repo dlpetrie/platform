@@ -64,7 +64,7 @@ class Localisation_Languages_v1_0_0
             $table->increments('id')->unsigned();
             $table->string('name');
             $table->string('slug');
-            $table->string('code', 5);
+            $table->string('abbreviation', 5);
             $table->string('locale');
             $table->integer('default')->default(0);
             $table->integer('status')->default(1);
@@ -91,14 +91,14 @@ class Localisation_Languages_v1_0_0
         foreach ($file as $language)
         {
             $languages[] = array(
-                'name'       => $language['name'],
-                'slug'       => \Str::slug($language['name']),
-                'code'       => strtoupper($language['code']),
-                'locale'     => $language['locale'],
-                'default'    => ( isset($language['default']) ? 1 : 0 ),
-                'status'     => ( isset($language['status']) ? $language['status'] : 1 ),
-                'created_at' => new \DateTime,
-                'updated_at' => new \DateTime
+                'name'         => $language['name'],
+                'slug'         => \Str::slug($language['name']),
+                'abbreviation' => $language['abbreviation'],
+                'locale'       => $language['locale'],
+                'default'      => ( isset($language['default']) ? 1 : 0 ),
+                'status'       => ( isset($language['status']) ? $language['status'] : 1 ),
+                'created_at'   => new \DateTime,
+                'updated_at'   => new \DateTime
             );
 
             // Is this a default language ?
@@ -107,7 +107,7 @@ class Localisation_Languages_v1_0_0
             {
                 // Mark it as the default then.
                 //
-                $default = $language['code'];
+                $default = $language['abbreviation'];
             }
         }
 
@@ -121,7 +121,7 @@ class Localisation_Languages_v1_0_0
             'extension' => 'localisation',
             'type'      => 'site',
             'name'      => 'language',
-            'value'     => strtoupper($default)
+            'value'     => $default
         ));
 
 

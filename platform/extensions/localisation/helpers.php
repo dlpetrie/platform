@@ -141,8 +141,12 @@ function timezones()
     //
     $timezones = array();
 
+    // Grab the timezones.
     //
-    //
+    foreach (Localisation\Timezone::all() as $item => $value)
+    {
+        $timezones[ $item ] = $value;
+    }
 
     // Return the timezones.
     //

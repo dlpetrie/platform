@@ -1,14 +1,14 @@
 {
     "english" : {
-        "name"    : "English",
-        "code"    : "en",
-        "locale"  : "en_US.UTF-8, en_US, en-us, english",
-        "default" : "1"
+        "name"         : "English",
+        "abbreviation" : "en",
+        "locale"       : "en_US.UTF-8, en_US, en-us, english",
+        "default"      : "1"
     },
 
     "portuguese" : {
-        "name"   : "Portuguese",
-        "code"   : "pt",
-        "locale" : "pt_PT.UTF-8, pt-pt, portuguese"
+        "name"         : "Portuguese",
+        "abbreviation" : "pt",
+        "locale"       : "pt_PT.UTF-8, pt-pt, portuguese"
     }
 }

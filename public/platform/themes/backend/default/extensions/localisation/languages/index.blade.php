@@ -47,7 +47,7 @@
                                 <thead>
                                     <tr>
                                         <th data-table-key="name" class="span4">{{ Lang::line('localisation::languages/table.name')->get() }}</th>
-                                        <th data-table-key="code"class="span2">{{ Lang::line('localisation::languages/table.code')->get() }}</th>
+                                        <th data-table-key="abbreviation"class="span2">{{ Lang::line('localisation::languages/table.abbreviation')->get() }}</th>
                                         <th class="span2"></th>
                                     </tr>
                                 <thead>
