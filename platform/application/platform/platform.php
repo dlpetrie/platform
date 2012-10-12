@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  * Platform Class
  * --------------------------------------------------------------------------
- * 
+ *
  * This is the main class, it does most of the heavy work !
  *
  * @package    Platform
@@ -359,7 +359,7 @@ class Platform
          * Register @widget with blade.
          *
          *  TODO: add error logging when widget/plugin fails
-         * 
+         *
          * @return   string
          */
         Blade::extend(function($view)
@@ -681,11 +681,14 @@ class Platform
      */
     public static function license($file = null)
     {
+    	// start filesystem
+    	$filesystem = Filesystem::make();
+
         // If no file is passed, we return the Platform licence.
         //
         if (is_null($file))
         {
-            return File::get(path('licenses') . DS . 'platform.txt');
+        	return $filesystem->file()->contents(path('licenses') . 'platform.txt');
         }
 
         // No file extension found, use the default one.
@@ -697,7 +700,7 @@ class Platform
 
         // Return the license file contents, if the file exists.
         //
-        return File::get(path('licenses') . DS . $file);
+        return $filesystem->file()->contents(path('licenses') . $file);
     }
 
 

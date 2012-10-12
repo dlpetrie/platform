@@ -43,7 +43,7 @@ use Bundle,
  * --------------------------------------------------------------------------
  * Installer Model
  * --------------------------------------------------------------------------
- * 
+ *
  * Handles operations of the install process.
  *
  * @package    Platform
@@ -166,6 +166,56 @@ class Installer
         );
     }
 
+    /**
+     * --------------------------------------------------------------------------
+     * Function: create_filesystem_config()
+     * --------------------------------------------------------------------------
+     *
+     * Creates the filesystem config file.
+     *
+     * @access   public
+     * @param    array
+     * @return   void
+     */
+    public static function create_filesystem_config($config = array())
+    {
+    	$config['ftp_timeout'] = 90;
+
+    	// get config stub
+    	$string = file_get_contents(path('installer') . DS . 'stubs' . DS . 'filesystem' . EXT);
+
+
+
+    	if (array_key_exists('ftp_enable', $config) and $config['ftp_enable'] == 1)
+    	{
+    		unset($config['ftp_enable']);
+    		$string = str_replace('{{driver}}', 'ftp', $string);
+
+    		$filesystem = \Filesystem::make('ftp', array(
+				'server'   => $config['ftp_server'],
+				'user'     => $config['ftp_user'],
+				'password' => $config['ftp_password'],
+				'port'     => $config['ftp_port'],
+				'timeout'  => $config['ftp_timeout'],
+			));
+    	}
+    	else
+    	{
+    		$string = str_replace('{{driver}}', 'native', $string);
+
+    		$filesystem = \Filesystem::make('native');
+    	}
+
+    	$replacements = array();
+		foreach ($config as $key => $value)
+		{
+			$replacements['{{' . $key . '}}'] = $value;
+		}
+
+		$string = str_replace(array_keys($replacements), array_values($replacements), $string);
+
+		$filesystem->file()->write(\Bundle::path('filesystem') . DS . 'config' . DS . 'filesystem.php', $string);
+    }
 
     /**
      * --------------------------------------------------------------------------
@@ -182,12 +232,13 @@ class Installer
     {
         // Load config file stub.
         //
-        $string = File::get(Bundle::path('installer') . 'stubs' . DS . 'database' . DS . $config['driver'] . EXT, function()
-        {
-            // File does not exist, fallback to standard config.
-            //
-            return File::get(Bundle::path('installer') . 'stubs' . DS . 'database' . EXT);
-        });
+        $filesystem = \Filesystem::make();
+    	$string = $filesystem->file()->contents(path('installer') . DS . 'stubs' . DS . 'database' . DS . $config['driver'] . EXT);
+
+    	if ( ! $string)
+    	{
+    		$string = $filesystem->file()->contents(path('installer'). DS . 'stubs' . DS . 'database' . EXT);
+    	}
 
         // Determine replacements.
         //
@@ -203,7 +254,7 @@ class Installer
 
         // Write the new file.
         //
-        File::put(path('app') . 'config' . DS . 'database' . EXT, $string);
+        $filesystem->file()->write('platform' . DS . 'application' . DS . 'config' . DS . 'database' . EXT, $string);
     }
 
 
@@ -333,7 +384,7 @@ class Installer
     {
         // Check if this is a valid step.
         //
-        if ( ! is_int($step) or $step < 2)
+        if ( ! is_int($step))
         {
             throw new Exception('Invalid step provided.');
         }

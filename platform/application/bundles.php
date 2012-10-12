@@ -29,5 +29,6 @@ return array(
 	'nesty' => array('auto' => true),
 	'sentry' => array('auto' => true),
 	'swiftmailer',
-	'theme' => array('auto' => true)
+	'theme' => array('auto' => true),
+	'filesystem' => array('auto' => true),
 );
