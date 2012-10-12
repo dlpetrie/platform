@@ -69,8 +69,6 @@ return array(
         'localisation::admin.languages@index',
         'localisation::admin.languages@view',
         'localisation::admin.languages@create',
-        'localisation::admin.languages@delete',
-
-        #'localisation::admin.timezones@index'
+        'localisation::admin.languages@delete'
     )
 );

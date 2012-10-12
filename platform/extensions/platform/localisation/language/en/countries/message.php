@@ -32,15 +32,13 @@ return array(
      */
     'create' => array(
         'success' => 'Country :country was successfully created.',
-        'fail'    => 'An error occurred while creating the country !',
-        'errors'  => 'Please check the form for errors'
+        'fail'    => 'An error occurred while creating the country !'
     ),
 
     'update' => array(
         'success'       => 'Country :country was successfully updated.',
         'fail'          => 'An error occurred while updating the country :country !',
         'disable_error' => 'You cannot disable a default country !',
-        'errors'        => 'Please check the form for errors',
         'default'       => 'Country :country is now the current default system country.'
     ),
 
@@ -52,9 +50,9 @@ return array(
             'being_used' => 'You cannot remove a country that is being used by the system.'
         ),
         'multi' => array(
-            'confirm' => 'Are you sure you want to delete these languages ?',
-            'success' => 'The languages selected were succesfully deleted.',
-            'fail'    => 'An error occurred while trying to delete the selected languages'
+            'confirm' => 'Are you sure you want to delete these countries ?',
+            'success' => 'The countries selected were succesfully deleted.',
+            'fail'    => 'An error occurred while trying to delete the selected countries'
         )
     ),
 

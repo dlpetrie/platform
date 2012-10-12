@@ -32,15 +32,13 @@ return array(
      */
     'create' => array(
         'success' => 'Currency :currency was successfully created.',
-        'fail'    => 'An error occurred while creating the currency !',
-        'errors'  => 'Please check the form for errors'
+        'fail'    => 'An error occurred while creating the currency !'
     ),
 
     'update' => array(
         'success'       => 'Currency :currency was successfully updated.',
         'fail'          => 'An error occurred while updating the currency :currency !',
         'disable_error' => 'You cannot disable a default currency !',
-        'errors'        => 'Please check the form for errors',
         'default'       => 'Currency :currency is now the current default system currency.'
     ),
 

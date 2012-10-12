@@ -32,15 +32,13 @@ return array(
      */
     'create' => array(
         'success' => 'Language :language was successfully created.',
-        'fail'    => 'An error occurred while creating the language !',
-        'errors'  => 'Please check the form for errors'
+        'fail'    => 'An error occurred while creating the language !'
     ),
 
     'update' => array(
         'success'       => 'Language :language was successfully updated.',
         'fail'          => 'An error occurred while updating the language :language !',
         'disable_error' => 'You cannot disable a default language !',
-        'errors'        => 'Please check the form for errors',
         'default'       => 'Language :language is now the current default system language.',
         'already_default' => 'Language :language is already the default language'
     ),

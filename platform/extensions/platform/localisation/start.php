@@ -45,23 +45,23 @@ require_once __DIR__ . DS . 'helpers.php';
  */
 if (Platform::extensions_manager()->is_enabled('localisation'))
 {
-    // Get all the settings.
+    // Get all the localisation settings.
     //
-    $localisation = array();
-    foreach (DB::table('settings')->where('extension', '=', 'localisation')->get() as $local)
+    $settings = array();
+    foreach (DB::table('settings')->where('extension', '=', 'localisation')->get() as $setting)
     {
-        $localisation[ $local->name ] = $local->value;
+        $settings[ $setting->name ] = $setting->value;
     }
 
     // Set the currency.
     //
-    Config::set('application.currency', strtolower($localisation['currency']));
+    Config::set('application.currency', strtolower($settings['currency']));
 
     // Set the language.
     //
-    Config::set('application.language', strtolower($localisation['language']));
+    Config::set('application.language', strtolower($settings['language']));
 
     // Set the timezone.
     //
-    Config::set('application.timezone', strtolower($localisation['timezone']));
+    Config::set('application.timezone', strtolower($settings['timezone']));
 }
