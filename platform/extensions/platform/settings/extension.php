@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Part of the Platform application.
  *
@@ -26,18 +25,18 @@
  * --------------------------------------------------------------------------
  */
 return array(
-	/*
+    /*
      * -----------------------------------------
-	 * Extension information.
+     * Extension information.
      * -----------------------------------------
-	 */
-	'info' => array(
-		'name'        => 'Settings',
-		'author'      => 'Cartalyst LLC',
-		'description' => 'Manages your website settings.',
-		'version'     => '1.1',
-		'is_core'     => true
-	),
+     */
+    'info' => array(
+        'name'        => 'Settings',
+        'author'      => 'Cartalyst LLC',
+        'description' => 'Manages your website settings.',
+        'version'     => '1.1',
+        'is_core'     => true
+    ),
 
 
     /*
@@ -45,9 +44,9 @@ return array(
      * Extension dependencies.
      * -----------------------------------------
      */
-	'dependencies' => array(
-		'menus'
-	),
+    'dependencies' => array(
+        'menus'
+    ),
 
 
     /*
@@ -55,11 +54,11 @@ return array(
      * Events
      * -----------------------------------------
      */
-	'events' => array(
-		'setting.create',
-		'setting.update',
-		'setting.delete'
-	),
+    'events' => array(
+        'setting.create',
+        'setting.update',
+        'setting.delete'
+    ),
 
 
     /*
@@ -67,10 +66,7 @@ return array(
      * Rules
      * -----------------------------------------
      */
-	'rules' => array(
-		'settings::admin.settings@general'
-	)
+    'rules' => array(
+        'settings::admin.settings@general'
+    )
 );
-
-/* End of file extension.php */
-/* Location: ./platform/extensions/platform/settings/extension.php */

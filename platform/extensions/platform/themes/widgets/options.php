@@ -35,6 +35,8 @@ class Options
 		$type         = $active_parts[0];
 		$name         = $active_parts[1];
 
+		
+
 		// Get active custom theme options
 		try
 		{

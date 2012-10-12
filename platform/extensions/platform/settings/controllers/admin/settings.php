@@ -18,123 +18,235 @@
  * @link       http://cartalyst.com
  */
 
-use Platform\Menus\Menu;
 
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
+use Platform\Menus\Menu,
+    Platform\Settings\Model\Setting;
+
+
+/**
+ * --------------------------------------------------------------------------
+ * Settings > Admin Class
+ * --------------------------------------------------------------------------
+ *
+ * Settings to manage your website settings.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.1
+ */
 class Settings_Admin_Settings_Controller extends Admin_Controller
 {
-	protected $validation = array(
-		// general settings
-		'general' => array(
-			'site:name' => 'required',
-			'site:email' => 'required|email'
-		)
-	);
+    /**
+     * --------------------------------------------------------------------------
+     * Function: __construct()
+     * --------------------------------------------------------------------------
+     *
+     * Initializer.
+     *
+     * @access   public
+     * @return   void
+     */
+    public function __construct()
+    {
+        // Call parent.
+        //
+        parent::__construct();
+    }
 
-	/**
-	 * This function is called before the action is executed.
-	 *
-	 * @return void
-	 */
-	public function before()
-	{
-		parent::before();
-		$this->active_menu('admin-settings');
-	}
 
-	/**
-	 * Alias for general
-	 *
-	 * @return View
-	 */
-	public function get_index()
-	{
-		return $this->get_general();
-	}
+    /**
+     * --------------------------------------------------------------------------
+     * Function: before()
+     * --------------------------------------------------------------------------
+     *
+     * This function is called before the action is executed.
+     *
+     * @access   public
+     * @return   void
+     */
+    public function before()
+    {
+        // Call parent.
+        //
+        parent::before();
 
-	/**
-	 * General Site Settings
-	 *
-	 * @return View
-	 */
-	public function get_general()
-	{
-		return Theme::make('settings::index');
-	}
+        // Set the active menu.
+        //
+        $this->active_menu('admin-settings');
+    }
 
-	public function post_general()
-	{
-		$post = Input::get();
 
-		$settings = array();
-		foreach ($post as $field => $value)
-		{
-			// Find the type and name for the respective field.
-			// If a field contains a ':', then a type was given
-			if (strpos($field, ':') !== false)
-			{
-				list($type, $name) = explode(':', $field);
-			}
-			else
-			{
-				$type = '';
-				$name = $field;
-			}
+    /**
+     * --------------------------------------------------------------------------
+     * Function: get_index()
+     * --------------------------------------------------------------------------
+     *
+     * The main page of the settings extension.
+     *
+     * @access   public
+     * @return   View
+     */
+    public function get_index()
+    {
+        // Initiate an empty array.
+        //
+        $settings = array();
 
-			// set the values
-			$values = array(
-				'extension' => 'settings',
-				'type'      => $type,
-				'name'      => $name,
-				'value'     => $value,
-			);
+        // Get all the settings from the database.
+        //
+        foreach (API::get('settings', array('organize' => true)) as $setting)
+        {
+            // Populate the extension name of each setting.
+            //
+            foreach ($setting as $data)
+            {
+                // Make sure this settings extension widget exist.
+                //
+                $widget = 'Platform\\' . ucfirst($data['extension']) . '\\Widgets\\Settings';
+                if( ! class_exists($widget))
+                {
+                    continue;
+                }
 
-			// set validation for the field if it exists
-			$validation = null;
-			if (array_key_exists($field, $this->validation['general']))
-			{
-				if (is_array($this->validation['general'][$field]))
-				{
-					$validation = $this->validation['general'][$feild];
-				}
-				else
-				{
-					$validation = array('value' => $this->validation['general'][$field]);
-				}
-			}
+                // Populate the array.
+                //
+                $settings[ $data['extension'] ][ $data['type'] ][ $data['name'] ] = $data['value'];
+            }
+        }
 
-			$settings[] = array(
-				'values'     => $values,
-				'validation' => $validation
-			);
-		}
+        // Show the page.
+        //
+        return Theme::make('settings::index')->with('settings', $settings);
+    }
 
-		try
-		{
-			$updated = Api::post('settings', array(
-				'settings' => $settings,
-			));
 
-			if (is_array($updated) and count($updated) > 0)
-			{
-				foreach ($updated as $setting)
-				{
-					Platform::messages()->success(Lang::line('settings::messages.success.update', array(
-						'setting' => $setting,
-					)));
-				}
-			}
-		}
-		catch (APIClientException $e)
-		{
-			Platform::messages()->error($e->getMessage());
+    /**
+     * --------------------------------------------------------------------------
+     * Function: post_index()
+     * --------------------------------------------------------------------------
+     *
+     * Form processing.
+     *
+     * @access   public
+     * @return   Redirect
+     */
+    public function post_index()
+    {
+        // Initiate an empty array.
+        //
+        $settings = array();
 
-			foreach ($e->errors() as $error)
-			{
-				Platform::messages()->error($error);
-			}
-		}
+        // Loop through the submited data.
+        //
+        foreach (Input::get() as $field => $value)
+        {
+            // Extension field shall not pass !
+            //
+            if ($field === 'extension')
+            {
+                continue;
+            }
 
-		return Redirect::to_secure(ADMIN.'/settings/general');
-	}
+            // Find the type and name for the respective field.
+            // If a field contains a ':', then a type was given.
+            //
+            if (strpos($field, ':') !== false)
+            {
+                list($type, $name) = explode(':', $field);
+            }
+            else
+            {
+                $type = '';
+                $name = $field;
+            }
 
+            // Get this extension name.
+            //
+            $extension = Input::get('extension', 'settings');
+
+            // Set validation if the field doesn't exist.
+            //
+            $validation = null;
+
+            // Check if this widget has validation rules.
+            //
+            $widget = 'Platform\\' . ucfirst($extension) . '\\Widgets\\Settings';
+            if (isset($widget::$validation) and array_key_exists($name, $widget::$validation))
+            {
+                // Get the rules.
+                //
+                $validation = array($name => array_get($widget::$validation, $name));
+            }
+
+            // Set the values.
+            //
+            $settings[] = array(
+                'extension'  => $extension,
+                'type'       => $type,
+                'name'       => $name,
+                'value'      => $value,
+                'validation' => $validation
+            );
+        }
+
+        try
+        {
+            // Make the API request.
+            //
+            $request = API::put('settings', array( 'settings' => $settings ));
+
+            // If we have fields that were updated with success.
+            //
+            if ($updated = array_get($request, 'updated'))
+            {
+                // Loop through each updated setting.
+                //
+                foreach ($updated as $setting)
+                {
+                    // Set the success message.
+                    //
+                    Platform::messages()->success(Lang::line('settings::message.success', array('setting' => $setting)));
+                }
+            }
+
+            // If we have fields that were not updated with success.
+            //
+            if ($errors = array_get($request, 'errors'))
+            {
+                // Loop through the error messages.
+                //
+                foreach ($errors as $error)
+                {
+                    // Set the error message.
+                    //
+                    Platform::messages()->error($error);
+                }
+            }
+        }
+        catch (APIClientException $e)
+        {
+            // Set the error message.
+            //
+            Platform::messages()->error($e->getMessage());
+
+            // Set the other error messages.
+            //
+            foreach ($e->errors() as $error)
+            {
+                Platform::messages()->error($error);
+            }
+        }
+
+        // Redirect back to the settings page.
+        //
+        return Redirect::to_admin('settings');
+    }
 }

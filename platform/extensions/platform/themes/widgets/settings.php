@@ -18,7 +18,7 @@
  * @link       http://cartalyst.com
  */
 
-namespace Platform\Settings\Widgets;
+namespace Platform\Themes\Widgets;
 
 
 /*
@@ -27,16 +27,15 @@ namespace Platform\Settings\Widgets;
  * --------------------------------------------------------------------------
  */
 use API,
-    APIClientException,
     Theme\Theme;
 
 
 /**
  * --------------------------------------------------------------------------
- * Settings > Widget Class
+ * Themes > Widget Class
  * --------------------------------------------------------------------------
  *
- * The settings widgets class.
+ * Wigdet class for changing themes.
  *
  * @package    Platform
  * @author     Cartalyst LLC
@@ -48,33 +47,38 @@ use API,
 class Settings
 {
     /**
-     * The validation rules.
-     *
-     * @access   public
-     * @var      array
-     */
-    public static $validation = array(
-        'title'   => 'required|min:3',
-        'tagline' => 'required|min:3',
-        'email'   => 'required|email'
-    );
-
-
-    /**
      * --------------------------------------------------------------------------
      * Function: index()
      * --------------------------------------------------------------------------
      *
-     * Shows the general settings form.
+     * Shows the themes settings form.
      *
      * @access   public
-     * @param    array
      * @return   View
      */
     public function index($settings = null)
     {
-        // Show the form.
+        // Get all themes for the frontend.
         //
-        return Theme::make('settings::widgets.form.settings')->with('settings', $settings);
+        $frontend = array();
+        foreach(API::get('themes/frontend') as $theme)
+        {
+            $frontend[ $theme['theme'] ] = $theme['name'];
+        }
+
+        // Get all themes for the backend.
+        //
+        $backend = array();
+        foreach(API::get('themes/backend') as $theme)
+        {
+            $backend[ $theme['theme'] ] = $theme['name'];
+        }
+
+        // Show the form page.
+        //
+        return Theme::make('themes::widgets.form.settings')
+                ->with('settings', $settings)
+                ->with('frontend_themes', $frontend)
+                ->with('backend_themes', $backend);
     }
 }

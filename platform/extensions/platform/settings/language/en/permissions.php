@@ -18,14 +18,17 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * Return the language lines.
+ * --------------------------------------------------------------------------
+ */
 return array(
-
-	'admin' => array(
-
-		'settings' => array(
-			'_title_'  => 'Admin Settings',
-			'general'  => 'View / Edit',
-		),
-	),
-
+    'admin' => array(
+        'settings' => array(
+            '_title_'  => 'Admin Settings',
+            'general'  => 'View / Edit'
+        )
+    )
 );

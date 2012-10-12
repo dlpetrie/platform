@@ -18,4 +18,15 @@
  * @link       http://cartalyst.com
  */
 
-Route::controller(Controller::detect('settings'));
+
+/*
+ * --------------------------------------------------------------------------
+ * Return the language lines.
+ * --------------------------------------------------------------------------
+ */
+return array(
+    'success' => ':setting has been updated.',
+    'errors' => array(
+        'none_found' => 'No settings found for the given parameters.'
+    )
+);

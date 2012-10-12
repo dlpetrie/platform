@@ -20,42 +20,114 @@
 
 namespace Platform\Settings\Model;
 
+
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
 use Crud;
 
+
 /**
- * Product Model
+ * --------------------------------------------------------------------------
+ * Settings > Setting Model
+ * --------------------------------------------------------------------------
  *
- * @author  Daniel Petrie
+ * The settings model class.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.1
  */
 class Setting extends Crud
 {
+    /**
+     * --------------------------------------------------------------------------
+     * Function: set_validation()
+     * --------------------------------------------------------------------------
+     *
+     * Set validation rules and labels.
+     *
+     * @access   public
+     * @param    array
+     * @param    array
+     * @return   void
+     */
+    public function set_validation($rules = array())
+    {
+        static::$_rules = $rules;
+    }
 
-	/**
-	 * Set validation rules and labels
-	 *
-	 * @param  array  validation rules
-	 * @param  array  labels
-	 */
-	public function set_validation($rules = array(), $messages = array())
-	{
-		static::$_rules  = $rules;
-		// static::$_messages = $messages;
-	}
 
-	/**
-	 * Called right after validation before inserting/updating to the database
-	 *
-	 * @param   array  $attributes
-	 * @return  array
-	 */
-	protected function prep_attributes($attributes)
-	{
-		foreach ($attributes as &$attribute);
-		{
-			$attribute = \HTML::entities($attribute);
-		}
+    /**
+     * --------------------------------------------------------------------------
+     * Function: attributes()
+     * --------------------------------------------------------------------------
+     *
+     * Get all the attributes of the model.
+     *
+     * @access   public
+     * @param    array
+     * @param    array
+     * @return   void
+     */
+    public function attributes()
+    {
+        // Get the attributes.
+        //
+        $attributes = get_object_public_vars($this);
 
-		return $attributes;
-	}
+        // Do we have rules ?
+        //
+        if (is_array(static::$_rules))
+        {
+            // Loop throgh the rules.
+            //
+            foreach (static::$_rules as $key => $val)
+            {
+                $attributes[ $key ] = $attributes['value'];
+            }
+        }
 
+        // Return the attributes.
+        //
+        return $attributes;
+    }
+
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: prep_attributes()
+     * --------------------------------------------------------------------------
+     *
+     * Called right after validation before inserting/updating to the database.
+     *
+     * @access   public
+     * @param    array
+     * @return   array
+     */
+    protected function prep_attributes($attributes)
+    {
+        // Loop through the attributes.
+        //
+        foreach ($attributes as $key => &$attribute);
+        {
+            if (is_array(static::$_rules) and array_key_exists($key, static::$_rules))
+            {
+                unset($attributes[ $key ]);
+            }
+            else
+            {
+                $attribute = \HTML::entities($attribute);
+            }
+        }
+
+        // Return the attributes.
+        //
+        return $attributes;
+    }
 }

@@ -18,182 +18,236 @@
  * @link       http://cartalyst.com
  */
 
+
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
 use Platform\Settings\Model\Setting;
 
+
+/**
+ * --------------------------------------------------------------------------
+ * Settings > API Class
+ * --------------------------------------------------------------------------
+ *
+ * API class to manage the settings.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.1
+ */
 class Settings_API_Settings_Controller extends API_Controller
 {
+    /**
+     * --------------------------------------------------------------------------
+     * Function: get_index()
+     * --------------------------------------------------------------------------
+     *
+     * Gets a group of settings by the given parameters.
+     *
+     *  <code>
+     *      API::get('settings', $conditions);
+     *  </code>
+     *
+     * @access   public
+     * @return   Response
+     */
+    public function get_index()
+    {
+        // Get the inputs.
+        //
+        $where    = Input::get('where');
+        $organize = Input::get('organize', false);
 
-	/**
-	 * Gets a group of settings by the
-	 * given parameters
-	 *
-	 *	<code>
-	 *		API::get('settings', $conditions);
-	 *	</code>
-	 *
-	 * @return  Response
-	 */
-	public function get_index()
-	{
-		$where    = Input::get('where');
-		$organize = Input::get('organize', false);
+        // Get the settings based on the request.
+        //
+        $result = Setting::all(function($query) use ($where)
+        {
+            if ( ! is_array($where) or ! is_array($where[0]))
+            {
+                $where = array($where);
+            }
 
-		$result = Setting::all(function($query) use ($where) {
+            foreach ($where as $w)
+            {
+                if (count($w) == 3)
+                {
+                    $query = $query->where($w[0], $w[1], $w[2]);
+                }
+            }
 
-			if ( ! is_array($where) or ! is_array($where[0]))
-			{
-				$where = array($where);
-			}
+            return $query;
+        });
 
-			foreach ($where as $w)
-			{
-				if (count($w) == 3)
-				{
-					$query = $query->where($w[0], $w[1], $w[2]);
-				}
-			}
+        // If there is no result.
+        //
+        if ( ! $result)
+        {
+            return new Response(array(
+                'message' => Lang::line('settings::messages.errors.none_found')->get()
+            ), API::STATUS_NOT_FOUND);
+        }
 
-			return $query;
+        // Do we want to return an organized array ?
+        //
+        if ($organize)
+        {
+            // Initialize an empty array.
+            //
+            $settings = array();
 
-		});
+            // Sort the settings array.
+            //
+            foreach ($result as $setting)
+            {
+                $settings[ $setting['type'] ][ $setting['name'] ] = $setting;
+            }
 
-		// if there was no result
-		if ( ! $result)
-		{
-			return new Response(array(
-				'message' => Lang::line('settings::messages.errors.none_found')->get(),
-			), API::STATUS_NOT_FOUND);
-		}
+            // Save the settings in our result variable.
+            //
+            $result = $settings;
+            unset($settings);
+        }
 
-		if ($organize)
-		{
-			$settings = array();
+        // Return the result.
+        //
+        return new Response($result);
+    }
 
-			foreach ($result as $setting)
-			{
-				$settings[$setting['type']][$setting['name']] = $setting;
-			}
 
-			$result = $settings;
-			unset($settings);
-		}
+    /**
+     * --------------------------------------------------------------------------
+     * Function: put_index()
+     * --------------------------------------------------------------------------
+     *
+     * Update the settings in the database.
+     *
+     *  <code>
+     *      API::put('settings', array('settings' => $settings));
+     *  </code>
+     *
+     * @access   public
+     * @return   Response
+     */
+    public function put_index()
+    {
+        // Initialize some arrays.
+        //
+        $updated = array();
+        $errors  = array();
 
-		return new Response($result);
-	}
+        // Get the data.
+        //
+        $settings = Input::get('settings');
 
-	public function post_index()
-	{
-		// set vars
-		$settings   = Input::get('settings');
-		$updated    = array();
-		$errors     = array();
+        // Loop through the settings.
+        //
+        foreach ($settings as $setting)
+        {
+            // Validation rules.
+            //
+            $validation = $setting['validation'];
+            unset($setting['validation']);
 
-		if ( ! isset($settings[0]))
-		{
-			$settings = array($settings);
-		}
+            // Lets make sure the values are set.
+            //
+            $setting['extension'] = array_get($setting, 'extension') ?: '';
+            $setting['type']      = array_get($setting, 'type')      ?: '';
+            $setting['name']      = array_get($setting, 'name')      ?: '';
+            $setting['value']     = array_get($setting, 'value')     ?: '';
 
-		// loop through settings and update
-		foreach ($settings as $setting)
-		{
-			// lets make sure value are set
-			$setting['values']['extension'] = isset($setting['values']['extension']) ? $setting['values']['extension'] : '';
-			$setting['values']['type']      = isset($setting['values']['type'] ) ? $setting['values']['type'] : '';
-			$setting['values']['name']      = isset($setting['values']['name']  ) ? $setting['values']['name']  : '';
-			$setting['values']['value']     = isset($setting['values']['value'] ) ? $setting['values']['value'] : '';
+            // Type is option, so we'll set it to the name of the extension.
+            //
+            $setting['type'] = array_get($setting, 'type') ?: $setting['extension'];
 
-			// type is optional, so we'll set it to null if its not set
-			if ( ! isset($setting['values']['type']))
-			{
-				$setting['values']['type'] = $setting['values']['extension'];
-			}
+            // Very optional
+            //
+            $setting['id'] = array_get($setting, 'id') ?: null;
 
-			$setting_model = Setting::find(function($query) use($setting)
-			{
-				// if an id was passed, we'll just use that to find the setting
-				if (isset($setting['id']))
-				{
-					return $query
-						->where('id', '=', $setting['id']);
-				}
+            //
+            //
+            $setting_model = Setting::find(function($query) use($setting)
+            {
+                // If the ID was passed, we'll just use that to find the setting.
+                //
+                if ( ! is_null( $setting['id'] ) )
+                {
+                    return $query->where('id', '=', $setting['id']);
+                }
 
-				return $query
-					->where('extension', '=', $setting['values']['extension'])
-					->where('type', '=', $setting['values']['type'])
-					->where('name', '=', $setting['values']['name']);
-			});
+                return $query
+                    ->where('extension', '=', $setting['extension'])
+                    ->where('type', '=', $setting['type'])
+                    ->where('name', '=', $setting['name']);
+            });
 
-			// if setting model doesn't exist, make one
-			if ( ! $setting_model)
-			{
-				unset($setting['value']['id']);
-				$setting_model = new Setting($setting['values']);
-			}
-			// otherwise update the value
-			else
-			{
-				$setting_model->extension = $setting['values']['extension'];
-				$setting_model->type      = $setting['values']['type'];
-				$setting_model->name      = $setting['values']['name'];
-				$setting_model->value     = $setting['values']['value'];
-			}
+            // If setting model doesn't exist, make one
+            //
+            if ( ! $setting_model)
+            {
+                unset( $setting['id'] );
+                $setting_model = new Setting($setting);
+            }
 
-			// now we'll set the validation rules and labels for the settings
-			$rules  = array();
-			$labels = array();
+            // Otherwise update the values.
+            //
+            else
+            {
+                $setting_model->extension = $setting['extension'];
+                $setting_model->type      = $setting['type'];
+                $setting_model->name      = $setting['name'];
+                $setting_model->value     = $setting['value'];
+            }
 
-			foreach ($setting['values'] as $col => $val)
-			{
-				if (isset($setting['validation'][$col]))
-				{
-					$rules[$col] = $setting['validation'][$col];
-				}
+            // Fallback and a rules reseter.
+            //
+            $rules = array();
 
-				if (isset($setting['labels'][$col]))
-				{
-					$labels[$col] = $setting['labels'][$col];
-				}
-			}
+            // Set this setting rules.
+            //
+            if ($validation)
+            {
+                $rules = $validation;
+            }
 
-			// pass validation and labels to the model
-			$setting_model->set_validation($rules, $labels);
+            // Pass the validation rules to the model.
+            //
+            $setting_model->set_validation($validation);
 
-			try
-			{
-				// now save the setting
-				if ($setting_model->save())
-				{
-					$updated[] = ucfirst($setting_model->name);
-				}
-				else
-				{
-					// get errors
-					foreach ($setting_model->validation()->errors->all() as $error)
-					{
-						$errors[] = $error;
-					}
-				}
-			}
-			catch (Exception $e)
-			{
-				$errors[] = $e->getMessage();
-			}
-		}
+            try
+            {
+                // Save the setting.
+                //
+                if ($setting_model->save())
+                {
+                    $updated[] = ucfirst($setting_model->name);
+                }
 
-		if (count($errors) > 0)
-		{
-			return new Response(array(
-				'message' => Lang::line('settings::messages.errors.occured')->get(),
-				'errors'  => $errors,
-			), API::STATUS_UNPROCESSABLE_ENTITY);
-		}
+                // Setting failed the validation
+                //
+                else
+                {
+                    // Get the errors.
+                    //
+                    foreach ($setting_model->validation()->errors->all() as $error)
+                    {
+                        $errors[] = $error;
+                    }
+                }
+            }
+            catch (Exception $e)
+            {
+                $errors[] = $e->getMessage();
+            }
+        }
 
-		if (count($updated) === 0)
-		{
-			return new Response(null, API::STATUS_NO_CONTENT);
-		}
-
-		return new Response($updated);
-	}
-
+        // Return the updated and non updated settings.
+        //
+        return new Response(array('updated' => $updated, 'errors' => $errors));
+    }
 }

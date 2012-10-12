@@ -11,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.3
+ * @version    1.0.1
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -21,10 +21,21 @@
 
 /*
  * --------------------------------------------------------------------------
- * Register some namespaces.
+ * Return the language lines.
  * --------------------------------------------------------------------------
  */
-Autoloader::namespaces(array(
-    'Platform\\Settings\\Widgets' => __DIR__ . DS . 'widgets',
-    'Platform\\Settings\\Model'   => __DIR__ . DS . 'models'
-));
+return array(
+    /*
+     * -----------------------------------------
+     * Settings form.
+     * -----------------------------------------
+     */
+    'settings' => array(
+        'legend' => 'Themes',
+
+        'fields' => array(
+            'frontend' => 'Frontend Theme',
+            'backend'  => 'Backend Theme'
+        )
+    )
+);
