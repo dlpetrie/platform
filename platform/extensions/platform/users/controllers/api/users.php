@@ -307,7 +307,8 @@ class Users_API_Users_Controller extends API_Controller
 				$mailer = IoC::resolve('mailer');
 
 				// Get email
-				$body = File::get(path('public').'platform/emails'.DS.'register.html');
+				$filesystem = Filesystem::make();
+				$filesystem->file()->contents(path('public').'platform' . DS . 'emails'.DS.'register.html');
 
 				// Replacements
 				$replacements = array(
@@ -464,7 +465,8 @@ class Users_API_Users_Controller extends API_Controller
 				$link = URL::to_admin('reset_password_confirm/'.$reset['link']);
 
 				// Get email
-				$body = File::get(path('public').'platform'.DS.'emails'.DS.'reset_password.html');
+				$filesystem = Filesystem::make();
+				$filesystem->file()->contents(path('public').'platform'.DS.'emails'.DS.'reset_password.html');
 
 				// Replacements
 				$replacements = array(

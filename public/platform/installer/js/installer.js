@@ -69,6 +69,32 @@ $(document).ready(function() {
 
 	/*
 	|-------------------------------------
+	| FTP Check
+	|-------------------------------------
+	|
+	*/
+	$('#ftp-test').on('click', function(e) {
+		e.preventDefault();
+
+		$.ajax({
+			type     : 'POST',
+			url      : platform.url.base('installer/ftp_test'),
+			async    : false,
+			data     : $('#filesystem-form').serialize(),
+			dataType : 'JSON',
+			success  : function(data) {
+				if (data.connected) {
+					$('#ftp-status').text('Connected.');
+				}
+				else {
+					$('#ftp-status').text('Could not connect.');
+				}
+			}
+		});
+	});
+
+	/*
+	|-------------------------------------
 	| Database form
 	|-------------------------------------
 	|

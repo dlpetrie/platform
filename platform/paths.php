@@ -43,7 +43,7 @@ $environments = array(
  *
  * We set these routes here so module.php files have access to these constants.
  *
- * If we set them in routes, modules do not have access to them since they 
+ * If we set them in routes, modules do not have access to them since they
  * would load before the define is set.
  *
  */
@@ -112,7 +112,7 @@ $paths['extensions'] = 'extensions';
  * The path to the licenses directory.
  * --------------------------------------------------------------------------
  */
-$paths['licenses'] = __DIR__ . '/licenses';
+$paths['licenses'] = 'licenses';
 
 
 // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*

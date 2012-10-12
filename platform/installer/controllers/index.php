@@ -31,7 +31,7 @@ use Installer\Installer;
  * --------------------------------------------------------------------------
  * Installer Class
  * --------------------------------------------------------------------------
- * 
+ *
  * The Platform Installer.
  *
  * @package    Platform
@@ -106,6 +106,21 @@ class Installer_Index_Controller extends Base_Controller
         return $this->get_step_1();
     }
 
+    /**
+     * --------------------------------------------------------------------------
+     * Function: get_index()
+     * --------------------------------------------------------------------------
+     *
+     * An alias for the step 1.
+     *
+     * @access   public
+     * @return   void
+     */
+    public function post_index()
+    {
+        return $this->post_step_1();
+    }
+
 
     /**
      * --------------------------------------------------------------------------
@@ -124,11 +139,37 @@ class Installer_Index_Controller extends Base_Controller
         //
         Installer::prepare();
 
+        $drivers = array(
+        	'Native',
+        	'Ftp'
+        );
+
         // Show the page.
         //
-        return View::make('installer::step_1')->with('permissions', Installer::permissions());
+        return View::make('installer::step_1')
+        	->with('drivers', $drivers)
+        	->with('permissions', Installer::permissions());
     }
 
+    /**
+     * -----------------------------------------
+     * Function: post_ftp_test()
+     * -----------------------------------------
+     *
+     * Used to test FTP credentials
+     */
+    public function post_ftp_test()
+    {
+    	// connect to ftp server
+    	$connection_id = @ftp_connect(Input::get('ftp_server'), Input::get('ftp_port'), 90);
+
+		// and now login
+		$response = @ftp_login($connection_id, Input::get('ftp_user'), Input::get('ftp_password'));
+
+		return json_encode(array(
+			'connected' => ($response) ? true : false,
+		));
+    }
 
     /**
      * --------------------------------------------------------------------------
@@ -143,6 +184,10 @@ class Installer_Index_Controller extends Base_Controller
      */
     public function post_step_1()
     {
+    	// Save the data.
+        //
+        Installer::remember_step_data(1, Input::get());
+
         // Continue to step 2.
         //
         return Redirect::to('installer/step_2');
@@ -263,6 +308,13 @@ class Installer_Index_Controller extends Base_Controller
      */
     public function get_install()
     {
+    	// Create the Filesystem Config first so we can use for other file creations
+    	//
+    	Installer::create_filesystem_config(Installer::get_step_data(1, function() {
+    		Redirect::to('installer/step_1')->send();
+    		exit;
+    	}));
+
         // 1) Create the database config file.
         //
         Installer::create_database_config(Installer::get_step_data(2, function() {
@@ -314,7 +366,7 @@ class Installer_Index_Controller extends Base_Controller
                     Config::get('sentry::sentry.permissions.superuser') => 1
                 )
             );
-            
+
             // Create the admin user.
             //
             API::post('users', $user);
@@ -344,7 +396,7 @@ class Installer_Index_Controller extends Base_Controller
      */
     public function get_step_4()
     {
-        // 
+        //
         //
         Session::forget('installer');
 
@@ -402,7 +454,7 @@ class Installer_Index_Controller extends Base_Controller
         }
         catch (Exception $e)
         {
-            // Error 1146 is actually good, because it means we connected fine, 
+            // Error 1146 is actually good, because it means we connected fine,
             // just couldn't get the contents of the random table above.
             // For some reason this exception has a code of "0"
             // whereas all of the other exceptions match the
