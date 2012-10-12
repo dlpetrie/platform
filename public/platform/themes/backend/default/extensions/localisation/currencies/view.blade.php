@@ -18,8 +18,8 @@
 
     <hr />
 
-    <form action="{{ URL::to_admin('localisation/currencies/view/' . $currency['slug']) }}" id="edit-form" class="form-horizontal" method="POST" accept-char="UTF-8">
-        <input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
+    {{ Form::open() }}
+        {{ Form::token() }}
         <fieldset>
             <div class="control-group">
                 <label class="control-label" for="name">{{ Lang::line('localisation::currencies/table.name')->get() }}</label>
@@ -54,6 +54,6 @@
             <a class="btn btn-large btn-danger" href="{{ URL::to_admin('localisation/currencies/delete/' . $currency['slug']) }}">{{ Lang::line('button.delete')->get() }}</a>
         	@endif
         </div>
-    </form>
+    {{ Form::close() }}
 </section>
 @endsection

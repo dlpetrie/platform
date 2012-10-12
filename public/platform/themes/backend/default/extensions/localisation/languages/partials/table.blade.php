@@ -1,13 +1,6 @@
 @foreach ($rows as $row)
     <tr>
-        <td>
-            <a href="{{ URL::to_admin('localisation/languages/view/' . $row['slug']) }}">{{ $row['name'] }}</a>
-            <span class="pull-right">
-                @if ($default_language != $row['abbreviation'])
-                <a class="btn btn-mini" href="{{ URL::to_admin('localisation/languages/default/' . $row['slug']) }}" title="* Make this the default country."><i class="icon-star"></i></a>
-                @endif
-            </span>
-        </td>
+        <td><a href="{{ URL::to_admin('localisation/languages/view/' . $row['slug']) }}">{{ $row['name'] }}</a></td>
         <td>{{ $row['abbreviation'] }}</td>
         <td>
             <div class="btn-group">

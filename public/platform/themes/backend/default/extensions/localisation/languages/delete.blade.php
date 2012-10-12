@@ -18,8 +18,8 @@
 
     <hr />
 
-    <form action="{{ URL::to_admin('localisation/languages/delete/' . $language['slug']) }}" id="edit-form" class="form-horizontal" method="POST" accept-char="UTF-8">
-        <input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
+    {{ Form::open() }}
+        {{ Form::token() }}
 
         <div class="alert alert-error">
             <h3>{{ Lang::line('general.warning')->get() }}</h3>
@@ -33,6 +33,6 @@
             <a href="{{ URL::to_admin('localisation/languages') }}" class="btn btn-success"><i class="icon-remove icon-white"></i> {{ Lang::line('button.cancel')->get() }}</a>
             @endif
         </div>
-    </form>
+    {{ Form::close() }}
 </section>
 @endsection

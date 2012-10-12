@@ -18,8 +18,8 @@
 
     <hr />
 
-    <form action="{{ URL::to_admin('localisation/currencies/create/') }}" id="edit-form" class="form-horizontal" method="POST" accept-char="UTF-8">
-        <input type="hidden" name="{{ Session::csrf_token }}" value="{{ Session::token() }}">
+    {{ Form::open() }}
+        {{ Form::token() }}
         <fieldset>
             <div class="control-group">
                 <label class="control-label" for="name">{{ Lang::line('localisation::currencies/table.name')->get() }}</label>
@@ -58,6 +58,6 @@
             <button class="btn btn-large btn-primary" type="submit" name="save" id="save" value="1">{{ Lang::line('button.update')->get() }}</button>
             <button class="btn btn-large btn-primary" type="submit" name="save_exit" id="save_exit" value="1">{{ Lang::line('button.update_exit')->get() }}</button>
         </div>
-    </form>
+    {{ Form::close() }}
 </section>
 @endsection
