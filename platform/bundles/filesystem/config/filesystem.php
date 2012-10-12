@@ -4,7 +4,7 @@ return array(
 
 	// Default Filesystem Driver
 	//
-	'default_driver' => 'ftp',
+	'default_driver' => 'native',
 
 	// Fallback - Native only
 	//
@@ -17,9 +17,9 @@ return array(
 		 // FTP Settings
 		 //
 		'ftp' => array(
-			'server'   => 'localhost',
-			'user'     => 'platform',
-			'password' => 'test',
+			'server'   => null,
+			'user'     => null,
+			'password' => null,
 			'port'     => 21,
 			'timeout'  => 2,
 		),
