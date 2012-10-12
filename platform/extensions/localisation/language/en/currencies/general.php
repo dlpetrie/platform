@@ -18,32 +18,24 @@
  * @link       http://cartalyst.com
  */
 
-namespace Localisation;
-
 
 /*
  * --------------------------------------------------------------------------
- * What we can use in this class.
+ * Return the language lines.
  * --------------------------------------------------------------------------
  */
-#use Crud;
-
-
-/**
- * --------------------------------------------------------------------------
- * Timezone model Class
- * --------------------------------------------------------------------------
- * 
- * Model to manage timezones.
- *
- * @package    Platform
- * @author     Cartalyst LLC
- * @copyright  (c) 2011 - 2012, Cartalyst LLC
- * @license    BSD License (3-clause)
- * @link       http://cartalyst.com
- * @version    1.0
- */
-class Timezone
-{
-
-}
+return array(
+    /*
+     * -----------------------------------------
+     * Extension header.
+     * -----------------------------------------
+     */
+    'title' => 'Currencies',
+    
+    'description' => array(
+        'index'  => 'Manage your system currencies.',
+        'create' => 'Creating a new currency',
+        'view'   => 'Viewing the currency :currency',
+        'delete' => 'Deleting the currency :currency'
+    )
+);

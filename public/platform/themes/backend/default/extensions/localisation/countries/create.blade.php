@@ -66,7 +66,7 @@
             <div class="control-group">
                 <label class="control-label" for="status">{{ Lang::line('localisation::countries/table.status')->get() }}</label>
                 <div class="controls">
-                    {{ Form::select('status', country_statuses()); }}
+                    {{ Form::select('status', general_statuses()); }}
                     <span class="help-block"></span>
                 </div>
             </div>

@@ -24,15 +24,15 @@
  * What we can use in this class.
  * --------------------------------------------------------------------------
  */
-use Localisation\Language;
+use Localisation\Currency;
 
 
 /**
  * --------------------------------------------------------------------------
- * Localisation > Languages > API Class
+ * Localisation > Currencies > API Class
  * --------------------------------------------------------------------------
  * 
- * Manage the languages.
+ * Manage the currencies.
  *
  * @package    Platform
  * @author     Cartalyst LLC
@@ -41,59 +41,59 @@ use Localisation\Language;
  * @link       http://cartalyst.com
  * @version    1.0
  */
-class Localisation_API_Languages_Controller extends API_Controller
+class Localisation_API_Currencies_Controller extends API_Controller
 {
     /**
      * --------------------------------------------------------------------------
      * Function: get_index()
      * --------------------------------------------------------------------------
      *
-     * Returns an array of all the languages.
+     * Returns an array of all the currencies.
      *
-     * If you want to retrieve information about a specific language, you can
-     * pass the language code, the language id or the language slug as the 
+     * If you want to retrieve information about a specific currency, you can
+     * pass the currency code, the currency id or the currency slug as the 
      * last parameter.
      *
      *  <code>
-     *      $all_languages = API::get('localisation/languages');
-     *      $en_language   = API::get('localisation/language/1');
-     *      $en_language   = API::get('localisation/language/en');
-     *      $en_language   = API::get('localisation/language/english');
+     *      $all_currencies = API::get('localisation/currencies');
+     *      $usd_currency   = API::get('localisation/currency/1');
+     *      $usd_currency   = API::get('localisation/currency/usd');
+     *      $usd_currency   = API::get('localisation/currency/us-dollar');
      *  </code>
      *
      * @access   public
      * @param    mixed
      * @return   Response
      */
-    public function get_index($language_code)
+    public function get_index($currency_code)
     {
-        // If we have the language code, we return the information about that language.
+        // If we have the currency code, we return the information about that currency.
         //
-        if ($language_code != false)
+        if ($currency_code != false)
         {
-            // Get this language information.
+            // Get this currency information.
             //
-            $language = Language::find($language_code);
+            $currency = Currency::find($currency_code);
 
-            // Check if the language exists.
+            // Check if the currency exists.
             //
-            if (is_null($language))
+            if (is_null($currency))
             {
-                // Language not found.
+                // Currency not found.
                 //
                 return new Response(array(
-                    'message' => Lang::line('localisation::languages/message.error.not_found', array('language' => $language_code))->get()
+                    'message' => Lang::line('localisation::currencies/message.error.not_found', array('currency' => $currency_code))->get()
                 ), API::STATUS_NOT_FOUND);
             }
 
-            // Return the language information.
+            // Return the currency information.
             //
-            return new Response($language);
+            return new Response($currency);
         }
 
-        // Get and return all the languages.
+        // Get and return all the currencies.
         //
-        return new Response(Language::all());
+        return new Response(Currency::all());
     }
 
 
@@ -102,10 +102,10 @@ class Localisation_API_Languages_Controller extends API_Controller
      * Function: post_index()
      * --------------------------------------------------------------------------
      *
-     * Creates a new language.
+     * Creates a new currency.
      *
      *  <code>
-     *      API::post('localisation/language');
+     *      API::post('localisation/currency');
      *  </code>
      *
      * @access   public
@@ -113,29 +113,29 @@ class Localisation_API_Languages_Controller extends API_Controller
      */
     public function post_index()
     {
-        // Create the language.
+        // Create the currency.
         //
-        $language = new Language();
+        $currency = new Currency();
 
-        // Update the language data.
+        // Update the currency data.
         //
-        $language->name   = Input::get('name');
-        $language->slug   = \Str::slug(Input::get('name'));
-        $language->code   = strtoupper(Input::get('code'));
-        $language->locale = Input::get('locale');
-        $language->status = Input::get('status');
+        $currency->name   = Input::get('name');
+        $currency->slug   = \Str::slug(Input::get('name'));
+        $currency->code   = strtoupper(Input::get('code'));
+        $currency->locale = Input::get('locale');
+        $currency->status = Input::get('status');
 
         try
         {
-            // Save the language.
+            // Save the currency.
             //
-            if ($language->save())
+            if ($currency->save())
             {
                 // Return a response.
                 //
                 return new Response(array(
-                    'message' => Lang::line('localisation::languages/message.create.success', array('language' => $language->name))->get(),
-                    'slug'    => $language->slug
+                    'message' => Lang::line('localisation::currencies/message.create.success', array('currency' => $currency->name))->get(),
+                    'slug'    => $currency->slug
                 ), API::STATUS_CREATED);
             }
 
@@ -146,9 +146,9 @@ class Localisation_API_Languages_Controller extends API_Controller
                 // Return a response.
                 //
                 return new Response(array(
-                    'message' => Lang::line('localisation::languages/message.create.fail')->get(),
-                    'errors'  => ($language->validation()->errors->has()) ? $language->validation()->errors->all() : array()
-                ), ($language->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
+                    'message' => Lang::line('localisation::currencies/message.create.fail')->get(),
+                    'errors'  => ($currency->validation()->errors->has()) ? $currency->validation()->errors->all() : array()
+                ), ($currency->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
             }
         }
         catch (Exception $e)
@@ -167,50 +167,50 @@ class Localisation_API_Languages_Controller extends API_Controller
      * Function: put_index()
      * --------------------------------------------------------------------------
      *
-     * Edits a given language using the provided language id, language code 
-     * or by using the language slug.
+     * Edits a given currency using the provided currency id, currency code 
+     * or by using the currency slug.
      *
      *  <code>
-     *      $language = API::put('localisation/language/1');
-     *      $language = API::put('localisation/language/en');
-     *      $language = API::put('localisation/language/english');
+     *      $currency = API::put('localisation/currency/1');
+     *      $currency = API::put('localisation/currency/usd');
+     *      $currency = API::put('localisation/currency/us-dollar');
      *  </code>
      *
      * @access   public
      * @param    mixed
      * @return   Response
      */
-    public function put_index($language_code)
+    public function put_index($currency_code)
     {
-        // Get this language information.
+        // Get this currency information.
         //
-        $language = Language::find($language_code);
+        $currency = Currency::find($currency_code);
 
         // Now update the rules.
         //
-        Language::set_validation(array(
-            'code' => 'required|size:2|unique:languages,code,' . $language->code . ',code'
+        Currency::set_validation(array(
+            'code' => 'required|size:2|unique:currencies,code,' . $currency->code . ',code'
         ));
 
-        // Update the language data.
+        // Update the currency data.
         //
-        $language->name   = Input::get('name');
-        $language->slug   = \Str::slug(Input::get('name'));
-        $language->code   = strtoupper(Input::get('code'));
-        $language->locale = Input::get('locale');
-        $language->status = ( ! $language['default'] ? Input::get('status') : 1 );
+        $currency->name   = Input::get('name');
+        $currency->slug   = \Str::slug(Input::get('name'));
+        $currency->code   = strtoupper(Input::get('code'));
+        $currency->locale = Input::get('locale');
+        $currency->status = ( ! $currency['default'] ? Input::get('status') : 1 );
 
         try
         {
-            // Update the language.
+            // Update the currency.
             //
-            if ($language->save())
+            if ($currency->save())
             {
                 // Return a response.
                 //
                 return new Response(array(
-                    'slug'    => $language->slug,
-                    'message' => Lang::line('localisation::languages/message.update.success', array('language' => $language['name']))->get()
+                    'slug'    => $currency->slug,
+                    'message' => Lang::line('localisation::currencies/message.update.success', array('currency' => $currency['name']))->get()
                 ));
             }
             else
@@ -218,9 +218,9 @@ class Localisation_API_Languages_Controller extends API_Controller
                 // Return a response.
                 //
                 return new Response(array(
-                    'message' => Lang::line('localisation::languages/message.update.fail', array('language' => $language['name']))->get(),
-                    'errors'  => ($language->validation()->errors->has()) ? $language->validation()->errors->all() : array()
-                ), ($language->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
+                    'message' => Lang::line('localisation::currencies/message.update.fail', array('currency' => $currency['name']))->get(),
+                    'errors'  => ($currency->validation()->errors->has()) ? $currency->validation()->errors->all() : array()
+                ), ($currency->validation()->errors->has()) ? API::STATUS_BAD_REQUEST : API::STATUS_UNPROCESSABLE_ENTITY);
             }
         }
         catch (Exception $e)
@@ -240,59 +240,59 @@ class Localisation_API_Languages_Controller extends API_Controller
      * Function: delete_index()
      * --------------------------------------------------------------------------
      *
-     * Deletes a given language using the provided language id, language code 
-     * or by using the language slug.
+     * Deletes a given currency using the provided currency id, currency code 
+     * or by using the currency slug.
      *
      *  <code>
-     *      $language = API::delete('localisation/language/1');
-     *      $language = API::delete('localisation/language/en');
-     *      $language = API::delete('localisation/language/english');
+     *      $currency = API::put('localisation/currency/1');
+     *      $currency = API::put('localisation/currency/usd');
+     *      $currency = API::put('localisation/currency/us-dollar');
      *  </code>
      *
      * @access   public
      * @param    mixed
      * @return   Response
      */
-    public function delete_index($language_code)
+    public function delete_index($currency_code)
     {
         try
         {
-            // Get this language information.
+            // Get this currency information.
             //
-            $language = Language::find($language_code);
+            $currency = Currency::find($currency_code);
         }
         catch (Exception $e)
         {
             // Return a response.
             //
             return new Response(array(
-                'message' => Lang::line('localisation::languages/message.error.not_found', array('language' => $language_code))->get()
+                'message' => Lang::line('localisation::currencies/message.error.not_found', array('currency' => $currency_code))->get()
             ), API::STATUS_NOT_FOUND);
         }
 
-        // Check if this is a default language.
+        // Check if this is a default currency.
         //
-        if ($language['default'])
+        if ($currency['default'])
         {
             // Return a response.
             //
             return new Response( array(
-                'message' => Lang::line('localisation::languages/message.delete.single.being_used')->get()
+                'message' => Lang::line('localisation::currencies/message.delete.single.being_used')->get()
             ), API::STATUS_BAD_REQUEST);
         }
 
-        // Try to delete the language.
+        // Try to delete the currency.
         //
         try
         {
-            // Delete the language.
+            // Delete the currency.
             //
-            $language->delete();
+            $currency->delete();
 
             // Return a response.
             //
             return new Response(array(
-                'message' => Lang::line('localisation::languages/message.delete.single.success', array('language' => $language->name))->get()
+                'message' => Lang::line('localisation::currencies/message.delete.single.success', array('currency' => $currency->name))->get()
             ));
         }
         catch (Exception $e)
@@ -300,7 +300,7 @@ class Localisation_API_Languages_Controller extends API_Controller
             // Return a response.
             //
             return new Response( array(
-                'message' => Lang::line('localisation::languages/message.delete.single.fail', array('language' => $language->name))->get()
+                'message' => Lang::line('localisation::currencies/message.delete.single.fail', array('currency' => $currency->name))->get()
             ), API::STATUS_BAD_REQUEST);
         }
     }
@@ -314,7 +314,7 @@ class Localisation_API_Languages_Controller extends API_Controller
      * Returns fields required for a Platform.table.
      *
      *  <code>
-     *      API::get('localisation/languages/datatable');
+     *      API::get('localisation/currencies/datatable');
      *  </code>
      *
      * @access   public
@@ -323,29 +323,29 @@ class Localisation_API_Languages_Controller extends API_Controller
      */
     public function get_datatable()
     {
-        // Get the default language.
+        // Get the default currency.
         //
-        $default_language = strtoupper(Platform::get('localisation.site.language'));
+        $default_currency = strtoupper(Platform::get('localisation.site.currency'));
 
 
         $defaults = array(
             'select'   => array(
-                'languages.id'   => 'id',
-                'languages.name' => 'name',
-                'languages.code' => 'code',
-                'languages.slug' => 'slug'
+                'currencies.id'   => 'id',
+                'currencies.name' => 'name',
+                'currencies.code' => 'code',
+                'currencies.slug' => 'slug'
             ),
             'where'    => array(),
-            'order_by' => array('languages.name' => 'asc')
+            'order_by' => array('currencies.id' => 'asc')
         );
 
-        // Count the total of languages.
+        // Count the total of currencies.
         //
-        $count_total = Language::count();
+        $count_total = Currency::count();
 
         // get the filtered count
         // we set to distinct because a user can be in multiple groups
-        $count_filtered = Language::count_distinct('languages.id', function($query) use ($defaults)
+        $count_filtered = Currency::count_distinct('currencies.id', function($query) use ($defaults)
         {
             // sets the where clause from passed settings
             return Table::count($query, $defaults);
@@ -355,9 +355,9 @@ class Localisation_API_Languages_Controller extends API_Controller
         //
         $paging = Table::prep_paging($count_filtered, 20);
 
-        // Get the languages.
+        // Get the currencies.
         //
-        $items = Language::all(function($query) use ($defaults, $paging)
+        $items = Currency::all(function($query) use ($defaults, $paging)
         {
             list($query, $columns) = Table::query($query, $defaults, $paging);
 
@@ -371,7 +371,7 @@ class Localisation_API_Languages_Controller extends API_Controller
             'count'            => $count_total,
             'count_filtered'   => $count_filtered,
             'paging'           => $paging,
-            'default_language' => $default_language
+            'default_currency' => $default_currency
         ));
     }
 
@@ -381,32 +381,32 @@ class Localisation_API_Languages_Controller extends API_Controller
      * Function: put_default()
      * --------------------------------------------------------------------------
      *
-     * Makes a language the default language on the system.
+     * Makes a currency the default currency on the system.
      *
      *  <code>
-     *      $language = API::put('localisation/language/default/1');
-     *      $language = API::put('localisation/language/default/en');
-     *      $language = API::put('localisation/language/default/english');
+     *      $currency = API::put('localisation/currency/1');
+     *      $currency = API::put('localisation/currency/usd');
+     *      $currency = API::put('localisation/currency/us-dollar');
      *  </code>
      *
      * @access   public
      * @param    mixed
      * @return   Response
      */
-    public function put_default($language_code)
+    public function put_default($currency_code)
     {
-        // Get this language information.
+        // Get this currency information.
         //
-        $language = Language::find($language_code);
+        $currency = Currency::find($currency_code);
         
-        // Check if the language exists.
+        // Check if the currency exists.
         //
-        if (is_null($language))
+        if (is_null($currency))
         {
             // Return a response.
             //
             return new Response(array(
-                'message' => Lang::line('localisation::languages/message.error.not_found', array('language' => $language_code))->get()
+                'message' => Lang::line('localisation::currencies/message.error.not_found', array('currency' => $currency_code))->get()
             ), API::STATUS_NOT_FOUND);
         }
 
@@ -415,13 +415,13 @@ class Localisation_API_Languages_Controller extends API_Controller
         DB::table('settings')
             ->where('extension', '=', 'localisation')
             ->where('type', '=', 'site')
-            ->where('name', '=', 'language')
-            ->update(array('value' => $language['code']));
+            ->where('name', '=', 'currency')
+            ->update(array('value' => $currency['code']));
 
         // Return a response.
         //
         return new Response(array(
-            'message' => Lang::line('localisation::languages/message.update.default', array('language' => $language->name))->get()
+            'message' => Lang::line('localisation::currencies/message.update.default', array('currency' => $currency->name))->get()
         ));
     }
 }

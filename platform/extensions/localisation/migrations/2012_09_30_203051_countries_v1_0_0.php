@@ -11,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.1.0
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -95,9 +95,9 @@ class Localisation_Countries_v1_0_0
             //
             $countries[] = array(
                 'name'               => $country['name'],
-                'slug'               => \Str::slug( $country['name'] ),
-                'iso_code_2'         => strtoupper( $country['iso_code_2'] ),
-                'iso_code_3'         => strtoupper( $country['iso_code_3'] ),
+                'slug'               => \Str::slug($country['name']),
+                'iso_code_2'         => strtoupper($country['iso_code_2']),
+                'iso_code_3'         => strtoupper($country['iso_code_3']),
                 'iso_code_numeric_3' => $country['iso_code_numeric_3'],
                 'region'             => $country['region'],
                 'subregion'          => $country['subregion'],

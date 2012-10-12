@@ -18,32 +18,20 @@
  * @link       http://cartalyst.com
  */
 
-namespace Localisation;
-
 
 /*
  * --------------------------------------------------------------------------
- * What we can use in this class.
+ * Return the language lines.
  * --------------------------------------------------------------------------
  */
-#use Crud;
-
-
-/**
- * --------------------------------------------------------------------------
- * Timezone model Class
- * --------------------------------------------------------------------------
- * 
- * Model to manage timezones.
- *
- * @package    Platform
- * @author     Cartalyst LLC
- * @copyright  (c) 2011 - 2012, Cartalyst LLC
- * @license    BSD License (3-clause)
- * @link       http://cartalyst.com
- * @version    1.0
- */
-class Timezone
-{
-
-}
+return array(
+    'id'            => 'ID',
+    'name'          => 'Currency Name',
+    'slug'          => 'Currency Slug',
+    'code'          => 'Code',
+    'symbol_left'   => 'Symbol Left',
+    'symbol_right'  => 'Symbol Right',
+    'decimal_place' => 'Decimal Place',
+    'rate'          => 'Exchange Rate',
+    'status'        => 'Currency Status'
+);

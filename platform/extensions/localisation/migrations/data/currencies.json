@@ -1,0 +1,26 @@
+{
+    "usd" : {
+        "name"           : "US Dollar",
+        "code"           : "usd",
+        "symbol_left"    : "$",
+        "decimal_places" : "2",
+        "rate"           : "1.00000",
+        "default"        : "1"
+    },
+
+    "euro" : {
+        "name"            : "Euro",
+        "code"            : "eur",
+        "symbol_left"     : "€",
+        "decimal_places"  : "2",
+        "rate"            : ""
+    },
+
+    "gbp" : {
+        "name"            : "Pound Sterling",
+        "code"            : "gbp",
+        "symbol_left"     : "£",
+        "decimal_places"  : "2",
+        "rate"            : ""
+    }
+}

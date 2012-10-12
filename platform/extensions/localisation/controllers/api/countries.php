@@ -11,7 +11,7 @@
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
  * @package    Platform
- * @version    1.0.1
+ * @version    1.1.0
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011 - 2012, Cartalyst LLC
@@ -191,9 +191,9 @@ class Localisation_API_Countries_Controller extends API_Controller
      * or by using the country slug.
      *
      *  <code>
-     *      API::put('localisation/country/232');
-     *      API::put('localisation/country/gb');
-     *      API::put('localisation/country/united-kingdom');
+     *      $country = API::put('localisation/country/232');
+     *      $country = API::put('localisation/country/gb');
+     *      $country = API::put('localisation/country/united-kingdom');
      *  </code>
      *
      * @access   public
@@ -406,9 +406,9 @@ class Localisation_API_Countries_Controller extends API_Controller
      * Makes a country the default country on the system.
      *
      *  <code>
-     *      API::put('localisation/country/default/232');
-     *      API::put('localisation/country/default/gb');
-     *      API::put('localisation/country/default/united-kingdom');
+     *      $country = API::put('localisation/country/default/232');
+     *      $country = API::put('localisation/country/default/gb');
+     *      $country = API::put('localisation/country/default/united-kingdom');
      *  </code>
      *
      * @access   public

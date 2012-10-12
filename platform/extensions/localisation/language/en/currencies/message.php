@@ -31,30 +31,30 @@ return array(
      * -----------------------------------------
      */
     'create' => array(
-        'success' => 'Language :language was successfully created.',
-        'fail'    => 'An error occurred while creating the language !',
+        'success' => 'Currency :currency was successfully created.',
+        'fail'    => 'An error occurred while creating the currency !',
         'errors'  => 'Please check the form for errors'
     ),
 
     'update' => array(
-        'success'       => 'Language :language was successfully updated.',
-        'fail'          => 'An error occurred while updating the language :language !',
-        'disable_error' => 'You cannot disable a default language !',
+        'success'       => 'Currency :currency was successfully updated.',
+        'fail'          => 'An error occurred while updating the currency :currency !',
+        'disable_error' => 'You cannot disable a default currency !',
         'errors'        => 'Please check the form for errors',
-        'default'       => 'Language :language is now the current default system language.'
+        'default'       => 'Currency :currency is now the current default system currency.'
     ),
 
     'delete' => array(
         'single' => array(
-            'confirm'    => 'Are you sure you want to delete the language :language ?',
-            'success'    => 'Language :language was successfully deleted.',
-            'fail'       => 'An error occurred while deleting the language :language.',
-            'being_used' => 'You cannot remove a language that is being used by the system.'
+            'confirm'    => 'Are you sure you want to delete the currency :currency ?',
+            'success'    => 'Currency :currency was successfully deleted.',
+            'fail'       => 'An error occurred while deleting the currency :currency.',
+            'being_used' => 'You cannot remove a currency that is being used by the system.'
         ),
         'multi' => array(
-            'confirm' => 'Are you sure you want to delete these languages ?',
-            'success' => 'The languages selected were succesfully deleted.',
-            'fail'    => 'An error occurred while trying to delete the selected languages'
+            'confirm' => 'Are you sure you want to delete these currencies ?',
+            'success' => 'The currencies selected were succesfully deleted.',
+            'fail'    => 'An error occurred while trying to delete the selected currencies'
         )
     ),
 
@@ -65,6 +65,6 @@ return array(
      * -----------------------------------------
      */
     'error' => array(
-        'not_found' => 'The language #:language was not found !'
+        'not_found' => 'The currency #:currency was not found !'
     )
 );
