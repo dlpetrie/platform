@@ -24,21 +24,21 @@
             <div class="control-group">
                 <label class="control-label" for="name">{{ Lang::line('localisation::languages/table.name')->get() }}</label>
                 <div class="controls">
-                    <input type="text" name="name" id="name" value="{{ Input::old('name'); }}" placeholder="{{ Lang::line('localisation::languages/table.name')->get() }}" required>
+                    <input type="text" name="name" id="name" value="{{ Input::old('name'); }}" placeholder="{{ Lang::line('localisation::languages/table.name')->get() }}" required />
                     <span class="help-block"></span>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="abbreviation">{{ Lang::line('localisation::languages/table.abbreviation')->get() }}</label>
                 <div class="controls">
-                    <input type="text" name="abbreviation" id="abbreviation" value="{{ Input::old('abbreviation'); }}" placeholder="{{ Lang::line('localisation::languages/table.abbreviation')->get() }}" required>
+                    <input type="text" name="abbreviation" id="abbreviation" value="{{ Input::old('abbreviation'); }}" placeholder="{{ Lang::line('localisation::languages/table.abbreviation')->get() }}" required />
                     <span class="help-block"></span>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="locale">{{ Lang::line('localisation::languages/table.locale')->get() }}</label>
                 <div class="controls">
-                    <input type="text" name="locale" id="locale" value="{{ Input::old('locale'); }}" placeholder="{{ Lang::line('localisation::languages/table.locale')->get() }}" required>
+                    <input type="text" name="locale" id="locale" value="{{ Input::old('locale'); }}" placeholder="{{ Lang::line('localisation::languages/table.locale')->get() }}" required />
                     <span class="help-block"></span>
                 </div>
             </div>
@@ -55,8 +55,8 @@
 
         <div class="form-actions">
             <a class="btn btn-large" href="{{ URL::to_admin('localisation/languages') }}">{{ Lang::line('button.cancel')->get() }}</a>
-            <button class="btn btn-large btn-primary" type="submit" name="save" id="save" value="1">{{ Lang::line('button.update')->get() }}</button>
-            <button class="btn btn-large btn-primary" type="submit" name="save_exit" id="save_exit" value="1">{{ Lang::line('button.update_exit')->get() }}</button>
+            <button class="btn btn-large btn-primary" type="submit" name="save" id="save" value="1">{{ Lang::line('button.create')->get() }}</button>
+            <button class="btn btn-large btn-primary" type="submit" name="save_exit" id="save_exit" value="1">{{ Lang::line('button.create_exit')->get() }}</button>
         </div>
     {{ Form::close() }}
 </section>

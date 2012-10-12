@@ -29,10 +29,10 @@ use Platform\Menus\Menu;
 
 /**
  * --------------------------------------------------------------------------
- * Languages Install Class v1.0.0
+ * Currencies Install Class v1.0.0
  * --------------------------------------------------------------------------
  * 
- * Languages installation.
+ * Currencies installation.
  *
  * @package    Platform
  * @author     Cartalyst LLC
@@ -41,7 +41,7 @@ use Platform\Menus\Menu;
  * @link       http://cartalyst.com
  * @version    1.0
  */
-class Localisation_Languages_v1_0_0
+class Localisation_Currencies_v1_0_0
 {
     /**
      * --------------------------------------------------------------------------
@@ -57,15 +57,19 @@ class Localisation_Languages_v1_0_0
     {
         /*
          * --------------------------------------------------------------------------
-         * # 1) Create the language table.
+         * # 1) Create the currencies table.
          * --------------------------------------------------------------------------
          */
-        Schema::create('languages', function($table){
+        Schema::create('currencies', function($table){
             $table->increments('id')->unsigned();
             $table->string('name');
             $table->string('slug');
-            $table->string('abbreviation', 5);
-            $table->string('locale');
+            $table->string('code', 5);
+            $table->string('symbol_left', 5)->nullable();
+            $table->string('symbol_right', 5)->nullable();
+            $table->string('decimal_place', 1)->nullable();
+            $table->decimal('rate', 15, 8)->nullable();
+            $table->integer('cdh_id')->nullable();
             $table->integer('default')->default(0);
             $table->integer('status')->default(1);
             $table->timestamps();
@@ -74,74 +78,79 @@ class Localisation_Languages_v1_0_0
 
         /*
          * --------------------------------------------------------------------------
-         * # 2) Insert the languages.
+         * # 2) Insert the currencies.
          * --------------------------------------------------------------------------
          */
-        // Define a default language, just in case.
+        // Define a default currency, just in case.
         //
-        $default = 'en';
+        $default = 'usd';
 
         // Read the json file.
         //
-        $file = json_decode(File::get(__DIR__ . DS . 'data' . DS . 'languages.json'), true);
+        $file = json_decode(File::get(__DIR__ . DS . 'data' . DS . 'currencies.json'), true);
 
-        // Loop through the languages.
+        // Loop through the currencies.
         //
-        $languages = array();
-        foreach ($file as $language)
+        $currencies = array();
+        foreach ( $file as $currency )
         {
-            $languages[] = array(
-                'name'         => $language['name'],
-                'slug'         => \Str::slug($language['name']),
-                'abbreviation' => $language['abbreviation'],
-                'locale'       => $language['locale'],
-                'default'      => ( isset($language['default']) ? 1 : 0 ),
-                'status'       => ( isset($language['status']) ? $language['status'] : 1 ),
-                'created_at'   => new \DateTime,
-                'updated_at'   => new \DateTime
+            $currencies[] = array(
+                'name'          => $currency['name'],
+                'slug'          => \Str::slug($currency['name']),
+                'code'          => strtoupper($currency['code']),
+                'symbol_left'   => ( isset($currency['symbol_left']) ? $currency['symbol_left'] : '' ),
+                'symbol_right'  => ( isset($currency['symbol_right']) ? $currency['symbol_right'] : '' ),
+                'decimal_place' => ( isset($currency['decimal_place']) ? $currency['decimal_place'] : 2 ),
+                'rate'          => ( isset($currency['rate']) ? $currency['rate'] : '' ),
+                'default'       => ( isset($currency['default']) ? 1 : 0 ),
+                'status'        => ( isset($currency['status']) ? $currency['status'] : 1 ),
+                'created_at'    => new \DateTime,
+                'updated_at'    => new \DateTime
             );
 
-            // Is this a default language ?
+            // Is this a default currency ?
             //
-            if (isset($language['default']))
+            if (isset($currency['default']))
             {
-                // Mark it as the default then.
-                //
-                $default = $language['abbreviation'];
+                $default = $currency['code'];
             }
         }
 
-        // Insert the languages into the database.
+        // Insert the currencies into the database.
         //
-        DB::table('languages')->insert($languages);
+        DB::table('currencies')->insert( $currencies );
 
-        // Set it as the default language.
-        //
+
+        /*
+         * --------------------------------------------------------------------------
+         * # 3) Set the default currency.
+         * --------------------------------------------------------------------------
+         */
         DB::table('settings')->insert(array(
             'extension' => 'localisation',
             'type'      => 'site',
-            'name'      => 'language',
-            'value'     => $default
+            'name'      => 'currency',
+            'value'     => strtoupper($default)
         ));
 
 
         /*
          * --------------------------------------------------------------------------
-         * # 3) Create the menus.
+         * # 4) Create the menus.
          * --------------------------------------------------------------------------
          */
         // Admin > System > Localisation > Languages
         //
         $localisation_menu = Menu::find('admin-localisation');
-        $languages_menu = new Menu(array(
-            'name'          => 'Languages',
-            'extension'     => 'languages',
-            'slug'          => 'admin-languages',
-            'uri'           => 'localisation/languages',
+        $currencies_menu = new Menu(array(
+            'name'          => 'Currencies',
+            'extension'     => 'currencies',
+            'slug'          => 'admin-currencies',
+            'uri'           => 'localisation/currencies',
             'user_editable' => 1,
             'status'        => 1
         ));
-        $languages_menu->last_child_of($localisation_menu);
+        $currencies_menu->last_child_of($localisation_menu);
     }
 
 
@@ -157,17 +166,17 @@ class Localisation_Languages_v1_0_0
      */
     public function down()
     {
-        // Delete the languages table.
+        // Delete the currencies table.
         //
-        Schema::drop('languages');
+        Schema::drop('currencies');
 
         // Delete the record from the settings table.
         //  
-        DB::table('settings')->where('extension', '=', 'localisation')->where('name', '=', 'language')->delete();
+        DB::table('settings')->where('extension', '=', 'localisation')->where('name', '=', 'currency')->delete();
 
         // Delete the menu.
         //
-        if ($menu = Menu::find('admin-languages'))
+        if ($menu = Menu::find('admin-currencies'))
         {
             $menu->delete();
         }

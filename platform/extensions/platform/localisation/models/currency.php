@@ -52,9 +52,10 @@ class Currency extends Crud
      * @param    array
      */
     public static $_rules = array(
-        'name'   => 'required',
-        'code'   => 'required|size:2|unique:currencies,code',
-        'status' => 'required'
+        'name'          => 'required',
+        'code'          => 'required|size:2|unique:currencies,code',
+        'decimal_place' => 'required',
+        'status'        => 'required'
     );
 
 

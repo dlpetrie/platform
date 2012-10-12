@@ -112,8 +112,12 @@ class Localisation_Countries_v1_0_0
         //
         DB::table('countries')->insert( $countries );
 
-        // Make the United Kingdom the default country.
-        //
+
+        /*
+         * --------------------------------------------------------------------------
+         * # 3) Set the default country.
+         * --------------------------------------------------------------------------
+         */
         DB::table('countries')->where('iso_code_2', '=', 'GB')->update(array('default' => 1));
         DB::table('settings')->insert(array(
             'extension' => 'localisation',
@@ -125,7 +129,7 @@ class Localisation_Countries_v1_0_0
 
         /*
          * --------------------------------------------------------------------------
-         * # 3) Create the menu.
+         * # 4) Create the menu.
          * --------------------------------------------------------------------------
          */
         // Admin > System > Localisation > Countries

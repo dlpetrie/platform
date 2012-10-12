@@ -24,14 +24,42 @@
             <div class="control-group">
                 <label class="control-label" for="name">{{ Lang::line('localisation::currencies/table.name')->get() }}</label>
                 <div class="controls">
-                    <input type="text" name="name" id="name" value="{{ Input::old('name', $currency['name']); }}" placeholder="{{ Lang::line('localisation::currencies/table.name')->get() }}" required>
+                    <input type="text" name="name" id="name" value="{{ Input::old('name', $currency['name']); }}" placeholder="{{ Lang::line('localisation::currencies/table.name')->get() }}" required />
                     <span class="help-block"></span>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="code">{{ Lang::line('localisation::currencies/table.code')->get() }}</label>
                 <div class="controls">
-                    <input type="text" name="code" id="code" value="{{ Input::old('code', $currency['code']); }}" placeholder="{{ Lang::line('localisation::currencies/table.code')->get() }}" required>
+                    <input type="text" name="code" id="code" value="{{ Input::old('code', $currency['code']); }}" placeholder="{{ Lang::line('localisation::currencies/table.code')->get() }}" required />
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="symbol_left">{{ Lang::line('localisation::currencies/table.symbol_left')->get() }}</label>
+                <div class="controls">
+                    <input type="text" name="symbol_left" id="symbol_left" value="{{ Input::old('symbol_left', $currency['symbol_left']); }}" placeholder="{{ Lang::line('localisation::currencies/table.symbol_left')->get() }}" />
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="symbol_right">{{ Lang::line('localisation::currencies/table.symbol_right')->get() }}</label>
+                <div class="controls">
+                    <input type="text" name="symbol_right" id="symbol_right" value="{{ Input::old('symbol_right', $currency['symbol_right']); }}" placeholder="{{ Lang::line('localisation::currencies/table.symbol_right')->get() }}" />
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="decimal_place">{{ Lang::line('localisation::currencies/table.decimal_place')->get() }}</label>
+                <div class="controls">
+                    <input type="text" name="decimal_place" id="decimal_place" value="{{ Input::old('decimal_place', $currency['decimal_place']); }}" placeholder="{{ Lang::line('localisation::currencies/table.decimal_place')->get() }}" required />
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="rate">{{ Lang::line('localisation::currencies/table.rate')->get() }}</label>
+                <div class="controls">
+                    <input type="text" name="rate" id="rate" value="{{ Input::old('rate', $currency['rate']); }}" placeholder="{{ Lang::line('localisation::currencies/table.rate')->get() }}" required />
                     <span class="help-block"></span>
                 </div>
             </div>

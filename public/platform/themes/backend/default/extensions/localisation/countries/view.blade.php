@@ -24,42 +24,42 @@
             <div class="control-group">
                 <label class="control-label" for="name">{{ Lang::line('localisation::countries/table.name')->get() }}</label>
                 <div class="controls">
-                    <input type="text" name="name" id="name" value="{{ Input::old('name', $country['name']); }}" placeholder="{{ Lang::line('localisation::countries/table.name')->get() }}" required>
+                    <input type="text" name="name" id="name" value="{{ Input::old('name', $country['name']); }}" placeholder="{{ Lang::line('localisation::countries/table.name')->get() }}" required />
                     <span class="help-block"></span>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="iso_code_2">{{ Lang::line('localisation::countries/table.iso_code_2')->get() }}</label>
                 <div class="controls">
-                    <input type="text" name="iso_code_2" id="iso_code_2" value="{{ Input::old('iso_code_2', $country['iso_code_2']); }}" placeholder="{{ Lang::line('localisation::countries/table.iso_code_2')->get() }}" required>
+                    <input type="text" name="iso_code_2" id="iso_code_2" value="{{ Input::old('iso_code_2', $country['iso_code_2']); }}" placeholder="{{ Lang::line('localisation::countries/table.iso_code_2')->get() }}" required />
                     <span class="help-block"></span>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="iso_code_3">{{ Lang::line('localisation::countries/table.iso_code_3')->get() }}</label>
                 <div class="controls">
-                    <input type="text" name="iso_code_3" id="iso_code_3" value="{{ Input::old('iso_code_3', $country['iso_code_3']); }}" placeholder="{{ Lang::line('localisation::countries/table.iso_code_3')->get() }}" required>
+                    <input type="text" name="iso_code_3" id="iso_code_3" value="{{ Input::old('iso_code_3', $country['iso_code_3']); }}" placeholder="{{ Lang::line('localisation::countries/table.iso_code_3')->get() }}" required />
                     <span class="help-block"></span>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="iso_code_numeric_3">{{ Lang::line('localisation::countries/table.iso_code_numeric_3')->get() }}</label>
                 <div class="controls">
-                    <input type="text" name="iso_code_numeric_3" id="iso_code_numeric_3" value="{{ Input::old('iso_code_numeric_3', $country['iso_code_numeric_3']); }}" placeholder="{{ Lang::line('localisation::countries/table.iso_code_numeric_3')->get() }}" required>
+                    <input type="text" name="iso_code_numeric_3" id="iso_code_numeric_3" value="{{ Input::old('iso_code_numeric_3', $country['iso_code_numeric_3']); }}" placeholder="{{ Lang::line('localisation::countries/table.iso_code_numeric_3')->get() }}" required />
                     <span class="help-block"></span>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="region">{{ Lang::line('localisation::countries/table.region')->get() }}</label>
                 <div class="controls">
-                    <input type="text" name="region" id="region" value="{{ Input::old('region', $country['region']); }}" placeholder="{{ Lang::line('localisation::countries/table.region')->get() }}">
+                    <input type="text" name="region" id="region" value="{{ Input::old('region', $country['region']); }}" placeholder="{{ Lang::line('localisation::countries/table.region')->get() }}" />
                     <span class="help-block"></span>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="subregion">{{ Lang::line('localisation::countries/table.subregion')->get() }}</label>
                 <div class="controls">
-                    <input type="text" name="subregion" id="subregion" value="{{ Input::old('subregion', $country['subregion']); }}" placeholder="{{ Lang::line('localisation::countries/table.subregion')->get() }}">
+                    <input type="text" name="subregion" id="subregion" value="{{ Input::old('subregion', $country['subregion']); }}" placeholder="{{ Lang::line('localisation::countries/table.subregion')->get() }}" />
                     <span class="help-block"></span>
                 </div>
             </div>

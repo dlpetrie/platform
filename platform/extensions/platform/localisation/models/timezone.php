@@ -173,14 +173,18 @@ class Timezone
     );
 
 
-
+    /**
+     * --------------------------------------------------------------------------
+     * Function: all()
+     * --------------------------------------------------------------------------
+     *
+     * Returns an array with the timezones.
+     *
+     * @access   public
+     * @return   array
+     */
     public static function all()
     {
         return static::$timezones;
-    }
-
-    public static function find($condition = 'all')
-    {
-
     }
 }
