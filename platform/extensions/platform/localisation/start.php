@@ -67,14 +67,14 @@ if (Platform::extensions_manager()->is_enabled('localisation'))
 
     // Set the Openexchangerates.org API Key.
     //
-    if (($api_key = $settings['currency_appkey']) != '')
+    if (($api_key = $settings['currency_api_key']) != '')
     {
-        Config::set('application.currency_appkey', $api_key);
+        Config::set('application.currency_api_key', $api_key);
     }
 
     // Update the currencies exchange rates.
     //
-    if ($api_key && $auto_update = $settings['currency_auto_update'])
+    if ($api_key && ($auto_update = $settings['currency_auto_update']) > 0)
     {
         // Store the value.
         //

@@ -167,9 +167,9 @@ function timezones()
 function currencies_update_intervals()
 {
     return array(
-        0 => Lang::line('Localisation::form.general.disabled')->get(),
-        1 => Lang::line('Localisation::form.general.everyday')->get(),
-        2 => Lang::line('Localisation::form.general.once_week')->get(),
-        3 => Lang::line('Localisation::form.general.once_month')->get()
+        0       => Lang::line('Localisation::form.general.disabled')->get(),
+        86400   => Lang::line('Localisation::form.general.everyday')->get(),
+        604800  => Lang::line('Localisation::form.general.once_week')->get(),
+        2592000 => Lang::line('Localisation::form.general.once_month')->get()
     );
 }

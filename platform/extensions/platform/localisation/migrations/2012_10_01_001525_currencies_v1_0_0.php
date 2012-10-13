@@ -149,7 +149,7 @@ class Localisation_Currencies_v1_0_0
         DB::table('settings')->insert(array(
             'extension' => 'localisation',
             'type'      => 'site',
-            'name'      => 'currency_appkey',
+            'name'      => 'currency_api_key',
             'value'     =>  ''
         ));
 

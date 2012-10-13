@@ -167,7 +167,7 @@ class Currency extends Crud
     {
         // First of all, check if we have the API Key for Openexchangerates.org set.
         //
-        if ( ! $app_key = \Config::get('application.currency_appkey'))
+        if ( ! $app_key = \Config::get('application.currency_api_key'))
         {
             return false;
         }
