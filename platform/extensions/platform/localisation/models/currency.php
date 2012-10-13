@@ -157,7 +157,7 @@ class Currency extends Crud
      * Function: update_currencies()
      * --------------------------------------------------------------------------
      *
-     * Updates or adds new rules to be validated.
+     * Updates the currencies rates.
      *
      * @access   public
      * @param    boolean

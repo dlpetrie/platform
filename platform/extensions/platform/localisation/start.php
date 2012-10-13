@@ -65,13 +65,16 @@ if (Platform::extensions_manager()->is_enabled('localisation'))
     //
     Config::set('application.timezone', strtolower($settings['timezone']));
 
-
-    Config::set('application.currency_appkey', 'eea4dc56db814a0eb5c57c38e40876f8');
-
+    // Set the Openexchangerates.org API Key.
+    //
+    if (($api_key = $settings['currency_appkey']) != '')
+    {
+        Config::set('application.currency_appkey', $api_key);
+    }
 
     // Update the currencies exchange rates.
     //
-    if ($auto_update = $settings['currency_auto_update'])
+    if ($api_key && $auto_update = $settings['currency_auto_update'])
     {
         // Store the value.
         //

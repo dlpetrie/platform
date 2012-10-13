@@ -119,11 +119,14 @@ class Localisation_API_Currencies_Controller extends API_Controller
 
         // Update the currency data.
         //
-        $currency->name   = Input::get('name');
-        $currency->slug   = \Str::slug(Input::get('name'));
-        $currency->code   = strtoupper(Input::get('code'));
-        $currency->locale = Input::get('locale');
-        $currency->status = Input::get('status');
+        $currency->name          = Input::get('name');
+        $currency->slug          = \Str::slug(Input::get('name'));
+        $currency->code          = strtoupper(Input::get('code'));
+        $currency->symbol_left   = Input::get('symbol_left');
+        $currency->symbol_right  = Input::get('symbol_right');
+        $currency->decimal_place = Input::get('decimal_place');
+        $currency->rate          = Input::get('rate');
+        $currency->status        = Input::get('status');
 
         try
         {
@@ -194,10 +197,14 @@ class Localisation_API_Currencies_Controller extends API_Controller
 
         // Update the currency data.
         //
-        $currency->name   = Input::get('name');
-        $currency->slug   = \Str::slug(Input::get('name'));
-        $currency->code   = strtoupper(Input::get('code'));
-        $currency->status = ( ! $currency['default'] ? Input::get('status') : 1 );
+        $currency->name          = Input::get('name');
+        $currency->slug          = \Str::slug(Input::get('name'));
+        $currency->code          = strtoupper(Input::get('code'));
+        $currency->symbol_left   = Input::get('symbol_left');
+        $currency->symbol_right  = Input::get('symbol_right');
+        $currency->decimal_place = Input::get('decimal_place');
+        $currency->rate          = Input::get('rate');
+        $currency->status        = ( ! $currency['default'] ? Input::get('status') : 1 );
 
         try
         {

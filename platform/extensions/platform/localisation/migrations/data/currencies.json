@@ -4,7 +4,7 @@
         "code"           : "usd",
         "symbol_left"    : "$",
         "decimal_places" : "2",
-        "rate"           : "1.00000",
+        "rate"           : "1.00000000",
         "default"        : "1"
     },
 
@@ -13,7 +13,7 @@
         "code"            : "eur",
         "symbol_left"     : "€",
         "decimal_places"  : "2",
-        "rate"            : ""
+        "rate"            : "0.77176000"
     },
 
     "gbp" : {
@@ -21,6 +21,6 @@
         "code"            : "gbp",
         "symbol_left"     : "£",
         "decimal_places"  : "2",
-        "rate"            : ""
+        "rate"            : "0.62207300"
     }
 }

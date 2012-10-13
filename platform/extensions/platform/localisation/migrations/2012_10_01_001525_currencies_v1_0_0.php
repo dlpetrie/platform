@@ -123,9 +123,11 @@ class Localisation_Currencies_v1_0_0
 
         /*
          * --------------------------------------------------------------------------
-         * # 3) Set the default currency.
+         * # 3) Make some inserts into the settings table.
          * --------------------------------------------------------------------------
          */
+        // Set the default currency.
+        //
         DB::table('settings')->insert(array(
             'extension' => 'localisation',
             'type'      => 'site',
@@ -133,12 +135,8 @@ class Localisation_Currencies_v1_0_0
             'value'     => strtoupper($default)
         ));
 
-
-        /*
-         * --------------------------------------------------------------------------
-         * # 4) Set the currency update to once a week.
-         * --------------------------------------------------------------------------
-         */
+        // Set the interval time for every rate update.
+        //
         DB::table('settings')->insert(array(
             'extension' => 'localisation',
             'type'      => 'site',
@@ -146,10 +144,19 @@ class Localisation_Currencies_v1_0_0
             'value'     =>  604800
         ));
 
+        // Set the default API Key for Openexchangerates.org
+        //
+        DB::table('settings')->insert(array(
+            'extension' => 'localisation',
+            'type'      => 'site',
+            'name'      => 'currency_appkey',
+            'value'     =>  ''
+        ));
+
 
         /*
          * --------------------------------------------------------------------------
-         * # 5) Create the menus.
+         * # 4) Create the menus.
          * --------------------------------------------------------------------------
          */
         // Admin > System > Localisation > Languages
