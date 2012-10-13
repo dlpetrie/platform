@@ -192,7 +192,7 @@ class Localisation_Currencies_v1_0_0
 
         // Delete the record from the settings table.
         //  
-        DB::table('settings')->where('extension', '=', 'localisation')->where('name', '=', 'currency')->delete();
+        DB::table('settings')->where('extension', '=', 'localisation')->where('name', 'LIKE', '%currency%')->delete();
 
         // Delete the menu.
         //
