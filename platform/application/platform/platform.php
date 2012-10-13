@@ -681,14 +681,15 @@ class Platform
      */
     public static function license($file = null)
     {
-    	// start filesystem
-    	$filesystem = Filesystem::make();
+        // Start the filesystem.
+        //
+        $filesystem = Filesystem::make();
 
         // If no file is passed, we return the Platform licence.
         //
         if (is_null($file))
         {
-        	return $filesystem->file()->contents(path('licenses') . 'platform.txt');
+            return $filesystem->file()->contents(path('licenses') . 'platform.txt');
         }
 
         // No file extension found, use the default one.
