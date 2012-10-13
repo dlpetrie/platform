@@ -20,9 +20,6 @@
             <h1>{{ Lang::line('localisation::languages/general.title')->get() }}</h1>
             <p>{{ Lang::line('localisation::languages/general.description.index')->get() }}</p>
         </div>
-        <nav class="tertiary-navigation span6">
-            @widget('platform.menus::menus.nav', 2, 1, 'nav nav-pills pull-right', ADMIN)
-        </nav>
     </header>
 
     <hr />

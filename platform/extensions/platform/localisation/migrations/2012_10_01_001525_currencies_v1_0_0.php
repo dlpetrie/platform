@@ -57,7 +57,7 @@ class Localisation_Currencies_v1_0_0
     {
         /*
          * --------------------------------------------------------------------------
-         * # 1) Create the currencies table.
+         * # 1) Create the necessary tables.
          * --------------------------------------------------------------------------
          */
         Schema::create('currencies', function($table){

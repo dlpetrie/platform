@@ -11,9 +11,6 @@
             <h1>{{ Lang::line('localisation::currencies/general.title')->get() }}</h1>
             <p>{{ Lang::line('localisation::currencies/general.description.delete', array('currency' => $currency['name']))->get() }}</p>
         </div>
-        <nav class="tertiary-navigation span6">
-            @widget('platform.menus::menus.nav', 2, 1, 'nav nav-pills pull-right', ADMIN)
-        </nav>
     </header>
 
     <hr />

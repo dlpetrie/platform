@@ -152,3 +152,24 @@ function timezones()
     //
     return $timezones;
 }
+
+
+/**
+ * --------------------------------------------------------------------------
+ * Function: currencies_update_intervals()
+ * --------------------------------------------------------------------------
+ *
+ * Returns an array of currencies update intervals we can choose from.
+ *
+ * @access   public
+ * @return   array
+ */
+function currencies_update_intervals()
+{
+    return array(
+        0 => Lang::line('Localisation::form.general.disabled')->get(),
+        1 => Lang::line('Localisation::form.general.everyday')->get(),
+        2 => Lang::line('Localisation::form.general.once_week')->get(),
+        3 => Lang::line('Localisation::form.general.once_month')->get()
+    );
+}

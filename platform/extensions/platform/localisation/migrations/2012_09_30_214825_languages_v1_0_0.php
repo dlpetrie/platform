@@ -57,7 +57,7 @@ class Localisation_Languages_v1_0_0
     {
         /*
          * --------------------------------------------------------------------------
-         * # 1) Create the language table.
+         * # 1) Create the necessary tables.
          * --------------------------------------------------------------------------
          */
         Schema::create('languages', function($table){

@@ -57,7 +57,7 @@ class Localisation_Countries_v1_0_0
     {
         /*
          * --------------------------------------------------------------------------
-         * # 1) Create the countries table.
+         * # 1) Create the necessary tables.
          * --------------------------------------------------------------------------
          */
         Schema::create('countries', function($table){
@@ -110,7 +110,7 @@ class Localisation_Countries_v1_0_0
 
         // Insert the countries into the database.
         //
-        DB::table('countries')->insert( $countries );
+        DB::table('countries')->insert($countries);
 
 
         /*

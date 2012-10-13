@@ -11,9 +11,6 @@
             <h1>{{ Lang::line('localisation::countries/general.title')->get() }}</h1>
             <p>{{ Lang::line('localisation::countries/general.description.view', array('country' => $country['name']))->get() }}</p>
         </div>
-        <nav class="tertiary-navigation span6">
-            @widget('platform.menus::menus.nav', 2, 1, 'nav nav-pills pull-right', ADMIN)
-        </nav>
     </header>
 
     <hr />
