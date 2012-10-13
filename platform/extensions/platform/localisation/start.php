@@ -64,4 +64,21 @@ if (Platform::extensions_manager()->is_enabled('localisation'))
     // Set the timezone.
     //
     Config::set('application.timezone', strtolower($settings['timezone']));
+
+
+    Config::set('application.currency_appkey', 'eea4dc56db814a0eb5c57c38e40876f8');
+
+
+    // Update the currencies exchange rates.
+    //
+    if ($auto_update = $settings['currency_auto_update'])
+    {
+        // Store the value.
+        //
+        Config::set('application.currency_auto_update', $auto_update);
+
+        // Proceed with the update.
+        //
+        Platform\Localisation\Currency::update_currencies();
+    }
 }

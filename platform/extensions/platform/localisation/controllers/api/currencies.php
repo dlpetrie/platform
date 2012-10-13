@@ -189,7 +189,7 @@ class Localisation_API_Currencies_Controller extends API_Controller
         // Now update the rules.
         //
         Currency::set_validation(array(
-            'code' => 'required|size:2|unique:currencies,code,' . $currency->code . ',code'
+            'code' => 'required|size:3|unique:currencies,code,' . $currency->code . ',code'
         ));
 
         // Update the currency data.
@@ -197,7 +197,6 @@ class Localisation_API_Currencies_Controller extends API_Controller
         $currency->name   = Input::get('name');
         $currency->slug   = \Str::slug(Input::get('name'));
         $currency->code   = strtoupper(Input::get('code'));
-        $currency->locale = Input::get('locale');
         $currency->status = ( ! $currency['default'] ? Input::get('status') : 1 );
 
         try

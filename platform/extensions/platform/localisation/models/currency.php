@@ -53,7 +53,7 @@ class Currency extends Crud
      */
     public static $_rules = array(
         'name'          => 'required',
-        'code'          => 'required|size:2|unique:currencies,code',
+        'code'          => 'required|size:3|unique:currencies,code',
         'decimal_place' => 'required',
         'status'        => 'required'
     );
@@ -149,5 +149,79 @@ class Currency extends Crud
         // Call parent.
         //
         return parent::find($condition, $columns, $events);
+    }
+
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: update_currencies()
+     * --------------------------------------------------------------------------
+     *
+     * Updates or adds new rules to be validated.
+     *
+     * @access   public
+     * @param    boolean
+     * @return   boolean
+     */
+    public static function update_currencies($force = false)
+    {
+        // First of all, check if we have the API Key for Openexchangerates.org set.
+        //
+        if ( ! $app_key = \Config::get('application.currency_appkey'))
+        {
+            return false;
+        }
+
+        // Check the log file to see when we ran the updater for the last time.
+        //
+        if (file_exists($file = \Bundle::path('localisation') . 'data' . DS . 'currencies.json') and $force === false)
+        {
+            // Check if we need to update currencies or not.
+            //
+            if (time() - filemtime($file) <= \Config::get('application.currency_auto_update'))
+            {
+                return false;
+            }
+        }
+
+        // Check if we have cURL enabled.
+        //
+        if (function_exists('curl_version'))
+        {
+            // Make the API request.
+            //
+            $ch = curl_init('http://openexchangerates.org/api/latest.json?app_id=' . $app_key);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            // Decode the response.
+            //
+            $json = json_decode($response);
+
+            // Loop through the currencies, so we can update their rates.
+            //
+            foreach(static::all() as $currency)
+            {
+                $code = $currency['code'];
+                $update = array(
+                    'code' => $code,
+                    'rate' => $json->rates->$code
+                );
+
+                // Update this currency.
+                //
+                \DB::table('currencies')->where('code', '=', $code)->update($update);
+            }
+
+            // Update the currencies file.
+            //
+            \File::put($file, $response);
+        }
+
+        // Currencies updated with success.
+        //
+        return true;
     }
 }
