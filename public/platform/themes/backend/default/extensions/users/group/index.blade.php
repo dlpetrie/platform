@@ -24,7 +24,7 @@
 @section('content')
 <section id="groups">
 
-	<header class="head row">
+	<header class="head row-fluid">
 		<div class="span6">
 			<h1>{{ Lang::line('users::general.groups.title') }}</h1>
 			<p>{{ Lang::line('users::general.groups.description') }}</p>
@@ -41,7 +41,7 @@
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="row-fluid">
 			<div class="span12">
 				<div class="row">
 					<ul id="table-filters-applied" class="nav nav-tabs span10"></ul>

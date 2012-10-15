@@ -41,7 +41,7 @@
 
 <section id="users">
 
-	<header class="head row">
+	<header class="head row-fluid">
 		<div class="span4">
 			<h1>{{ Lang::line('users::general.users.create.title') }}</h1>
 			<p>{{ Lang::line('users::general.users.create.description') }}</p>
@@ -50,7 +50,7 @@
 
 	<hr>
 
-	<div class="row">
+	<div class="row-fluid">
 		<div class="span12">
 			@widget('platform.users::admin.user.form.create')
 		</div>

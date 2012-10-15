@@ -25,28 +25,29 @@
  * --------------------------------------------------------------------------
  */
 return array(
-	/*
+    /*
      * -----------------------------------------
-	 * Extension information.
+     * Extension information.
      * -----------------------------------------
-	 */
-	'info' => array(
-		'name'        => 'Themes',
-		'author'      => 'Cartalyst LLC',
-		'description' => 'Manages your website themes.',
-		'version'     => '1.1',
-		'is_core'     => true
-	),
+     */
+    'info' => array(
+        'name'        => 'Themes',
+        'author'      => 'Cartalyst LLC',
+        'description' => 'Manages your website themes.',
+        'version'     => '1.1',
+        'is_core'     => true
+    ),
+
 
     /*
      * -----------------------------------------
      * Extension dependencies.
      * -----------------------------------------
      */
-	'dependencies' => array(
-		'menus',
-		'settings'
-	),
+    'dependencies' => array(
+        'menus',
+        'settings'
+    ),
 
 
     /*
@@ -54,11 +55,11 @@ return array(
      * Events
      * -----------------------------------------
      */
-	'events' => array(
-		'theme.create',
-		'theme.update',
-		'theme.delete'
-	),
+    'events' => array(
+        'theme.create',
+        'theme.update',
+        'theme.delete'
+    ),
 
 
     /*
@@ -66,10 +67,10 @@ return array(
      * Rules
      * -----------------------------------------
      */
-	'rules' => array(
-		'themes::admin.themes@frontend',
-		'themes::admin.themes@backend',
-		'themes::admin.themes@edit',
-		'themes::admin.themes@activate'
-	)
+    'rules' => array(
+        'themes::admin.themes@frontend',
+        'themes::admin.themes@backend',
+        'themes::admin.themes@edit',
+        'themes::admin.themes@activate'
+    )
 );

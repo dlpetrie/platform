@@ -29,10 +29,10 @@ use Platform\Menus\Menu;
 
 /**
  * --------------------------------------------------------------------------
- * Install Class
+ * Install Class v1.0.0
  * --------------------------------------------------------------------------
  * 
- * Dashboard installation.
+ * Extensions installation.
  *
  * @package    Platform
  * @author     Cartalyst LLC
@@ -40,7 +40,7 @@ use Platform\Menus\Menu;
  * @license    BSD License (3-clause)
  * @link       http://cartalyst.com
  */
-class Dashboard_Install
+class Extensions_v1_0_0
 {
     /**
      * --------------------------------------------------------------------------
@@ -59,16 +59,21 @@ class Dashboard_Install
          * # 1) Create the menus.
          * --------------------------------------------------------------------------
          */
-        $admin_menu = Menu::admin_menu();
-        $dashboard = new Menu(array(
-            'name'          => 'Dashboard',
-            'extension'     => 'dashboard',
-            'slug'          => 'admin-dashboard',
-            'uri'           => 'dashboard',
+        // Get the System menu.
+        //
+        $system = Menu::find('admin-system');
+
+        // Admin > System > Extensions
+        //
+        $extensions = new Menu(array(
+            'name'          => 'Extensions',
+            'extension'     => 'extensions',
+            'slug'          => 'admin-extensions',
+            'uri'           => 'extensions',
             'user_editable' => 0,
             'status'        => 1
         ));
-        $dashboard->first_child_of($admin_menu);
+        $extensions->last_child_of($system);
     }
 
 
@@ -84,6 +89,14 @@ class Dashboard_Install
      */
     public function down()
     {
-
+        /*
+         * --------------------------------------------------------------------------
+         * # 1) Delete the menus.
+         * --------------------------------------------------------------------------
+         */
+        if ($menu = Menu::find('admin-extensions'))
+        {
+            $menu->delete();
+        }
     }
 }

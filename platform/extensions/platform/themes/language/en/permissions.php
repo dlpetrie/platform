@@ -25,15 +25,14 @@
  * --------------------------------------------------------------------------
  */
 return array(
+    'admin' => array(
+        'themes' => array(
+            '_title_'  => 'Admin Themes',
 
-	'admin' => array(
-		'themes' => array(
-			'_title_'  => 'Admin Themes',
-			'frontend' => 'Frontend',
-			'backend'  => 'Backend',
-			'edit'     => 'Edit',
-			'activate' => 'Activate',
-		),
-	)
-
+            'frontend' => 'Frontend',
+            'backend'  => 'Backend',
+            'edit'     => 'Edit',
+            'activate' => 'Activate'
+        )
+    )
 );

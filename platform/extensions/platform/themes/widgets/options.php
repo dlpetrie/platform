@@ -29,40 +29,40 @@ use URI;
 class Options
 {
 
-	public function css()
-	{
-		$active_parts = explode(DS, ltrim(rtrim(Theme::active(), DS), DS));
-		$type         = $active_parts[0];
-		$name         = $active_parts[1];
+    public function css()
+    {
+        $active_parts = explode(DS, ltrim(rtrim(Theme::active(), DS), DS));
+        $type         = $active_parts[0];
+        $name         = $active_parts[1];
 
-		
+        
 
-		// Get active custom theme options
-		try
-		{
-			$options = API::get('themes/'.$type.'/'.$name.'/options');
-		}
-		catch (APIClientException $e)
-		{
-			Platform::messages()->error($e->getMessage());
+        // Get active custom theme options
+        try
+        {
+            $options = API::get('themes/'.$type.'/'.$name.'/options');
+        }
+        catch (APIClientException $e)
+        {
+            Platform::messages()->error($e->getMessage());
 
-			foreach ($e->errors() as $error)
-			{
-				Platform::messages()->error($error);
-			}
+            foreach ($e->errors() as $error)
+            {
+                Platform::messages()->error($error);
+            }
 
-			// Options fallback
-			$options = array();
-		}
+            // Options fallback
+            $options = array();
+        }
 
-		// Get the active status from the database. The admin
-		// compiles the theme_options.css file. We need to know
-		// if it's actually active before including the file (done
-		// in the view).
-		$status = array_get($options, 'status', false);
+        // Get the active status from the database. The admin
+        // compiles the theme_options.css file. We need to know
+        // if it's actually active before including the file (done
+        // in the view).
+        $status = array_get($options, 'status', false);
 
-		return Theme::make('themes::widgets.theme_options_css')
-		            ->with('status', $status);
-	}
+        return Theme::make('themes::widgets.theme_options_css')
+                    ->with('status', $status);
+    }
 
 }

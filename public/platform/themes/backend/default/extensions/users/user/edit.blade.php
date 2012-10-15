@@ -40,7 +40,7 @@
 @section('content')
 <section id="users-edit">
 
-	<header class="head row">
+	<header class="head row-fluid">
 		<div class="span4">
 			<h1>{{ Lang::line('users::general.users.update.title') }}</h1>
 			<p>{{ Lang::line('users::general.users.update.description') }}</p>

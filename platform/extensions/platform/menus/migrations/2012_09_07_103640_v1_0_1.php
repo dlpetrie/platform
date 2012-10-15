@@ -30,7 +30,7 @@ use Platform\Menus\Menu;
 
 /**
  * --------------------------------------------------------------------------
- * Add Class column to Menus
+ * Install Class v1.0.1
  * --------------------------------------------------------------------------
  * 
  * Adds a class column to menus.
@@ -41,7 +41,7 @@ use Platform\Menus\Menu;
  * @license    BSD License (3-clause)
  * @link       http://cartalyst.com
  */
-class Menus_Add_Class_Column
+class Menus_v1_0_1
 {
     /**
      * --------------------------------------------------------------------------
@@ -73,15 +73,15 @@ class Menus_Add_Class_Column
          */
 		// Get the admin menu.
 		//
-		$admin      = Menu::admin_menu();
-		$admin_tree = $admin->{Menu::nesty_col('tree')};
+		$admin_menu    = Menu::admin_menu();
+		$admin_menu_id = $admin_menu->{Menu::nesty_col('tree')};
 
 		// Update the system class.
 		//
-		$system = Menu::find(function($query) use ($admin_tree)
+		$system = Menu::find(function($query) use ($admin_menu_id)
 		{
 			return $query->where('slug', '=', 'admin-system')
-			             ->where(Menu::nesty_col('tree'), '=', $admin_tree);
+			             ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
 		});
 
 		if ($system)
@@ -92,10 +92,10 @@ class Menus_Add_Class_Column
 
 		// Update the menus class.
 		//
-		$menus = Menu::find(function($query) use ($admin_tree)
+		$menus = Menu::find(function($query) use ($admin_menu_id)
 		{
 			return $query->where('slug', '=', 'admin-menus')
-			             ->where(Menu::nesty_col('tree'), '=', $admin_tree);
+			             ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
 		});
 
 		if ($menus)
@@ -118,10 +118,54 @@ class Menus_Add_Class_Column
      */
 	public function down()
 	{
+        /*
+         * --------------------------------------------------------------------------
+         * # 1) Update the menu table.
+         * --------------------------------------------------------------------------
+         */
 		Schema::table('menus', function($table)
 		{
 			$table->drop_column('class');
 		});
+
+
+        /*
+         * --------------------------------------------------------------------------
+         * # 2) Update the menu items.
+         * --------------------------------------------------------------------------
+         */
+		// Get the admin menu.
+		//
+		$admin_menu    = Menu::admin_menu();
+		$admin_menu_id = $admin_menu->{Menu::nesty_col('tree')};
+
+		// Update the system class.
+		//
+		$system = Menu::find(function($query) use ($admin_menu_id)
+		{
+			return $query->where('slug', '=', 'admin-system')
+			             ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
+		});
+
+		if ($system)
+		{
+			$system->class = '';
+			$system->save();
+		}
+
+		// Update the menus class.
+		//
+		$menus = Menu::find(function($query) use ($admin_menu_id)
+		{
+			return $query->where('slug', '=', 'admin-menus')
+			             ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
+		});
+
+		if ($menus)
+		{
+			$menus->class = '';
+			$menus->save();
+		}
 	}
 }
 

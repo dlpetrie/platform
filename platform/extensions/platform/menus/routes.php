@@ -21,7 +21,7 @@
 
 /*
  * All reserved API routes should be put here.
- * Menu children cannot match these routes.
+ *
  */
 $reserved = implode('|', array(
     'active', 'active_path'
@@ -61,5 +61,6 @@ Route::any(API . '/menus/((?!' . $reserved . ').*)', 'menus::api.menus@index');
 
 /*
  * Unset the $reserved variable from the global namespace.
+ *
  */
 unset($reserved);

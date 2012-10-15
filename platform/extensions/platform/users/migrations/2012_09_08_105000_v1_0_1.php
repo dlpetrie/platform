@@ -40,7 +40,7 @@ use Platform\Menus\Menu;
  * @license    BSD License (3-clause)
  * @link       http://cartalyst.com
  */
-class Settings_v1_0_1
+class Users_v1_0_1
 {
     /**
      * --------------------------------------------------------------------------
@@ -64,18 +64,46 @@ class Settings_v1_0_1
         $admin_menu    = Menu::admin_menu();
         $admin_menu_id = $admin_menu->{Menu::nesty_col('tree')};
 
-        // Update the settings link.
+        // Update the users link.
         //
-        $settings = Menu::find(function($query) use ($admin_menu_id)
+        $users = Menu::find(function($query) use ($admin_menu_id)
         {
-            return $query->where('slug', '=', 'admin-settings')
+            return $query->where('slug', '=', 'admin-users')
                          ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
         });
 
-        if ($settings)
+        if ($users)
         {
-            $settings->class = 'icon-cog';
-            $settings->save();
+            $users->class = 'icon-user';
+            $users->save();
+        }
+
+        // Update the users list link.
+        //
+        $users_list = Menu::find(function($query) use ($admin_menu_id)
+        {
+            return $query->where('slug', '=', 'admin-users-list')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
+        });
+
+        if ($users_list)
+        {
+            $users_list->class = 'icon-user';
+            $users_list->save();
+        }
+
+        // Update the groups list link.
+        //
+        $groups_list = Menu::find(function($query) use ($admin_menu_id)
+        {
+            return $query->where('slug', '=', 'admin-groups-list')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
+        });
+
+        if ($groups_list)
+        {
+            $groups_list->class = 'icon-user';
+            $groups_list->save();
         }
     }
 
@@ -102,18 +130,46 @@ class Settings_v1_0_1
         $admin_menu    = Menu::admin_menu();
         $admin_menu_id = $admin_menu->{Menu::nesty_col('tree')};
 
-        // Update the settings link.
+        // Update the users link.
         //
-        $settings = Menu::find(function($query) use ($admin_menu_id)
+        $users = Menu::find(function($query) use ($admin_menu_id)
         {
-            return $query->where('slug', '=', 'admin-settings')
+            return $query->where('slug', '=', 'admin-users')
+                        ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
+        });
+
+        if ($users)
+        {
+            $users->class = '';
+            $users->save();
+        }
+
+        // Update the users list link.
+        //
+        $users_list = Menu::find(function($query) use ($admin_menu_id)
+        {
+            return $query->where('slug', '=', 'admin-users-list')
                          ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
         });
 
-        if ($settings)
+        if ($users_list)
         {
-            $settings->class = '';
-            $settings->save();
+            $users_list->class = '';
+            $users_list->save();
+        }
+
+        // Update the groups list link.
+        //
+        $groups_list = Menu::find(function($query) use ($admin_menu_id)
+        {
+            return $query->where('slug', '=', 'admin-groups-list')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
+        });
+
+        if ($groups_list)
+        {
+            $groups_list->class = '';
+            $groups_list->save();
         }
     }
 }

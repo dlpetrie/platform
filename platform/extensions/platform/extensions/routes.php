@@ -22,8 +22,8 @@
 /**
  * Route /api/extensions/:extension
  *
- *	<code>
- *		/api/extensions/users => extensions::extensions.api@index(users)
- *	</code>
+ *  <code>
+ *      /api/extensions/users => extensions::extensions.api@index(users)
+ *  </code>
  */
 Route::any(API . '/extensions/(:any)', 'extensions::api.extensions@index');

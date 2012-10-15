@@ -33,7 +33,7 @@ use Platform\Menus\Menu,
  * Settings > Admin Class
  * --------------------------------------------------------------------------
  *
- * Settings to manage your website settings.
+ * Class to manage your website settings.
  *
  * @package    Platform
  * @author     Cartalyst LLC

@@ -32,7 +32,7 @@ use Platform\Menus\Menu;
  * Install Class v1.0.0
  * --------------------------------------------------------------------------
  * 
- * Settings installation.
+ * Extensions installation.
  *
  * @package    Platform
  * @author     Cartalyst LLC
@@ -40,7 +40,7 @@ use Platform\Menus\Menu;
  * @license    BSD License (3-clause)
  * @link       http://cartalyst.com
  */
-class Settings_v1_0_0
+class Themes_v1_0_0
 {
     /**
      * --------------------------------------------------------------------------
@@ -56,69 +56,93 @@ class Settings_v1_0_0
     {
         /*
          * --------------------------------------------------------------------------
-         * # 1) Create the settings table.
+         * # 1) Create the necessary tables.
          * --------------------------------------------------------------------------
          */
-        Schema::create('settings', function($table)
+        Schema::create('theme_options', function($table)
         {
             $table->increments('id')->unsigned();
-            $table->string('extension');
             $table->string('type');
-            $table->string('name');
-            $table->text('value');
+            $table->string('theme');
+            $table->text('options')->nullable();
+            $table->boolean('status');
         });
 
 
         /*
          * --------------------------------------------------------------------------
-         * # 2) Configuration settings.
-         * --------------------------------------------------------------------------
-         */
-        $settings = array(
-            // Website title.
-            //
-            array(
-                'extension' => 'settings',
-                'type'      => 'site',
-                'name'      => 'title',
-                'value'     => 'Platform'
-            ),
-
-            // Website tagline.
-            //
-            array(
-                'extension' => 'settings',
-                'type'      => 'site',
-                'name'      => 'tagline',
-                'value'     => 'A base application on Laravel'
-            )
-        );
-
-        // Insert the settings into the database.
-        //
-        DB::table('settings')->insert($settings);
-
-
-        /*
-         * --------------------------------------------------------------------------
-         * # 3) Create the menus.
+         * # 2) Create the menus.
          * --------------------------------------------------------------------------
          */
         // Get the System menu.
         //
         $system = Menu::find('admin-system');
 
-        // Admin > System > Settings
+        // Admin > System > Themes
         //
-        $settings = new Menu(array(
-            'name'          => 'Settings',
-            'extension'     => 'settings',
-            'slug'          => 'admin-settings',
-            'uri'           => 'settings',
+        $themes = new Menu(array(
+            'name'          => 'Themes',
+            'extension'     => 'themes',
+            'slug'          => 'admin-themes',
+            'uri'           => 'themes',
             'user_editable' => 0,
             'status'        => 1
         ));
-        $settings->last_child_of($system);
+        $themes->last_child_of($system);
+
+        // Admin > System > Themes > Frontend
+        //
+        $frontend = new Menu(array(
+            'name'          => 'Frontend',
+            'extension'     => 'themes',
+            'slug'          => 'admin-frontend',
+            'uri'           => 'themes/frontend',
+            'user_editable' => 0,
+            'status'        => 1
+        ));
+        $frontend->last_child_of($themes);
+
+        // Admin > System > Themes > Backend
+        //
+        $backend = new Menu(array(
+            'name'          => 'Backend',
+            'extension'     => 'themes',
+            'slug'          => 'admin-backend',
+            'uri'           => 'themes/backend',
+            'user_editable' => 0,
+            'status'        => 1
+        ));
+        $backend->last_child_of($themes);
+
+
+        /*
+         * --------------------------------------------------------------------------
+         * # 3) Configuration settings.
+         * --------------------------------------------------------------------------
+         */
+        $settings = array(
+            // Frontend default theme.
+            //
+            array(
+                'extension' => 'themes',
+                'type'      => 'theme',
+                'name'      => 'frontend',
+                'value'     => 'default'
+            ),
+
+            // Backend default theme.
+            //
+            array(
+                'extension' => 'themes',
+                'type'      => 'theme',
+                'name'      => 'backend',
+                'value'     => 'default'
+            )
+        );
+
+        // Insert the settings into the database.
+        //
+        DB::table('settings')->insert($settings);
     }
 
 
@@ -139,17 +163,25 @@ class Settings_v1_0_0
          * # 1) Drop the necessary tables.
          * --------------------------------------------------------------------------
          */
-        Schema::drop('settings');
+        Schema::drop('theme_options');
 
 
         /*
          * --------------------------------------------------------------------------
-         * # 2) Delete the menus.
+         * # 2) Drop the menus.
          * --------------------------------------------------------------------------
          */
-        if ($menu = Menu::find('admin-settings'))
+        if ($menu = Menu::find('admin-themes'))
         {
-            $menu->delete();
+            $menu->delete_with_children();
         }
+
+
+        /*
+         * --------------------------------------------------------------------------
+         * # 3) Drop the configuration settings.
+         * --------------------------------------------------------------------------
+         */
+        DB::table('settings')->where('extension', '=', 'themes')->delete();
     }
 }

@@ -25,6 +25,6 @@
  * --------------------------------------------------------------------------
  */
 Autoloader::namespaces(array(
-	'Platform\\Themes\\Widgets' => __DIR__ . DS . 'widgets',
-	'Platform\\Themes'          => __DIR__ . DS . 'models'
+    'Platform\\Themes\\Widgets' => __DIR__ . DS . 'widgets',
+    'Platform\\Themes'          => __DIR__ . DS . 'models'
 ));

@@ -40,7 +40,7 @@ use Platform\Menus\Menu;
  * @license    BSD License (3-clause)
  * @link       http://cartalyst.com
  */
-class Settings_v1_0_1
+class Themes_v1_0_1
 {
     /**
      * --------------------------------------------------------------------------
@@ -64,18 +64,46 @@ class Settings_v1_0_1
         $admin_menu    = Menu::admin_menu();
         $admin_menu_id = $admin_menu->{Menu::nesty_col('tree')};
 
-        // Update the settings link.
+        // Update the themes link.
         //
-        $settings = Menu::find(function($query) use ($admin_menu_id)
+        $themes = Menu::find(function($query) use ($admin_menu_id)
         {
-            return $query->where('slug', '=', 'admin-settings')
+            return $query->where('slug', '=', 'admin-themes')
                          ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
         });
 
-        if ($settings)
+        if ($themes)
         {
-            $settings->class = 'icon-cog';
-            $settings->save();
+            $themes->class = 'icon-eye-open';
+            $themes->save();
+        }
+
+        // Update the frontend link.
+        //
+        $frontend = Menu::find(function($query) use ($admin_menu_id)
+        {
+            return $query->where('slug', '=', 'admin-frontend')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
+        });
+
+        if ($frontend)
+        {
+            $frontend->class = 'icon-eye-open';
+            $frontend->save();
+        }
+
+        // Update the backend link.
+        //
+        $backend = Menu::find(function($query) use ($admin_menu_id)
+        {
+            return $query->where('slug', '=', 'admin-backend')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
+        });
+
+        if ($backend)
+        {
+            $backend->class = 'icon-eye-open';
+            $backend->save();
         }
     }
 
@@ -102,18 +130,46 @@ class Settings_v1_0_1
         $admin_menu    = Menu::admin_menu();
         $admin_menu_id = $admin_menu->{Menu::nesty_col('tree')};
 
-        // Update the settings link.
+        // Update the themes link.
         //
-        $settings = Menu::find(function($query) use ($admin_menu_id)
+        $themes = Menu::find(function($query) use ($admin_menu_id)
         {
-            return $query->where('slug', '=', 'admin-settings')
+            return $query->where('slug', '=', 'admin-themes')
                          ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
         });
 
-        if ($settings)
+        if ($themes)
         {
-            $settings->class = '';
-            $settings->save();
+            $themes->class = '';
+            $themes->save();
+        }
+
+        // Update the frontend link.
+        //
+        $frontend = Menu::find(function($query) use ($admin_menu_id)
+        {
+            return $query->where('slug', '=', 'admin-frontend')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
+        });
+
+        if ($frontend)
+        {
+            $frontend->class = '';
+            $frontend->save();
+        }
+
+        // Update the backend link.
+        //
+        $backend = Menu::find(function($query) use ($admin_menu_id)
+        {
+            return $query->where('slug', '=', 'admin-backend')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
+        });
+
+        if ($backend)
+        {
+            $backend->class = '';
+            $backend->save();
         }
     }
 }

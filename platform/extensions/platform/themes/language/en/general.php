@@ -25,12 +25,15 @@
  * --------------------------------------------------------------------------
  */
 return array(
+    /*
+     * -----------------------------------------
+     * Extension header.
+     * -----------------------------------------
+     */
+    'title'       => 'Theme Management',
+    'description' => 'Activate, deactivate, and customize themes.',
 
 
-	'title'       => 'Theme Management',
-	'description' => 'Activate, deactivate, and customize themes.',
-
-	'author'      => 'Author:',
-	'version'     => 'Version:',
-
+    'author'      => 'Author:',
+    'version'     => 'Version:'
 );

@@ -29,7 +29,7 @@ use Platform\Menus\Menu;
 
 /**
  * --------------------------------------------------------------------------
- * Add Class to Menus Class
+ * Install Class v1.0.1
  * --------------------------------------------------------------------------
  * 
  * Adds a class to menu items.
@@ -40,7 +40,7 @@ use Platform\Menus\Menu;
  * @license    BSD License (3-clause)
  * @link       http://cartalyst.com
  */
-class Extensions_Add_Class_To_Menus
+class Extensions_v1_0_1
 {
     /**
      * --------------------------------------------------------------------------
@@ -61,15 +61,15 @@ class Extensions_Add_Class_To_Menus
          */
         // Get the admin menu.
         //
-        $admin      = Menu::admin_menu();
-        $admin_tree = $admin->{Menu::nesty_col('tree')};
+        $admin_menu    = Menu::admin_menu();
+        $admin_menu_id = $admin_menu->{Menu::nesty_col('tree')};
 
-        // Update the extensions class.
+        // Update the extensions link.
         //
-        $extensions = Menu::find(function($query) use ($admin_tree)
+        $extensions = Menu::find(function($query) use ($admin_menu_id)
         {
             return $query->where('slug', '=', 'admin-extensions')
-                         ->where(Menu::nesty_col('tree'), '=', $admin_tree);
+                         ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
         });
 
         if ($extensions)
@@ -92,17 +92,22 @@ class Extensions_Add_Class_To_Menus
      */
     public function down()
     {
+        /*
+         * --------------------------------------------------------------------------
+         * # 1) Update the menu items.
+         * --------------------------------------------------------------------------
+         */
         // Get the admin menu.
         //
-        $admin      = Menu::admin_menu();
-        $admin_tree = $admin->{Menu::nesty_col('tree')};
+        $admin_menu    = Menu::admin_menu();
+        $admin_menu_id = $admin_menu->{Menu::nesty_col('tree')};
 
-        // Update groups list class.
+        // Update the extensions link.
         //
-        $extensions = Menu::find(function($query) use ($admin_tree)
+        $extensions = Menu::find(function($query) use ($admin_menu_id)
         {
             return $query->where('slug', '=', 'admin-extensions')
-                         ->where(Menu::nesty_col('tree'), '=', $admin_tree);
+                         ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
         });
 
         if ($extensions)

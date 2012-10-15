@@ -25,18 +25,18 @@
  * --------------------------------------------------------------------------
  */
 return array(
-	/*
+    /*
      * -----------------------------------------
-	 * Extension information.
+     * Extension information.
      * -----------------------------------------
-	 */
-	'info' => array(
-		'name'        => 'Users',
-		'author'      => 'Cartalyst LLC',
-		'description' => 'Manages your website users, groups and roles.',
-		'version'     => '1.1',
-		'is_core'     => true
-	),
+     */
+    'info' => array(
+        'name'        => 'Users',
+        'author'      => 'Cartalyst LLC',
+        'description' => 'Manages your website users, groups and roles.',
+        'version'     => '1.1',
+        'is_core'     => true
+    ),
 
 
     /*
@@ -44,10 +44,10 @@ return array(
      * Extension dependencies.
      * -----------------------------------------
      */
-	'dependencies' => array(
-		'menus',
-		'settings'
-	),
+    'dependencies' => array(
+        'menus',
+        'settings'
+    ),
 
 
     /*
@@ -55,14 +55,14 @@ return array(
      * Events
      * -----------------------------------------
      */
-	'events' => array(
-		'user.create',
-		'user.update',
-		'user.delete',
-		'group.create',
-		'group.update',
-		'group.delete'
-	),
+    'events' => array(
+        'user.create',
+        'user.update',
+        'user.delete',
+        'group.create',
+        'group.update',
+        'group.delete'
+    ),
 
 
     /*
@@ -70,16 +70,16 @@ return array(
      * Extension routes.
      * -----------------------------------------
      */
-	'routes' => function() {
-		Route::any(ADMIN.'/insufficient_permissions', 'users::admin.users@insufficient_permissions');
+    'routes' => function() {
+        Route::any(ADMIN.'/insufficient_permissions', 'users::admin.users@insufficient_permissions');
 
-		Route::any('register', 'users::auth@register');
-		Route::any('activate/(:any)/(:any)', 'users::auth@activate');
-		Route::any('login', 'users::auth@login');
-		Route::any('logout', 'users::auth@logout');
-		Route::any('reset_password', 'users::auth@reset_password');
-		Route::any('reset_password_confirm/(:any)/(:any)', 'users::auth@reset_password_confirm');
-	},
+        Route::any('register', 'users::auth@register');
+        Route::any('activate/(:any)/(:any)', 'users::auth@activate');
+        Route::any('login', 'users::auth@login');
+        Route::any('logout', 'users::auth@logout');
+        Route::any('reset_password', 'users::auth@reset_password');
+        Route::any('reset_password_confirm/(:any)/(:any)', 'users::auth@reset_password_confirm');
+    },
 
 
     /*
@@ -87,14 +87,14 @@ return array(
      * Rules
      * -----------------------------------------
      */
-	'rules' => array(
-		'users::admin.users@index',
-		'users::admin.users@create',
-		'users::admin.users@edit',
-		'users::admin.users@delete',
-		'users::admin.groups@index',
-		'users::admin.groups@create',
-		'users::admin.groups@edit',
-		'users::admin.groups@delete'
-	)
+    'rules' => array(
+        'users::admin.users@index',
+        'users::admin.users@create',
+        'users::admin.users@edit',
+        'users::admin.users@delete',
+        'users::admin.groups@index',
+        'users::admin.groups@create',
+        'users::admin.groups@edit',
+        'users::admin.groups@delete'
+    )
 );

@@ -28,6 +28,7 @@ return array(
     'admin' => array(
         'extensions' => array(
             '_title_'   => 'Admin Extensions',
+
             'index'     => 'View',
             'view'      => 'Edit',
             'install'   => 'Install',

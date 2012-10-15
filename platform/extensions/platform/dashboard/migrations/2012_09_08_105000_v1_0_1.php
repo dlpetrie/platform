@@ -29,10 +29,10 @@ use Platform\Menus\Menu;
 
 /**
  * --------------------------------------------------------------------------
- * Install Class
+ * Install Class v1.0.1
  * --------------------------------------------------------------------------
  * 
- * Extensions installation.
+ * Adds a class to menu items.
  *
  * @package    Platform
  * @author     Cartalyst LLC
@@ -40,7 +40,7 @@ use Platform\Menus\Menu;
  * @license    BSD License (3-clause)
  * @link       http://cartalyst.com
  */
-class Extensions_Install
+class Dashboard_v1_0_1
 {
     /**
      * --------------------------------------------------------------------------
@@ -56,21 +56,27 @@ class Extensions_Install
     {
         /*
          * --------------------------------------------------------------------------
-         * # 1) Create the menus.
+         * # 1) Update the menu items.
          * --------------------------------------------------------------------------
          */
-        // Admin > System > Extensions
+        // Get the admin menu.
         //
-        $system = Menu::find('admin-system');
-        $extensions = new Menu(array(
-            'name'          => 'Extensions',
-            'extension'     => 'extensions',
-            'slug'          => 'admin-extensions',
-            'uri'           => 'extensions',
-            'user_editable' => 0,
-            'status'        => 1
-        ));
-        $extensions->last_child_of($system);
+        $admin_menu    = Menu::admin_menu();
+        $admin_menu_id = $admin_menu->{Menu::nesty_col('tree')};
+
+        // Update the dashboard link.
+        //
+        $dashboard = Menu::find(function($query) use ($admin_menu_id)
+        {
+            return $query->where('slug', '=', 'admin-dashboard')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
+        });
+
+        if ($dashboard)
+        {
+            $dashboard->class = 'icon-th';
+            $dashboard->save();
+        }
     }
 
 
@@ -86,6 +92,28 @@ class Extensions_Install
      */
     public function down()
     {
+        /*
+         * --------------------------------------------------------------------------
+         * # 1) Update the menu items.
+         * --------------------------------------------------------------------------
+         */
+        // Get the admin menu.
+        //
+        $admin_menu    = Menu::admin_menu();
+        $admin_menu_id = $admin->{Menu::nesty_col('tree')};
 
+        // Update the dashboard link
+        //
+        $dashboard = Menu::find(function($query) use ($admin_menu_id)
+        {
+            return $query->where('slug', '=', 'admin-dashboard')
+                         ->where(Menu::nesty_col('tree'), '=', $admin_menu_id);
+        });
+
+        if ($dashboard)
+        {
+            $dashboard->class = '';
+            $dashboard->save();
+        }
     }
 }

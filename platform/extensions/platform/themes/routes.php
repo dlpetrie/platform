@@ -18,36 +18,57 @@
  * @link       http://cartalyst.com
  */
 
-use Platform\Themes\Theme;
+
+/*
+ * All reserved API routes should be put here.
+ *
+ */
+$reserved = implode('|', Platform\Themes\Theme::types());
+
 
 /**
- * Route /api/themes/:type/:name. The available types are stored
- * inside the Theme model.
+ * Route /api/themes/:type/:name.
  *
- *	<code>
- *		/api/themes/backend         => themes::themes.api.index(backend)
- *		/api/themes/backend/default => themes::themes.api.index(backend, default)
- *	</code>
+ * The available types are stored inside the Theme model.
+ *
+ *  <code>
+ *      /api/themes/backend         => themes::themes.api.index(backend)
+ *      /api/themes/backend/default => themes::themes.api.index(backend, default)
+ *  </code>
  */
-Route::any(API.'/themes/('.implode('|', Theme::types()).')/(:any?)', function($type, $name = null)
-{
-	return Controller::call('themes::api.themes@index', array($type, $name));
-});
+Route::any(API . '/themes/(' . $reserved . ')/(:any?)', 'themes::api.themes@index');
+
 
 /**
  * Route /api/themes/:type/:name/options.
  *
- *	<code>
- *		/api/themes/backend/default/options => themes::themes.api.options(backend, default)
- *	</code>
+ *  <code>
+ *      /api/themes/backend/default/options => themes::themes.api.options(backend, default)
+ *  </code>
  */
-Route::any(API.'/themes/('.implode('|', Theme::types()).')/(:any)/options', function($type, $name)
-{
-	return Controller::call('themes::api.themes@options', array($type, $name));
-});
+Route::any(API . '/themes/(' . $reserved . ')/(:any)/options', 'themes::api.themes@options');
 
-Route::any(ADMIN.'/themes', function() {
-	return Redirect::to(ADMIN.'/themes/frontend');
-});
 
-Route::controller(Controller::detect('themes'));
+/**
+ * Route /admin/themes/
+ *
+ * This shows the frontend themes listing page.
+ *
+ */
+Route::any(ADMIN . '/themes', 'themes::admin.themes@frontend');
+
+
+/**
+ * Route /admin/themes/backend/edit/default
+ *
+ * Another route to edit themes.
+ *
+ */
+Route::any(ADMIN . '/themes/(' . $reserved . ')/edit/(:any)', 'themes::admin.themes@edit');
+
+
+/*
+ * Unset the $reserved variable from the global namespace.
+ *
+ */
+unset($reserved);

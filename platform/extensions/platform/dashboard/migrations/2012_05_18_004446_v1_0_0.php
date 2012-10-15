@@ -29,10 +29,10 @@ use Platform\Menus\Menu;
 
 /**
  * --------------------------------------------------------------------------
- * Add Class to Menus Class
+ * Install Class v1.0.0
  * --------------------------------------------------------------------------
  * 
- * Adds a class to menu items.
+ * Dashboard installation.
  *
  * @package    Platform
  * @author     Cartalyst LLC
@@ -40,7 +40,7 @@ use Platform\Menus\Menu;
  * @license    BSD License (3-clause)
  * @link       http://cartalyst.com
  */
-class Dashboard_Add_Class_To_Menus
+class Dashboard_v1_0_0
 {
     /**
      * --------------------------------------------------------------------------
@@ -56,27 +56,24 @@ class Dashboard_Add_Class_To_Menus
     {
         /*
          * --------------------------------------------------------------------------
-         * # 1) Update the menu items.
+         * # 1) Create the menus.
          * --------------------------------------------------------------------------
          */
-        // Get the admin menu.
+        // Get the Admin menu.
         //
-        $admin      = Menu::admin_menu();
-        $admin_tree = $admin->{Menu::nesty_col('tree')};
+        $admin_menu = Menu::admin_menu();
 
-        // Update the dashboard class.
+        // Admin > Dashboard
         //
-        $dashboard = Menu::find(function($query) use ($admin_tree)
-        {
-            return $query->where('slug', '=', 'admin-dashboard')
-                         ->where(Menu::nesty_col('tree'), '=', $admin_tree);
-        });
-
-        if ($dashboard)
-        {
-            $dashboard->class = 'icon-th';
-            $dashboard->save();
-        }
+        $dashboard = new Menu(array(
+            'name'          => 'Dashboard',
+            'extension'     => 'dashboard',
+            'slug'          => 'admin-dashboard',
+            'uri'           => 'dashboard',
+            'user_editable' => 0,
+            'status'        => 1
+        ));
+        $dashboard->first_child_of($admin_menu);
     }
 
 
@@ -92,23 +89,14 @@ class Dashboard_Add_Class_To_Menus
      */
     public function down()
     {
-        // Get the admin menu.
-        //
-        $admin      = Menu::admin_menu();
-        $admin_tree = $admin->{Menu::nesty_col('tree')};
-
-        // Update groups list class.
-        //
-        $dashboard = Menu::find(function($query) use ($admin_tree)
+        /*
+         * --------------------------------------------------------------------------
+         * # 1) Delete the menus.
+         * --------------------------------------------------------------------------
+         */
+        if ($menu = Menu::find('admin-dashboard'))
         {
-            return $query->where('slug', '=', 'admin-dashboard')
-                         ->where(Menu::nesty_col('tree'), '=', $admin_tree);
-        });
-
-        if ($dashboard)
-        {
-            $dashboard->class = '';
-            $dashboard->save();
+            $menu->delete();
         }
     }
 }

@@ -23,18 +23,17 @@
 @section('content')
 <section id="themes">
 
-	<header class="row">
-			<div class="span4">
-				<h1>{{ Lang::line('themes::general.title') }}</h1>
-				<p>{{ Lang::line('themes::general.description') }}</p>
-			</div>
-			<nav class="actions span8 pull-right">
-			</nav>
+	<header class="row-fluid">
+		<div class="span6">
+			<h1>{{ Lang::line('themes::general.title') }}</h1>
+			<p>{{ Lang::line('themes::general.description') }}</p>
+		</div>
+		<nav class="actions span6 pull-right"></nav>
 	</header>
 
 	<hr>
 
-	<div class="selections row">
+	<div class="selections row-fluid">
 		@if($active)
 			<div class="active span3">
 				<div class="thumbnail">
