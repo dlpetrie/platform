@@ -683,7 +683,7 @@ class Platform
     {
         // Start the filesystem.
         //
-        $filesystem = Filesystem::make();
+        $filesystem = Filesystem::make('native');
 
         // If no file is passed, we return the Platform licence.
         //
