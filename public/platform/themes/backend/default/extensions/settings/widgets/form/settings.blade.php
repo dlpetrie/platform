@@ -32,7 +32,7 @@
 		<legend>Filesystem Messages</legend>
 
 		<div>
-			<h4>Backend</h4>
+			<h4>Frontend</h4>
 
 			<div>
 				<label for="filesysem-frontend-fallback-message">{{ Lang::line('settings::form.settings.fields.filesystem_fallback') }}</label>
@@ -47,7 +47,7 @@
 		</div>
 
 		<div>
-			<h4>Frontend</h4>
+			<h4>Backend</h4>
 
 			<div>
 				<label for="filesysem-backend-fallback-message">{{ Lang::line('settings::form.settings.fields.filesystem_fallback') }}</label>
