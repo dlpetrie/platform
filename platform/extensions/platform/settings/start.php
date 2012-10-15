@@ -28,3 +28,43 @@ Autoloader::namespaces(array(
     'Platform\\Settings\\Widgets' => __DIR__ . DS . 'widgets',
     'Platform\\Settings\\Model'   => __DIR__ . DS . 'models'
 ));
+
+// Filesystem Errors
+//
+Event::listen(Config::get('filesystem::filesystem.event.fallback'), function($message) {
+
+	// Front or Back end controller?
+	//
+	if (URI::segment(1) == ADMIN)
+	{
+		$message_type = Platform::get('settings.filesystem.backend_fallback_message');
+	}
+	else
+	{
+		$message_type = Platform::get('settings.filesystem.fronted_fallback_message');
+	}
+
+	if (in_array($message_type, array('error', 'info', 'success', 'warning')))
+	{
+		Platform::messages()->{$message_type}($message);
+	}
+});
+
+Event::listen(Config::get('filesystem::filesystem.event.failed'), function($message) {
+
+	// Front or Back end controller?
+	//
+	if (URI::segment(1) == ADMIN)
+	{
+		$message_type = Platform::get('settings.filesystem.backend_failed_message');
+	}
+	else
+	{
+		$message_type = Platform::get('settings.filesystem.frontend_failed_message');
+	}
+
+	if (in_array($message_type, array('error', 'info', 'success', 'warning')))
+	{
+		Platform::messages()->{$message_type}($message);
+	}
+});

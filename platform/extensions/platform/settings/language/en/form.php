@@ -34,9 +34,17 @@ return array(
         'legend' => 'General Settings',
 
         'fields' => array(
+
+        	// Site
+        	//
             'title'   => 'Site Title',
             'tagline' => 'Site Tagline',
-            'email'   => 'Site Email Address'
+            'email'   => 'Site Email Address',
+
+            // Filesystem
+            //
+            'filesystem_fallback' => 'Fallback Message',
+            'filesystem_failed'   => 'Failed Message',
         )
     )
 );

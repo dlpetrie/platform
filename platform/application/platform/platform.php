@@ -127,10 +127,6 @@ class Platform
             //
             static::$initialized = true;
 
-            // Register Filesystem Warnings
-            //
-            static::filesystem_warnings();
-
             // Register blade extensions.
             //
             static::register_blade_extensions();
@@ -723,25 +719,4 @@ class Platform
     {
         return self::PLATFORM_VERSION;
     }
-
-    /**
-     * -----------------------------------------
-     * Function: filesystem_warnings()
-     * -----------------------------------------
-     *
-     * Catches file system warnings
-     *
-     * @access   protected
-     */
-    protected static function filesystem_warnings()
-    {
-    	Event::listen(Config::get('filesystem::filesystem.event.fallback'), function($message) {
-    		Platform::messages()->warning($message);
-    	});
-
-    	Event::listen(Config::get('filesystem::filesystem.event.failed'), function($message) {
-    		Platform::messages()->warning($message);
-    	});
-    }
-
 }
