@@ -67,6 +67,7 @@ class Directory
 
 		if ( ! $response and ! is_null($this->fallback))
 		{
+			\Event::fire(\Config::get('filesystem::events.directory.fallback.'.$method));
 			$response = call_user_func_array(array($this->fallback, $method), $args);
 		}
 
@@ -87,7 +88,14 @@ class Directory
 	 */
 	public function move($from, $to)
 	{
-		return $this->call('rename', Filesystem::findPath($from), Filesystem::findPath($to));
+		$response = $this->call('rename', Filesystem::findPath($from), Filesystem::findPath($to));
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.directory.failed.move'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -103,7 +111,14 @@ class Directory
 	 */
 	public function make($name)
 	{
-		return $this->call('make', Filesystem::findPath($name));
+		$response = $this->call('make', Filesystem::findPath($name));
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.directory.failed.make'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -119,7 +134,14 @@ class Directory
 	 */
 	public function delete($path)
 	{
-		return $this->call('delete', Filesystem::findPath($path));
+		$response = $this->call('delete', Filesystem::findPath($path));
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.directory.failed.delete'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -135,7 +157,14 @@ class Directory
 	 */
 	public function clean($path = null)
 	{
-		return $this->call('clean', Filesystem::findPath($path));
+		$response = $this->call('clean', Filesystem::findPath($path));
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.directory.failed.clean'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -152,7 +181,14 @@ class Directory
 	 */
 	public function rename($from, $to)
 	{
-		return $this->call('rename', Filesystem::findPath($from), Filesystem::findPath($to));
+		$response = $this->call('rename', Filesystem::findPath($from), Filesystem::findPath($to));
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.directory.failed.rename'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -167,7 +203,14 @@ class Directory
 	 */
 	public function current()
 	{
-		return $this->call('current');
+		$response = $this->call('current');
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.directory.failed.current'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -183,7 +226,14 @@ class Directory
 	 */
 	public function contents($path = null)
 	{
-		return $this->call('contents', Filesystem::findPath($path));
+		$response = $this->call('contents', Filesystem::findPath($path));
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.directory.failed.contents'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -199,7 +249,14 @@ class Directory
 	 */
 	public function change($path)
 	{
-		return $this->call('change', Filesystem::findPath($path));
+		$response = $this->call('change', Filesystem::findPath($path));
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.directory.failed.change'));
+		}
+
+		return $response;
 	}
 
 }

@@ -149,7 +149,7 @@ class File extends \Filesystem\Driver\File
 	 */
 	public function size($path)
 	{
-		return filesize($path);
+		return (file_exists($path)) ? filesize($path) : false;
 	}
 
 	/**
@@ -181,6 +181,6 @@ class File extends \Filesystem\Driver\File
 	 */
 	public function modified($path)
 	{
-		return filemtime($path);
+		return (file_exists($path)) ? filemtime($path) : false;
 	}
 }

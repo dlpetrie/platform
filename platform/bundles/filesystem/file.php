@@ -87,7 +87,14 @@ class File
 	 */
 	public function move($from, $to)
 	{
-		return $this->call('rename',Filesystem::findPath($from), Filesystem::findPath($to));
+		$response = $this->call('rename',Filesystem::findPath($from), Filesystem::findPath($to));
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.file.failed.move'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -104,7 +111,14 @@ class File
 	 */
 	public function make($path, $contents = null)
 	{
-		return $this->call('make', Filesystem::findPath($path), $contents);
+		$response = $this->call('make', Filesystem::findPath($path), $contents);
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.file.failed.make'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -120,7 +134,14 @@ class File
 	 */
 	public function delete($path)
 	{
-		return $this->call('delete', Filesystem::findPath($path));
+		$response = $this->call('delete', Filesystem::findPath($path));
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.file.failed.delete'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -137,7 +158,14 @@ class File
 	 */
 	public function rename($from, $to)
 	{
-		return $this->call('rename', Filesystem::findPath($from), Filesystem::findPath($to));
+		$response = $this->call('rename', Filesystem::findPath($from), Filesystem::findPath($to));
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.file.failed.rename'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -153,7 +181,14 @@ class File
 	 */
 	public function contents($path)
 	{
-		return $this->call('contents', Filesystem::findPath($path));
+		$response = $this->call('contents', Filesystem::findPath($path));
+
+		if ($response === false)
+		{
+			\Event::fire(\Config::get('filesystem::events.file.failed.contents'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -170,7 +205,14 @@ class File
 	 */
 	public function write($path, $contents)
 	{
-		return $this->call('write', Filesystem::findPath($path), $contents);
+		$response = $this->call('write', Filesystem::findPath($path), $contents);
+
+		if ($response === false)
+		{
+			\Event::fire(\Config::get('filesystem::events.file.failed.write'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -187,7 +229,14 @@ class File
 	 */
 	public function append($path, $contents)
 	{
-		return $this->call('append', Filesystem::findPath($path), $contents);
+		$response = $this->call('append', Filesystem::findPath($path), $contents);
+
+		if ($response === false)
+		{
+			\Event::fire(\Config::get('filesystem::events.file.failed.append'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -203,7 +252,14 @@ class File
 	 */
 	public function size($path)
 	{
-		return $this->call('size', Filesystem::findPath($path));
+		$response = $this->call('size', Filesystem::findPath($path));
+
+		if ($response === false)
+		{
+			\Event::fire(\Config::get('filesystem::events.file.failed.size'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -219,7 +275,14 @@ class File
 	 */
 	public function exists($path)
 	{
-		return $this->call('exists', Filesystem::findPath($path));
+		$response = $this->call('exists', Filesystem::findPath($path));
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.file.failed.exists'));
+		}
+
+		return $response;
 	}
 
 	/**
@@ -235,6 +298,13 @@ class File
 	 */
 	public function modified($path)
 	{
-		return $this->call('modified', Filesystem::findPath($path));
+		$response = $this->call('modified', Filesystem::findPath($path));
+
+		if ( ! $response)
+		{
+			\Event::fire(\Config::get('filesystem::events.file.failed.modified'));
+		}
+
+		return $response;
 	}
 }

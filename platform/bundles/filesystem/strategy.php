@@ -51,7 +51,6 @@ class Strategy
 	public function __construct($driver = null, $settings = array())
 	{
 		$driver = ucfirst(($driver) ?: \Config::get('filesystem::filesystem.default_driver'));
-		// $this->driver = $driver;
 
 		$class = 'Filesystem\\Strategy\\'.$driver.'\\Strategy';
 		$this->strategy = new $class($settings);
@@ -67,6 +66,7 @@ class Strategy
 			// use fallback if strategy doesn't exist
 			if ( ! class_exists($class) or ! $this->strategy->isConnected())
 			{
+				\Event::fire(\Config::get('filesystem::events.strategy.fallback'));
 				$this->strategy = new $fallback_class($settings);
 			}
 		}

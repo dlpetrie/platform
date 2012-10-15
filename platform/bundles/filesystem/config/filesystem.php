@@ -4,11 +4,11 @@ return array(
 
 	// Default Filesystem Driver
 	//
-	'default_driver' => 'native',
+	'default_driver' => 'ftp',
 
 	// Fallback - Native only
 	//
-	'fallback' => false,
+	'fallback' => true,
 
 	// Driver Settings
 	//
@@ -17,11 +17,11 @@ return array(
 		 // FTP Settings
 		 //
 		'ftp' => array(
-			'server'   => null,
-			'user'     => null,
-			'password' => null,
+			'server'   => 'localhost',
+			'user'     => 'platform',
+			'password' => 'test',
 			'port'     => 21,
-			'timeout'  => 2,
+			'timeout'  => 90,
 		),
 	)
 );

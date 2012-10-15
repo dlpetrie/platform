@@ -187,7 +187,11 @@ class File extends \Filesystem\Driver\File
 	 */
 	public function size($path)
 	{
-		return @ftp_size($this->connection_id, $path);
+		$response = @ftp_size($this->connection_id, $path);
+
+		$response = ($response == -1) ? false : $response;
+
+		return $response;
 	}
 
 	/**
