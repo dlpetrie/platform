@@ -1,4 +1,4 @@
-1.0.3 Changelog
+1.1.1 Changelog
 ----------
 
 **General:**
@@ -8,6 +8,7 @@
   * Extended Laravel URL and Redirect core classes.
   * HTML comments are now compiled to PHP comments (in Blade templates).
   * Added method to return the current Platform version.
+  * Added in new Filesystem Bundle to allow for FTP usage to get around apache user permission issues if desired.
 
 **Extensions Manager:**
 
@@ -17,11 +18,13 @@
 
   * Fixed installer issues on some MySQL versions.
   * Added a new dependencies manager for the installer.
+  * Added in optional FTP fields for the new filesystem bundle.
 
 **Settings:**
 
   * Bug fixes.
   * Settings are now modular.
+  * Added in filesystem message configurations to the general settings admin form.
 
 1.0.2 Changelog
 ----------
