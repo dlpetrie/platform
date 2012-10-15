@@ -184,8 +184,6 @@ class Installer
     	// get config stub
     	$string = file_get_contents(path('installer') . DS . 'stubs' . DS . 'filesystem' . EXT);
 
-
-
     	if (array_key_exists('ftp_enable', $config) and $config['ftp_enable'] == 1)
     	{
     		unset($config['ftp_enable']);
