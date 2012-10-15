@@ -129,7 +129,16 @@ class File extends \Filesystem\Driver\File
 		{
 			fseek($tmp, 0);
 
-			$contents = fread($tmp, $this->size($path));
+			$size = $this->size($path);
+
+			if ($size)
+			{
+				$contents = fread($tmp, $this->size($path));
+			}
+			else
+			{
+				$contents = '';
+			}
 
 			// remove temp file
 			fclose($tmp);

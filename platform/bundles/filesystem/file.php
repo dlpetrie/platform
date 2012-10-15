@@ -58,15 +58,20 @@ class File
 	 * @param    string
 	 * @return   mixed
 	 */
-	protected function call($method)
+	protected function call()
 	{
 		$args = func_get_args();
-		array_shift($args);
+
+		$method = array_shift($args);
 
 		$response = call_user_func_array(array($this->file, $method), $args);
 
-		if ( ! $response and ! is_null($this->fallback))
+		if ( $response === false and ! is_null($this->fallback))
 		{
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event.fallback'),
+				array(\Lang::line('filesystem::fallback.file.'.$method)->get())
+			);
 			$response = call_user_func_array(array($this->fallback, $method), $args);
 		}
 
@@ -87,11 +92,14 @@ class File
 	 */
 	public function move($from, $to)
 	{
-		$response = $this->call('rename',Filesystem::findPath($from), Filesystem::findPath($to));
+		$response = $this->call('rename', Filesystem::findPath($from), Filesystem::findPath($to));
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.file.failed.move'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event'),
+				array(\Lang::line('filesystem::failed.file.move')->get())
+			);
 		}
 
 		return $response;
@@ -115,7 +123,10 @@ class File
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.file.failed.make'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event'),
+				array(\Lang::line('filesystem::failed.file.make')->get())
+			);
 		}
 
 		return $response;
@@ -138,7 +149,10 @@ class File
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.file.failed.delete'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event'),
+				array(\Lang::line('filesystem::failed.file.delete')->get())
+			);
 		}
 
 		return $response;
@@ -162,7 +176,10 @@ class File
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.file.failed.rename'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event'),
+				array(\Lang::line('filesystem::failed.file.rename')->get())
+			);
 		}
 
 		return $response;
@@ -185,7 +202,10 @@ class File
 
 		if ($response === false)
 		{
-			\Event::fire(\Config::get('filesystem::events.file.failed.contents'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event'),
+				array(\Lang::line('filesystem::failed.file.contents')->get())
+			);
 		}
 
 		return $response;
@@ -209,7 +229,10 @@ class File
 
 		if ($response === false)
 		{
-			\Event::fire(\Config::get('filesystem::events.file.failed.write'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event'),
+				array(\Lang::line('filesystem::failed.file.write')->get())
+			);
 		}
 
 		return $response;
@@ -233,7 +256,10 @@ class File
 
 		if ($response === false)
 		{
-			\Event::fire(\Config::get('filesystem::events.file.failed.append'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event'),
+				array(\Lang::line('filesystem::failed.file.append')->get())
+			);
 		}
 
 		return $response;
@@ -256,7 +282,10 @@ class File
 
 		if ($response === false)
 		{
-			\Event::fire(\Config::get('filesystem::events.file.failed.size'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event'),
+				array(\Lang::line('filesystem::failed.file.size')->get())
+			);
 		}
 
 		return $response;
@@ -279,7 +308,10 @@ class File
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.file.failed.exists'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event'),
+				array(\Lang::line('filesystem::failed.file.exists'))
+			);
 		}
 
 		return $response;
@@ -302,7 +334,10 @@ class File
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.file.failed.modified'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event'),
+				array(\Lang::line('filesystem::failed.file.modified'))
+			);
 		}
 
 		return $response;

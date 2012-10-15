@@ -65,9 +65,13 @@ class Directory
 
 		$response = call_user_func_array(array($this->directory, $method), $args);
 
-		if ( ! $response and ! is_null($this->fallback))
+		if ( $response === false and ! is_null($this->fallback))
 		{
-			\Event::fire(\Config::get('filesystem::events.directory.fallback.'.$method));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event.fallback'),
+				array(\Lang::line('filesystem::fallback.directory.'.$method)->get())
+			);
+
 			$response = call_user_func_array(array($this->fallback, $method), $args);
 		}
 
@@ -92,7 +96,10 @@ class Directory
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.directory.failed.move'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event.failed'),
+				array(\Lang::line('filesystem::failed.directory.move')->get())
+			);
 		}
 
 		return $response;
@@ -115,7 +122,10 @@ class Directory
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.directory.failed.make'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event.failed'),
+				array(\Lang::line('filesystem::failed.directory.make')->get())
+			);
 		}
 
 		return $response;
@@ -138,7 +148,10 @@ class Directory
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.directory.failed.delete'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event.failed'),
+				array(\Lang::line('filesystem::failed.directory.delete')->get())
+			);
 		}
 
 		return $response;
@@ -161,7 +174,10 @@ class Directory
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.directory.failed.clean'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event.failed'),
+				array(\Lang::line('filesystem::failed.directory.clean')->get())
+			);
 		}
 
 		return $response;
@@ -185,7 +201,10 @@ class Directory
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.directory.failed.rename'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event.failed'),
+				array(\Lang::line('filesystem::failed.directory.rename')->get())
+			);
 		}
 
 		return $response;
@@ -207,7 +226,10 @@ class Directory
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.directory.failed.current'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event.failed'),
+				array(\Lang::line('filesystem::failed.directory.current')->get())
+			);
 		}
 
 		return $response;
@@ -228,9 +250,12 @@ class Directory
 	{
 		$response = $this->call('contents', Filesystem::findPath($path));
 
-		if ( ! $response)
+		if ($response === false)
 		{
-			\Event::fire(\Config::get('filesystem::events.directory.failed.contents'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event.failed'),
+				array(\Lang::line('filesystem::failed.directory.contents')->get())
+			);
 		}
 
 		return $response;
@@ -253,7 +278,10 @@ class Directory
 
 		if ( ! $response)
 		{
-			\Event::fire(\Config::get('filesystem::events.directory.failed.change'));
+			\Event::fire(
+				\Config::get('filesystem::filesystem.event.failed'),
+				array(\Lang::line('filesystem::failed.directory.change')->get())
+			);
 		}
 
 		return $response;

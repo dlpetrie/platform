@@ -66,7 +66,11 @@ class Strategy
 			// use fallback if strategy doesn't exist
 			if ( ! class_exists($class) or ! $this->strategy->isConnected())
 			{
-				\Event::fire(\Config::get('filesystem::events.strategy.fallback'));
+				\Event::fire(
+					\Config::get('filesystem::filesystem.event'),
+					array(\Lang::line('filesystem::fallback.strategy')->get())
+				);
+
 				$this->strategy = new $fallback_class($settings);
 			}
 		}

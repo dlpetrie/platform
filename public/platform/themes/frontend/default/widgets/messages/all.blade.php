@@ -10,7 +10,7 @@
 		@endforeach
 	</ul>
 	<ul class="warning">
-		@foreach (Session::get('platform.warning', array()) as $plat_warning)
+		@foreach (Session::get('platform.warnings', array()) as $plat_warning)
 			<li>{{ $plat_warning }}</li>
 		@endforeach
 	</ul>

@@ -69,7 +69,7 @@ class Strategy extends Filesystem\Driver\Strategy
 
 		// set connections status
 		$this->connected = $response;
-		echo 'connected';
+
 		return $response;
 	}
 

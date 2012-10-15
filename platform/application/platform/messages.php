@@ -74,7 +74,7 @@ class Messages extends Laravel\Messages
      */
     public function __construct($messages = array())
     {
-        // After the controller has been executed we want 
+        // After the controller has been executed we want
         // to persist the messages instance to the session.
         //
         Event::listen('platform.controller.after', function()
@@ -186,7 +186,7 @@ class Messages extends Laravel\Messages
      */
     public function add($key, $message)
     {
-        // The message needs to be in an array. 
+        // The message needs to be in an array.
         //
         $message = ( ! is_array($message)) ? array($message) : $message;
 
@@ -213,7 +213,7 @@ class Messages extends Laravel\Messages
      *
      * Returns one instance of the messages object.
      *
-     * Note, all parameters will be passed to a new instance, they won't be 
+     * Note, all parameters will be passed to a new instance, they won't be
      * used to access future instances.
      *
      * @access   public

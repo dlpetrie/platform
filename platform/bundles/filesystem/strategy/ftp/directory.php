@@ -139,7 +139,19 @@ class Directory extends \Filesystem\Driver\Directory
 		// if path is not set, use the current path
 		$path = ($path) ?: $this->current();
 
-		return @ftp_nlist($this->connection_id, $path);
+		$contents = @ftp_nlist($this->connection_id, $path);
+
+		if (is_array($contents))
+		{
+			foreach ($contents as &$content)
+			{
+				$content = basename($content);
+			}
+
+			return $contents;
+		}
+
+		return false;
 	}
 
 	/**
