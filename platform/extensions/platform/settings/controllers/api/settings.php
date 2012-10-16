@@ -145,13 +145,20 @@ class Settings_API_Settings_Controller extends API_Controller
         //
         $settings = Input::get('settings');
 
+        // Make sure we have an array !
+        //
+        if ( ! isset($settings[0]))
+        {
+            $settings = array($settings);
+        }
+
         // Loop through the settings.
         //
         foreach ($settings as $setting)
         {
             // Validation rules.
             //
-            $validation = $setting['validation'];
+            $validation = array_get($setting, 'validation') ?: array();
             unset($setting['validation']);
 
             // Lets make sure the values are set.
@@ -169,13 +176,13 @@ class Settings_API_Settings_Controller extends API_Controller
             //
             $setting['id'] = array_get($setting, 'id') ?: null;
 
-            //
+            // Create the model instance.
             //
             $setting_model = Setting::find(function($query) use($setting)
             {
                 // If the ID was passed, we'll just use that to find the setting.
                 //
-                if ( ! is_null( $setting['id'] ) )
+                if ( ! is_null($setting['id']))
                 {
                     return $query->where('id', '=', $setting['id']);
                 }
@@ -188,9 +195,9 @@ class Settings_API_Settings_Controller extends API_Controller
 
             // If setting model doesn't exist, make one
             //
-            if ( ! $setting_model)
+            if (is_null($setting_model))
             {
-                unset( $setting['id'] );
+                unset($setting['id']);
                 $setting_model = new Setting($setting);
             }
 

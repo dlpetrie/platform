@@ -31,18 +31,23 @@ use Config,
     Str,
     Theme as BundleTheme;
 
+
 /**
- * @todo Either use `name` or `theme` as the
- *       reference for a theme's name
- *       throughout API/controllers/models,
- *       currently it's both (`name` in controllers
- *       and `theme` in Model).
+ * --------------------------------------------------------------------------
+ * Themes > Theme Model
+ * --------------------------------------------------------------------------
  *
- * - Ben Corlett
+ * The themes model class.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.1
  */
 class Theme extends Crud
 {
-
     /**
      * The name of the table associated with the model.
      * If left null, the table name will become the the plural of
@@ -91,9 +96,12 @@ class Theme extends Crud
      */
     protected function prep_attributes($attributes)
     {
-        // generate css file contents
+        // Generate css file contents.
+        //
         $options = $attributes['options'];
 
+        // Loop through the options.
+        //
         foreach ($options as $id => $option)
         {
             $selector = $options[$id]['selector'];
@@ -102,20 +110,22 @@ class Theme extends Crud
             {
                 $styles .= "\t" . $attribute . ': ' . $value . ';' . "\n";
             }
-            static::$_css_content .= $selector . ' {'."\n".$styles.'}'."\n\n";
+            static::$_css_content .= $selector . ' {' . "\n" . $styles . '}' . "\n\n";
         }
 
-        // Get compile dir from theme bundle
+        // Get compile dir from theme bundle.
+        //
         $compile_dir = str_finish(Config::get('theme::theme.compile_directory'), DS);
 
-        // Set path for css file
+        // Set path for css file.
+        //
         static::$_filepath = BundleTheme::directory() . $compile_dir . $attributes['type'] . DS . $attributes['theme'] . DS . 'assets' . DS . 'css' . DS . 'theme_options.css';
 
-        // Encode options for db storage.
+        // Encode options for database storage.
         //
         $attributes['options'] = json_encode($attributes['options']);
 
-        // 
+        // Return the attributes.
         //
         return $attributes;
     }
@@ -138,7 +148,8 @@ class Theme extends Crud
     {
         if ($result)
         {
-            // Find css file and rewrite contents
+            // Find css file and rewrite contents.
+            //
             file_put_contents(static::$_filepath, static::$_css_content);
         }
 
@@ -163,7 +174,8 @@ class Theme extends Crud
     {
         if ($result)
         {
-            // find css file and rewrite contents
+            // Find css file and rewrite contents.
+            //
             file_put_contents(static::$_filepath, static::$_css_content);
         }
 
@@ -213,6 +225,10 @@ class Theme extends Crud
         //
         $theme_list = BundleTheme::all($type);
 
+        // Get the current active theme for this theme type.
+        //
+        $active = \Platform::get('themes.theme.' . $type);
+
         // Returning one theme ?
         //
         if ( ! is_null($name))
@@ -231,7 +247,9 @@ class Theme extends Crud
                 'name'        => Str::title($name),
                 'description' => null,
                 'author'      => null,
-                'version'     => '1.0'
+                'version'     => '1.0',
+                'active'      => ( $active === $name ? true : false ),
+                'thumbnail'   => static::thumbnail($type, $name)
             ), BundleTheme::info($type . DS . $name));
         }
 
@@ -243,12 +261,14 @@ class Theme extends Crud
         //
         foreach ($theme_list as $theme)
         {
-            $themes[] = array_merge(array(
+            $themes[ $theme ] = array_merge(array(
                 'theme'       => $theme,
                 'name'        => Str::title($theme),
                 'description' => null,
                 'author'      => null,
-                'version'     => '1.0'
+                'version'     => '1.0',
+                'active'      => ( $active === $theme ? true : false ),
+                'thumbnail'   => static::thumbnail($type, $theme)
             ), BundleTheme::info($type . DS . $theme));
         }
 
@@ -271,5 +291,23 @@ class Theme extends Crud
     public static function types()
     {
         return static::$_types;
+    }
+
+
+    /**
+     * --------------------------------------------------------------------------
+     * Function: thumbnail()
+     * --------------------------------------------------------------------------
+     *
+     * Returns the theme thumbnail url.
+     *
+     * @access   public
+     * @param    string
+     * @param    string
+     * @return   string
+     */
+    public static function thumbnail($type, $theme)
+    {
+        return BundleTheme\Asset::url(str_finish(BundleTheme::directory(), DS) . $type . DS . $theme . DS . 'assets' . DS . 'img' . DS . 'theme-thumbnail.png');
     }
 }

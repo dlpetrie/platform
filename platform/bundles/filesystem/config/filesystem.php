@@ -24,9 +24,9 @@ return array(
 		 // FTP Settings
 		 //
 		'ftp' => array(
-			'server'   => null,
-			'user'     => null,
-			'password' => null,
+			'server'   => '',
+			'user'     => 'brunofgaspar@live.com.pt',
+			'password' => 'asd',
 			'port'     => 21,
 			'timeout'  => 2,
 		),

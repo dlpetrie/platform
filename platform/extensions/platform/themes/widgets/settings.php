@@ -27,12 +27,12 @@ namespace Platform\Themes\Widgets;
  * --------------------------------------------------------------------------
  */
 use API,
-    Theme\Theme;
+    Theme;
 
 
 /**
  * --------------------------------------------------------------------------
- * Themes > Widget Class
+ * Themes > Settings widget class
  * --------------------------------------------------------------------------
  *
  * Wigdet class for changing themes.
@@ -60,19 +60,11 @@ class Settings
     {
         // Get all themes for the frontend.
         //
-        $frontend = array();
-        foreach(API::get('themes/frontend') as $theme)
-        {
-            $frontend[ $theme['theme'] ] = $theme['name'];
-        }
+        $frontend = API::get('themes/frontend', array('organize' => true));
 
         // Get all themes for the backend.
         //
-        $backend = array();
-        foreach(API::get('themes/backend') as $theme)
-        {
-            $backend[ $theme['theme'] ] = $theme['name'];
-        }
+        $backend = API::get('themes/backend', array('organize' => true));
 
         // Show the form page.
         //

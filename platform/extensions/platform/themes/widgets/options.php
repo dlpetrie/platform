@@ -20,27 +20,56 @@
 
 namespace Platform\Themes\Widgets;
 
-use API;
-use APIClientException;
-use Request;
-use Theme;
-use URI;
 
+/*
+ * --------------------------------------------------------------------------
+ * What we can use in this class.
+ * --------------------------------------------------------------------------
+ */
+use API,
+    APIClientException,
+    Theme;
+
+
+/**
+ * --------------------------------------------------------------------------
+ * Themes > Options widget Class
+ * --------------------------------------------------------------------------
+ *
+ * Wigdet class for updating theme options.
+ *
+ * @package    Platform
+ * @author     Cartalyst LLC
+ * @copyright  (c) 2011 - 2012, Cartalyst LLC
+ * @license    BSD License (3-clause)
+ * @link       http://cartalyst.com
+ * @version    1.0
+ */
 class Options
 {
-
+    /**
+     * --------------------------------------------------------------------------
+     * Function: css()
+     * --------------------------------------------------------------------------
+     *
+     * Returns the custom theme options.
+     *
+     * @access   public
+     * @return   View
+     */
     public function css()
     {
+        // Get the active theme type and name.
+        //
         $active_parts = explode(DS, ltrim(rtrim(Theme::active(), DS), DS));
         $type         = $active_parts[0];
         $name         = $active_parts[1];
-
-        
-
-        // Get active custom theme options
+       
         try
         {
-            $options = API::get('themes/'.$type.'/'.$name.'/options');
+            // Get active theme custom options.
+            //
+            $options = API::get('themes/' . $type . '/' . $name . '/options');
         }
         catch (APIClientException $e)
         {
@@ -61,8 +90,8 @@ class Options
         // in the view).
         $status = array_get($options, 'status', false);
 
-        return Theme::make('themes::widgets.theme_options_css')
-                    ->with('status', $status);
+        // Show the page.
+        //
+        return Theme::make('themes::widgets.theme_options_css')->with('status', $status);
     }
-
 }

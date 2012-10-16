@@ -50,19 +50,25 @@ Route::any(API . '/themes/(' . $reserved . ')/(:any)/options', 'themes::api.them
 
 
 /**
- * Route /admin/themes/
+ * Route /admin/themes/:type
  *
- * This shows the frontend themes listing page.
+ * This shows the all the themes based on the type provided.
  *
+ *  <code>
+ *      /admin/themes/backend/ => themes::themes.admin.index(backend)
+ *  </code>
  */
-Route::any(ADMIN . '/themes', 'themes::admin.themes@frontend');
+Route::any(ADMIN . '/themes/(' . $reserved . ')', 'themes::admin.themes@index');
 
 
 /**
- * Route /admin/themes/backend/edit/default
+ * Route /admin/themes/:type/edit/:theme
  *
  * Another route to edit themes.
  *
+ *  <code>
+ *      /api/themes/backend/edit/default => themes::themes.admin.edit(backend, default)
+ *  </code>
  */
 Route::any(ADMIN . '/themes/(' . $reserved . ')/edit/(:any)', 'themes::admin.themes@edit');
 

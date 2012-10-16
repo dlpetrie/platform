@@ -63,45 +63,43 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
      * @access   public
      * @return   View
      */
-    public function get_frontend()
+    public function get_index($type)
     {
+        // Make sure we have the type.
+        //
+        $type = ( $type ?: 'frontend' );
+
         // Set the active menu.
         //
-        $this->active_menu('admin-frontend');
+        $this->active_menu('admin-' . $type);
 
-        // Get all the frontend themes.
-        //
-        $data = $this->themes_data('frontend');
+        try
+        {
+            // Get the themes.
+            //
+            $themes = API::get('themes/' . $type);
+        }
+        catch(APIClientException $e)
+        {
+            // Set the error message.
+            //
+            Platform::messages()->error($e->getMessage());
+
+            // Set the other error messages.
+            //
+            foreach($e->errors() as $error)
+            {
+                Platform::messages()->error($error);
+            }
+
+            // Redirect to the dashboard page.
+            //
+            return Redirect::to_admin();
+        }
 
         // Show the page.
         //
-        return Theme::make('themes::index', $data);
-    }
-
-
-    /**
-     * --------------------------------------------------------------------------
-     * Function: get_backend()
-     * --------------------------------------------------------------------------
-     *
-     * Shows Backend Themes
-     *
-     * @access   public
-     * @return   View
-     */
-    public function get_backend()
-    {
-        // Set the active menu.
-        //
-        $this->active_menu('admin-backend');
-
-        // Get all the backend themes.
-        //
-        $data = $this->themes_data('backend');
-
-        // Show the page.
-        //
-        return Theme::make('themes::index', $data);
+        return Theme::make('themes::index')->with('type', $type)->with('themes', $themes);
     }
 
 
@@ -190,6 +188,10 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
             // Update the theme data.
             //
             API::put('themes/' . $type . '/' . $name . '/options', $data);
+
+            // Set the success message.
+            //
+            Platform::messages()->success(Lang::line('themes::messages.update.success', array('theme' => $type . '\\' . $name))->get());
         }
         catch (APIClientException $e)
         {
@@ -213,6 +215,24 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
 
     /**
      * --------------------------------------------------------------------------
+     * Function: get_activate()
+     * --------------------------------------------------------------------------
+     *
+     * Activates a theme, just an alias.
+     *
+     * @access   public
+     * @param    string
+     * @param    array
+     * @return   Redirect
+     */
+    public function get_activate($type, $theme)
+    {
+        return $this->post_activate($type, $theme);
+    }
+
+
+    /**
+     * --------------------------------------------------------------------------
      * Function: post_activate()
      * --------------------------------------------------------------------------
      *
@@ -229,31 +249,11 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
         {
             // Make the request.
             //
-            API::post('settings', array(
-                'settings' => array(
-                    // Values
-                    //
-                    'values' => array(
-                        'extension' => 'themes',
-                        'type'      => 'theme',
-                        'name'      => Input::get('type'),
-                        'value'     => Input::get('theme')
-                    ),
+            API::put('themes/activate/' . $type . '/' . $theme);
 
-                    // Validation
-                    //
-                    'validation' => array(
-                        'name'  => 'required',
-                        'value' => 'required'
-                    ),
-
-                    // Labels
-                    //
-                    'labels' => array(
-                        'name' => 'Theme'
-                    )
-                )
-            ));
+            // Set the success message.
+            //
+            Platform::messages()->success(Lang::line('themes::messages.activate.success', array('theme' => $type . '\\' . $theme))->get());
         }
         catch (APIClientException $e)
         {
@@ -272,93 +272,5 @@ class Themes_Admin_Themes_Controller extends Admin_Controller
         // Redirect to the themes page, based on the theme type.
         //
         return Redirect::to_admin('themes/' . $type);
-    }
-
-
-    /**
-     * --------------------------------------------------------------------------
-     * Function: themes_data()
-     * --------------------------------------------------------------------------
-     *
-     * Gets all theme data necessary for views
-     *
-     * @access   public
-     * @param    string
-     * @return   array
-     */
-    protected function themes_data($type)
-    {
-        try
-        {
-            // Make the request.
-            //
-            $themes = API::get('themes/' . $type);
-        }
-        catch (APIClientException $e)
-        {
-            // Set the error message.
-            //
-            Platform::messages()->error($e->getMessage());
-
-            // Set the other error messages.
-            //
-            foreach ($e->errors() as $error)
-            {
-                Platform::messages()->error($error);
-            }
-
-            // Fallback array.
-            //
-            $themes = array();
-        }
-
-        // Get the default theme based on the theme type.
-        //
-        $active = Platform::get('themes.theme.' . $type, 'default');
-
-        // Set some fallback data.
-        //
-        $data = array(
-            // The theme type.
-            //
-            'type' => $type,
-
-            // If we have an existing active theme.
-            //
-            'exists' => false,
-
-            // Mimmick the data we
-            // get back from the API
-            // so the view exists.
-            'active' => array(
-                'name' => Str::title($active),
-            ),
-
-            // Inactive themes is everything
-            // else. We'll override this soon
-            'inactive' => $themes,
-        );
-
-        // Loop through the themes.
-        //
-        foreach ($themes as $index => $theme)
-        {
-            // If it's the active theme
-            if ($theme['theme'] === $active)
-            {
-                // We have an active theme
-                $data['exists'] = true;
-
-                // Set it in the data array
-                $data['active'] = $theme;
-
-                // Remove the inactive one
-                array_forget($data, 'inactive.' . $index);
-            }
-        }
-
-        // Return the data.
-        //
-        return $data;
     }
 }
