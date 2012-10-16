@@ -25,8 +25,8 @@ return array(
 		 //
 		'ftp' => array(
 			'server'   => '',
-			'user'     => 'brunofgaspar@live.com.pt',
-			'password' => 'asd',
+			'user'     => '',
+			'password' => '',
 			'port'     => 21,
 			'timeout'  => 2,
 		),
